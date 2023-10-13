@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="company">  
+    <select id="list">
+        select company_id
+             , company_name
+             , owner_name
+             , business_no
+             , resident_no
+             , business_place
+             , telephone
+          from company;
+    </select>
+    <select id="detail">
+        select company_id
+             , company_name
+             , owner_name
+             , business_no
+             , resident_no
+             , business_place
+             , telephone
+          from company
+         where company_id = #{companyId};
+    </select>
+    <insert id="insert">
+        insert into company (
+                    company_id
+                  , company_name
+                  , owner_name
+                  , business_no
+                  , resident_no
+                  , business_place
+                  , telephone
+                  , regist_user
+                  , regist_datetime
+        )
+        values (
+                    (select isnull(max(company_id), 1000) + 1 from company) 
+                  , #{companyName}
+                  , #{ownerName}
+                  , #{businessNo}
+                  , #{residentNo} 
+                  , #{businessPlace}
+                  , #{telephone}
+                  , ${registUser}
+                  , convert(varchar(20), getdate(), 20)
+        );
+    </insert>
+    <update id="update">
+        update company
+            set company_name = #{companyName}
+              , owner_name = #{ownerName}
+              , business_no = #{businessNo}
+              , resident_no = #{residentNo}
+              , business_place = #{businessPlace}
+              , telephone = #{telephone}
+              , modify_user = #{modifyUser}
+              , modify_datetime = convert(varchar(20), getdate(), 20)
+          where company_id = #{companyId};
+    </update>
+    <delete id="delete">
+        delete from company
+          where company_id = #{companyId};
+    </delete>
+</mapper>
