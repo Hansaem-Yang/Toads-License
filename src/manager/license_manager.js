@@ -1,31 +1,32 @@
 const { poolPromise, sql } = require("../db/sql_manager");
 const mybatisMapper = require("mybatis-mapper");
-const Company = require("../models/company");
+const License = require("../models/license");
 const logger = require("../logger/logger.js");
 
-mybatisMapper.createMapper(["./src/sql/company.xml"]);
+mybatisMapper.createMapper(["./src/sql/license.xml"]);
 
 module.exports = {
-    list: async function () {
+    list: async function (companyNo) {
         try {
             let pool = await poolPromise;
-            let param = {};
+            let param = { companyNo: companyNo };
             let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("company", "list", param, format);
+            let query = mybatisMapper.getStatement("license", "list", param, format);
 
             let result = await pool.request().query(query);
             let list = [];
 
             result.recordset.forEach((record) => {
-                let item = new Company();
+                let item = new License();
 
                 item.setCompanyNo(record.company_no);
-                item.setCompanyName(record.company_name);
-                item.setOwnerName(record.owner_name);
-                item.setBusinessNo(record.business_no);
-                item.setResidentNo(record.resident_no);
-                item.setBusinessPlace(record.business_place);
-                item.setTelephone(record.telephone);
+                item.setContractNo(record.contract_no);
+                item.setLicenseNo(record.license_no);
+                item.setLicenseType(record.license_type);
+                item.setAppName(record.app_name);
+                item.setLicenseCount(record.license_count);
+                item.setStartDate(record.start_date);
+                item.setEndDate(record.end_date);
                 item.setRegistDatetime(record.regist_datetime);
                 item.setRegistCompany(record.regist_company);
                 item.setRegistUser(record.regist_user);
@@ -42,26 +43,30 @@ module.exports = {
             return null;
         }
     },
-    detail: async function (companyNo) {
+    detail: async function (companyNo, contractNo) {
         try {
             let pool = await poolPromise;
-            let param = { companyNo: companyNo };
+            let param = { 
+                companyNo: companyNo, 
+                contractNo: contractNo 
+            };
             let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("company", "detail", param, format);
+            let query = mybatisMapper.getStatement("license", "detail", param, format);
 
             let result = await pool.request().query(query);
             let item = null;
             if (result.recordset.length > 0) {
                 let record = result.recordset[0];
 
-                item = new Company();
+                item = new License();
                 item.setCompanyNo(record.company_no);
-                item.setCompanyName(record.company_name);
-                item.setOwnerName(record.owner_name);
-                item.setBusinessNo(record.business_no);
-                item.setResidentNo(record.resident_no);
-                item.setBusinessPlace(record.business_place);
-                item.setTelephone(record.telephone);
+                item.setContractNo(record.contract_no);
+                item.setLicenseNo(record.license_no);
+                item.setLicenseType(record.license_type);
+                item.setAppName(record.app_name);
+                item.setLicenseCount(record.license_count);
+                item.setStartDate(record.start_date);
+                item.setEndDate(record.end_date);
                 item.setRegistDatetime(record.regist_datetime);
                 item.setRegistCompany(record.regist_company);
                 item.setRegistUser(record.regist_user);
@@ -76,44 +81,21 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyName, ownerName, businessNo, residentNo, businessPlace, telephone, registUser) {
-        try {
-            let pool = await poolPromise;
-            let param = {
-                companyName: companyName, 
-                ownerName: ownerName, 
-                businessNo: businessNo, 
-                residentNo: residentNo, 
-                businessPlace: businessPlace, 
-                telephone: telephone,
-                registUser: registUser
-            };
-            let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("company", "insert", param, format);
-
-            let result = await pool.request().query(query);
-
-            return result.rowsAffected[0];
-        } catch (err) {
-            logger.error(err);
-            return -1;
-        }
-    },
-    update: async function (companyNo, companyName, ownerName, businessNo, residentNo, businessPlace, telephone, modifyUser) {
+    insert: async function (companyNo, contractNo, licenseType, appName, licenseCount, startDate, endDate, registUser) {
         try {
             let pool = await poolPromise;
             let param = {
                 companyNo: companyNo,
-                companyName: companyName, 
-                ownerName: ownerName, 
-                businessNo: businessNo, 
-                residentNo: residentNo, 
-                businessPlace: businessPlace, 
-                telephone: telephone,
-                modifyUser: modifyUser,
+                contractNo: contractNo,
+                licenseType: licenseType,
+                appName: appName,
+                licenseCount: licenseCount,
+                startDate: startDate,
+                endDate: endDate,
+                registUser: registUser
             };
             let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("company", "update", param, format);
+            let query = mybatisMapper.getStatement("license", "insert", param, format);
 
             let result = await pool.request().query(query);
 
@@ -123,7 +105,32 @@ module.exports = {
             return -1;
         }
     },
-    delete: async function (companyNos) {
+    update: async function (companyNo, contractNo, licenseNo, licenseType, appName, licenseCount, startDate, endDate, modifyUser) {
+        try {
+            let pool = await poolPromise;
+            let param = {
+                companyNo: companyNo,
+                contractNo: contractNo,
+                licenseNo: licenseNo,
+                licenseType: licenseType,
+                appName: appName,
+                licenseCount: licenseCount,
+                startDate: startDate,
+                endDate: endDate,
+                modifyUser: modifyUser
+            };
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("license", "update", param, format);
+
+            let result = await pool.request().query(query);
+
+            return result.rowsAffected[0];
+        } catch (err) {
+            logger.error(err);
+            return -1;
+        }
+    },
+    delete: async function (companyNo, contractNo, licenseNos) {
         let count = 0;
         try {
             let pool = await poolPromise;
@@ -131,12 +138,14 @@ module.exports = {
 
             await transaction.begin();
             try {
-                for (let i = 0; i < companyNos.length; i++) {
+                for (let i = 0; i < licenseNos.length; i++) {
                     let param = {
-                        companyNo: companyNos[i],
+                        companyNo: companyNo,
+                        contractNo: contractNo,
+                        licenseNo: licenseNos[i],
                     };
                     let format = { language: "sql", indent: " " };
-                    let query = mybatisMapper.getStatement("company", "delete", param, format);
+                    let query = mybatisMapper.getStatement("license", "delete", param, format);
 
                     let request = new sql.Request(transaction);
                     let result = await request.query(query);

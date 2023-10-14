@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contract">  
+    <select id="list">
+        select a.company_no
+             , a.contract_no
+             , a.contract_name
+             , a.contract_date
+             , a.contractor
+             , a.contract_period
+             , a.start_date
+             , a.end_date
+             , a.monetary_unit
+             , a.exchange_rate
+             , sum(isnull(b.amount, 0)) as amount
+             , sum(isnull(b.discounted_amount, 0)) as discounted_amount
+             , sum(isnull(b.actual_amount, 0)) as actual_amount
+             , a.remark
+             , a.regist_datetime
+             , a.regist_company
+             , a.regist_user
+             , a.modify_datetime
+             , a.modify_company
+             , a.modify_user
+          from contract as a
+          left outer join license as b
+            on a.company_no = b.company_no
+           and a.contract_no = b.contract_no
+         where a.company_no = #{companyNo}
+         group by a.company_no
+             , a.contract_no
+             , a.contract_name
+             , a.contract_date
+             , a.contractor
+             , a.contract_period
+             , a.start_date
+             , a.end_date
+             , a.monetary_unit
+             , a.exchange_rate
+             , a.remark
+             , a.regist_datetime
+             , a.regist_company
+             , a.regist_user
+             , a.modify_datetime
+             , a.modify_company
+             , a.modify_user;
+    </select>
+    <select id="detail">
+        select a.company_no
+             , a.contract_no
+             , a.contract_name
+             , a.contract_date
+             , a.contractor
+             , a.contract_period
+             , a.start_date
+             , a.end_date
+             , a.monetary_unit
+             , a.exchange_rate
+             , sum(isnull(b.amount, 0)) as amount
+             , sum(isnull(b.discounted_amount, 0)) as discounted_amount
+             , sum(isnull(b.actual_amount, 0)) as actual_amount
+             , a.remark
+             , a.regist_datetime
+             , a.regist_company
+             , a.regist_user
+             , a.modify_datetime
+             , a.modify_company
+             , a.modify_user
+          from contract as a
+          left outer join license as b
+            on a.company_no = b.company_no
+           and a.contract_no = b.contract_no
+         where a.company_no = #{companyNo}
+           and a.contract_no = #{contractNo}
+         group by a.company_no
+             , a.contract_no
+             , a.contract_name
+             , a.contract_date
+             , a.contractor
+             , a.contract_period
+             , a.start_date
+             , a.end_date
+             , a.monetary_unit
+             , a.exchange_rate
+             , a.remark
+             , a.regist_datetime
+             , a.regist_company
+             , a.regist_user
+             , a.modify_datetime
+             , a.modify_company
+             , a.modify_user;
+    </select>
+    <insert id="insert">
+        insert into contract (
+                    company_no
+                  , contract_no
+                  , contract_name
+                  , contract_date
+                  , contractor
+                  , contract_period
+                  , start_date
+                  , end_date
+                  , monetary_unit
+                  , exchange_rate
+                  , remark
+                  , regist_datetime
+                  , regist_company
+                  , regist_user
+        )
+        values (
+                  , #{companyNo}
+                  , (select 'C' + convert(varchar(8), convert(datetime, #{contractDate}), 12) + format(isnull(max(company_no), 0) + 1, '000') 
+                       from contract
+                      where company_no = #{companyNo}
+                        and contract_date = #{contractDate})
+                  , #{contractName}
+                  , #{contractDate}
+                  , #{contractor}
+                  , #{contractPeriod}
+                  , #{startDate}
+                  , #{endDate}
+                  , #{monetaryUnit}
+                  , #{exchangeRate}
+                  , #{remark}
+                  , convert(varchar(20), getdate(), 20)
+                  , #{registCompany}
+                  , #{registUser}
+        );
+    </insert>
+    <update id="update">
+        update contract
+           set contract_name = #{contractName}
+             , contract_date = #{contractDate}
+             , contractor = #{contractor}
+             , contract_period = #{contractPeriod}
+             , start_date = #{startDate}
+             , end_date = #{endDate}
+             , monetary_unit = #{monetaryUnit}
+             , exchange_rate = #{exchangeRate}
+             , remark = #{remark}
+             , modify_datetime = convert(varchar(20), getdate(), 20)
+             , modify_company = #{modifyCompany}
+             , modify_user = #{modifyUser}
+         where company_no = #{companyNo}
+           and contract_no = #{contractNo};
+    </update>
+    <delete id="delete">
+        delete from contract
+         where company_no = #{companyNo}
+           and contract_no = #{contractNo};
+    </delete>
+</mapper>

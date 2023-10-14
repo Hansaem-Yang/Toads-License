@@ -4,14 +4,14 @@ config.web = {
     port: 8080,
 };
 config.sql = {
-    server: "10.10.9.54",
+    server: "192.168.50.254",
     port: 1433,
     requestTimeout: 6000,
-    options: { encrypt: false, database: "ToadsMarineCS" },
+    options: { encrypt: false, database: "ToadsLicense" },
     authentication: {
         type: "default",
         options: {
-            userName: "toadsuser",
+            userName: "sa",
             password: "toads0228",
         },
     },

@@ -38,38 +38,6 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/member/login", (req, res) => {
-        let email = req.body.email;
-        let password = req.body.password;
-
-        manager.member(email).then((data) => {
-            if (data == null || data.length <= 0) {
-                res.send(constants.NO_USER);
-            } else {
-                if (password != data.getPassword()) {
-                    res.send(constants.WRONG_PASSWORD);
-                } else if ("Y" == data.getJoinYn()) {
-                    res.send(constants.ALREADY_CONNECTED);
-                } else {
-                    manager.login(email);
-                    data.setPassword("");
-
-                    res.send(data);
-                }
-            }
-        });
-    });
-    app.post("/member/logout", (req, res) => {
-        let accountNo = req.body.accountNo;
-
-        manager.logout(accountNo).then((data) => {
-            if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
-            } else {
-                res.send(data);
-            }
-        });
-    });
     app.post("/member/regist", (req, res) => {
         let companyId = req.body.companyId;
         let userName = req.body.userName;

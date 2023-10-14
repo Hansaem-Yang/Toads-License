@@ -1,22 +1,20 @@
 const Common = require("./common");
 
-class Contract extends Common {
+class License extends Common {
     constructor() {
         super();
         this.companyNo = -1;
         this.contractNo = null;
-        this.contractName = null;
-        this.contractDate = null;
-        this.contractor = null;
-        this.contractPeriod = null;
+        this.licenseNo = null;
+        this.licenseType = null;
+        this.appName = null;
+        this.licenseCount = -1;
         this.startDate = null;
         this.endDate = null;
-        this.monetaryUnit = null;
-        this.exchangeRate = -1;
+        this.unitPrice = -1;
         this.amount = -1;
         this.discountedAmount = -1;
         this.actualAmount = -1;
-        this.remark = null;
     }
 
     getCompanyNo(){
@@ -25,17 +23,17 @@ class Contract extends Common {
     getContractNo(){
         return this.contractNo;
     }
-    getContractName(){
-        return this.contractName;
+    getLicenseNo(){
+        return this.licenseNo;
     }
-    getContractDate(){
-        return this.contractDate;
+    getLicenseType(){
+        return this.licenseType;
     }
-    getContractor(){
-        return this.contractor;
+    getAppName(){
+        return this.appName;
     }
-    getContractPeriod(){
-        return this.contractPeriod;
+    getLicenseCount(){
+        return this.licenseCount;
     }
     getStartDate(){
         return this.startDate;
@@ -43,11 +41,8 @@ class Contract extends Common {
     getEndDate(){
         return this.endDate;
     }
-    getMonetaryUnit(){
-        return monetaryUnit;
-    }
-    getExchangeRate(){
-        return exchangeRate;
+    getUnitPrice(){
+        return unitPrice;
     }
     getAmount(){
         return amount;
@@ -58,9 +53,6 @@ class Contract extends Common {
     getActualAmount(){
         return actualAmount;
     }
-    getRemark(){
-        return this.remark;
-    }
     
     setCompanyNo(companyNo){
         this.companyNo = companyNo;
@@ -68,17 +60,17 @@ class Contract extends Common {
     setContractNo(contractNo){
         this.contractNo = contractNo;
     }
-    setContractName(contractName){
-        this.contractName = contractName;
+    setLicenseNo(licenseNo){
+        this.licenseNo = licenseNo;
     }
-    setContractDate(contractDate){
-        this.contractDate = contractDate;
+    setLicenseType(licenseType){
+        this.licenseType = licenseType;
     }
-    setContractor(contractor){
-        this.contractor = contractor;
+    setAppName(appName){
+        this.appName = appName;
     }
-    setContractPeriod(contractPeriod){
-        this.contractPeriod = contractPeriod;
+    setLicenseCount(licenseCount){
+        this.licenseCount = licenseCount;
     }
     setStartDate(startDate){
         this.startDate = startDate;
@@ -86,11 +78,8 @@ class Contract extends Common {
     setEndDate(endDate){
         this.endDate = endDate;
     }
-    setMonetaryUnit(monetaryUnit){
-        this.monetaryUnit = monetaryUnit;
-    }
-    setExchangeRate(exchangeRate){
-        this.exchangeRate = exchangeRate;
+    setUnitPrice(unitPrice){
+        this.unitPrice = unitPrice;
     }
     setAmount(amount){
         this.amount = amount;
@@ -101,9 +90,6 @@ class Contract extends Common {
     setActualAmount(actualAmount){
         this.actualAmount = actualAmount;
     }
-    setRemark(remark){
-        this.remark = remark;
-    }
 }
 
-module.exports = Contract;
+module.exports = License;

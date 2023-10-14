@@ -14,3 +14,4 @@ define("EMAIL_DUPLICATE", "EMAIL DUPLICATE");
 define("NO_LICENSE", "NO LICENSE");
 define("LICENSE_EXCEEDED", "LICENSE EXCEEDED");
 define("LICENSE_EXPIRATION", "LICENSE EXPIRATION");
+define("LOG_PATH", "C:/public/license/logs");

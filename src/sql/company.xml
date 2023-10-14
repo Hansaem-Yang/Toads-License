@@ -2,64 +2,80 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="company">  
     <select id="list">
-        select company_id
+        select company_no
              , company_name
              , owner_name
              , business_no
              , resident_no
              , business_place
              , telephone
+             , regist_datetime
+             , regist_company
+             , regist_user
+             , modify_datetime
+             , modify_company
+             , modify_user
           from company;
     </select>
     <select id="detail">
-        select company_id
+        select company_no
              , company_name
              , owner_name
              , business_no
              , resident_no
              , business_place
              , telephone
+             , regist_datetime
+             , regist_company
+             , regist_user
+             , modify_datetime
+             , modify_company
+             , modify_user
           from company
-         where company_id = #{companyId};
+         where company_no = #{companyNo};
     </select>
     <insert id="insert">
         insert into company (
-                    company_id
+                    company_no
                   , company_name
                   , owner_name
                   , business_no
                   , resident_no
                   , business_place
                   , telephone
-                  , regist_user
                   , regist_datetime
+                  , regist_company
+                  , regist_user
         )
         values (
-                    (select isnull(max(company_id), 1000) + 1 from company) 
+                    (select isnull(max(company_no), 0) + 1
+                       from company) 
                   , #{companyName}
                   , #{ownerName}
                   , #{businessNo}
                   , #{residentNo} 
                   , #{businessPlace}
                   , #{telephone}
-                  , ${registUser}
                   , convert(varchar(20), getdate(), 20)
+                  , #{registCompany}
+                  , #{registUser}
         );
     </insert>
     <update id="update">
         update company
-            set company_name = #{companyName}
-              , owner_name = #{ownerName}
-              , business_no = #{businessNo}
-              , resident_no = #{residentNo}
-              , business_place = #{businessPlace}
-              , telephone = #{telephone}
-              , modify_user = #{modifyUser}
-              , modify_datetime = convert(varchar(20), getdate(), 20)
-          where company_id = #{companyId};
+           set company_name = #{companyName}
+             , owner_name = #{ownerName}
+             , business_no = #{businessNo}
+             , resident_no = #{residentNo}
+             , business_place = #{businessPlace}
+             , telephone = #{telephone}
+             , modify_datetime = convert(varchar(20), getdate(), 20)
+             , modify_company = #{modifyCompany}
+             , modify_user = #{modifyUser}
+         where company_no = #{companyNo};
     </update>
     <delete id="delete">
         delete from company
-          where company_id = #{companyId};
+         where company_no = #{companyNo};
     </delete>
 </mapper>
