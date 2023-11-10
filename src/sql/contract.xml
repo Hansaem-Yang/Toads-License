@@ -16,12 +16,12 @@
              , sum(isnull(b.discounted_amount, 0)) as discounted_amount
              , sum(isnull(b.actual_amount, 0)) as actual_amount
              , a.remark
-             , a.regist_datetime
-             , a.regist_company
-             , a.regist_user
-             , a.modify_datetime
-             , a.modify_company
-             , a.modify_user
+             , a.reg_date
+             , a.reg_company
+             , a.reg_member
+             , a.upt_date
+             , a.upt_company
+             , a.upt_member
           from contract as a
           left outer join license as b
             on a.company_no = b.company_no
@@ -38,12 +38,12 @@
              , a.monetary_unit
              , a.exchange_rate
              , a.remark
-             , a.regist_datetime
-             , a.regist_company
-             , a.regist_user
-             , a.modify_datetime
-             , a.modify_company
-             , a.modify_user;
+             , a.reg_date
+             , a.reg_company
+             , a.reg_member
+             , a.upt_date
+             , a.upt_company
+             , a.upt_member;
     </select>
     <select id="detail">
         select a.company_no
@@ -60,12 +60,12 @@
              , sum(isnull(b.discounted_amount, 0)) as discounted_amount
              , sum(isnull(b.actual_amount, 0)) as actual_amount
              , a.remark
-             , a.regist_datetime
-             , a.regist_company
-             , a.regist_user
-             , a.modify_datetime
-             , a.modify_company
-             , a.modify_user
+             , a.reg_date
+             , a.reg_company
+             , a.reg_member
+             , a.upt_date
+             , a.upt_company
+             , a.upt_member
           from contract as a
           left outer join license as b
             on a.company_no = b.company_no
@@ -83,12 +83,12 @@
              , a.monetary_unit
              , a.exchange_rate
              , a.remark
-             , a.regist_datetime
-             , a.regist_company
-             , a.regist_user
-             , a.modify_datetime
-             , a.modify_company
-             , a.modify_user;
+             , a.reg_date
+             , a.reg_company
+             , a.reg_member
+             , a.upt_date
+             , a.upt_company
+             , a.upt_member;
     </select>
     <insert id="insert">
         insert into contract (
@@ -103,9 +103,9 @@
                   , monetary_unit
                   , exchange_rate
                   , remark
-                  , regist_datetime
-                  , regist_company
-                  , regist_user
+                  , reg_date
+                  , reg_company
+                  , reg_member
         )
         values (
                   , #{companyNo}
@@ -123,8 +123,8 @@
                   , #{exchangeRate}
                   , #{remark}
                   , convert(varchar(20), getdate(), 20)
-                  , #{registCompany}
-                  , #{registUser}
+                  , #{regCompany}
+                  , #{regMember}
         );
     </insert>
     <update id="update">
@@ -138,9 +138,9 @@
              , monetary_unit = #{monetaryUnit}
              , exchange_rate = #{exchangeRate}
              , remark = #{remark}
-             , modify_datetime = convert(varchar(20), getdate(), 20)
-             , modify_company = #{modifyCompany}
-             , modify_user = #{modifyUser}
+             , upt_date = convert(varchar(20), getdate(), 20)
+             , upt_company = #{uptCompany}
+             , upt_member = #{uptMember}
          where company_no = #{companyNo}
            and contract_no = #{contractNo};
     </update>

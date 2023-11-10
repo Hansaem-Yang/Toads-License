@@ -28,12 +28,12 @@ module.exports = {
                 item.setNationCode(record.nation_code);
                 item.setPhoneNumber(record.phone_number);
                 item.setUseStatus(record.use_status);
-                item.setRegistDatetime(record.regist_datetime);
-                item.setRegistCompany(record.regist_company);
-                item.setRegistUser(record.regist_user);
-                item.setModifyDatetime(record.modify_datetime);
-                item.setModifyCompany(record.modify_company);
-                item.setModifyUser(record.modify_user);
+                item.setRegDate(record.reg_date);
+                item.setRegCompany(record.reg_company);
+                item.setRegMember(record.reg_user);
+                item.setUptDate(record.upt_date);
+                item.setUptCompany(record.upt_company);
+                item.setUptMember(record.upt_member);
 
                 list.push(member);
             });
@@ -69,12 +69,12 @@ module.exports = {
                 item.setNationCode(record.nation_code);
                 item.setPhoneNumber(record.phone_number);
                 item.setUseStatus(record.use_status);
-                item.setRegistDatetime(record.regist_datetime);
-                item.setRegistCompany(record.regist_company);
-                item.setRegistUser(record.regist_user);
-                item.setModifyDatetime(record.modify_datetime);
-                item.setModifyCompany(record.modify_company);
-                item.setModifyUser(record.modify_user);
+                item.setRegDate(record.reg_date);
+                item.setRegCompany(record.reg_company);
+                item.setRegMember(record.reg_user);
+                item.setUptDate(record.upt_date);
+                item.setUptCompany(record.upt_company);
+                item.setUptMember(record.upt_member);
             }
 
             return item;
@@ -83,7 +83,7 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyNo, userName, email, password, userType, nationCode, phoneNumber, useStatus, registUser) {
+    insert: async function (companyNo, userName, email, password, userType, nationCode, phoneNumber, useStatus, regMember) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -95,7 +95,7 @@ module.exports = {
                 nationCode: nationCode,
                 phoneNumber: phoneNumber,
                 useStatus: useStatus,
-                registUser: registUser
+                regMember: regMember
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("member", "insert", param, format);
@@ -108,7 +108,7 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyNo, accountNo, userName, email, password, userType, nationCode, phoneNumber, useStatus, modifyUser) {
+    update: async function (companyNo, accountNo, userName, email, password, userType, nationCode, phoneNumber, useStatus, uptMember) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -121,7 +121,7 @@ module.exports = {
                 nationCode: nationCode,
                 phoneNumber: phoneNumber,
                 useStatus: useStatus,
-                modifyUser: modifyUser
+                uptMember: uptMember
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("member", "update", param, format);

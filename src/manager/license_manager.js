@@ -27,12 +27,12 @@ module.exports = {
                 item.setLicenseCount(record.license_count);
                 item.setStartDate(record.start_date);
                 item.setEndDate(record.end_date);
-                item.setRegistDatetime(record.regist_datetime);
-                item.setRegistCompany(record.regist_company);
-                item.setRegistUser(record.regist_user);
-                item.setModifyDatetime(record.modify_datetime);
-                item.setModifyCompany(record.modify_company);
-                item.setModifyUser(record.modify_user);
+                item.setRegDate(record.reg_date);
+                item.setRegCompany(record.reg_company);
+                item.setRegMember(record.reg_user);
+                item.setUptDate(record.upt_date);
+                item.setUptCompany(record.upt_company);
+                item.setUptMember(record.upt_member);
 
                 list.push(member);
             });
@@ -67,12 +67,12 @@ module.exports = {
                 item.setLicenseCount(record.license_count);
                 item.setStartDate(record.start_date);
                 item.setEndDate(record.end_date);
-                item.setRegistDatetime(record.regist_datetime);
-                item.setRegistCompany(record.regist_company);
-                item.setRegistUser(record.regist_user);
-                item.setModifyDatetime(record.modify_datetime);
-                item.setModifyCompany(record.modify_company);
-                item.setModifyUser(record.modify_user);
+                item.setRegDate(record.reg_date);
+                item.setRegCompany(record.reg_company);
+                item.setRegMember(record.reg_user);
+                item.setUptDate(record.upt_date);
+                item.setUptCompany(record.upt_company);
+                item.setUptMember(record.upt_member);
             }
 
             return item;
@@ -81,7 +81,7 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyNo, contractNo, licenseType, appName, licenseCount, startDate, endDate, registUser) {
+    insert: async function (companyNo, contractNo, licenseType, appName, licenseCount, startDate, endDate, regMember) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -92,7 +92,7 @@ module.exports = {
                 licenseCount: licenseCount,
                 startDate: startDate,
                 endDate: endDate,
-                registUser: registUser
+                regMember: regMember
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("license", "insert", param, format);
@@ -105,7 +105,7 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyNo, contractNo, licenseNo, licenseType, appName, licenseCount, startDate, endDate, modifyUser) {
+    update: async function (companyNo, contractNo, licenseNo, licenseType, appName, licenseCount, startDate, endDate, uptMember) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -117,7 +117,7 @@ module.exports = {
                 licenseCount: licenseCount,
                 startDate: startDate,
                 endDate: endDate,
-                modifyUser: modifyUser
+                uptMember: uptMember
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("license", "update", param, format);

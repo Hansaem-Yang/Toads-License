@@ -10,12 +10,12 @@
              , nation_code
              , phone_number
              , use_status
-             , regist_datetime
-             , regist_company
-             , regist_user
-             , modify_datetime
-             , modify_company
-             , modify_user
+             , reg_date
+             , reg_company
+             , reg_member
+             , upt_date
+             , upt_company
+             , upt_member
           from member
          where company_no = #{companyNo};
     </select>
@@ -28,12 +28,12 @@
              , nation_code
              , phone_number
              , use_status
-             , regist_datetime
-             , regist_company
-             , regist_user
-             , modify_datetime
-             , modify_company
-             , modify_user
+             , reg_date
+             , reg_company
+             , reg_member
+             , upt_date
+             , upt_company
+             , upt_member
           from member
          where company_no = #{companyNo}
            and account_no = #{accountNo};
@@ -48,9 +48,9 @@
                   , nation_code
                   , phone_number
                   , use_status
-                  , regist_datetime
-                  , regist_company
-                  , regist_user
+                  , reg_date
+                  , reg_company
+                  , reg_member
         )
         values (
                     #{companyNo}
@@ -64,8 +64,8 @@
                   , #{phoneNumber}
                   , #{useStatus}
                   , convert(varchar(20), getdate(), 20)
-                  , #{registCompany}
-                  , #{registUser}
+                  , #{regCompany}
+                  , #{regMember}
         );
     </insert>
     <update id="update">
@@ -76,9 +76,9 @@
              , nation_code = #{nationCode}
              , phone_number = #{phoneNumber}
              , use_status = #{useStatus}
-             , modify_datetime = convert(varchar(20), getdate(), 20)
-             , modify_company = #{modifyCompany}
-             , modify_user = #{modifyUser}
+             , upt_date = convert(varchar(20), getdate(), 20)
+             , upt_company = #{uptCompany}
+             , upt_user = #{uptMember}
          where company_no = #{companyNo}
            and account_no = #{accountNo};
     </update>

@@ -26,12 +26,12 @@ module.exports = {
                 item.setResidentNo(record.resident_no);
                 item.setBusinessPlace(record.business_place);
                 item.setTelephone(record.telephone);
-                item.setRegistDatetime(record.regist_datetime);
-                item.setRegistCompany(record.regist_company);
-                item.setRegistUser(record.regist_user);
-                item.setModifyDatetime(record.modify_datetime);
-                item.setModifyCompany(record.modify_company);
-                item.setModifyUser(record.modify_user);
+                item.setRegDate(record.reg_date);
+                item.setRegCompany(record.reg_company);
+                item.setRegMember(record.reg_user);
+                item.setUptDate(record.upt_date);
+                item.setUptCompany(record.upt_company);
+                item.setUptMember(record.upt_member);
 
                 list.push(member);
             });
@@ -62,12 +62,12 @@ module.exports = {
                 item.setResidentNo(record.resident_no);
                 item.setBusinessPlace(record.business_place);
                 item.setTelephone(record.telephone);
-                item.setRegistDatetime(record.regist_datetime);
-                item.setRegistCompany(record.regist_company);
-                item.setRegistUser(record.regist_user);
-                item.setModifyDatetime(record.modify_datetime);
-                item.setModifyCompany(record.modify_company);
-                item.setModifyUser(record.modify_user);
+                item.setRegDate(record.reg_date);
+                item.setRegCompany(record.reg_company);
+                item.setRegMember(record.reg_user);
+                item.setUptDate(record.upt_date);
+                item.setUptCompany(record.upt_company);
+                item.setUptMember(record.upt_member);
             }
 
             return item;
@@ -76,7 +76,7 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyName, ownerName, businessNo, residentNo, businessPlace, telephone, registUser) {
+    insert: async function (companyName, ownerName, businessNo, residentNo, businessPlace, telephone, regMember) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -86,7 +86,7 @@ module.exports = {
                 residentNo: residentNo, 
                 businessPlace: businessPlace, 
                 telephone: telephone,
-                registUser: registUser
+                regMember: regMember
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("company", "insert", param, format);
@@ -99,7 +99,7 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyNo, companyName, ownerName, businessNo, residentNo, businessPlace, telephone, modifyUser) {
+    update: async function (companyNo, companyName, ownerName, businessNo, residentNo, businessPlace, telephone, uptMember) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -110,7 +110,7 @@ module.exports = {
                 residentNo: residentNo, 
                 businessPlace: businessPlace, 
                 telephone: telephone,
-                modifyUser: modifyUser,
+                uptMember: uptMember,
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("company", "update", param, format);
