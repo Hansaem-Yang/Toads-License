@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="company">  
     <select id="list">
-        select company_no
+        select company_id
              , company_name
              , owner_name
              , business_no
@@ -18,7 +18,7 @@
           from company;
     </select>
     <select id="detail">
-        select company_no
+        select company_id
              , company_name
              , owner_name
              , business_no
@@ -32,11 +32,11 @@
              , upt_company
              , upt_member
           from company
-         where company_no = #{companyNo};
+         where company_id = #{companyId};
     </select>
     <insert id="insert">
         insert into company (
-                    company_no
+                    company_id
                   , company_name
                   , owner_name
                   , business_no
@@ -48,7 +48,7 @@
                   , reg_member
         )
         values (
-                    (select isnull(max(company_no), 0) + 1
+                    (select isnull(max(company_id), 0) + 1
                        from company) 
                   , #{companyName}
                   , #{ownerName}
@@ -72,10 +72,10 @@
              , upt_date = convert(varchar(20), getdate(), 20)
              , upt_company = #{uptCompany}
              , upt_member = #{uptMember}
-         where company_no = #{companyNo};
+         where company_id = #{companyId};
     </update>
     <delete id="delete">
         delete from company
-         where company_no = #{companyNo};
+         where company_id = #{companyId};
     </delete>
 </mapper>

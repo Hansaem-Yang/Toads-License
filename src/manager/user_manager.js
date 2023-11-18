@@ -17,14 +17,14 @@ module.exports = {
             let item = new Member();
 
             result.recordset.forEach((record) => {
-                item.setCompanyNo(record.company_no);
-                item.setAccountNo(record.account_no);
-                item.setUserName(record.user_name);
+                item.setCompanyId(record.company_id);
+                item.setMemberId(record.member_id);
+                item.setMemberName(record.member_name);
                 item.setEmail(record.email);
                 item.setPassword(record.password);
-                item.setUserType(record.user_type);
-                item.setNationCode(record.nation_code);
-                item.setPhoneNumber(record.phone_number);
+                item.setMemberType(record.member_type);
+                item.setRoleCode(record.role_code);
+                item.setPhone(record.phone);
                 item.setUseStatus(record.use_status);
                 item.setRegDate(record.reg_date);
                 item.setRegCompany(record.reg_company);
@@ -37,7 +37,7 @@ module.exports = {
             return item;
         } catch (err) {
             logger.error(err);
-            return null;
+            return null; 
         }
     },
 };

@@ -3,7 +3,7 @@ const Common = require("../models/common");
 class Company extends Common {
     constructor() {
         super();
-        this.companyNo = -1;
+        this.companyId = -1;
         this.companyName = null;
         this.ownerName = null;
         this.businessNo = null;
@@ -12,8 +12,8 @@ class Company extends Common {
         this.telephone = null;
     }
 
-    getCompanyNo(){
-        return this.companyNo;
+    getCompanyId(){
+        return this.companyId;
     }
     getCompanyName(){
         return this.companyName;
@@ -34,8 +34,8 @@ class Company extends Common {
         return this.telephone;
     }
 
-    setCompanyNo(companyNo){
-        this.companyNo = companyNo;
+    setCompanyId(companyId){
+        this.companyId = companyId;
     }
     setCompanyName(companyName){
         this.companyName = companyName;

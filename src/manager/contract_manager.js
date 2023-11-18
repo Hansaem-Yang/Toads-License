@@ -6,10 +6,10 @@ const logger = require("../logger/logger.js");
 mybatisMapper.createMapper(["./src/sql/contract.xml"]);
 
 module.exports = {
-    list: async function (companyNo) {
+    list: async function (companyId) {
         try {
             let pool = await poolPromise;
-            let param = { companyNo: companyNo };
+            let param = { companyId: companyId };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("contract", "list", param, format);
 
@@ -19,7 +19,7 @@ module.exports = {
             result.recordset.forEach((record) => {
                 let item = new Contract();
 
-                item.setCompanyNo(record.company_no);
+                item.setCompanyId(record.company_id);
                 item.setContractNo(record.contract_no);
                 item.setContractName(record.contract_name);
                 item.setContractDate(record.contract_date);
@@ -44,11 +44,11 @@ module.exports = {
             return null;
         }
     },
-    detail: async function (companyNo, contractNo) {
+    detail: async function (companyId, contractNo) {
         try {
             let pool = await poolPromise;
             let param = { 
-                companyNo: companyNo, 
+                companyId: companyId, 
                 contractNo: contractNo 
             };
             let format = { language: "sql", indent: " " };
@@ -60,7 +60,7 @@ module.exports = {
                 let record = result.recordset[0];
                 
                 item = new Contract();
-                item.setCompanyNo(record.company_no);
+                item.setCompanyId(record.company_id);
                 item.setContractNo(record.contract_no);
                 item.setContractName(record.contract_name);
                 item.setContractDate(record.contract_date);
@@ -83,11 +83,11 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, regMember) {
+    insert: async function (companyId, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, regMember) {
         try {
             let pool = await poolPromise;
             let param = {
-                companyNo: companyNo, 
+                companyId: companyId, 
                 contractName: contractName, 
                 contractDate: contractDate, 
                 contractor: contractor, 
@@ -108,11 +108,11 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyNo, contractNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, uptMember) {
+    update: async function (companyId, contractNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, uptMember) {
         try {
             let pool = await poolPromise;
             let param = {
-                companyNo: companyNo, 
+                companyId: companyId, 
                 contractNo: contractNo,
                 contractName: contractName, 
                 contractDate: contractDate, 
@@ -134,7 +134,7 @@ module.exports = {
             return -1;
         }
     },
-    delete: async function (companyNo, contractNos) {
+    delete: async function (companyId, contractNos) {
         let count = 0;
         try {
             let pool = await poolPromise;
@@ -144,7 +144,7 @@ module.exports = {
             try {
                 for (let i = 0; i < contractNos.length; i++) {
                     let param = {
-                        companyNo: companyNo,
+                        companyId: companyId,
                         contractNo: contractNos[i],
                     };
                     let format = { language: "sql", indent: " " };

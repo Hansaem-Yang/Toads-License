@@ -17,6 +17,7 @@ app.use("/public", express.static("public"));
 
 // Route 파일 설정
 require("./src/routes/view_route")(app);
+require("./src/routes/user_route")(app);
 require("./src/routes/member_route")(app);
 require("./src/routes/company_route")(app);
 require("./src/routes/contract_route")(app);

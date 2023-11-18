@@ -6,11 +6,18 @@ module.exports = function (app) {
         let email = req.body.email;
         let password = req.body.password;
 
-        manager.login(email, password).then((data) => {
+        manager.member(email).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
-                res.send(data);
+                if (data.password == password)
+                {
+                    res.send(constants.SUCCESS);
+                }
+                else
+                {
+                    res.send(constants.WRONG_PASSWORD);
+                }
             }
         });
     });

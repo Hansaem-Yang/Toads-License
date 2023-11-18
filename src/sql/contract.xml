@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="contract">  
     <select id="list">
-        select a.company_no
+        select a.company_id
              , a.contract_no
              , a.contract_name
              , a.contract_date
@@ -24,10 +24,10 @@
              , a.upt_member
           from contract as a
           left outer join license as b
-            on a.company_no = b.company_no
+            on a.company_id = b.company_id
            and a.contract_no = b.contract_no
-         where a.company_no = #{companyNo}
-         group by a.company_no
+         where a.company_id = #{companyId}
+         group by a.company_id
              , a.contract_no
              , a.contract_name
              , a.contract_date
@@ -46,7 +46,7 @@
              , a.upt_member;
     </select>
     <select id="detail">
-        select a.company_no
+        select a.company_id
              , a.contract_no
              , a.contract_name
              , a.contract_date
@@ -68,11 +68,11 @@
              , a.upt_member
           from contract as a
           left outer join license as b
-            on a.company_no = b.company_no
+            on a.company_id = b.company_id
            and a.contract_no = b.contract_no
-         where a.company_no = #{companyNo}
+         where a.company_id = #{companyId}
            and a.contract_no = #{contractNo}
-         group by a.company_no
+         group by a.company_id
              , a.contract_no
              , a.contract_name
              , a.contract_date
@@ -92,7 +92,7 @@
     </select>
     <insert id="insert">
         insert into contract (
-                    company_no
+                    company_id
                   , contract_no
                   , contract_name
                   , contract_date
@@ -108,10 +108,10 @@
                   , reg_member
         )
         values (
-                  , #{companyNo}
-                  , (select 'C' + convert(varchar(8), convert(datetime, #{contractDate}), 12) + format(isnull(max(company_no), 0) + 1, '000') 
+                  , #{companyId}
+                  , (select 'C' + convert(varchar(8), convert(datetime, #{contractDate}), 12) + format(isnull(max(company_id), 0) + 1, '000') 
                        from contract
-                      where company_no = #{companyNo}
+                      where company_id = #{companyId}
                         and contract_date = #{contractDate})
                   , #{contractName}
                   , #{contractDate}
@@ -141,12 +141,12 @@
              , upt_date = convert(varchar(20), getdate(), 20)
              , upt_company = #{uptCompany}
              , upt_member = #{uptMember}
-         where company_no = #{companyNo}
+         where company_id = #{companyId}
            and contract_no = #{contractNo};
     </update>
     <delete id="delete">
         delete from contract
-         where company_no = #{companyNo}
+         where company_id = #{companyId}
            and contract_no = #{contractNo};
     </delete>
 </mapper>

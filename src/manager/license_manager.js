@@ -6,10 +6,10 @@ const logger = require("../logger/logger.js");
 mybatisMapper.createMapper(["./src/sql/license.xml"]);
 
 module.exports = {
-    list: async function (companyNo) {
+    list: async function (companyId) {
         try {
             let pool = await poolPromise;
-            let param = { companyNo: companyNo };
+            let param = { companyId: companyId };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("license", "list", param, format);
 
@@ -19,7 +19,7 @@ module.exports = {
             result.recordset.forEach((record) => {
                 let item = new License();
 
-                item.setCompanyNo(record.company_no);
+                item.setCompanyId(record.company_id);
                 item.setContractNo(record.contract_no);
                 item.setLicenseNo(record.license_no);
                 item.setLicenseType(record.license_type);
@@ -43,11 +43,11 @@ module.exports = {
             return null;
         }
     },
-    detail: async function (companyNo, contractNo) {
+    detail: async function (companyId, contractNo) {
         try {
             let pool = await poolPromise;
             let param = { 
-                companyNo: companyNo, 
+                companyId: companyId, 
                 contractNo: contractNo 
             };
             let format = { language: "sql", indent: " " };
@@ -59,7 +59,7 @@ module.exports = {
                 let record = result.recordset[0];
 
                 item = new License();
-                item.setCompanyNo(record.company_no);
+                item.setCompanyId(record.company_id);
                 item.setContractNo(record.contract_no);
                 item.setLicenseNo(record.license_no);
                 item.setLicenseType(record.license_type);
@@ -81,11 +81,11 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyNo, contractNo, licenseType, appName, licenseCount, startDate, endDate, regMember) {
+    insert: async function (companyId, contractNo, licenseType, appName, licenseCount, startDate, endDate, regMember) {
         try {
             let pool = await poolPromise;
             let param = {
-                companyNo: companyNo,
+                companyId: companyId,
                 contractNo: contractNo,
                 licenseType: licenseType,
                 appName: appName,
@@ -105,11 +105,11 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyNo, contractNo, licenseNo, licenseType, appName, licenseCount, startDate, endDate, uptMember) {
+    update: async function (companyId, contractNo, licenseNo, licenseType, appName, licenseCount, startDate, endDate, uptMember) {
         try {
             let pool = await poolPromise;
             let param = {
-                companyNo: companyNo,
+                companyId: companyId,
                 contractNo: contractNo,
                 licenseNo: licenseNo,
                 licenseType: licenseType,
@@ -130,7 +130,7 @@ module.exports = {
             return -1;
         }
     },
-    delete: async function (companyNo, contractNo, licenseNos) {
+    delete: async function (companyId, contractNo, licenseNos) {
         let count = 0;
         try {
             let pool = await poolPromise;
@@ -140,7 +140,7 @@ module.exports = {
             try {
                 for (let i = 0; i < licenseNos.length; i++) {
                     let param = {
-                        companyNo: companyNo,
+                        companyId: companyId,
                         contractNo: contractNo,
                         licenseNo: licenseNos[i],
                     };

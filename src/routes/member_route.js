@@ -14,9 +14,9 @@ module.exports = function (app) {
         });
     });
     app.post("/member/detail", (req, res) => {
-        let accountNo = req.body.accountNo;
+        let memberId = req.body.memberId;
 
-        manager.detail(companyId, accountNo).then((data) => {
+        manager.detail(companyId, memberId).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -25,10 +25,10 @@ module.exports = function (app) {
         });
     });
     app.post("/member/checkEmail", (req, res) => {
-        let accountNo = req.body.accountNo;
+        let memberId = req.body.memberId;
         let email = req.body.email;
 
-        manager.checkEmail(accountNo, email).then((data) => {
+        manager.checkEmail(memberId, email).then((data) => {
             if (data == 0) {
                 res.send(constants.SUCCESS);
             } else if (data > 0) {
@@ -40,14 +40,14 @@ module.exports = function (app) {
     });
     app.post("/member/regist", (req, res) => {
         let companyId = req.body.companyId;
-        let userName = req.body.userName;
+        let memberName = req.body.memberName;
         let email = req.body.email;
         let password = req.body.password;
         let memberType = req.body.memberType;
-        let nationCode = req.body.nationCode;
-        let phoneNumber = req.body.phoneNumber;
+        let roleCode = req.body.roleCode;
+        let phone = req.body.phone;
 
-        manager.regist(companyId, userName, email, password, memberType, nationCode, phoneNumber).then((data) => {
+        manager.regist(companyId, memberName, email, password, memberType, roleCode, phone).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -56,14 +56,14 @@ module.exports = function (app) {
         });
     });
     app.post("/member/modify", (req, res) => {
-        let accountNo = req.body.accountNo;
-        let userName = req.body.userName;
+        let memberId = req.body.memberId;
+        let memberName = req.body.memberName;
         let email = req.body.email;
         let memberType = req.body.memberType;
-        let nationCode = req.body.nationCode;
-        let phoneNumber = req.body.phoneNumber;
+        let roleCode = req.body.roleCode;
+        let phone = req.body.phone;
 
-        manager.modify(accountNo, userName, email, memberType, nationCode, phoneNumber).then((data) => {
+        manager.modify(memberId, memberName, email, memberType, roleCode, phone).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -72,9 +72,9 @@ module.exports = function (app) {
         });
     });
     app.post("/member/delete", (req, res) => {
-        let accountNo = req.body.accountNo;
+        let memberId = req.body.memberId;
 
-        manager.delete(accountNo).then((data) => {
+        manager.delete(memberId).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {

@@ -19,7 +19,7 @@ module.exports = {
             result.recordset.forEach((record) => {
                 let item = new Company();
 
-                item.setCompanyNo(record.company_no);
+                item.setCompanyId(record.company_id);
                 item.setCompanyName(record.company_name);
                 item.setOwnerName(record.owner_name);
                 item.setBusinessNo(record.business_no);
@@ -42,10 +42,10 @@ module.exports = {
             return null;
         }
     },
-    detail: async function (companyNo) {
+    detail: async function (companyId) {
         try {
             let pool = await poolPromise;
-            let param = { companyNo: companyNo };
+            let param = { companyId: companyId };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("company", "detail", param, format);
 
@@ -55,7 +55,7 @@ module.exports = {
                 let record = result.recordset[0];
 
                 item = new Company();
-                item.setCompanyNo(record.company_no);
+                item.setCompanyId(record.company_id);
                 item.setCompanyName(record.company_name);
                 item.setOwnerName(record.owner_name);
                 item.setBusinessNo(record.business_no);
@@ -99,11 +99,11 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyNo, companyName, ownerName, businessNo, residentNo, businessPlace, telephone, uptMember) {
+    update: async function (companyId, companyName, ownerName, businessNo, residentNo, businessPlace, telephone, uptMember) {
         try {
             let pool = await poolPromise;
             let param = {
-                companyNo: companyNo,
+                companyId: companyId,
                 companyName: companyName, 
                 ownerName: ownerName, 
                 businessNo: businessNo, 
@@ -123,7 +123,7 @@ module.exports = {
             return -1;
         }
     },
-    delete: async function (companyNos) {
+    delete: async function (companyIds) {
         let count = 0;
         try {
             let pool = await poolPromise;
@@ -131,9 +131,9 @@ module.exports = {
 
             await transaction.begin();
             try {
-                for (let i = 0; i < companyNos.length; i++) {
+                for (let i = 0; i < companyIds.length; i++) {
                     let param = {
-                        companyNo: companyNos[i],
+                        companyId: companyIds[i],
                     };
                     let format = { language: "sql", indent: " " };
                     let query = mybatisMapper.getStatement("company", "delete", param, format);
