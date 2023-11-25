@@ -9,27 +9,80 @@ module.exports = function (app) {
     app.get("/", (req, res) => {
         logger.info(`Index view`);
 
-        res.sendFile(path.join(config.root, "/src/content/index.html"));
-    });
-
-    // 메인 페이지
-    app.get("/main", (req, res) => {
-        logger.info(`Main view`);
-
-        res.sendFile(path.join(config.root, "/src/content/main.html"));
-    });
-
-    // 메뉴 페이지
-    app.get("/menu", (req, res) => {
-        logger.info(`Menu view`);
-
-        res.sendFile(path.join(config.root, "/src/content/menu/menu.html"));
+        res.sendFile(path.join(config.root, "/src/views/index.html"));
     });
 
     // 로그인 페이지
-    app.get("/login", (req, res) => {
+    app.get("/view/login", (req, res) => {
         logger.info(`Login view`);
 
-        res.sendFile(path.join(config.root, "/src/content/user/login.html"));
+        res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+    });
+
+    // 메인 페이지
+    app.get("/view/menu", (req, res) => {
+        logger.info(`Menu view`);
+
+        res.render("menu/menu");
+    });
+
+    // 메인 페이지
+    app.get("/view/main", (req, res) => {
+        if (!req.session.user)
+        {
+            res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+            return;
+        }
+        logger.info(`Main view`);
+
+        res.render("main");
+    });
+
+    // 업체 관리 페이지
+    app.get("/view/company", (req, res) => {
+        if (!req.session.user)
+        {
+            res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+            return;
+        }
+        logger.info(`Main view`);
+
+        res.render("company/status");
+    });
+    
+    // 계약 관리 페이지
+    app.get("/view/contract", (req, res) => {
+        if (!req.session.user)
+        {
+            res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+            return;
+        }
+        logger.info(`Login view`);
+
+        res.sendFile(path.join(config.root, "/src/views/contract/login.html"));
+    });
+    
+    // 사용자 관리 페이지
+    app.get("/view/user", (req, res) => {
+        if (!req.session.user)
+        {
+            res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+            return;
+        }
+        logger.info(`Login view`);
+
+        res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+    });
+    
+    // 선박 관리 페이지
+    app.get("/view/ship", (req, res) => {
+        if (!req.session.user)
+        {
+            res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+            return;
+        }
+        logger.info(`Login view`);
+
+        res.sendFile(path.join(config.root, "/src/views/ship/login.html"));
     });
 };

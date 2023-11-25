@@ -1,150 +1,101 @@
 /* Styles for screens between 1025px and 2560px wide */
 header {
     font-size: 30px;
+    height: 154px;
 }
 
 nav {
     display: block;
+    font-size: 16px;
+}
+
+nav a {
+    font-size: 16px;
 }
 
 main {
     font-size: 20px;
 }
 
-/* Main CSS */
+/* Menu CSS */
 .logo {
-    position: absolute;
     top: 25px;
     left: 25px;
     width: 240px;
     height: 80px;
-    background-size: cover;
-    background-image: url('/public/images/logo.png');
-    margin: 0;
 }
-/* Main CSS */
+
+.topMenu {
+    /* Layout Properties */
+    height: 154px;
+}
+
+.menu {
+    top: 96px;
+}
+
+.topShortcuts {
+    height: 26px;
+}
+/* Menu CSS */
 
 /* Login CSS */
 .login {
-    /* Layout Properties */
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     width: 720px;
     height: 480px;
-    /* UI Properties */
-    background: #4887c6 0% 0% no-repeat padding-box;
-    opacity: 1;
 }
 
 .login-logo {
-    position: absolute;
     top: 40px;
     left: 60px;
     width: 300px;
     height: 100px;
-    background-size: cover;
-    background-image: url('/public/images/logo.png');
-    margin: 0;
 }
 
-.id {
-    /* Layout Properties */
-    position: absolute;
+.login-id {
     top: 170px;
     left: 60px;
     width: 600px;
     height: 58px;
-    /* UI Properties */
-    background: #ffffff 0% 0% no-repeat padding-box;
-    border-radius: 8px;
-    opacity: 1;
 }
 
 .login-password {
-    /* Layout Properties */
-    position: absolute;
     top: 240px;
     left: 60px;
     width: 600px;
     height: 58px;
-    /* UI Properties */
-    background: #ffffff 0% 0% no-repeat padding-box;
-    border-radius: 8px;
-    opacity: 1;
 }
 
 .login-id-text {
-    /* Layout Properties */
-    position: absolute;
     top: 5px;
     left: 10px;
     width: 580px;
     height: 48px;
-    /* UI Properties */
-    text-align: left;
+    
     font: normal normal 300 28px/32px Pretendard;
-    background: #ffffff 0% 0% no-repeat padding-box;
-    letter-spacing: 0px;
-    color: #484848;
-    opacity: 1;
-    border: none;
-    outline: none;
 }
 
 .login-password-text {
-    /* Layout Properties */
-    position: absolute;
     top: 5px;
     left: 10px;
     width: 580px;
     height: 48px;
-    /* UI Properties */
-    text-align: left;
+    
     font: normal normal 300 28px/32px Pretendard;
-    background: #ffffff 0% 0% no-repeat padding-box;
-    letter-spacing: 0px;
-    color: #484848;
-    opacity: 1;
-    border: none;
-    outline: none;
 }
 
 .login-button {
-    /* Layout Properties */
-    position: absolute;
     top: 360px;
     left: 60px;
     width: 600px;
     height: 64px;
-    /* UI Properties */
-    background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
-    box-shadow: 0px 5px 6px #00000029;
-    border-radius: 8px;
-    opacity: 1;
-
-    cursor: pointer;
 }
 
 .login-submit {
-    /* Layout Properties */
-    position: absolute;
-    justify-content: center;
-    align-items: center;
     width: 600px;
     height: 64px;
-    /* UI Properties */
-    text-align: center;
+    
     font: normal normal medium 24px/35px Pretendard;
     font-size: 32px;
-    letter-spacing: 0px;
-    color: #ffffff;
-    opacity: 1;
-    border: none;
-    outline: none;
-    background: none;
-
-    cursor: pointer;
 }
 /* Login CSS */

@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<!-- 로그인 화면 -->
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/public/css/styles.css">
-        <link rel="stylesheet" media="screen and (max-width: 720px)" href="/public/css/styles-small.css">
-        <link rel="stylesheet" media="screen and (min-width: 721px) and (max-width: 1280px)" href="/public/css/styles-medium.css">
-        <link rel="stylesheet" media="screen and (min-width: 1281px)" href="/public/css/styles-large.css">
-        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
+        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
+        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script>
             $(document).ready(() => {
                 // 로그인 화면 Submit 처리
@@ -32,7 +31,7 @@
                             password: password,
                         },
                         success: function (res) {
-                            switch (res.status) {
+                            switch (res) {
                                 case "NO DATA":
                                     alert("아이디가 존재하지 않습니다.");
                                     break;
@@ -51,22 +50,17 @@
                 });
             });
         </script>
-        <title>Main</title>
+        <title>로그인</title>
     </head>
     <body>
-        <form id="main-form">
-            <header>
-                <div class="topMenu">
-                    <div class="logo"/>
-                    <div class="menu">
-                        <div>계약 관리</div>
-                        <div>사용자 관리</div>
-                        <div>선박 관리</div>
-                        <div>권한 관리</div>
-                    </div>
-                </div>
-            </header>
+        <form id="login-form">
             <main>
+                <div class="login">
+                    <div class="login-logo"></div>
+                    <div class="login-id"><input type="text" id="email" class="login-id-text" placeholder="E-Mail"/></div>
+                    <div class="login-password"><input type="password" id="password" class="login-password-text" placeholder="Password"/></div>
+                    <div class="login-button"><button type="submit" class="login-submit">로그인</button></div>
+                </div>
             </main>
         </form>
     </body>

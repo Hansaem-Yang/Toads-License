@@ -12,6 +12,15 @@ module.exports = function (app) {
             } else {
                 if (data.password == password)
                 {
+                    req.session.user = {
+                        companyId: data.companyId,
+                        memberId: data.memberId,
+                        memberName: data.memberName,
+                        email: data.email,
+                        memberType: data.memberType,
+                        roleCode: data.roleCode,
+                    }
+
                     res.send(constants.SUCCESS);
                 }
                 else
@@ -20,5 +29,29 @@ module.exports = function (app) {
                 }
             }
         });
+    });
+    app.post("/user/logout", (req, res) => {
+        console.log("Logout");
+        let email = req.body.email;
+
+        req.session.destroy((err) =>{
+            if (err) {
+                console.error(err);
+            }
+            res.send(constants.SUCCESS);
+        });
+
+        // manager.logout(email).then((data) => {
+        //     if (data == null || data.length <= 0) {
+        //         res.send(constants.NO_DATA);
+        //     } else {
+        //         req.session.destroy((err) =>{
+        //             if (err) {
+        //                 console.error(err);
+        //             }
+        //         });
+        //         res.send(constants.SUCCESS);
+        //     }
+        // });
     });
 };

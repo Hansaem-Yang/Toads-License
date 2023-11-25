@@ -83,7 +83,7 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyId, memberName, email, password, memberType, roleCode, phone, useStatus, regMember) {
+    insert: async function (companyId, memberName, email, password, memberType, roleCode, phone, useStatus, regCompany, regMember) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -95,6 +95,7 @@ module.exports = {
                 roleCode: roleCode,
                 phone: phone,
                 useStatus: useStatus,
+                regCompany: regCompany,
                 regMember: regMember
             };
             let format = { language: "sql", indent: " " };
@@ -108,7 +109,7 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyId, memberId, memberName, email, password, memberType, roleCode, phone, useStatus, uptMember) {
+    update: async function (companyId, memberId, memberName, email, password, memberType, roleCode, phone, useStatus, uptCompany, uptMember) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -121,7 +122,8 @@ module.exports = {
                 roleCode: roleCode,
                 phone: phone,
                 useStatus: useStatus,
-                uptMember: uptMember
+                uptCompany: uptCompany,
+                uptMember: uptMember,
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("member", "update", param, format);

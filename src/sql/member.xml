@@ -44,6 +44,7 @@
                   , member_id
                   , member_name
                   , email
+                  , password
                   , member_type
                   , phone
                   , role_code
@@ -59,6 +60,7 @@
                       where company_id = #{companyId})  
                   , #{memberName}
                   , #{email}
+                  , convert(varbinary(MAX), #{password})
                   , #{memberType}
                   , #{phone}
                   , #{roleCode}
