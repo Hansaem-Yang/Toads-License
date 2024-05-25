@@ -11,9 +11,17 @@
     </head>
     <body>
         <header>
-            <object data="./menu" class="topMenu"></object>
+            <div class="top-menu">
+                <object id="top-menu" data="./top-menu"></object>
+            </div>
         </header>
-        <form id="main-form">
-        </form>
+        <div class="container">
+            <div class="sidebar">
+                <object id="sidebar" data="./sidebar"></object>
+            </div>
+            <div class="content">
+                <iframe id="content-frame"></iframe>
+            </div>
+        </div>
     </body>
 </html>

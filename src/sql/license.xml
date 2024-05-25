@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="license">  
     <select id="list">
-        select company_id
+        select company_no
              , contract_no
              , license_no
              , license_type
@@ -14,18 +14,18 @@
              , amount
              , discounted_amount
              , actual_amount
-             , reg_date
-             , reg_company
-             , reg_member
-             , upt_date
-             , upt_company
-             , upt_member
+             , regist_datetime
+             , regist_company
+             , regist_user
+             , modify_datetime
+             , modify_company
+             , modify_user
           from license
-         where company_id = #{companyId}
+         where company_no = #{companyNo}
            and contract_no = #{contractNo};
     </select>
     <select id="detail">
-        select company_id
+        select company_no
              , contract_no
              , license_no
              , license_type
@@ -37,20 +37,20 @@
              , amount
              , discounted_amount
              , actual_amount
-             , reg_date
-             , reg_company
-             , reg_member
-             , upt_date
-             , upt_company
-             , upt_member
+             , regist_datetime
+             , regist_company
+             , regist_user
+             , modify_datetime
+             , modify_company
+             , modify_user
           from license
-         where company_id = #{companyId}
+         where company_no = #{companyNo}
            and contract_no = #{contractNo}
            and license_no = #{licenseNo};
     </select>
     <insert id="insert">
         insert into license (
-                    company_id
+                    company_no
                   , contract_no
                   , license_no
                   , license_type
@@ -62,16 +62,16 @@
                   , amount
                   , discounted_amount
                   , actual_amount
-                  , reg_date
-                  , reg_company
-                  , reg_member
+                  , regist_datetime
+                  , regist_company
+                  , regist_user
         )
         values (
-                    #{companyId}
+                    #{companyNo}
                   , #{contractNo}
                   , (select #{licenseType} + format(isnull(substring(max(license_no), 3, 2), 0) + 1, '00') + #{appName}
                        from license
-                      where company_id = #{companyId}
+                      where company_no = #{companyNo}
                         and contract_no = #{contractNo}
                         and license_type = #{licenseType})
                   , #{licenseType}
@@ -97,22 +97,22 @@
              , amount = #{amount}
              , discounted_amount = #{discountedAmount}
              , actual_amount = #{actualAmount}
-             , upt_date = convert(varchar(20), getdate(), 20)
-             , upt_company = #{uptCompany}
-             , upt_member = #{uptMember}
-         where company_id = #{companyId}
+             , modify_datetime = convert(varchar(20), getdate(), 20)
+             , modify_company = #{uptCompany}
+             , modify_user = #{uptMember}
+         where company_no = #{companyNo}
            and contract_no = #{contractNo}
            and license_no = #{licenseNo};
     </update>
     <delete id="delete">
         delete from license
-         where company_id = #{companyId}
+         where company_no = #{companyNo}
            and contract_no = #{contractNo}
            and license_no = #{licenseNo};
     </delete>
     <delete id="deleteAll">
         delete from license
-         where company_id = #{companyId}
+         where company_no = #{companyNo}
            and contract_no = #{contractNo};
     </delete>
 </mapper>

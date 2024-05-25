@@ -1,23 +1,19 @@
 /* Reset some default styles and set a base font size */
-body {
+body, html {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    height: 100%;
     font-size: 16px;
+    overflow: hidden;
 }
 
-/* Common styles for all screen sizes */
-header {
-    /* Layout Properties */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 132px;
-    /* UI Properties */
-    background: #ffffff 0% 0% no-repeat padding-box;
-    font-size: 24px;
-    opacity: 1;
+object, iframe {
+    top:0px;
+    left:0px;
+    width: 100%;
+    height: 100%;
+    border: 0px;
 }
 
 nav {
@@ -32,70 +28,104 @@ nav a {
     padding: 2px;
 }
 
-main {
-    /* Layout Properties */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 84vh;
-    /* UI Properties */
-    background: #ffffff 0% 0% no-repeat padding-box;
-    font-size: 18px;
-    opacity: 1;
-}
-
 footer {
     text-align: center;
 }
 
 /* Main CSS */
+.top-menu {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    padding: 10;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #53a8fd 0% 0% no-repeat padding-box;
+    overflow: hidden;
+    z-index: 1000;
+}
+.top-menu a {
+    color: white;
+    text-decoration: none;
+}
+.top-menu a:hover {
+    text-decoration: underline;
+}
+.top-shortcuts {
+    /* Layout Properties */
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    /* UI Properties */
+    font: normal normal 300 18px/22px Pretendard;
+    opacity: 1;
+}
 .logo {
     position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 180px;
-    height: 60px;
+    top: 10px;
+    left: 10px;
+    width: 120px;
+    height: 40px;
     background-size: cover;
     background-image: url('/public/images/logo.png');
     margin: 0;
 }
 
-.topMenu {
-    /* Layout Properties */
-    position: relative;
-    justify-content: top;
-    align-items: center;
-    width: 100vw;
-    height: 132px;
-    /* UI Properties */
-    background: #5994cf 0% 0% no-repeat padding-box;
-    opacity: 1;
+.container {
+    display: flex;
+    height: 100vh;
+    margin-top: 80px;
+}
+.sidebar {
+    width: 250px;
+    color: rgb(0, 50, 74);
+    padding: 12px;
+    box-sizing: border-box;
+    position: fixed;
+    top: 80px; /* 상단 메뉴 바로 아래에 위치 */
+    bottom: 0px;
+    border-right: 2px solid #0056ad;
     overflow: hidden;
 }
-
-.menu {
-    /* Layout Properties */
-    position: absolute;
-    display: flex;
-    top: 96px;
-    left: 0px;
-    width: 100vw;
-    height: 26px;
-    /* UI Properties */
-    font: normal normal 300 18px/22px Pretendard;
-    opacity: 1;
+.side-menu {
+    width: 220px;
+    color: rgb(0, 37, 69);
+    box-sizing: border-box;
+    position: fixed;
+    top: 0px; /* 상단 메뉴 바로 아래에 위치 */
+    bottom: 0px;
+    overflow: hidden;
+}
+.side-menu div {
+    width: 100%;
+    height: 40px;
+    padding-left: 20px;
+    padding-Top: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border-radius: 18px;
+    transition: background-color 0.3s;
+    background: #ffffff 0% 0% no-repeat padding-box;
+}
+.side-menu div:hover {
+    background: #53a8fd 0% 0% no-repeat padding-box;
 }
 
-.topShortcuts {
-    /* Layout Properties */
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    height: 26px;
-    /* UI Properties */
-    font: normal normal 300 18px/22px Pretendard;
-    opacity: 1;
+.content {
+    margin-left: 250px; /* 왼쪽 메뉴 너비만큼 여백 추가 */
+    padding: 0px;
+    box-sizing: border-box;
+    position: fixed;
+    top: 80px; /* 상단 메뉴 바로 아래에 위치 */
+    left:0px;
+    right:0px;
+    bottom: 0px;
+    background-color: #f4f4f4;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 /* Main CSS */
 
@@ -109,7 +139,7 @@ footer {
     width: 620px;
     height: 420px;
     /* UI Properties */
-    background: #4887c6 0% 0% no-repeat padding-box;
+    background: #53a8fd 0% 0% no-repeat padding-box;
     opacity: 1;
 }
 

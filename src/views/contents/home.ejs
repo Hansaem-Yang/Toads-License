@@ -17,7 +17,7 @@
                     // Ajax를 이용한 데이터 전송
                     $.ajax({
                         url: "../user/logout",
-                        method: "POST",
+                        method: "POST", 
                         data: {
                             email: email,
                         },
@@ -39,27 +39,11 @@
         </script>
     </head>
     <body>
-        <form id="menu-form">
-            <div class="topMenu">
-                <div class="topShortcuts">
-                    <nav>
-                        <%= user.memberName %>님
-                        <a href="./user/mypage">내정보</a>
-                        <a href="#" id="logout">로그아웃</a>
-                    <nav>
-                </div>
-                <div class="logo"/>
-                <div class="menu">
-                    <nav>
-                        <a href="./main"">홈</a>
-                        <a href="./company">업체 관리</a>
-                        <a href="./contract">계약 관리</a>
-                        <a href="./user">사용자 관리</a>
-                        <a href="./ship">선박 관리</a>
-                        <a href="./role">권한 관리</a>
-                    </nav>
-                </div>
-            </div>
+        <form id="home-form">
+            <div>홈</div>
+            <div>고객사관리</div>
+            <div>계약관리</div>
+            <div>라이센스관리</div>
         </form>
     </body>
 </html>

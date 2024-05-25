@@ -6,19 +6,22 @@ module.exports = function (app) {
         let email = req.body.email;
         let password = req.body.password;
 
-        manager.member(email).then((data) => {
+        console.log(email);
+
+        manager.login(email).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
                 if (data.password == password)
                 {
                     req.session.user = {
-                        companyId: data.companyId,
-                        memberId: data.memberId,
-                        memberName: data.memberName,
+                        companyNo: data.companyNo,
+                        accountNo: data.accountNo,
+                        userName: data.userName,
                         email: data.email,
-                        memberType: data.memberType,
-                        roleCode: data.roleCode,
+                        userType: data.userType,
+                        nationCode: data.nationCode,
+                        phoneNumber: data.phoneNumber,
                     }
 
                     res.send(constants.SUCCESS);
@@ -34,24 +37,17 @@ module.exports = function (app) {
         console.log("Logout");
         let email = req.body.email;
 
-        req.session.destroy((err) =>{
-            if (err) {
-                console.error(err);
+        manager.logout(email).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                req.session.destroy((err) =>{
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+                res.send(constants.SUCCESS);
             }
-            res.send(constants.SUCCESS);
         });
-
-        // manager.logout(email).then((data) => {
-        //     if (data == null || data.length <= 0) {
-        //         res.send(constants.NO_DATA);
-        //     } else {
-        //         req.session.destroy((err) =>{
-        //             if (err) {
-        //                 console.error(err);
-        //             }
-        //         });
-        //         res.send(constants.SUCCESS);
-        //     }
-        // });
     });
 };

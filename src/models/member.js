@@ -3,25 +3,25 @@ const Common = require("./common");
 class Member extends Common {
     constructor() {
         super();
-        this.companyId = -1;
-        this.memberId = -1;
-        this.memberName = null;
+        this.companyNo = -1;
+        this.accountNo = -1;
+        this.userName = null;
         this.email = null;
         this.password = null;
-        this.memberType = null;
-        this.phone = null;
-        this.roleCode = null;
+        this.userType = null;
+        this.nationCode = null;
+        this.phoneNumber = null;
         this.useStatus = null;
     }
 
-    getCompanyId(){
-        return companyId;
+    getCompanyNo(){
+        return companyNo;
     }
-    getMemberId(){
-        return memberId;
+    getAccountNo(){
+        return accountNo;
     }
-    getMemberName(){
-        return memberName;
+    getUserName(){
+        return userName;
     }
     getEmail(){
         return email;
@@ -29,27 +29,27 @@ class Member extends Common {
     getPassword(){
         return password;
     }
-    getMemberType(){
-        return memberType;
+    getUserType(){
+        return userType;
     }
-    getRoleCode(){
-        return roleCode;
+    getNationCode(){
+        return nationCode;
     }
-    getPhone(){
-        return phone;
+    getPhoneNumber(){
+        return phoneNumber;
     }
     getUseStatus(){
         return useStatus;
     }
 
-    setCompanyId(companyId){
-        this.companyId = companyId;
+    setCompanyNo(companyNo){
+        this.companyNo = companyNo;
     }
-    setMemberId(memberId){
-        this.memberId = memberId;
+    setAccountNo(accountNo){
+        this.accountNo = accountNo;
     }
-    setMemberName(memberName){
-        this.memberName = memberName;
+    setUserName(userName){
+        this.userName = userName;
     }
     setEmail(email){
         this.email = email;
@@ -57,14 +57,14 @@ class Member extends Common {
     setPassword(password){
         this.password = password;
     }
-    setMemberType(memberType){
-        this.memberType = memberType;
+    setUserType(userType){
+        this.userType = userType;
     }
-    setRoleCode(roleCode){
-        this.roleCode = roleCode;
+    setNationCode(nationCode){
+        this.nationCode = nationCode;
     }
-    setPhone(phone){
-        this.phone = phone;
+    setPhoneNumber(phoneNumber){
+        this.phoneNumber = phoneNumber;
     }
     setUseStatus(useStatus){
         this.useStatus = useStatus;

@@ -1,53 +1,53 @@
 class Common {
     constructor() {
-        this.regCompany = 0;
-        this.regMember = 0;
-        this.regDate = null;
-        this.uptCompany = 0;
-        this.uptMember = 0;
-        this.uptDate = null;
+        this.registCompany = 0;
+        this.registUser = 0;
+        this.registDatetime = null;
+        this.modifyCompany = 0;
+        this.modifyUser = 0;
+        this.modifyDatetime = null;
         this.errorCode = null;
     }
 
-    getRegCompany() {
-        return this.regCompany;
+    getRegistCompany() {
+        return this.registCompany;
     }
-    getRegMember() {
-        return this.regMember;
+    getRegistUser() {
+        return this.registUser;
     }
-    getRegDate() {
-        return this.regDate;
+    getRegistDatetime() {
+        return this.registDatetime;
     }
-    getUptCompany() {
-        return this.uptCompany;
+    getModifyCompany() {
+        return this.modifyCompany;
     }
-    getUptMember() {
-        return this.uptMember;
+    getModifyUser() {
+        return this.modifyUser;
     }
-    getUptDate() {
-        return this.uptDate;
+    getModifyDatetime() {
+        return this.modifyDatetime;
     }
     getErrorCode() {
         return this.errorCode;
     }
 
-    setRegCompany(regCompany) {
-        this.regCompany = regCompany;
+    setRegistCompany(registCompany) {
+        this.registCompany = registCompany;
     }
-    setRegMember(regMember) {
-        this.regMember = regMember;
+    setRegistUser(registUser) {
+        this.registUser = registUser;
     }
-    setRegDate(regDate) {
-        this.regDate = regDate;
+    setRegistDatetime(registDatetime) {
+        this.registDatetime = registDatetime;
     }
-    setUptCompany(uptCompany) {
-        this.uptCompany = uptCompany;
+    setModifyCompany(modifyCompany) {
+        this.modifyCompany = modifyCompany;
     }
-    setUptMember(uptMember) {
-        this.uptMember = uptMember;
+    setModifyUser(modifyUser) {
+        this.modifyUser = modifyUser;
     }
-    setUptDate(uptDate) {
-        this.uptDate = uptDate;
+    setModifyDatetime(modifyDatetime) {
+        this.modifyDatetime = modifyDatetime;
     }
     setErrorCode(errorCode) {
         this.errorCode = errorCode;

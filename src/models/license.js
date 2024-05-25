@@ -3,7 +3,7 @@ const Common = require("./common");
 class License extends Common {
     constructor() {
         super();
-        this.companyId = -1;
+        this.companyNo = -1;
         this.contractNo = null;
         this.licenseNo = null;
         this.licenseType = null;
@@ -17,8 +17,8 @@ class License extends Common {
         this.actualAmount = -1;
     }
 
-    getCompanyId(){
-        return this.companyId;
+    getCompanyNo(){
+        return this.companyNo;
     }
     getContractNo(){
         return this.contractNo;
@@ -54,8 +54,8 @@ class License extends Common {
         return actualAmount;
     }
     
-    setCompanyId(companyId){
-        this.companyId = companyId;
+    setCompanyNo(companyNo){
+        this.companyNo = companyNo;
     }
     setContractNo(contractNo){
         this.contractNo = contractNo;

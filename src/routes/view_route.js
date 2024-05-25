@@ -20,13 +20,6 @@ module.exports = function (app) {
     });
 
     // 메인 페이지
-    app.get("/view/menu", (req, res) => {
-        logger.info(`Menu view`);
-
-        res.render("menu/menu");
-    });
-
-    // 메인 페이지
     app.get("/view/main", (req, res) => {
         if (!req.session.user)
         {
@@ -36,6 +29,18 @@ module.exports = function (app) {
         logger.info(`Main view`);
 
         res.render("main");
+    });
+
+    app.get("/view/top-menu", (req, res) => {
+        logger.info(`Top menu view`);
+
+        res.render("menu/topmenu");
+    });
+    
+    app.get("/view/sidebar", (req, res) => {
+        logger.info(`Sidebar view`);
+
+        res.render("menu/sidebar");
     });
 
     // 업체 관리 페이지

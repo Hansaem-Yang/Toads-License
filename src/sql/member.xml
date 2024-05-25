@@ -2,91 +2,91 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="member">  
     <select id="list">
-        select company_id
-             , member_id
-             , member_name
+        select company_no
+             , account_no
+             , user_name
              , email
-             , member_type
-             , phone
-             , role_code
+             , user_type
+             , nation_code
+             , phone_number
              , use_status
-             , reg_date
-             , reg_company
-             , reg_member
-             , upt_date
-             , upt_company
-             , upt_member
+             , regist_datetime
+             , regist_company
+             , regist_user
+             , modify_datetime
+             , modify_company
+             , modify_user
           from member
-         where company_id = #{companyId};
+         where company_no = #{companyNo};
     </select>
     <select id="detail">
-        select company_id
-             , member_id
-             , member_name
+        select company_no
+             , account_no
+             , user_name
              , email
-             , member_type
-             , phone
-             , role_code
+             , user_type
+             , nation_code
+             , phone_number
              , use_status
-             , reg_date
-             , reg_company
-             , reg_member
-             , upt_date
-             , upt_company
-             , upt_member
+             , regist_date
+             , regist_company
+             , regist_user
+             , modify_datetime
+             , modify_company
+             , modify_user
           from member
-         where company_id = #{companyId}
-           and member_id = #{memberId};
+         where company_no = #{companyNo}
+           and account_no = #{accountNo};
     </select>
     <insert id="insert">
         insert into member (
-                    company_id
-                  , member_id
-                  , member_name
+                    company_no
+                  , account_no
+                  , user_name
                   , email
                   , password
-                  , member_type
-                  , phone
-                  , role_code
+                  , user_type
+                  , nation_code
+                  , phone_number
                   , use_status
-                  , reg_date
-                  , reg_company
-                  , reg_member
+                  , regist_datetime
+                  , regist_company
+                  , regist_user
         )
         values (
-                    #{companyId}
-                  , (select isnull(max(member_id), 0) + 1
+                    #{companyNo}
+                  , (select isnull(max(account_no), 0) + 1
                        from member 
-                      where company_id = #{companyId})  
-                  , #{memberName}
+                      where company_no = #{companyNo})  
+                  , #{userName}
                   , #{email}
                   , convert(varbinary(MAX), #{password})
-                  , #{memberType}
-                  , #{phone}
-                  , #{roleCode}
+                  , #{userType}
+                  , #{nationCode}
+                  , #{phoneNumber}
                   , #{useStatus}
                   , convert(varchar(20), getdate(), 20)
-                  , #{regCompany}
-                  , #{regMember}
+                  , #{registCompany}
+                  , #{registUser}
         );
     </insert>
     <update id="update">
         update member
-           set member_name = #{memberName}
+           set user_name = #{userName}
              , email = #{email}
-             , member_type = #{memberType}
-             , phone = #{phone}
-             , role_code = #{roleCode}
+             , user_type = #{userType}
+             , nation_code = #{nationCode}
+             , phone_number = #{phoneNumber}
              , use_status = #{useStatus}
-             , upt_date = convert(varchar(20), getdate(), 20)
-             , upt_company = #{uptCompany}
-             , upt_user = #{uptMember}
-         where company_id = #{companyId}
-           and member_id = #{memberId};
+             , modify_datetime = convert(varchar(20), getdate(), 20)
+             , modify_company = #{modifyCompany}
+             , modify_user = #{modifyUser}
+         where company_no = #{companyNo}
+           and account_no = #{accountNo};
     </update>
     <delete id="delete">
         delete from member
-         where company_id = #{companyId}
-           and member_id = #{memberId};
+         where company_no = #{companyNo}
+           and account_no = #{accountNo};
     </delete>
 </mapper>

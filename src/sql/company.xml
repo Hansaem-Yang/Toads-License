@@ -2,53 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="company">  
     <select id="list">
-        select company_id
+        select company_no
              , company_name
              , owner_name
              , business_no
              , resident_no
              , business_place
              , telephone
-             , reg_date
-             , reg_company
-             , reg_member
-             , upt_date
-             , upt_company
-             , upt_member
+             , regist_datetime
+             , regist_company
+             , regist_user
+             , modify_datetime
+             , modify_company
+             , modify_user
           from company;
     </select>
     <select id="detail">
-        select company_id
+        select company_no
              , company_name
              , owner_name
              , business_no
              , resident_no
              , business_place
              , telephone
-             , reg_date
-             , reg_company
-             , reg_member
-             , upt_date
-             , upt_company
-             , upt_member
+             , regist_datetime
+             , regist_company
+             , regist_user
+             , modify_datetime
+             , modify_company
+             , modify_user
           from company
-         where company_id = #{companyId};
+         where company_no = #{companyNo};
     </select>
     <insert id="insert">
         insert into company (
-                    company_id
+                    company_no
                   , company_name
                   , owner_name
                   , business_no
                   , resident_no
                   , business_place
                   , telephone
-                  , reg_date
-                  , reg_company
-                  , reg_member
+                  , regist_datetime
+                  , regist_company
+                  , regist_user
         )
         values (
-                    (select isnull(max(company_id), 0) + 1
+                    (select isnull(max(company_no), 0) + 1
                        from company) 
                   , #{companyName}
                   , #{ownerName}
@@ -69,13 +69,13 @@
              , resident_no = #{residentNo}
              , business_place = #{businessPlace}
              , telephone = #{telephone}
-             , upt_date = convert(varchar(20), getdate(), 20)
-             , upt_company = #{uptCompany}
-             , upt_member = #{uptMember}
-         where company_id = #{companyId};
+             , modify_datetime = convert(varchar(20), getdate(), 20)
+             , modify_company = #{uptCompany}
+             , modify_user = #{uptMember}
+         where company_no = #{companyNo};
     </update>
     <delete id="delete">
         delete from company
-         where company_id = #{companyId};
+         where company_no = #{companyNo};
     </delete>
 </mapper>
