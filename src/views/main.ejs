@@ -8,19 +8,27 @@
         <link rel="stylesheet" media="screen and (min-width: 1281px)" href="/public/css/styles-large.css">
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <title>Main</title>
+        <script>
+            $(document).ready(function() {
+                window.onSelectMenu = function(menuId) {
+                    alert(menuId);
+                }
+            });
+        </script>
     </head>
     <body>
         <header>
             <div class="top-menu">
-                <object id="top-menu" data="./top-menu"></object>
+                <object id="top-menu" data="./topmenu"></object>
             </div>
         </header>
         <div class="container">
+            <%= menuId %>
             <div class="sidebar">
                 <object id="sidebar" data="./sidebar"></object>
             </div>
             <div class="content">
-                <iframe id="content-frame"></iframe>
+                <iframe id="content-frame" src="./home"></iframe>
             </div>
         </div>
     </body>

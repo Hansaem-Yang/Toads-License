@@ -3,6 +3,7 @@ body, html {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    width: 100%;
     height: 100%;
     font-size: 16px;
     overflow: hidden;
@@ -111,6 +112,9 @@ footer {
     background: #ffffff 0% 0% no-repeat padding-box;
 }
 .side-menu div:hover {
+    background: #79bbfd 0% 0% no-repeat padding-box;
+}
+.side-menu-selected {
     background: #53a8fd 0% 0% no-repeat padding-box;
 }
 
@@ -130,14 +134,20 @@ footer {
 /* Main CSS */
 
 /* Login CSS */
-.login {
-    /* Layout Properties */
-    position: relative;
+.login-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 620px;
-    height: 420px;
+    height: 100vh;
+}
+
+.login-content {
+    position: relative;
+    /* Layout Properties */
+    width: 720px;
+    height: 480px;
+    
+    box-sizing: border-box;
     /* UI Properties */
     background: #53a8fd 0% 0% no-repeat padding-box;
     opacity: 1;
@@ -146,7 +156,7 @@ footer {
 .login-logo {
     position: absolute;
     top: 40px;
-    left: 60px;
+    left: 30px;
     width: 225px;
     height: 75px;
     background-size: cover;
@@ -180,25 +190,7 @@ footer {
     opacity: 1;
 }
 
-.login-id-text {
-    /* Layout Properties */
-    position: absolute;
-    top: 5px;
-    left: 10px;
-    width: 580px;
-    height: 48px;
-    /* UI Properties */
-    text-align: left;
-    font: normal normal 300 28px/32px Pretendard;
-    background: #ffffff 0% 0% no-repeat padding-box;
-    letter-spacing: 0px;
-    color: #484848;
-    opacity: 1;
-    border: none;
-    outline: none;
-}
-
-.login-password-text {
+.login-text {
     /* Layout Properties */
     position: absolute;
     top: 5px;
@@ -233,10 +225,8 @@ footer {
 }
 
 .login-submit {
-    /* Layout Properties */
     position: absolute;
-    justify-content: center;
-    align-items: center;
+    /* Layout Properties */
     width: 600px;
     height: 64px;
     /* UI Properties */

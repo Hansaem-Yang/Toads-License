@@ -22,7 +22,9 @@ module.exports = function (app) {
                         userType: data.userType,
                         nationCode: data.nationCode,
                         phoneNumber: data.phoneNumber,
-                    }
+                    };
+                    
+                    req.session.menuId = 'home';
 
                     res.send(constants.SUCCESS);
                 }

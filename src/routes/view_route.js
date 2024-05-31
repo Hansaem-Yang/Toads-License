@@ -31,7 +31,7 @@ module.exports = function (app) {
         res.render("main");
     });
 
-    app.get("/view/top-menu", (req, res) => {
+    app.get("/view/topmenu", (req, res) => {
         logger.info(`Top menu view`);
 
         res.render("menu/topmenu");
@@ -41,6 +41,12 @@ module.exports = function (app) {
         logger.info(`Sidebar view`);
 
         res.render("menu/sidebar");
+    });
+    
+    app.get("/view/home", (req, res) => {
+        logger.info(`Sidebar view`);
+
+        res.render("contents/home");
     });
 
     // 업체 관리 페이지

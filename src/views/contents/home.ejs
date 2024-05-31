@@ -9,32 +9,7 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script>
             $(document).ready(() => {
-                // 로그아웃
-                $("#logout").click((event) => {
-                    event.preventDefault();
-
-                    var email = "<%= user.email %>";
-                    // Ajax를 이용한 데이터 전송
-                    $.ajax({
-                        url: "../user/logout",
-                        method: "POST", 
-                        data: {
-                            email: email,
-                        },
-                        success: function (res) {
-                            switch (res) {
-                                case "SUCCESS":
-                                    alert("사용자가 로그아웃 되었습니다.");
-
-                                    window.parent.location.href = "./login";
-                                    break;
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            alert("서버 요청에 실패했습니다.");
-                        },
-                    });
-                });
+                
             });
         </script>
     </head>

@@ -24,6 +24,9 @@ app.use((req, res, next) => {
     if (req.session.user) {
       res.locals.user = req.session.user;
     }
+    if (req.session.menuId) {
+      res.locals.menuId = req.session.menuId;
+    }
     next();
 });
 
