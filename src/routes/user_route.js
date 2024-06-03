@@ -24,7 +24,7 @@ module.exports = function (app) {
                         phoneNumber: data.phoneNumber,
                     };
                     
-                    req.session.menuId = 'home';
+                    req.session.menuId = 'dashboard';
 
                     res.send(constants.SUCCESS);
                 }

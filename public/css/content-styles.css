@@ -1,0 +1,42 @@
+/* Reset some default styles and set a base font size */
+body, html {
+    font-family: Arial, sans-serif;
+    color: rgb(0, 28, 53);
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
+.content {
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed;
+    background-color: #ffffff;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.title {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 15px;
+    height: 26px;
+}
+
+table {
+    border: 2px solid rgb(51, 54, 58); /* 테이블 외곽선 생성 */
+    border-collapse: collapse; /* 셀 간의 이중 경계선을 단일 경계선으로 합침 */
+}
+th, td {
+    font-size: 14px;
+    border: 1px solid rgb(51, 54, 58); /* 테이블 외곽선 생성 */
+    padding: 8px;
+}

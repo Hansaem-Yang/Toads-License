@@ -21,32 +21,55 @@ module.exports = function (app) {
 
     // 메인 페이지
     app.get("/view/main", (req, res) => {
-        if (!req.session.user)
-        {
+        if (!req.session.user) {
             res.sendFile(path.join(config.root, "/src/views/user/login.html"));
             return;
         }
-        logger.info(`Main view`);
-
-        res.render("main");
+        
+        if (req.session.user.userType === 'T') {
+            res.render("admin/main");
+        }
+        else {
+            res.render("member/main");
+        }
     });
 
     app.get("/view/topmenu", (req, res) => {
         logger.info(`Top menu view`);
 
-        res.render("menu/topmenu");
+        if (req.session.user.userType === 'T') {
+            res.render("admin/menu/topmenu");
+        }
+        else {
+            res.render("member/menu/topmenu");
+        }
     });
     
     app.get("/view/sidebar", (req, res) => {
         logger.info(`Sidebar view`);
 
-        res.render("menu/sidebar");
+        if (req.session.user.userType === 'T') {
+            res.render("admin/menu/sidebar");
+        }
+        else {
+            res.render("member/menu/sidebar");
+        }
     });
     
-    app.get("/view/home", (req, res) => {
-        logger.info(`Sidebar view`);
+    app.get("/view/dashboard", (req, res) => {
+        if (!req.session.user)
+        {
+            res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+            return;
+        }
 
-        res.render("contents/home");
+        req.session.menuId = 'dashboard';
+        if (req.session.user.userType === 'T') {
+            res.render("admin/dashboard");
+        }
+        else {
+            res.render("member/dashboard");
+        }
     });
 
     // 업체 관리 페이지
@@ -56,9 +79,14 @@ module.exports = function (app) {
             res.sendFile(path.join(config.root, "/src/views/user/login.html"));
             return;
         }
-        logger.info(`Main view`);
 
-        res.render("company/status");
+        req.session.menuId = 'company';
+        if (req.session.user.userType === 'T') {
+            res.render("admin/company/status");
+        }
+        else {
+            res.render("member/company/status");
+        }
     });
     
     // 계약 관리 페이지
@@ -68,9 +96,31 @@ module.exports = function (app) {
             res.sendFile(path.join(config.root, "/src/views/user/login.html"));
             return;
         }
-        logger.info(`Login view`);
 
-        res.sendFile(path.join(config.root, "/src/views/contract/login.html"));
+        req.session.menuId = 'contract';
+        if (req.session.user.userType === 'T') {
+            res.render("admin/contract/status");
+        }
+        else {
+            res.render("member/contract/status");
+        }
+    });
+    
+    // 라이센스 관리 페이지
+    app.get("/view/license", (req, res) => {
+        if (!req.session.user)
+        {
+            res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+            return;
+        }
+
+        req.session.menuId = 'license';
+        if (req.session.user.userType === 'T') {
+            res.render("admin/license/status");
+        }
+        else {
+            res.render("member/license/status");
+        }
     });
     
     // 사용자 관리 페이지
@@ -80,9 +130,14 @@ module.exports = function (app) {
             res.sendFile(path.join(config.root, "/src/views/user/login.html"));
             return;
         }
-        logger.info(`Login view`);
 
-        res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+        req.session.menuId = 'user';
+        if (req.session.user.userType === 'T') {
+            res.render("admin/user/status");
+        }
+        else {
+            res.render("member/user/status");
+        }
     });
     
     // 선박 관리 페이지
@@ -92,8 +147,13 @@ module.exports = function (app) {
             res.sendFile(path.join(config.root, "/src/views/user/login.html"));
             return;
         }
-        logger.info(`Login view`);
 
-        res.sendFile(path.join(config.root, "/src/views/ship/login.html"));
+        req.session.menuId = 'ship';
+        if (req.session.user.userType === 'T') {
+            res.render("admin/ship/status");
+        }
+        else {
+            res.render("member/ship/status");
+        }
     });
 };

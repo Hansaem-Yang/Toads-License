@@ -1,5 +1,5 @@
-const manager = require("../manager/contract_manager");
-const constants = require("../common/constants");
+const manager = require("../../manager/contract_manager");
+const constants = require("../../common/constants");
 
 module.exports = function (app) {
     app.post("/contract/list", (req, res) => {

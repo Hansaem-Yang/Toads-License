@@ -4,7 +4,7 @@ config.web = {
     port: 8080,
 };
 config.sql = {
-    server: "192.168.50.254",
+    server: "127.0.0.1",
     port: 1433,
     requestTimeout: 6000,
     options: { encrypt: false, database: "ToadsLicense" },
