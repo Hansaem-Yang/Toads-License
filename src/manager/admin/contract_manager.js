@@ -1,17 +1,17 @@
-const { poolPromise, sql } = require("../db/sql_manager");
+const { poolPromise, sql } = require("../../db/sql_manager");
 const mybatisMapper = require("mybatis-mapper");
-const Contract = require("../models/contract");
-const logger = require("../logger/logger.js");
+const Contract = require("../../models/contract");
+const logger = require("../../logger/logger.js");
 
 mybatisMapper.createMapper(["./src/sql/contract.xml"]);
 
 module.exports = {
-    list: async function (companyId) {
+    status: async function (companyId) {
         try {
             let pool = await poolPromise;
             let param = { companyId: companyId };
             let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("contract", "list", param, format);
+            let query = mybatisMapper.getStatement("contract", "status", param, format);
 
             let result = await pool.request().query(query);
             let list = [];
@@ -19,7 +19,7 @@ module.exports = {
             result.recordset.forEach((record) => {
                 let item = new Contract();
 
-                item.setCompanyId(record.company_id);
+                item.setCompanyNo(record.company_no);
                 item.setContractNo(record.contract_no);
                 item.setContractName(record.contract_name);
                 item.setContractDate(record.contract_date);
@@ -60,7 +60,7 @@ module.exports = {
                 let record = result.recordset[0];
                 
                 item = new Contract();
-                item.setCompanyId(record.company_id);
+                item.setCompanyNo(record.company_no);
                 item.setContractNo(record.contract_no);
                 item.setContractName(record.contract_name);
                 item.setContractDate(record.contract_date);

@@ -1,17 +1,17 @@
-const { poolPromise, sql } = require("../db/sql_manager");
+const { poolPromise, sql } = require("../../db/sql_manager");
 const mybatisMapper = require("mybatis-mapper");
-const License = require("../models/license");
-const logger = require("../logger/logger.js");
+const License = require("../../models/license");
+const logger = require("../../logger/logger.js");
 
 mybatisMapper.createMapper(["./src/sql/license.xml"]);
 
 module.exports = {
-    list: async function (companyId) {
+    status: async function (companyId) {
         try {
             let pool = await poolPromise;
             let param = { companyId: companyId };
             let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("license", "list", param, format);
+            let query = mybatisMapper.getStatement("license", "status", param, format);
 
             let result = await pool.request().query(query);
             let list = [];
@@ -19,7 +19,7 @@ module.exports = {
             result.recordset.forEach((record) => {
                 let item = new License();
 
-                item.setCompanyId(record.company_id);
+                item.setCompanyNo(record.company_no);
                 item.setContractNo(record.contract_no);
                 item.setLicenseNo(record.license_no);
                 item.setLicenseType(record.license_type);
@@ -59,7 +59,7 @@ module.exports = {
                 let record = result.recordset[0];
 
                 item = new License();
-                item.setCompanyId(record.company_id);
+                item.setCompanyNo(record.company_no);
                 item.setContractNo(record.contract_no);
                 item.setLicenseNo(record.license_no);
                 item.setLicenseType(record.license_type);

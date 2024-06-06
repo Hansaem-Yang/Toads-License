@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/styles.css">
+        <link rel="stylesheet" href="/public/css/content-styles.css">
         <!--
         <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
         <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
@@ -11,13 +11,176 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script>
             $(document).ready(() => {
-                
+                $('#btn_search').click(() => {
+                    var companyName = $('#txt_s_company_name').val();
+
+                    $.ajax({
+                        url: "../admin/company/status",
+                        method: "POST",
+                        data: {
+                            companyName: companyName,
+                        },
+                        success: function (data) {
+                            $('#company tbody').empty();
+
+                            if (data === 'NO DATA') {
+                                var newRow = '<tr><td colspan="7" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                                $('#company').append(newRow);
+                            }
+                            else {
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        var newRow = '<tr><td class="center-align">' + post.companyNo + '</td><td class="left-align">' + post.companyName + '</td><td class="center-align">' + post.ownerName + '</td><td class="center-align">' + post.companyDiv + '</td><td class="center-align">' + post.telephone + '</td><td class="right-align">' + post.totalLicenses + '</td><td class="right-align">' + post.totalUsers + '</td></tr>';
+                                        $('#company tbody').append(newRow);
+                                    });
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            $('#company tbody').empty();
+
+                            var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
+                            $('#company').append(newRow);
+                        },
+                    });
+                });
+
+                $('#btn_add').click(() => {
+                    $('#modal').show();
+                });
+
+                $('#close').click(() => {
+                    $('#modal').hide();
+                })
             });
         </script>
     </head>
     <body>
         <form id="company-status-form">
-            <div>Company</div>
+            <div class="content">
+                <div>
+                    <div class="title">조회 조건</div>
+                    <div>
+                        <table id="search">
+                            <thead>
+                                <tr>
+                                    <th width="120px" class="right-align">법인명</th>
+                                    <td class="left-align">
+                                        <div class="align-container">
+                                            <p><input type="text" id="txt_s_company_name" class="search-text"/></p>
+                                            <input type="button" id="btn_search" class="search-button" value="조회"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div></br></br></br>
+                <div  class="contents-container">
+                    <div class="title">고객사 목록</div>
+                    <div class="top-right-button"><input type="button" id="btn_add" class="status-button" value="등록"/></div>
+                    <div>
+                        <table id="company">
+                            <thead>
+                                <tr>
+                                    <th width="100px">고객사번호</th>
+                                    <th width="240px">법인명</th>
+                                    <th width="120px">대표자명</th>
+                                    <th width="120px">회사구분</th>
+                                    <th width="160px">연락처</th>
+                                    <th width="120px">라이센스 수</th>
+                                    <th width="120px">사용자 수</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </form>
+        <div id="modal" class="modal">
+            <div class="modal-content" style="width:630px">
+                <div class="contents-container">
+                    <span id="close" class="close">&times;</span>
+                    <div class="title">고객사 등록</div>
+                    <div>
+                        <table id="content">
+                            <thead>
+                                <tr>
+                                    <th width="120px" class="right-align">고객사번호</th>
+                                    <td width="480px" class="left-align">
+                                        <input type="text" id="txt_company_no" class="input-text" style="width: 80px;" readonly/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="120px" class="right-align">법인명</th>
+                                    <td width="480px" class="left-align">
+                                        <input type="text" id="txt_company_name" class="input-text" style="width: 240px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="120px" class="right-align">대표자명</th>
+                                    <td width="480px" class="left-align">
+                                        <input type="text" id="txt_owner_name" class="input-text" style="width: 240px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="120px" class="right-align">사업자등록번호</th>
+                                    <td width="480px" class="left-align">
+                                        <input type="text" id="txt_business_no" class="input-text" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="120px" class="right-align">법인등록번호</th>
+                                    <td width="480px" class="left-align">
+                                        <input type="text" id="txt_resident_no" class="input-text" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="120px" class="right-align">회사구분</th>
+                                    <td width="480px" class="left-align">
+                                        <select id="sel_company_div" class="input-select">
+                                            <option value=""></option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="120px" class="right-align">국가</th>
+                                    <td width="480px" class="left-align">
+                                        <input type="text" id="txt_nation" class="input-text"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="120px" class="right-align">연락처</th>
+                                    <td width="480px" class="left-align">
+                                        <input type="text" id="txt_telephone" class="input-text" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th width="120px" class="right-align">사업장소재지</th>
+                                    <td width="480px" class="left-align">
+                                        <div class="align-container">
+                                            <p><input type="text" id="txt_post_code" class="input-text" style="width:80px"/></p>
+                                            <input type="button" id="btn_search_address" class="input-button" value="주소검색"/>
+                                        </div>
+                                        <input type="text" id="txt_business_place" class="input-text" style="width:480px"/>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

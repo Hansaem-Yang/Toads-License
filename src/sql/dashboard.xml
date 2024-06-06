@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dashboard">  
+    <select id="satellite_usage">
+        select count(1) as total_companys
+             , sum(users) as total_users
+             , 0 as daliy_usage
+             , 0 as monthly_usage
+          from (select a.company_no
+                     , count(1) as users
+                  from company as a
+                 inner join member as b
+                    on a.company_no = b.company_no
+                 group by a.company_no) as a
+    </select>
+    <select id="company_all">
+    <![CDATA[
+        select a.company_no
+             , a.company_name
+             , a.owner_name
+             , isnull(a.company_div, '') company_div
+             , isnull(a.nation, '') nation
+             , isnull(a.telephone, '') telephone
+             , (select isnull(sum(license_count), 0) from license
+                 where company_no = a.company_no
+                   and start_date >= convert(varchar(10), getdate(), 20)
+                   and end_date <= convert(varchar(10), getdate(), 20)) as total_licenses
+             , (select count(1) from member
+                 where company_no = a.company_no
+                   and use_status = 'Y') as total_users
+             , 0 as total_satellite_usage
+          from company as a
+    ]]>
+    </select>
+</mapper>

@@ -1,17 +1,19 @@
-const { poolPromise, sql } = require("../db/sql_manager");
+const { poolPromise, sql } = require("../../db/sql_manager");
 const mybatisMapper = require("mybatis-mapper");
-const Company = require("../models/company");
-const logger = require("../logger/logger.js");
+const Company = require("../../models/company");
+const logger = require("../../logger/logger.js");
 
 mybatisMapper.createMapper(["./src/sql/company.xml"]);
 
 module.exports = {
-    list: async function () {
+    status: async function (companyName) {
         try {
             let pool = await poolPromise;
-            let param = {};
+            let param = {
+                companyName: companyName
+            };
             let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("company", "list", param, format);
+            let query = mybatisMapper.getStatement("company", "status", param, format);
 
             let result = await pool.request().query(query);
             let list = [];
@@ -19,26 +21,22 @@ module.exports = {
             result.recordset.forEach((record) => {
                 let item = new Company();
 
-                item.setCompanyId(record.company_id);
+                item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);
                 item.setOwnerName(record.owner_name);
-                item.setBusinessNo(record.business_no);
-                item.setResidentNo(record.resident_no);
-                item.setBusinessPlace(record.business_place);
+                item.setCompanyDiv(record.company_div);
+                item.setNation(record.nation);
                 item.setTelephone(record.telephone);
-                item.setRegDate(record.reg_date);
-                item.setRegCompany(record.reg_company);
-                item.setRegMember(record.reg_user);
-                item.setUptDate(record.upt_date);
-                item.setUptCompany(record.upt_company);
-                item.setUptMember(record.upt_member);
-
-                list.push(member);
+                item.setTotalLicenses(record.total_licenses);
+                item.setTotalUsers(record.total_users);
+                item.setTotalSatelliteUsage(record.total_satellite_usage);
+                
+                list.push(item);
             });
 
             return list;
         } catch (err) {
-            logger.error(err);
+            logger.error(`company.status error : ${err}`);
             return null;
         }
     },
@@ -55,7 +53,7 @@ module.exports = {
                 let record = result.recordset[0];
 
                 item = new Company();
-                item.setCompanyId(record.company_id);
+                item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);
                 item.setOwnerName(record.owner_name);
                 item.setBusinessNo(record.business_no);
@@ -72,7 +70,7 @@ module.exports = {
 
             return item;
         } catch (err) {
-            logger.error(err);
+            logger.error(`company.detail error : ${err}`);
             return null;
         }
     },
@@ -95,7 +93,7 @@ module.exports = {
 
             return result.rowsAffected[0];
         } catch (err) {
-            logger.error(err);
+            logger.error(`company.insert error : ${err}`);
             return -1;
         }
     },
@@ -119,7 +117,7 @@ module.exports = {
 
             return result.rowsAffected[0];
         } catch (err) {
-            logger.error(err);
+            logger.error(`company.update error : ${err}`);
             return -1;
         }
     },
@@ -147,11 +145,11 @@ module.exports = {
                 await transaction.commit();
             } catch (err) {
                 await transaction.rollback();
-                logger.error(err);
+                logger.error(`company.delete error : ${err}`);
                 return -1;
             }
         } catch (err) {
-            logger.error(err);
+            logger.error(`company.delete error : ${err}`);
             return -1;
         }
 

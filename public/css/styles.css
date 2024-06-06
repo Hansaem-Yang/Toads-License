@@ -112,10 +112,10 @@ footer {
 }
 .side-menu div:hover {
     transition: background-color 0.3s;
-    background: #79bbfd 0% 0% no-repeat padding-box;
+    background: #51a8ff 0% 0% no-repeat padding-box;
 }
 .side-menu-selected {
-    background: #53a8fd 0% 0% no-repeat padding-box;
+    background: #67b3ff 0% 0% no-repeat padding-box;
 }
 
 .content {

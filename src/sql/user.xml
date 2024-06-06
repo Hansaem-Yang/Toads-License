@@ -2,22 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="user">  
     <select id="member">
-        select company_no
-             , account_no
-             , user_name
-             , email
-             , convert(varchar(max), password) as password
-             , user_type
-             , nation_code
-             , phone_number
-             , use_status
-             , regist_datetime
-             , regist_company
-             , regist_user
-             , modify_datetime
-             , modify_company
-             , modify_user
-          from member
+        select a.company_no
+             , b.company_name
+             , a.account_no
+             , a.user_name
+             , a.email
+             , convert(varchar(max), a.password) as password
+             , a.user_type
+             , a.nation_code
+             , a.phone_number
+             , a.use_status
+             , a.regist_datetime
+             , a.regist_company
+             , a.regist_user
+             , a.modify_datetime
+             , a.modify_company
+             , a.modify_user
+          from member as a
+         inner join company as b
+            on a.company_no = b.company_no
          where email = #{email};
     </select>
 </mapper>

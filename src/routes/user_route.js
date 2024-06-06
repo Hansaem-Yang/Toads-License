@@ -6,8 +6,6 @@ module.exports = function (app) {
         let email = req.body.email;
         let password = req.body.password;
 
-        console.log(email);
-
         manager.login(email).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
@@ -16,6 +14,7 @@ module.exports = function (app) {
                 {
                     req.session.user = {
                         companyNo: data.companyNo,
+                        companyName: data.companyName,
                         accountNo: data.accountNo,
                         userName: data.userName,
                         email: data.email,

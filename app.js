@@ -41,6 +41,7 @@ require("./src/routes/member_route")(app);
 require("./src/routes/admin/company_route")(app);
 require("./src/routes/admin/contract_route")(app);
 require("./src/routes/admin/license_route")(app);
+require("./src/routes/admin/dashboard_route")(app);
 
 app.listen(config.web.port, function () {
     logger.info(`Express server has started on port (${config.web.port})`);

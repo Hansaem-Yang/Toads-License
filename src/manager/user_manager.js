@@ -18,6 +18,7 @@ module.exports = {
 
             result.recordset.forEach((record) => {
                 item.setCompanyNo(record.company_no);
+                item.setCompanyName(record.company_name);
                 item.setAccountNo(record.account_no);
                 item.setUserName(record.user_name);
                 item.setEmail(record.email);

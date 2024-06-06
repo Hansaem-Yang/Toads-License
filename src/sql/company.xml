@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="company">  
-    <select id="list">
-        select company_no
-             , company_name
-             , owner_name
-             , business_no
-             , resident_no
-             , business_place
-             , telephone
-             , regist_datetime
-             , regist_company
-             , regist_user
-             , modify_datetime
-             , modify_company
-             , modify_user
-          from company;
+    <select id="status">
+    <![CDATA[
+        select a.company_no
+             , a.company_name
+             , a.owner_name
+             , isnull(a.company_div, '') company_div
+             , isnull(a.nation, '') nation
+             , isnull(a.telephone, '') telephone
+             , (select isnull(sum(license_count), 0) from license
+                 where company_no = a.company_no
+                   and start_date >= convert(varchar(10), getdate(), 20)
+                   and end_date <= convert(varchar(10), getdate(), 20)) as total_licenses
+             , (select count(1) from member
+                 where company_no = a.company_no
+                   and use_status = 'Y') as total_users
+             , 0 as total_satellite_usage
+          from company as a
+         where a.company_name like #{companyName} + '%';
+    ]]>
     </select>
     <select id="detail">
         select company_no

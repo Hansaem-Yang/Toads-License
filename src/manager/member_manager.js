@@ -19,7 +19,7 @@ module.exports = {
             result.recordset.forEach((record) => {
                 let item = new Member();
 
-                item.setCompanyId(record.company_id);
+                item.setCompanyNo(record.company_no);
                 item.setMemberId(record.member_id);
                 item.setMemberName(record.member_name);
                 item.setEmail(record.email);
@@ -60,7 +60,7 @@ module.exports = {
                 let record = result.recordset[0];
 
                 item = new Member();
-                item.setCompanyId(record.company_id);
+                item.setCompanyNo(record.company_no);
                 item.setMemberId(record.member_id);
                 item.setMemberName(record.member_name);
                 item.setEmail(record.email);

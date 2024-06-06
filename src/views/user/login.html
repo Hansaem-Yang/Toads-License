@@ -32,8 +32,8 @@
                             email: email,
                             password: password,
                         },
-                        success: function (res) {
-                            switch (res) {
+                        success: function (data) {
+                            switch (data) {
                                 case "NO DATA":
                                     alert("아이디가 존재하지 않습니다.");
                                     break;

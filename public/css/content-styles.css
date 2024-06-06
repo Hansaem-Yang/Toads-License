@@ -31,12 +31,145 @@ body, html {
     height: 26px;
 }
 
+.contents-container {
+    position: relative;
+    width: 100%;
+}
+
 table {
     border: 2px solid rgb(51, 54, 58); /* 테이블 외곽선 생성 */
     border-collapse: collapse; /* 셀 간의 이중 경계선을 단일 경계선으로 합침 */
+}
+tbody :hover {
+    transition: background-color 0.3s;
+    background: #cae4ff 0% 0% no-repeat padding-box;
 }
 th, td {
     font-size: 14px;
     border: 1px solid rgb(51, 54, 58); /* 테이블 외곽선 생성 */
     padding: 8px;
+    align-items: center;
+}
+
+.search-text {
+    width: 240px;
+    height: 32px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font: normal normal medium 12px/16px Pretendard;
+    font-size: 14px;
+    letter-spacing: 0px;
+    color: #3c4047;
+}
+.search-button {
+    width: 120px;
+    height: 32px;
+    /* UI Properties */
+    background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
+    box-shadow: 0px 5px 6px #00000029;
+    font: normal normal medium 24px/35px Pretendard;
+    font-size: 14px;
+    letter-spacing: 0px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.status-button {
+    width: 80px;
+    height: 25px;
+    /* UI Properties */
+    background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
+    box-shadow: 0px 5px 6px #00000029;
+    font: normal normal medium 24px/35px Pretendard;
+    font-size: 14px;
+    letter-spacing: 0px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.input-text {
+    height: 32px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font: normal normal medium 12px/16px Pretendard;
+    font-size: 14px;
+    letter-spacing: 0px;
+    color: #3c4047;
+}
+.input-button {
+    width: 80px;
+    height: 30px;
+    /* UI Properties */
+    background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
+    box-shadow: 0px 5px 6px #00000029;
+    font: normal normal medium 24px/35px Pretendard;
+    font-size: 14px;
+    letter-spacing: 0px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.top-right-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.align-container {
+    display: flex;
+    align-items: center;
+}
+.align-container p {
+    margin: 0 10px 0 0;
+}
+.left-align {
+    text-align: left;
+    vertical-align: middle;
+}
+.center-align {
+    text-align: center;
+    vertical-align: middle;
+}
+.right-align {
+    text-align: right;
+    vertical-align: middle;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 99; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }

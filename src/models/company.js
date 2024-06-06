@@ -9,7 +9,12 @@ class Company extends Common {
         this.businessNo = null;
         this.residentNo = null;
         this.businessPlace = null;
+        this.companyDiv = null;
+        this.nation = null;
         this.telephone = null;
+        this.totalLicenses = -1;
+        this.totalUsers = -1;
+        this.totalSatelliteUsage = -1;
     }
 
     getCompanyNo(){
@@ -30,8 +35,23 @@ class Company extends Common {
     getBusinessPlace(){
         return this.businessPlace;
     }
+    getCompanyDiv(){
+        return this.companyDiv;
+    }
+    getNation(){
+        return this.nation;
+    }
     getTelephone(){
         return this.telephone;
+    }
+    getTotalLicenses(){
+        return this.totalLicenses;
+    }
+    getTotalUsers(){
+        return this.totalUsers;
+    }
+    getTotalSatelliteUsage(){
+        return this.totalSatelliteUsage;
     }
 
     setCompanyNo(companyNo){
@@ -52,8 +72,23 @@ class Company extends Common {
     setBusinessPlace(businessPlace){
         this.businessPlace = businessPlace;
     }
+    setCompanyDiv(companyDiv){
+        this.companyDiv = companyDiv;
+    }
+    setNation(nation){
+        this.nation = nation;
+    }
     setTelephone(telephone){
         this.telephone = telephone;
+    }
+    setTotalLicenses(totalLicenses){
+        this.totalLicenses = totalLicenses;
+    }
+    setTotalUsers(totalUsers){
+        this.totalUsers = totalUsers;
+    }
+    setTotalSatelliteUsage(totalSatelliteUsage){
+        this.totalSatelliteUsage = totalSatelliteUsage;
     }
 }
 

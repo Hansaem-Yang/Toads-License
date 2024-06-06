@@ -11,7 +11,61 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script>
             $(document).ready(() => {
+                $.ajax({
+                    url: "../admin/dashboard/satelliteUsage",
+                    method: "POST",
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#satellite-usage tbody').empty();
+
+                        if (data === 'NO DATA') {
+                            var newRow = '<tr><td colspan="4">조회된 데이터가 없습니다.</td></tr>';
+                            $('#satellite-usage').append(newRow);
+                        }
+                        else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    var newRow = '<tr><td class="right-align">' + post.totalCompanys + '</td><td class="right-align">' + post.totalUsers + '</td><td class="right-align">' + post.daliyUsage + '</td><td class="right-align">' + post.monthlyUsage + '</td></tr>';
+                                    $('#satellite-usage tbody').append(newRow);
+                                });
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        $('#satellite-usage tbody').empty();
+
+                        var newRow = '<tr><td colspan="4">서버 요청에 실패하였습니다.</td></tr>';
+                        $('#satellite-usage').append(newRow);
+                    },
+                });
                 
+                $.ajax({
+                    url: "../admin/dashboard/companyAll",
+                    method: "POST",
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#company tbody').empty();
+
+                        if (data === 'NO DATA') {
+                            var newRow = '<tr><td colspan="7" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                            $('#company').append(newRow);
+                        }
+                        else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    var newRow = '<tr><td class="center-align">' + post.companyNo + '</td><td class="left-align">' + post.companyName + '</td><td class="center-align">' + post.ownerName + '</td><td class="center-align">' + post.companyDiv + '</td><td class="center-align">' + post.telephone + '</td><td class="right-align">' + post.totalLicenses + '</td><td class="right-align">' + post.totalUsers + '</td></tr>';
+                                    $('#company tbody').append(newRow);
+                                });
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        $('#company tbody').empty();
+
+                        var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
+                        $('#company').append(newRow);
+                    },
+                });
             });
         </script>
     </head>
@@ -21,44 +75,52 @@
                 <div>
                     <div class="title">위성통신 전체 사용량</div>
                     <div>
-                        <table>
-                            <tr>
-                                <th width="200px">전체 고객사 수</th>
-                                <th width="200px">전체 사용자 수</th>
-                                <th width="200px">일 사용량</th>
-                                <th width="200px">월 사용량</th>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
+                        <table id="satellite-usage">
+                            <thead>
+                                <tr>
+                                    <th width="200px">전체 고객사 수</th>
+                                    <th width="200px">전체 사용자 수</th>
+                                    <th width="200px">일 사용량</th>
+                                    <th width="200px">월 사용량</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div></br></br></br>
                 <div>
                     <div class="title">고객사 정보</div>
                     <div>
-                        <table>
-                            <tr>
-                                <th width="100px">고객사 번호</th>
-                                <th width="240px">법인명</th>
-                                <th width="120px">대표자명</th>
-                                <th width="120px">회사구분</th>
-                                <th width="160px">연락처</th>
-                                <th width="120px">라이센스 수</th>
-                                <th width="120px">사용자 수</th>
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                            </tr>
+                        <table id="company">
+                            <thead>
+                                <tr>
+                                    <th width="100px">고객사 번호</th>
+                                    <th width="240px">법인명</th>
+                                    <th width="120px">대표자명</th>
+                                    <th width="120px">회사구분</th>
+                                    <th width="160px">연락처</th>
+                                    <th width="120px">라이센스 수</th>
+                                    <th width="120px">사용자 수</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
