@@ -98,7 +98,7 @@ module.exports = {
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("company", "insert", param, format);
-console.log(query);
+            
             let result = await pool.request().query(query);
 
             return result.rowsAffected[0];

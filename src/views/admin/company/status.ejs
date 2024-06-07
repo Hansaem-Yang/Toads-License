@@ -43,8 +43,7 @@
                         if (data === 'NO SESSION') {
                             alert("세션이 만료되었습니다.");
                             window.parent.location.href = "./login";
-                        }
-                        else if (data === 'NO DATA') {
+                        } else if (data === 'NO DATA') {
                             nation_options = [
                                 { code:'CN', ename:'China', kname:'중국', country:'86' },
                                 { code:'KR', ename:'Republic of Korea', kname:'대한민국', country:'82' },
@@ -53,8 +52,7 @@
                             ];
                             
                             createNations();
-                        }
-                        else {
+                        } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
                                     nation_options.push({
@@ -89,14 +87,12 @@
                             $('#company tbody').empty();
 
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다. 확인 후 재접속 바랍니다.");
+                                alert("세션이 만료되었습니다.");
                                 window.parent.location.href = "./login";
-                            }
-                            else if (data === 'NO DATA') {
+                            } else if (data === 'NO DATA') {
                                 var newRow = '<tr><td colspan="7" class="left-align">조회된 데이터가 없습니다.</td></tr>';
                                 $('#company').append(newRow);
-                            }
-                            else {
+                            } else {
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
                                         var newRow = '<tr><td class="center-align">' + post.companyNo + '</td><td class="left-align">' + post.companyName + '</td><td class="center-align">' + post.ownerName + '</td><td class="center-align">' + companyDiv[post.companyDiv] + '</td><td class="center-align">' + post.telephone + '</td><td class="right-align">' + post.totalLicenses + '</td><td class="right-align">' + post.totalUsers + '</td></tr>';
@@ -200,11 +196,14 @@
                         },
                         success: function (data) {
                             switch (data) {
+                                case "NO SESSION":
+                                    alert("세션이 만료되었습니다.");
+                                    window.parent.location.href = "./login";
                                 case "FAIL":
-                                    alert('데이터 저장에 실패하였습니다.');
+                                    alert('데이터 저장에 실패 하였습니다.');
                                     return;
                                 case "SUCCESS":
-                                    alert('데이터 저장을 완료하였습니다.');
+                                    alert('데이터 저장을 완료 하였습니다.');
                                     break;
                             }
 

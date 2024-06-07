@@ -19,11 +19,13 @@
                     success: function (data) {
                         $('#satellite-usage tbody').empty();
 
-                        if (data === 'NO DATA') {
+                        if (data === 'NO SESSION') {
+                            alert("세션이 만료되었습니다.");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
                             var newRow = '<tr><td colspan="4">조회된 데이터가 없습니다.</td></tr>';
                             $('#satellite-usage').append(newRow);
-                        }
-                        else {
+                        } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
                                     var newRow = '<tr><td class="right-align">' + post.totalCompanys + '</td><td class="right-align">' + post.totalUsers + '</td><td class="right-align">' + post.daliyUsage + '</td><td class="right-align">' + post.monthlyUsage + '</td></tr>';
@@ -47,11 +49,13 @@
                     success: function (data) {
                         $('#company tbody').empty();
 
-                        if (data === 'NO DATA') {
+                        if (data === 'NO SESSION') {
+                            alert("세션이 만료되었습니다.");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
                             var newRow = '<tr><td colspan="7" class="left-align">조회된 데이터가 없습니다.</td></tr>';
                             $('#company').append(newRow);
-                        }
-                        else {
+                        } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
                                     var newRow = '<tr><td class="center-align">' + post.companyNo + '</td><td class="left-align">' + post.companyName + '</td><td class="center-align">' + post.ownerName + '</td><td class="center-align">' + companyDiv[post.companyDiv] + '</td><td class="center-align">+' + post.nationCode + '-' + post.telephone + '</td><td class="right-align">' + post.totalLicenses + '</td><td class="right-align">' + post.totalUsers + '</td></tr>';
