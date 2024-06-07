@@ -4,6 +4,7 @@
     <select id="member">
         select a.company_no
              , b.company_name
+             , b.company_div
              , a.account_no
              , a.user_name
              , a.email

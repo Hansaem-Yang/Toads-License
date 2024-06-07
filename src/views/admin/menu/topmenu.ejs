@@ -10,15 +10,15 @@
         -->
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script>
-            $(document).ready(() => {
+            $(document).ready(function() {
                 // 로그아웃
-                $("#logout").click((event) => {
+                $("#logout").click(function(event) {
                     event.preventDefault();
 
-                    var email = "<%= user.email %>";
+                    var email = "<%= session.user.email %>";
                     // Ajax를 이용한 데이터 전송
                     $.ajax({
-                        url: "../user/logout",
+                        url: "../logout",
                         method: "POST", 
                         data: {
                             email: email,
@@ -37,6 +37,12 @@
                         },
                     });
                 });
+
+                $('#logo').click(function(event) {
+                    event.preventDefault();
+
+                    window.parent.location.href = "./main";
+                });
             });
         </script>
     </head>
@@ -45,12 +51,12 @@
             <div class="topmenu">
                 <div class="shortcuts">
                     <nav>
-                        <%= user.companyName %>&nbsp;<%= user.userName %>님
+                        <%= session.user.companyName %>&nbsp;<%= session.user.userName %>님
                         <a href="./user/mypage">내정보</a>
                         <a href="#" id="logout">로그아웃</a>
                     <nav>
                 </div>
-                <div class="logo"/>
+                <div class="logo" id="logo"/>
             </div>
         </form>
     </body>

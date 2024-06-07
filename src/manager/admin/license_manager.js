@@ -34,12 +34,12 @@ module.exports = {
                 item.setUptCompany(record.upt_company);
                 item.setUptMember(record.upt_member);
 
-                list.push(member);
+                list.push(item);
             });
 
             return list;
         } catch (err) {
-            logger.error(err);
+            logger.error(`license_manager.status : ${err}`);
             return null;
         }
     },
@@ -77,7 +77,7 @@ module.exports = {
 
             return item;
         } catch (err) {
-            logger.error(err);
+            logger.error(`license_manager.detail : ${err}`);
             return null;
         }
     },
@@ -101,7 +101,7 @@ module.exports = {
 
             return result.rowsAffected[0];
         } catch (err) {
-            logger.error(err);
+            logger.error(`license_manager.insert : ${err}`);
             return -1;
         }
     },
@@ -126,7 +126,7 @@ module.exports = {
 
             return result.rowsAffected[0];
         } catch (err) {
-            logger.error(err);
+            logger.error(`license_manager.update : ${err}`);
             return -1;
         }
     },
@@ -156,11 +156,11 @@ module.exports = {
                 await transaction.commit();
             } catch (err) {
                 await transaction.rollback();
-                logger.error(err);
+                logger.error(`license_manager.delete : ${err}`);
                 return -1;
             }
         } catch (err) {
-            logger.error(err);
+            logger.error(`license_manager.delete : ${err}`);
             return -1;
         }
 

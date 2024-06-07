@@ -74,6 +74,8 @@ footer {
     background-size: cover;
     background-image: url('/public/images/logo.png');
     margin: 0;
+
+    cursor: pointer;
 }
 
 .container {

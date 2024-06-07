@@ -2,10 +2,10 @@ const manager = require("../manager/member_manager");
 const constants = require("../common/constants");
 
 module.exports = function (app) {
-    app.post("/member/list", (req, res) => {
+    app.post("/member/status", (req, res) => {
         let companyId = req.body.companyId;
 
-        manager.list(companyId).then((data) => {
+        manager.status(companyId).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {

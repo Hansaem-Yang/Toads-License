@@ -2,7 +2,7 @@ const manager = require("../manager/user_manager");
 const constants = require("../common/constants");
 
 module.exports = function (app) {
-    app.post("/user/login", (req, res) => {
+    app.post("/login", (req, res) => {
         let email = req.body.email;
         let password = req.body.password;
 
@@ -12,9 +12,11 @@ module.exports = function (app) {
             } else {
                 if (data.password == password)
                 {
+                    req.session.language = 'KR';
                     req.session.user = {
                         companyNo: data.companyNo,
                         companyName: data.companyName,
+                        companyDiv: data.companyDiv,
                         accountNo: data.accountNo,
                         userName: data.userName,
                         email: data.email,
@@ -34,7 +36,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/user/logout", (req, res) => {
+    app.post("/logout", (req, res) => {
         console.log("Logout");
         let email = req.body.email;
 
@@ -50,5 +52,12 @@ module.exports = function (app) {
                 res.send(constants.SUCCESS);
             }
         });
+    });
+    app.post("/session", (req, res) => {
+        if (req.session.user) {
+            res.send(constants.SESSION);
+        } else {
+            res.send(constants.NO_SESSION);
+        }
     });
 };

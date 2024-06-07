@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const config = require("./src/config/config");
 const logger = require("./src/logger/logger");
+const constants = require("./src/common/constants");
 
 const app = express();
 
@@ -21,13 +22,38 @@ app.use("/public", express.static("public"));
 app.use(session({ secret: '0x546F6164734D6172696E654C6963656E7365', resave: false, saveUninitialized: true, }));
 // 미들웨어를 사용하여 세션에 로그인 상태 저장
 app.use((req, res, next) => {
-    if (req.session.user) {
-      res.locals.user = req.session.user;
+    if (req.session) {
+        res.locals.session = req.session;
     }
-    if (req.session.menuId) {
-      res.locals.menuId = req.session.menuId;
-    }
+
     next();
+});
+
+app.use('/view', (req, res, next) => {
+  if (req.session.user) {
+    next();
+  }
+  else {
+    res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+  }
+});
+
+app.use('/admin', (req, res, next) => {
+  if (req.session.user) {
+    next();
+  }
+  else {
+    res.send(constants.NO_SESSION);
+  }
+});
+
+app.use('/user', (req, res, next) => {
+  if (req.session.user) {
+    next();
+  }
+  else {
+    res.send(constants.NO_SESSION);
+  }
 });
 
  // EJS 설정
@@ -36,8 +62,9 @@ app.set('views', __dirname + '/src/views');
 
 // Route 파일 설정
 require("./src/routes/view_route")(app);
-require("./src/routes/user_route")(app);
+require("./src/routes/login_route")(app);
 require("./src/routes/member_route")(app);
+require("./src/routes/nations_route")(app);
 require("./src/routes/admin/company_route")(app);
 require("./src/routes/admin/contract_route")(app);
 require("./src/routes/admin/license_route")(app);

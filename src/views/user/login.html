@@ -10,7 +10,7 @@
         -->
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script>
-            $(document).ready(() => {
+            $(document).ready(function() {
                 // 로그인 화면 Submit 처리
                 $("#login-form").submit((event) => {
                     event.preventDefault();
@@ -26,7 +26,7 @@
 
                     // Ajax를 이용한 데이터 전송
                     $.ajax({
-                        url: "../user/login",
+                        url: "../login",
                         method: "POST",
                         data: {
                             email: email,

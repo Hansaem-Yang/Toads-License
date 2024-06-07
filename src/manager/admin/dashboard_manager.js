@@ -52,6 +52,7 @@ module.exports = {
                 item.setOwnerName(record.owner_name);
                 item.setCompanyDiv(record.company_div);
                 item.setNation(record.nation);
+                item.setNationCode(record.nation_code);
                 item.setTelephone(record.telephone);
                 item.setTotalLicenses(record.total_licenses);
                 item.setTotalUsers(record.total_users);

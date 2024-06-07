@@ -26,6 +26,7 @@ module.exports = {
                 item.setOwnerName(record.owner_name);
                 item.setCompanyDiv(record.company_div);
                 item.setNation(record.nation);
+                item.setNationCode(record.nation_code);
                 item.setTelephone(record.telephone);
                 item.setTotalLicenses(record.total_licenses);
                 item.setTotalUsers(record.total_users);
@@ -36,7 +37,7 @@ module.exports = {
 
             return list;
         } catch (err) {
-            logger.error(`company.status error : ${err}`);
+            logger.error(`company_manager.status error : ${err}`);
             return null;
         }
     },
@@ -58,7 +59,10 @@ module.exports = {
                 item.setOwnerName(record.owner_name);
                 item.setBusinessNo(record.business_no);
                 item.setResidentNo(record.resident_no);
+                item.setPostCode(record.post_code);
                 item.setBusinessPlace(record.business_place);
+                item.setNation(record.nation);
+                item.setNationCode(record.nation_code);
                 item.setTelephone(record.telephone);
                 item.setRegDate(record.reg_date);
                 item.setRegCompany(record.reg_company);
@@ -70,11 +74,12 @@ module.exports = {
 
             return item;
         } catch (err) {
-            logger.error(`company.detail error : ${err}`);
+            logger.error(`company_manager.detail error : ${err}`);
             return null;
         }
     },
-    insert: async function (companyName, ownerName, businessNo, residentNo, businessPlace, telephone, regMember) {
+    insert: async function (companyName, ownerName, businessNo, residentNo, companyDiv,
+        postCode, businessPlace, nation, nationCode, telephone, regCompany, regUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -82,22 +87,28 @@ module.exports = {
                 ownerName: ownerName, 
                 businessNo: businessNo, 
                 residentNo: residentNo, 
+                companyDiv: companyDiv,
+                postCode: postCode,
                 businessPlace: businessPlace, 
+                nation: nation,
+                nationCode: nationCode,
                 telephone: telephone,
-                regMember: regMember
+                regCompany: regCompany,
+                regUser: regUser
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("company", "insert", param, format);
-
+console.log(query);
             let result = await pool.request().query(query);
 
             return result.rowsAffected[0];
         } catch (err) {
-            logger.error(`company.insert error : ${err}`);
+            logger.error(`company_manager.insert error : ${err}`);
             return -1;
         }
     },
-    update: async function (companyId, companyName, ownerName, businessNo, residentNo, businessPlace, telephone, uptMember) {
+    update: async function (companyId, companyName, ownerName, businessNo, residentNo, companyDiv,
+        postCode, businessPlace, nation, nationCode, telephone, uptCompany, uptUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -106,9 +117,14 @@ module.exports = {
                 ownerName: ownerName, 
                 businessNo: businessNo, 
                 residentNo: residentNo, 
+                companyDiv: companyDiv,
+                postCode: postCode,
                 businessPlace: businessPlace, 
+                nation: nation,
+                nationCode: nationCode,
                 telephone: telephone,
-                uptMember: uptMember,
+                uptCompany: uptCompany,
+                uptUser: uptUser,
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("company", "update", param, format);
@@ -117,7 +133,7 @@ module.exports = {
 
             return result.rowsAffected[0];
         } catch (err) {
-            logger.error(`company.update error : ${err}`);
+            logger.error(`company_manager.update error : ${err}`);
             return -1;
         }
     },
@@ -145,11 +161,11 @@ module.exports = {
                 await transaction.commit();
             } catch (err) {
                 await transaction.rollback();
-                logger.error(`company.delete error : ${err}`);
+                logger.error(`company_manager.delete error : ${err}`);
                 return -1;
             }
         } catch (err) {
-            logger.error(`company.delete error : ${err}`);
+            logger.error(`company_manager.delete error : ${err}`);
             return -1;
         }
 

@@ -5,6 +5,7 @@ class Member extends Common {
         super();
         this.companyNo = -1;
         this.companyName = null;
+        this.companyDiv = null;
         this.accountNo = -1;
         this.userName = null;
         this.email = null;
@@ -20,6 +21,9 @@ class Member extends Common {
     }
     getCompanyName(){
         return companyName;
+    }
+    getCompanyDiv(){
+        return companyDiv;
     }
     getAccountNo(){
         return accountNo;
@@ -51,6 +55,9 @@ class Member extends Common {
     }
     setCompanyName(companyName){
         this.companyName = companyName;
+    }
+    setCompanyDiv(companyDiv){
+        this.companyDiv = companyDiv;
     }
     setAccountNo(accountNo){
         this.accountNo = accountNo;

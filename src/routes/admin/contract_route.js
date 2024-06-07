@@ -2,10 +2,10 @@ const manager = require("../../manager/admin/contract_manager");
 const constants = require("../../common/constants");
 
 module.exports = function (app) {
-    app.post("/admin/contract/list", (req, res) => {
-        let companyId = req.body.companyId;
+    app.post("/admin/contract/status", (req, res) => {
+        let companyNo = req.body.companyNo;
 
-        manager.status(companyId).then((data) => {
+        manager.status(companyNo).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -14,10 +14,10 @@ module.exports = function (app) {
         });
     });
     app.post("/admin/contract/detail", (req, res) => {
-        let companyId = req.body.companyId;
+        let companyNo = req.body.companyNo;
         let contractNo = req.body.contractNo;
 
-        manager.detail(companyId, contractNo).then((data) => {
+        manager.detail(companyNo, contractNo).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -26,7 +26,7 @@ module.exports = function (app) {
         });
     });
     app.post("/admin/contract/insert", (req, res) => {
-        let companyId = req.body.companyId;
+        let companyNo = req.body.companyNo;
         let contractName = req.body.contractName;
         let contractDate = req.body.contractDate;
         let contractor = req.body.contractor;
@@ -36,7 +36,7 @@ module.exports = function (app) {
         let remark = req.body.remark;
         let registUser = req.body.registUser;
 
-        manager.insert(companyId, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, registUser).then((data) => {
+        manager.insert(companyNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, registUser).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -45,7 +45,7 @@ module.exports = function (app) {
         });
     });
     app.post("/admin/contract/update", (req, res) => {
-        let companyId = req.body.companyId;
+        let companyNo = req.body.companyNo;
         let contractNo = req.body.contractNo;
         let contractName = req.body.contractName;
         let contractDate = req.body.contractDate;
@@ -56,7 +56,7 @@ module.exports = function (app) {
         let remark = req.body.remark;
         let modifyUser = req.body.modifyUser;
 
-        manager.update(companyId, contractNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, modifyUser).then((data) => {
+        manager.update(companyNo, contractNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, modifyUser).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -65,10 +65,10 @@ module.exports = function (app) {
         });
     });
     app.post("/admin/contract/delete", (req, res) => {
-        let companyId = req.body.companyId;
+        let companyNo = req.body.companyNo;
         let contractNo = req.body.contractNo;
 
-        manager.delete(companyId, contractNo).then((data) => {
+        manager.delete(companyNo, contractNo).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {

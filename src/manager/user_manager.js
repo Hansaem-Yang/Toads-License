@@ -19,6 +19,7 @@ module.exports = {
             result.recordset.forEach((record) => {
                 item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);
+                item.setCompanyDiv(record.company_div);
                 item.setAccountNo(record.account_no);
                 item.setUserName(record.user_name);
                 item.setEmail(record.email);
@@ -37,7 +38,7 @@ module.exports = {
 
             return item;
         } catch (err) {
-            logger.error(`user.login error : ${err}`);
+            logger.error(`user_manager.login error : ${err}`);
             return null; 
         }
     },
@@ -71,7 +72,7 @@ module.exports = {
 
             return item;
         } catch (err) {
-            logger.error(err);
+            logger.error(`user_manager.logout error : ${err}`);
             return null; 
         }
     },

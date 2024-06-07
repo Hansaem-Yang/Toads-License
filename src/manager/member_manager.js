@@ -6,12 +6,12 @@ const logger = require("../logger/logger.js");
 mybatisMapper.createMapper(["./src/sql/member.xml"]);
 
 module.exports = {
-    list: async function (companyId) {
+    status: async function (companyId) {
         try {
             let pool = await poolPromise;
             let param = { companyId: companyId };
             let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("member", "list", param, format);
+            let query = mybatisMapper.getStatement("member", "status", param, format);
 
             let result = await pool.request().query(query);
             let list = [];
@@ -40,7 +40,7 @@ module.exports = {
 
             return list;
         } catch (err) {
-            logger.error(err);
+            logger.error(`member.status error : ${err}`);
             return null;
         }
     },
@@ -79,7 +79,7 @@ module.exports = {
 
             return item;
         } catch (err) {
-            logger.error(err);
+            logger.error(`member.detail error : ${err}`);
             return null;
         }
     },
@@ -105,7 +105,7 @@ module.exports = {
 
             return result.rowsAffected[0];
         } catch (err) {
-            logger.error(err);
+            logger.error(`member.insert error : ${err}`);
             return -1;
         }
     },
@@ -132,7 +132,7 @@ module.exports = {
 
             return result.rowsAffected[0];
         } catch (err) {
-            logger.error(err);
+            logger.error(`member.update error : ${err}`);
             return -1;
         }
     },
@@ -161,11 +161,11 @@ module.exports = {
                 await transaction.commit();
             } catch (err) {
                 await transaction.rollback();
-                logger.error(err);
+                logger.error(`member.delete error : ${err}`);
                 return -1;
             }
         } catch (err) {
-            logger.error(err);
+            logger.error(`member.delete error : ${err}`);
             return -1;
         }
 

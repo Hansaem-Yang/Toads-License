@@ -8,6 +8,7 @@
              , a.owner_name
              , isnull(a.company_div, '') company_div
              , isnull(a.nation, '') nation
+             , isnull(a.nation_code, '') nation_code
              , isnull(a.telephone, '') telephone
              , (select isnull(sum(license_count), 0) from license
                  where company_no = a.company_no
@@ -27,7 +28,11 @@
              , owner_name
              , business_no
              , resident_no
+             , company_div
+             , post_code
              , business_place
+             , nation
+             , nation_code
              , telephone
              , regist_datetime
              , regist_company
@@ -40,29 +45,34 @@
     </select>
     <insert id="insert">
         insert into company (
-                    company_no
-                  , company_name
+                    company_name
                   , owner_name
                   , business_no
                   , resident_no
+                  , company_div
+                  , post_code
                   , business_place
+                  , nation
+                  , nation_code
                   , telephone
                   , regist_datetime
                   , regist_company
                   , regist_user
         )
         values (
-                    (select isnull(max(company_no), 0) + 1
-                       from company) 
-                  , #{companyName}
+                    #{companyName}
                   , #{ownerName}
                   , #{businessNo}
-                  , #{residentNo} 
+                  , #{residentNo}
+                  , #{companyDiv} 
+                  , #{postCode}
                   , #{businessPlace}
+                  , #{nation}
+                  , #{nationCode}
                   , #{telephone}
                   , convert(varchar(20), getdate(), 20)
                   , #{regCompany}
-                  , #{regMember}
+                  , #{regUser}
         );
     </insert>
     <update id="update">
@@ -71,11 +81,15 @@
              , owner_name = #{ownerName}
              , business_no = #{businessNo}
              , resident_no = #{residentNo}
+             , compay_div = #{companyDiv}
+             , post_code = #{postCode}
              , business_place = #{businessPlace}
+             , nation = #{nation}
+             , nation_code = #{nationCode}
              , telephone = #{telephone}
              , modify_datetime = convert(varchar(20), getdate(), 20)
              , modify_company = #{uptCompany}
-             , modify_user = #{uptMember}
+             , modify_user = #{uptUser}
          where company_no = #{companyNo};
     </update>
     <delete id="delete">

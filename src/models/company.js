@@ -11,6 +11,7 @@ class Company extends Common {
         this.businessPlace = null;
         this.companyDiv = null;
         this.nation = null;
+        this.nationCode = null;
         this.telephone = null;
         this.totalLicenses = -1;
         this.totalUsers = -1;
@@ -40,6 +41,9 @@ class Company extends Common {
     }
     getNation(){
         return this.nation;
+    }
+    getNationCode(){
+        return this.nationCode;
     }
     getTelephone(){
         return this.telephone;
@@ -77,6 +81,9 @@ class Company extends Common {
     }
     setNation(nation){
         this.nation = nation;
+    }
+    setNationCode(nationCode){
+        this.nationCode = nationCode;
     }
     setTelephone(telephone){
         this.telephone = telephone;

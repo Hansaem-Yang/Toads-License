@@ -29,15 +29,22 @@ module.exports = function (app) {
         let ownerName = req.body.ownerName;
         let businessNo = req.body.businessNo;
         let residentNo = req.body.residentNo;
+        let companyDiv = req.body.companyDiv;
+        let postCode = req.body.postCode;
         let businessPlace = req.body.businessPlace;
+        let nation = req.body.nation;
+        let nationCode = req.body.nationCode;
         let telephone = req.body.telephone;
-        let registUser = req.body.registUser;
+        let regCompany = req.session.user.companyNo;
+        let regUser = req.session.user.accountNo;
 
-        manager.insert(companyName, ownerName, businessNo, residentNo, businessPlace, telephone, registUser).then((data) => {
-            if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
+
+        manager.insert(companyName, ownerName, businessNo, residentNo, companyDiv,
+            postCode, businessPlace, nation, nationCode, telephone, regCompany, regUser).then((data) => {
+            if (data == null || data <= 0) {
+                res.send(constants.FAIL);
             } else {
-                res.send(data);
+                res.send(constants.SUCCESS);
             }
         });
     });
@@ -47,15 +54,21 @@ module.exports = function (app) {
         let ownerName = req.body.ownerName;
         let businessNo = req.body.businessNo;
         let residentNo = req.body.residentNo;
+        let companyDiv = req.body.companyDiv;
+        let postCode = req.body.postCode;
         let businessPlace = req.body.businessPlace;
         let telephone = req.body.telephone;
-        let modifyUser = req.body.modifyUser;
+        let nation = req.body.nation;
+        let nationCode = req.body.nationCode;
+        let uptCompany = req.session.user.companyNo;
+        let uptUser = req.session.user.accountNo;
 
-        manager.update(companyId, companyName, ownerName, businessNo, residentNo, businessPlace, telephone, modifyUser).then((data) => {
-            if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
+        manager.update(companyId, companyName, ownerName, businessNo, residentNo, companyDiv,
+            postCode, businessPlace, nation, nationCode, telephone, uptCompany, uptUser).then((data) => {
+            if (data == null || data <= 0) {
+                res.send(constants.FAIL);
             } else {
-                res.send(data);
+                res.send(constants.SUCCESS);
             }
         });
     });
@@ -63,10 +76,10 @@ module.exports = function (app) {
         let companyIds = req.body.companyIds;
 
         manager.delete(companyIds).then((data) => {
-            if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
+            if (data == null || data <= 0) {
+                res.send(constants.FAIL);
             } else {
-                res.send(data);
+                res.send(constants.SUCCESS);
             }
         });
     });

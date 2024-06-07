@@ -9,8 +9,9 @@
         <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
         -->
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="/public/js/common/common_variables.js"></script>
         <script>
-            $(document).ready(() => {
+            $(document).ready(function() {
                 $.ajax({
                     url: "../admin/dashboard/satelliteUsage",
                     method: "POST",
@@ -53,7 +54,7 @@
                         else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
-                                    var newRow = '<tr><td class="center-align">' + post.companyNo + '</td><td class="left-align">' + post.companyName + '</td><td class="center-align">' + post.ownerName + '</td><td class="center-align">' + post.companyDiv + '</td><td class="center-align">' + post.telephone + '</td><td class="right-align">' + post.totalLicenses + '</td><td class="right-align">' + post.totalUsers + '</td></tr>';
+                                    var newRow = '<tr><td class="center-align">' + post.companyNo + '</td><td class="left-align">' + post.companyName + '</td><td class="center-align">' + post.ownerName + '</td><td class="center-align">' + companyDiv[post.companyDiv] + '</td><td class="center-align">+' + post.nationCode + '-' + post.telephone + '</td><td class="right-align">' + post.totalLicenses + '</td><td class="right-align">' + post.totalUsers + '</td></tr>';
                                     $('#company tbody').append(newRow);
                                 });
                             }
