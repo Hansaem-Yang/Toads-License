@@ -51,6 +51,11 @@ th, td {
     align-items: center;
 }
 
+
+.selectedrow {
+    background: #88c1fd 0% 0% no-repeat padding-box;
+}
+
 .search-text {
     width: 240px;
     height: 32px;

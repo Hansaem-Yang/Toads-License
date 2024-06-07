@@ -22,17 +22,17 @@
 
                     $.each(nation_options, function(index, option)
                     {
-                        <% if (session.language == 'KR') { %>
+                        if ('<%= session.language %>' == 'KR') {
                             $('#sel_nation').append($('<option>', { 
                                 value:option.code, 
                                 text:option.kname
                             }));
-                        <% } else { %>
+                        } else {
                             $('#sel_nation').append($('<option>', { 
                                 value:option.code, 
                                 text:option.ename
                             }));
-                        <% } %>
+                        }
                     });
                 };
 
@@ -110,25 +110,20 @@
                     });
                 });
 
-                var clear = function() {
-                    $('#txt_company_name').val('');
-                    $('#txt_owner_name').val('');
-                    $('#txt_business_no').val('');
-                    $('#txt_resident_no').val('');
-                    $('#sel_company_div').val('');
-                    $('#sel_nation').val('');
-                    $('#sel_nation_code').val('');
-                    $('#txt_telephone').val('');
-                    $('#txt_post_code').val('');
-                    $('#txt_business_place').val('');
-                };
-
                 $('#btn_add').click(function() {
+                    $('#modal').show();
+                });
+
+                $('#btn_modify').click(function() {
                     $('#modal').show();
                 });
 
                 $('#close').click(function() {
                     $('#modal').hide();
+                });
+
+                $('#company tbody').on('click', 'tr', function() {
+                    $(this).addClass('selectedrow').siblings().removeClass('selectedrow');
                 });
 
                 $('#sel_nation').change(function() {
@@ -232,6 +227,19 @@
                 });
 
                 $('#btn_search').click();
+
+                var clear = function() {
+                    $('#txt_company_name').val('');
+                    $('#txt_owner_name').val('');
+                    $('#txt_business_no').val('');
+                    $('#txt_resident_no').val('');
+                    $('#sel_company_div').val('');
+                    $('#sel_nation').val('');
+                    $('#sel_nation_code').val('');
+                    $('#txt_telephone').val('');
+                    $('#txt_post_code').val('');
+                    $('#txt_business_place').val('');
+                };
             });
         </script>
     </head>
@@ -258,7 +266,12 @@
                 </div></br></br></br>
                 <div  class="contents-container">
                     <div class="title">고객사 목록</div>
-                    <div class="top-right-button"><input type="button" id="btn_add" class="status-button" value="등록"/></div>
+                    <div class="top-right-button">
+                        <div class="align-container">
+                            <p><input type="button" id="btn_add" class="status-button" value="등록"/></p>
+                            <input type="button" id="btn_modify" class="status-button" value="수정"/>
+                        </div>
+                    </div>
                     <div>
                         <table id="company">
                             <thead>
@@ -290,6 +303,7 @@
         </form>
         <div id="modal" class="modal">
             <div class="modal-content" style="width:630px">
+                <input type="hidden" id="mode"/>
                 <div class="contents-container">
                     <span id="close" class="close">&times;</span>
                     <div class="title">고객사 등록</div>
@@ -299,6 +313,7 @@
                                 <tr>
                                     <th width="120px" class="right-align">*법인명</th>
                                     <td width="480px" class="left-align">
+                                        <input type="hidden" id="hid_company_no"/>
                                         <input type="text" id="txt_company_name" class="input-text" style="width: 240px;"/>
                                     </td>
                                 </tr>
