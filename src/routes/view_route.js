@@ -71,6 +71,17 @@ module.exports = function (app) {
             res.render("user/company/status");
         }
     });
+
+    app.get("/view/company/detail", (req, res) => {
+        res.locals.companyNo = req.query.companyNo;
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/company/detail");
+        }
+        else {
+            res.render("user/company/detail");
+        }
+    });
     
     // 계약 관리 페이지
     app.get("/view/contract", (req, res) => {

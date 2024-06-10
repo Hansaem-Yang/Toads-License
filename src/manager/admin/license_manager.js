@@ -27,12 +27,6 @@ module.exports = {
                 item.setLicenseCount(record.license_count);
                 item.setStartDate(record.start_date);
                 item.setEndDate(record.end_date);
-                item.setRegDate(record.reg_date);
-                item.setRegCompany(record.reg_company);
-                item.setRegMember(record.reg_user);
-                item.setUptDate(record.upt_date);
-                item.setUptCompany(record.upt_company);
-                item.setUptMember(record.upt_member);
 
                 list.push(item);
             });
@@ -67,12 +61,6 @@ module.exports = {
                 item.setLicenseCount(record.license_count);
                 item.setStartDate(record.start_date);
                 item.setEndDate(record.end_date);
-                item.setRegDate(record.reg_date);
-                item.setRegCompany(record.reg_company);
-                item.setRegMember(record.reg_user);
-                item.setUptDate(record.upt_date);
-                item.setUptCompany(record.upt_company);
-                item.setUptMember(record.upt_member);
             }
 
             return item;

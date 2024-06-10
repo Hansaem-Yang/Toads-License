@@ -8,7 +8,7 @@
              , a.owner_name
              , isnull(a.company_div, '') company_div
              , isnull(a.nation, '') nation
-             , isnull(a.nation_code, '') nation_code
+             , isnull(b.nation_code, '') nation_code
              , isnull(a.telephone, '') telephone
              , (select isnull(sum(license_count), 0) from license
                  where company_no = a.company_no
@@ -19,29 +19,33 @@
                    and use_status = 'Y') as total_users
              , 0 as total_satellite_usage
           from company as a
-         where a.company_name like #{companyName} + '%';
+          left outer join nations as b
+            on a.nation = b.nation_iso2
+         where a.company_name like '%' + #{companyName} + '%';
     ]]>
     </select>
     <select id="detail">
-        select company_no
-             , company_name
-             , owner_name
-             , business_no
-             , resident_no
-             , company_div
-             , post_code
-             , business_place
-             , nation
-             , nation_code
-             , telephone
-             , regist_datetime
-             , regist_company
-             , regist_user
-             , modify_datetime
-             , modify_company
-             , modify_user
-          from company
-         where company_no = #{companyNo};
+        select a.company_no
+             , a.company_name
+             , a.owner_name
+             , isnull(a.business_no, '') business_no
+             , isnull(a.resident_no, '') resident_no
+             , isnull(a.company_div, '') company_div
+             , isnull(a.post_code, '') post_code
+             , isnull(a.business_place, '') business_place
+             , isnull(a.nation, '') nation
+             , isnull(b.nation_code, '') nation_code
+             , isnull(a.telephone, '') telephone
+             , a.regist_datetime
+             , a.regist_company
+             , a.regist_user
+             , a.modify_datetime
+             , a.modify_company
+             , a.modify_user
+          from company as a
+          left outer join nations as b
+            on a.nation = b.nation_iso2
+         where a.company_no = #{companyNo};
     </select>
     <insert id="insert">
         insert into company (
@@ -53,7 +57,6 @@
                   , post_code
                   , business_place
                   , nation
-                  , nation_code
                   , telephone
                   , regist_datetime
                   , regist_company
@@ -68,7 +71,6 @@
                   , #{postCode}
                   , #{businessPlace}
                   , #{nation}
-                  , #{nationCode}
                   , #{telephone}
                   , convert(varchar(20), getdate(), 20)
                   , #{regCompany}
@@ -81,11 +83,10 @@
              , owner_name = #{ownerName}
              , business_no = #{businessNo}
              , resident_no = #{residentNo}
-             , compay_div = #{companyDiv}
+             , company_div = #{companyDiv}
              , post_code = #{postCode}
              , business_place = #{businessPlace}
              , nation = #{nation}
-             , nation_code = #{nationCode}
              , telephone = #{telephone}
              , modify_datetime = convert(varchar(20), getdate(), 20)
              , modify_company = #{uptCompany}

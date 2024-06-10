@@ -8,6 +8,7 @@ class Company extends Common {
         this.ownerName = null;
         this.businessNo = null;
         this.residentNo = null;
+        this.postCode = null;
         this.businessPlace = null;
         this.companyDiv = null;
         this.nation = null;
@@ -32,6 +33,9 @@ class Company extends Common {
     }
     getResidentNo(){
         return this.residentNo;
+    }
+    getPostCode(){
+        return this.postCode;
     }
     getBusinessPlace(){
         return this.businessPlace;
@@ -72,6 +76,9 @@ class Company extends Common {
     }
     setResidentNo(residentNo){
         this.residentNo = residentNo;
+    }
+    setPostCode(postCode){
+        this.postCode = postCode;
     }
     setBusinessPlace(businessPlace){
         this.businessPlace = businessPlace;

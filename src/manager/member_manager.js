@@ -28,12 +28,6 @@ module.exports = {
                 item.setRoleCode(record.role_code);
                 item.setPhone(record.phone);
                 item.setUseStatus(record.use_status);
-                item.setRegDate(record.reg_date);
-                item.setRegCompany(record.reg_company);
-                item.setRegMember(record.reg_user);
-                item.setUptDate(record.upt_date);
-                item.setUptCompany(record.upt_company);
-                item.setUptMember(record.upt_member);
 
                 list.push(member);
             });
@@ -69,12 +63,6 @@ module.exports = {
                 item.setRoleCode(record.role_code);
                 item.setPhone(record.phone);
                 item.setUseStatus(record.use_status);
-                item.setRegDate(record.reg_date);
-                item.setRegCompany(record.reg_company);
-                item.setRegMember(record.reg_user);
-                item.setUptDate(record.upt_date);
-                item.setUptCompany(record.upt_company);
-                item.setUptMember(record.upt_member);
             }
 
             return item;

@@ -51,8 +51,7 @@ th, td {
     align-items: center;
 }
 
-
-.selectedrow {
+.selected {
     background: #88c1fd 0% 0% no-repeat padding-box;
 }
 
@@ -191,8 +190,21 @@ th, td {
 }
 
 .bottom-button {
-    width: 100%;
     display: flex;
+    width: 100%;
     justify-content: center;
     align-items: center;
+}
+
+.satellite-usage-container {
+    display: flex;
+    width: 100%;
+    padding:10px;
+}
+
+.daliy-usage, .monthly-usage {
+    flex: 1;
+    height: 240px; 
+    padding: 10px;
+    background-color: #fefefe;
 }

@@ -12,6 +12,22 @@
         <script src="/public/js/common/common_variables.js"></script>
         <script>
             $(document).ready(function() {
+                var GetTelephone = function(nationCode, telephone)
+                {
+                    var resultValue = '';
+                    if (nationCode === '')
+                    {
+                        resultValue = telephone;
+                    }
+                    else
+                    {
+                        telephone = telephone[0] === '0' ? telephone.substring(1) : telephone;
+                        resultValue = '+' + nationCode + '-' + telephone;
+                    }
+                    
+                    return resultValue;
+                };
+
                 $.ajax({
                     url: "../admin/dashboard/satelliteUsage",
                     method: "POST",
@@ -58,7 +74,13 @@
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
-                                    var newRow = '<tr><td class="center-align">' + post.companyNo + '</td><td class="left-align">' + post.companyName + '</td><td class="center-align">' + post.ownerName + '</td><td class="center-align">' + companyDiv[post.companyDiv] + '</td><td class="center-align">+' + post.nationCode + '-' + post.telephone + '</td><td class="right-align">' + post.totalLicenses + '</td><td class="right-align">' + post.totalUsers + '</td></tr>';
+                                    var newRow = '<tr><td class="center-align">' + post.companyNo + 
+                                        '</td><td class="left-align">' + post.companyName + 
+                                        '</td><td class="center-align">' + post.ownerName + 
+                                        '</td><td class="center-align">' + companyDiv[post.companyDiv] + 
+                                        '</td><td class="center-align">' + GetTelephone(post.nationCode, post.telephone) + 
+                                        '</td><td class="right-align">' + post.totalLicenses + 
+                                        '</td><td class="right-align">' + post.totalUsers + '</td></tr>';
                                     $('#company tbody').append(newRow);
                                 });
                             }

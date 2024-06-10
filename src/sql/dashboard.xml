@@ -20,7 +20,7 @@
              , a.owner_name
              , isnull(a.company_div, '') company_div
              , isnull(a.nation, '') nation
-             , isnull(a.nation_code, '') nation_code
+             , isnull(b.nation_code, '') nation_code
              , isnull(a.telephone, '') telephone
              , (select isnull(sum(license_count), 0) from license
                  where company_no = a.company_no
@@ -31,6 +31,8 @@
                    and use_status = 'Y') as total_users
              , 0 as total_satellite_usage
           from company as a
+          left outer join nations as b
+            on a.nation = b.nation_iso2
     ]]>
     </select>
 </mapper>
