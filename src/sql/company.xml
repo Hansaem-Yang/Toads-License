@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="company">  
+    <select id="codes">
+    <![CDATA[
+        select company_no
+             , company_name
+          from company;
+    ]]>
+    </select>
     <select id="status">
     <![CDATA[
         select a.company_no

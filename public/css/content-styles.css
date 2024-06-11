@@ -28,12 +28,18 @@ body, html {
     font-family: Arial, sans-serif;
     font-weight: bold;
     font-size: 15px;
-    height: 26px;
+    height: 28px;
 }
 
 .contents-container {
     position: relative;
     width: 100%;
+}
+
+.table-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
 }
 
 table {
@@ -44,10 +50,13 @@ tbody :hover {
     transition: background-color 0.3s;
     background: #cae4ff 0% 0% no-repeat padding-box;
 }
+tr {
+    height: 30px;
+}
 th, td {
     font-size: 14px;
     border: 1px solid rgb(51, 54, 58); /* 테이블 외곽선 생성 */
-    padding: 8px;
+    padding: 4px;
     align-items: center;
 }
 
@@ -56,9 +65,17 @@ th, td {
 }
 
 .search-text {
-    width: 240px;
-    height: 32px;
-    font-size: 16px;
+    height: 28px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font: normal normal medium 12px/16px Pretendard;
+    font-size: 14px;
+    letter-spacing: 0px;
+    color: #3c4047;
+}
+.search-select {
+    height: 28px;
     border: 2px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
@@ -69,7 +86,7 @@ th, td {
 }
 .button {
     width: 100px;
-    height: 32px;
+    height: 26px;
     /* UI Properties */
     background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
     box-shadow: 0px 5px 6px #00000029;
@@ -81,7 +98,7 @@ th, td {
 }
 .status-button {
     width: 80px;
-    height: 25px;
+    height: 26px;
     /* UI Properties */
     background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
     box-shadow: 0px 5px 6px #00000029;
@@ -92,19 +109,18 @@ th, td {
     cursor: pointer;
 }
 .input-text {
-    height: 32px;
-    font-size: 16px;
+    height: 28px;
     border: 2px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    font: normal normal medium 12px/16px Pretendard;
+    font: normal normal medium 12px/14px Pretendard;
     font-size: 14px;
     letter-spacing: 0px;
     color: #3c4047;
 }
 .input-button {
     width: 80px;
-    height: 30px;
+    height: 26px;
     /* UI Properties */
     background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
     box-shadow: 0px 5px 6px #00000029;
@@ -115,8 +131,7 @@ th, td {
     cursor: pointer;
 }
 .input-select {
-    height: 32px;
-    font-size: 16px;
+    height: 28px;
     border: 2px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
@@ -167,7 +182,7 @@ th, td {
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;
-    margin: 5% auto; /* 15% from the top and centered */
+    margin: 2% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
 }
@@ -207,4 +222,8 @@ th, td {
     height: 240px; 
     padding: 10px;
     background-color: #fefefe;
+}
+
+.hidden {
+    display: none;
 }

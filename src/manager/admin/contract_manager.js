@@ -6,10 +6,10 @@ const logger = require("../../logger/logger.js");
 mybatisMapper.createMapper(["./src/sql/contract.xml"]);
 
 module.exports = {
-    status: async function (companyId) {
+    status: async function (companyNo) {
         try {
             let pool = await poolPromise;
-            let param = { companyId: companyId };
+            let param = { companyNo: companyNo };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("contract", "status", param, format);
 
@@ -38,11 +38,11 @@ module.exports = {
             return null;
         }
     },
-    detail: async function (companyId, contractNo) {
+    detail: async function (companyNo, contractNo) {
         try {
             let pool = await poolPromise;
             let param = { 
-                companyId: companyId, 
+                companyNo: companyNo, 
                 contractNo: contractNo 
             };
             let format = { language: "sql", indent: " " };
@@ -71,36 +71,68 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyId, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, regMember) {
+    insert: async function (companyNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, 
+        amount, discountedAmount, actualAmount, remark, licenses, regCompany, regUser) {
         try {
             let pool = await poolPromise;
-            let param = {
-                companyId: companyId, 
-                contractName: contractName, 
-                contractDate: contractDate, 
-                contractor: contractor, 
-                contractPeriod: contractPeriod, 
-                startDate: startDate, 
-                endDate: endDate, 
-                remark: remark, 
-                regMember: regMember
-            };
-            let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("contract", "insert", param, format);
+            let transaction = new sql.Transaction(pool);
 
-            let result = await pool.request().query(query);
+            await transaction.begin();
+            try {
+                let param = {
+                    companyNo: companyNo, 
+                    contractName: contractName, 
+                    contractDate: contractDate, 
+                    contractor: contractor, 
+                    contractPeriod: contractPeriod, 
+                    startDate: startDate, 
+                    endDate: endDate, 
+                    amount: amount, 
+                    discountedAmount: discountedAmount, 
+                    actualAmount: actualAmount,
+                    remark: remark, 
+                    regCompany: regCompany,
+                    regUser: regUser
+                };
+                let format = { language: "sql", indent: " " };
+                let query = mybatisMapper.getStatement("contract", "insert", param, format);
+                let result = await request.query(query);
 
-            return result.rowsAffected[0];
+                count += result.rowsAffected[0];
+
+                for (let i = 0; i < contractNos.length; i++) {
+                    let param = {
+                        companyNo: companyNo,
+                        contractNo: contractNos[i],
+                    };
+                    let format = { language: "sql", indent: " " };
+                    let query = mybatisMapper.getStatement("contract", "delete", param, format);
+
+                    let request = new sql.Request(transaction);
+                    let result = await request.query(query);
+
+                    count += result.rowsAffected[0];
+                }
+
+                await transaction.commit();
+            } catch (err) {
+                await transaction.rollback();
+                logger.error(`contract_manager.delete error : ${err}`);
+                return -1;
+            }
+
+            return count;
         } catch (err) {
             logger.error(`contract_manager.insert error : ${err}`);
             return -1;
         }
     },
-    update: async function (companyId, contractNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, uptMember) {
+    update: async function (companyNo, contractNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, 
+        amount, discountedAmount, actualAmount, remark, licenses, uptCompany, uptUser) {
         try {
             let pool = await poolPromise;
             let param = {
-                companyId: companyId, 
+                companyNo: companyNo, 
                 contractNo: contractNo,
                 contractName: contractName, 
                 contractDate: contractDate, 
@@ -108,8 +140,11 @@ module.exports = {
                 contractPeriod: contractPeriod, 
                 startDate: startDate, 
                 endDate: endDate, 
+                amount: amount, 
+                discountedAmount: discountedAmount, 
+                actualAmount: actualAmount,
                 remark: remark, 
-                uptMember: uptMember
+                modifyUser: modifyUser
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("contract", "update", param, format);
@@ -122,7 +157,7 @@ module.exports = {
             return -1;
         }
     },
-    delete: async function (companyId, contractNos) {
+    delete: async function (companyNo, contractNos) {
         let count = 0;
         try {
             let pool = await poolPromise;
@@ -132,7 +167,7 @@ module.exports = {
             try {
                 for (let i = 0; i < contractNos.length; i++) {
                     let param = {
-                        companyId: companyId,
+                        companyNo: companyNo,
                         contractNo: contractNos[i],
                     };
                     let format = { language: "sql", indent: " " };

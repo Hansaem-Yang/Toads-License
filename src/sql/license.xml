@@ -85,7 +85,7 @@
                   , #{actualAmount}
                   , convert(varchar(20), getdate(), 20)
                   , #{regCompany}
-                  , #{regMember}
+                  , #{regUser}
         );
     </insert>
     <update id="update">
@@ -99,7 +99,7 @@
              , actual_amount = #{actualAmount}
              , modify_datetime = convert(varchar(20), getdate(), 20)
              , modify_company = #{uptCompany}
-             , modify_user = #{uptMember}
+             , modify_user = #{uptUser}
          where company_no = #{companyNo}
            and contract_no = #{contractNo}
            and license_no = #{licenseNo};

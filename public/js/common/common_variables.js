@@ -27,12 +27,21 @@ const montearyUnit = {
     EUR:'유로'
 }
 
+const contractPeriod = {
+    M1:'1개월', 
+    M3:'3개월', 
+    M6:'6개월', 
+    Y1:'1년', 
+    Y2:'2년', 
+    Y3:'3년', 
+}
+
 const licenseType = {
     OL:'Official license',
     SL:'Service license'
 }
 
-const applicationName = {
+const appName = {
     TM:'Toads Marine',
     TS:'Toads S-Link'
 }
@@ -43,9 +52,4 @@ const machinDiv = {
     E:'전장분야',
     T:'통신분야',
     Z:'기타'
-}
-
-function GetCompanyDiv(code)
-{
-    return companyDiv[code];
 }

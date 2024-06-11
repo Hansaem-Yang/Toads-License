@@ -9,48 +9,11 @@
         <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
         -->
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="/public/js/common/common_utility.js"></script>
         <script src="/public/js/common/common_variables.js"></script>
         <script>
             $(document).ready(function() {
                 var nation_options = [];
-                var createNations = function()
-                {
-                    $('#sel_nation').append($('<option>', { 
-                        value:'', 
-                        text:'선택하세요.'
-                    }));
-
-                    $.each(nation_options, function(index, option)
-                    {
-                        if ('<%= session.language %>' == 'KR') {
-                            $('#sel_nation').append($('<option>', { 
-                                value:option.code, 
-                                text:option.kname
-                            }));
-                        } else {
-                            $('#sel_nation').append($('<option>', { 
-                                value:option.code, 
-                                text:option.ename
-                            }));
-                        }
-                    });
-                };
-
-                var GetTelephone = function(nationCode, telephone)
-                {
-                    var resultValue = '';
-                    if (nationCode === '')
-                    {
-                        resultValue = telephone;
-                    }
-                    else
-                    {
-                        telephone = telephone[0] === '0' ? telephone.substring(1) : telephone;
-                        resultValue = '+' + nationCode + '-' + telephone;
-                    }
-                    
-                    return resultValue;
-                };
 
                 $.ajax({
                     url: "../nations/status",
@@ -67,7 +30,7 @@
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
                             
-                            createNations();
+                            CreateNationsSelection($('#sel_nation'), nation_options, $('#hid_language').val());
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -78,15 +41,13 @@
                                         country:post.nationCode
                                     });
                                 });
-                                createNations();
+
+                                CreateNationsSelection($('#sel_nation'), nation_options, $('#hid_language').val());
                             }
                         }
                     },
                     error: function (xhr, status, error) {
-                        $('#company tbody').empty();
-
-                        var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
-                        $('#company').append(newRow);
+                        alert("서버 요청에 실패하였습니다.");
                     },
                 });
 
@@ -107,17 +68,20 @@
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
                                 var newRow = '<tr><td colspan="7" class="left-align">조회된 데이터가 없습니다.</td></tr>';
-                                $('#company').append(newRow);
+                                $('#company tbody').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
-                                        var newRow = '<tr><td class="center-align">' + post.companyNo + 
-                                            '</td><td class="left-align">' + post.companyName + 
-                                            '</td><td class="center-align">' + post.ownerName + 
-                                            '</td><td class="center-align">' + companyDiv[post.companyDiv] + 
-                                            '</td><td class="center-align">' + GetTelephone(post.nationCode, post.telephone) + 
-                                            '</td><td class="right-align">' + post.totalLicenses + 
-                                            '</td><td class="right-align">' + post.totalUsers + '</td></tr>';
+                                        var newRow = 
+                                            '<tr>' +
+                                                '<td class="center-align">' + post.companyNo + '</td>' +
+                                                '<td class="left-align">' + post.companyName + '</td>' +
+                                                '<td class="center-align">' + post.ownerName + '</td>' +
+                                                '<td class="center-align">' + companyDiv[post.companyDiv] + '</td>' +
+                                                '<td class="center-align">' + GetTelephone(post.nationCode, post.telephone) + '</td>' +
+                                                '<td class="right-align">' + post.totalLicenses + '</td>' +
+                                                '<td class="right-align">' + post.totalUsers + '</td>' +
+                                            '</tr>';
                                         $('#company tbody').append(newRow);
                                     });
                                 }
@@ -127,7 +91,7 @@
                             $('#company tbody').empty();
 
                             var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
-                            $('#company').append(newRow);
+                            $('#company tbody').append(newRow);
                         },
                     });
                 });
@@ -237,19 +201,7 @@
                 $('#btn_save').click(function() {
                     if (confirm('데이터를 저장 하시겠습니까?') == true)
                     {
-                        var companyNo = $('#hid_company_no').val();
-                        var companyName = $('#txt_company_name').val();
-                        var ownerName = $('#txt_owner_name').val();
-                        var businessNo = $('#txt_business_no').val();
-                        var residentNo = $('#txt_resident_no').val();
-                        var companyDiv = $('#sel_company_div').val();
-                        var nation = $('#sel_nation').val();
-                        var nationCode = $('#txt_nation_code').val();
-                        var telephone = $('#txt_telephone').val();
-                        var postCode = $('#txt_post_code').val();
-                        var businessPlace = $('#txt_business_place').val();
-
-                        if (companyName === '') {
+                        if ($('#txt_company_name').val() === '') {
                             alert('법인명을 입력하세요.');
                             return;
                         }
@@ -273,6 +225,18 @@
                             alert('연락처를 입력하세요.');
                             return;
                         }
+                        
+                        var companyNo = $('#hid_company_no').val();
+                        var companyName = $('#txt_company_name').val();
+                        var ownerName = $('#txt_owner_name').val();
+                        var businessNo = $('#txt_business_no').val();
+                        var residentNo = $('#txt_resident_no').val();
+                        var companyDiv = $('#sel_company_div').val();
+                        var nation = $('#sel_nation').val();
+                        var nationCode = $('#txt_nation_code').val();
+                        var telephone = $('#txt_telephone').val();
+                        var postCode = $('#txt_post_code').val();
+                        var businessPlace = $('#txt_business_place').val();
 
                         var url = "../admin/company/insert";
                         if (companyNo === ''){
@@ -331,12 +295,14 @@
                     }
                 });
 
+                CreateVariablesSelection($('#sel_company_div'), companyDiv);
                 $('#btn_search').click();
             });
         </script>
     </head>
     <body>
         <form id="company-detail-form">
+            <input type="hidden" id="hid_language" value="<%=session.language%>"/>
             <div class="content">
                 <div>
                     <div class="title">조회 조건</div>
@@ -430,17 +396,7 @@
                                 <tr>
                                     <th width="120px" class="right-align">*회사구분</th>
                                     <td width="480px" class="left-align">
-                                        <select id="sel_company_div" class="input-select">
-                                            <option value=''>선택하세요.</option> 
-                                            <option value='A'>조선사</option> 
-                                            <option value='B'>설계회사</option> 
-                                            <option value='1'>선사</option> 
-                                            <option value='2'>선박관리화사</option> 
-                                            <option value='M'>기가재기업</option> 
-                                            <option value='P'>파트너사</option> 
-                                            <option value='T'>토즈본사</option> 
-                                            <option value='Z'>기타</option>
-                                        </select>
+                                        <select id="sel_company_div" class="input-select"></select>
                                     </td>
                                 </tr>
                                 <tr>

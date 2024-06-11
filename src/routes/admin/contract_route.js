@@ -33,10 +33,16 @@ module.exports = function (app) {
         let contractPeriod = req.body.contractPeriod;
         let startDate = req.body.startDate;
         let endDate = req.body.endDate;
+        let amount = req.body.amount;
+        let discountedAmount = req.body.discountedAmount;
+        let actualAmount = req.body.actualAmount;
         let remark = req.body.remark;
-        let registUser = req.body.registUser;
+        let licenses = req.body.licenses;
+        let regCompany = req.session.user.companyNo;
+        let regUser = req.session.user.accountNo;
 
-        manager.insert(companyNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, registUser).then((data) => {
+        manager.insert(companyNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, 
+            amount, discountedAmount, actualAmount, remark, licenses, regCompany, regUser).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -53,10 +59,16 @@ module.exports = function (app) {
         let contractPeriod = req.body.contractPeriod;
         let startDate = req.body.startDate;
         let endDate = req.body.endDate;
+        let amount = req.body.amount;
+        let discountedAmount = req.body.discountedAmount;
+        let actualAmount = req.body.actualAmount;
         let remark = req.body.remark;
-        let modifyUser = req.body.modifyUser;
+        let licenses = req.body.licenses;
+        let uptCompany = req.session.user.companyNo;
+        let uptUser = req.session.user.accountNo;
 
-        manager.update(companyNo, contractNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, remark, modifyUser).then((data) => {
+        manager.update(companyNo, contractNo, contractName, contractDate, contractor, contractPeriod, startDate, endDate, 
+            amount, discountedAmount, actualAmount, remark, licenses, uptCompany, uptUser).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {

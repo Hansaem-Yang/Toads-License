@@ -9,48 +9,11 @@
         <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
         -->
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="/public/js/common/common_utility.js"></script>
         <script src="/public/js/common/common_variables.js"></script>
         <script>
             $(document).ready(function() {
                 var nation_options = [];
-                var createNations = function()
-                {
-                    $('#sel_nation').append($('<option>', { 
-                        value:'', 
-                        text:'선택하세요.'
-                    }));
-
-                    $.each(nation_options, function(index, option)
-                    {
-                        if ('<%= session.language %>' == 'KR') {
-                            $('#sel_nation').append($('<option>', { 
-                                value:option.code, 
-                                text:option.kname
-                            }));
-                        } else {
-                            $('#sel_nation').append($('<option>', { 
-                                value:option.code, 
-                                text:option.ename
-                            }));
-                        }
-                    });
-                };
-
-                var GetTelephone = function(nationCode, telephone)
-                {
-                    var resultValue = '';
-                    if (nationCode === '')
-                    {
-                        resultValue = telephone;
-                    }
-                    else
-                    {
-                        telephone = telephone[0] === '0' ? telephone.substring(1) : telephone;
-                        resultValue = '+' + nationCode + '-' + telephone;
-                    }
-                    
-                    return resultValue;
-                };
 
                 $.ajax({
                     url: "../../nations/status",
@@ -67,7 +30,7 @@
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
                             
-                            createNations();
+                            CreateNationsSelection($('#sel_nation'), nation_options, $('#hid_language').val());
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -78,7 +41,8 @@
                                         country:post.nationCode
                                     });
                                 });
-                                createNations();
+                                
+                                CreateNationsSelection($('#sel_nation'), nation_options, $('#hid_language').val());
                             }
                         }
                     },
@@ -327,12 +291,14 @@
                     }
                 });
 
+                CreateVariablesSelection($('#sel_company_div'), companyDiv);
                 Search();
             });
         </script>
     </head>
     <body>
         <form id="company-status-form">
+            <input type="hidden" id="hid_language" value="<%=session.language%>"/>
             <input type="hidden" id="hid_company_no"/>
             <input type="hidden" id="hid_company_name"/>
             <input type="hidden" id="hid_owner_name"/>
@@ -356,7 +322,7 @@
                     </div>
                     <div>
                         <table id="company">
-                            <tbody>
+                            <thead>
                                 <tr>
                                     <th class="right-align" width="120px">고객사번호</th>
                                     <td id="company_no" width="300"></td>
@@ -395,7 +361,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                            </tbody>
+                            </thead>
                         </table>
                     </div>
                 </div></br></br></br>
@@ -443,17 +409,7 @@
                                 <tr>
                                     <th width="120px" class="right-align">*회사구분</th>
                                     <td width="480px" class="left-align">
-                                        <select id="sel_company_div" class="input-select">
-                                            <option value=''>선택하세요.</option> 
-                                            <option value='A'>조선사</option> 
-                                            <option value='B'>설계회사</option> 
-                                            <option value='1'>선사</option> 
-                                            <option value='2'>선박관리화사</option> 
-                                            <option value='M'>기가재기업</option> 
-                                            <option value='P'>파트너사</option> 
-                                            <option value='T'>토즈본사</option> 
-                                            <option value='Z'>기타</option>
-                                        </select>
+                                        <select id="sel_company_div" class="input-select"></select>
                                     </td>
                                 </tr>
                                 <tr>

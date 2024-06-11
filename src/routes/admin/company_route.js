@@ -2,6 +2,15 @@ const manager = require("../../manager/admin/company_manager");
 const constants = require("../../common/constants");
 
 module.exports = function (app) {
+    app.post("/admin/company/codes", (req, res) => {
+        manager.codes().then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
     app.post("/admin/company/status", (req, res) => {
         let companyName = req.body.companyName;
 
