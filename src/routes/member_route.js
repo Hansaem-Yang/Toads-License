@@ -38,7 +38,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/member/regist", (req, res) => {
+    app.post("/member/insert", (req, res) => {
         let companyId = req.body.companyId;
         let memberName = req.body.memberName;
         let email = req.body.email;
@@ -46,28 +46,34 @@ module.exports = function (app) {
         let memberType = req.body.memberType;
         let roleCode = req.body.roleCode;
         let phone = req.body.phone;
+        let useStatus = req.body.useStatus;
+        let registCompany = req.session.user.companyNo;
+        let registUser = req.session.user.accountNo;
 
-        manager.regist(companyId, memberName, email, password, memberType, roleCode, phone).then((data) => {
+        manager.insert(companyId, memberName, email, password, memberType, roleCode, phone, useStatus, registCompany, registUser).then((data) => {
             if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
+                res.send(constants.FAIL);
             } else {
-                res.send(data);
+                res.send(constants.SUCCESS);
             }
         });
     });
-    app.post("/member/modify", (req, res) => {
+    app.post("/member/update", (req, res) => {
         let memberId = req.body.memberId;
         let memberName = req.body.memberName;
         let email = req.body.email;
         let memberType = req.body.memberType;
         let roleCode = req.body.roleCode;
         let phone = req.body.phone;
+        let useStatus = req.body.useStatus;
+        let modifyCompany = req.session.user.companyNo;
+        let modifyUser = req.session.user.accountNo;
 
-        manager.modify(memberId, memberName, email, memberType, roleCode, phone).then((data) => {
+        manager.update(memberId, memberName, email, memberType, roleCode, phone, useStatus, modifyCompany, modifyUser).then((data) => {
             if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
+                res.send(constants.FAIL);
             } else {
-                res.send(data);
+                res.send(constants.SUCCESS);
             }
         });
     });
@@ -76,9 +82,9 @@ module.exports = function (app) {
 
         manager.delete(memberId).then((data) => {
             if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
+                res.send(constants.FAIL);
             } else {
-                res.send(data);
+                res.send(constants.SUCCESS);
             }
         });
     });

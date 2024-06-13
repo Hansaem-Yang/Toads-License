@@ -27,19 +27,21 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/license/regist", (req, res) => {
+    app.post("/admin/license/insert", (req, res) => {
         let companyId = req.body.companyId;
         let contractNo = req.body.contractNo;
         let appName = req.body.appName;
         let licenseCount = req.body.licenseCount;
         let startDate = req.body.startDate;
         let endDate = req.body.endDate;
+        let registCompany = req.session.user.companyNo;
+        let registUser = req.session.user.accountNo;
 
-        manager.regist(companyId, contractNo, appName, licenseCount, startDate, endDate).then((data) => {
-            if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
+        manager.insert(companyId, contractNo, appName, licenseCount, startDate, endDate, registCompany, registUser).then((data) => {
+            if (data == null || data <= 0) {
+                res.send(constants.FAIL);
             } else {
-                res.send(data);
+                res.send(constants.SUCCESS);
             }
         });
     });
@@ -52,12 +54,14 @@ module.exports = function (app) {
         let startDate = req.body.startDate;
         let endDate = req.body.endDate;
         let useStatus = req.body.useStatus;
+        let modifyCompany = req.session.user.companyNo;
+        let modifyUser = req.session.user.accountNo;
 
-        manager.modify(companyId, contractNo, licenseNo, appName, licenseCount, startDate, endDate, useStatus).then((data) => {
-            if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
+        manager.update(companyId, contractNo, licenseNo, appName, licenseCount, startDate, endDate, useStatus, modifyCompany, modifyUser).then((data) => {
+            if (data == null || data <= 0) {
+                res.send(constants.FAIL);
             } else {
-                res.send(data);
+                res.send(constants.SUCCESS);
             }
         });
     });
@@ -67,10 +71,10 @@ module.exports = function (app) {
         let licenseNo = req.body.licenseNo;
 
         manager.delete(companyId, contractNo, licenseNo).then((data) => {
-            if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
+            if (data == null || data <= 0) {
+                res.send(constants.FAIL);
             } else {
-                res.send(data);
+                res.send(constants.SUCCESS);
             }
         });
     });

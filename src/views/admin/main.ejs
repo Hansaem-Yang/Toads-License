@@ -19,7 +19,7 @@
                         success: function (data) {
                             switch (data) {
                                 case "SESSION":
-                                    $('#content-frame').attr('src', menuId);
+                                    $('.content-frame').attr('src', menuId);
                                     break;
                                 case "NO SESSION":
                                     alert("세션이 만료되었습니다.");
@@ -39,15 +39,15 @@
     <body>
         <header>
             <div class="top-menu">
-                <object id="top-menu" data="./topmenu"></object>
+                <object data="./topmenu"></object>
             </div>
         </header>
         <div class="container">
             <div class="sidebar">
-                <object id="sidebar" data="./sidebar"></object>
+                <object data="./sidebar"></object>
             </div>
             <div class="content">
-                <iframe id="content-frame" src="./dashboard"></iframe>
+                <iframe class="content-frame" src="./dashboard"></iframe>
             </div>
         </div>
     </body>

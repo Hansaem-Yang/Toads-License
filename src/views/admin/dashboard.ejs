@@ -33,28 +33,28 @@
                     method: "POST",
                     dataType: 'json',
                     success: function (data) {
-                        $('#satellite-usage tbody').empty();
+                        $('.satellite-usage tbody').empty();
 
                         if (data === 'NO SESSION') {
                             alert("세션이 만료되었습니다.");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
                             var newRow = '<tr><td colspan="4">조회된 데이터가 없습니다.</td></tr>';
-                            $('#satellite-usage').append(newRow);
+                            $('.satellite-usage').append(newRow);
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
                                     var newRow = '<tr><td class="right-align">' + post.totalCompanys + '</td><td class="right-align">' + post.totalUsers + '</td><td class="right-align">' + post.daliyUsage + '</td><td class="right-align">' + post.monthlyUsage + '</td></tr>';
-                                    $('#satellite-usage tbody').append(newRow);
+                                    $('.satellite-usage tbody').append(newRow);
                                 });
                             }
                         }
                     },
                     error: function (xhr, status, error) {
-                        $('#satellite-usage tbody').empty();
+                        $('.satellite-usage tbody').empty();
 
                         var newRow = '<tr><td colspan="4">서버 요청에 실패하였습니다.</td></tr>';
-                        $('#satellite-usage').append(newRow);
+                        $('.satellite-usage').append(newRow);
                     },
                 });
                 
@@ -63,46 +63,46 @@
                     method: "POST",
                     dataType: 'json',
                     success: function (data) {
-                        $('#company tbody').empty();
+                        $('.company tbody').empty();
 
                         if (data === 'NO SESSION') {
                             alert("세션이 만료되었습니다.");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
                             var newRow = '<tr><td colspan="7" class="left-align">조회된 데이터가 없습니다.</td></tr>';
-                            $('#company').append(newRow);
+                            $('.company').append(newRow);
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
                                     var newRow = '<tr><td class="center-align">' + post.companyNo + 
                                         '</td><td class="left-align">' + post.companyName + 
                                         '</td><td class="center-align">' + post.ownerName + 
-                                        '</td><td class="center-align">' + companyDiv[post.companyDiv] + 
+                                        '</td><td class="center-align">' + companyDivs[post.companyDiv] + 
                                         '</td><td class="center-align">' + GetTelephone(post.nationCode, post.telephone) + 
                                         '</td><td class="right-align">' + post.totalLicenses + 
                                         '</td><td class="right-align">' + post.totalUsers + '</td></tr>';
-                                    $('#company tbody').append(newRow);
+                                    $('.company tbody').append(newRow);
                                 });
                             }
                         }
                     },
                     error: function (xhr, status, error) {
-                        $('#company tbody').empty();
+                        $('.company tbody').empty();
 
                         var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
-                        $('#company').append(newRow);
+                        $('.company').append(newRow);
                     },
                 });
             });
         </script>
     </head>
     <body>
-        <form id="home-form" class="container">
+        <form class="home-form" class="container">
             <div class="content">
                 <div>
                     <div class="title">위성통신 전체 사용량</div>
                     <div>
-                        <table id="satellite-usage">
+                        <table class="satellite-usage">
                             <thead>
                                 <tr>
                                     <th width="200px">전체 고객사 수</th>
@@ -125,7 +125,7 @@
                 <div>
                     <div class="title">고객사 정보</div>
                     <div>
-                        <table id="company">
+                        <table class="company">
                             <thead>
                                 <tr>
                                     <th width="100px">고객사 번호</th>

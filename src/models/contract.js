@@ -3,7 +3,8 @@ const Common = require("./common");
 class Contract extends Common {
     constructor() {
         super();
-        this.companyNo = -1;
+        this.companyNo = null;
+        this.companyName = null;
         this.contractNo = null;
         this.contractName = null;
         this.contractDate = null;
@@ -17,10 +18,14 @@ class Contract extends Common {
         this.discountedAmount = -1;
         this.actualAmount = -1;
         this.remark = null;
+        this.licenses = [];
     }
 
     getCompanyNo(){
         return this.companyNo;
+    }
+    getCompanyName(){
+        return this.companyName;
     }
     getContractNo(){
         return this.contractNo;
@@ -61,9 +66,15 @@ class Contract extends Common {
     getRemark(){
         return this.remark;
     }
+    getLicenses(){
+        return this.licenses;
+    }
     
     setCompanyNo(companyNo){
         this.companyNo = companyNo;
+    }
+    setCompanyName(companyName){
+        this.companyName = companyName;
     }
     setContractNo(contractNo){
         this.contractNo = contractNo;
@@ -103,6 +114,9 @@ class Contract extends Common {
     }
     setRemark(remark){
         this.remark = remark;
+    }
+    setLicenses(licenses){
+        this.licenses = licenses;
     }
 }
 

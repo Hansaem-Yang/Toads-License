@@ -99,7 +99,7 @@ module.exports = {
         }
     },
     insert: async function (companyName, ownerName, businessNo, residentNo, companyDiv,
-        postCode, businessPlace, nation, telephone, regCompany, regUser) {
+        postCode, businessPlace, nation, telephone, registCompany, registUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -112,8 +112,8 @@ module.exports = {
                 businessPlace: businessPlace, 
                 nation: nation,
                 telephone: telephone,
-                regCompany: regCompany,
-                regUser: regUser
+                regCompany: registCompany,
+                regUser: registUser
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("company", "insert", param, format);
@@ -127,7 +127,7 @@ module.exports = {
         }
     },
     update: async function (companyNo, companyName, ownerName, businessNo, residentNo, companyDiv,
-        postCode, businessPlace, nation, telephone, uptCompany, uptUser) {
+        postCode, businessPlace, nation, telephone, modifyCompany, modifyUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -141,8 +141,8 @@ module.exports = {
                 businessPlace: businessPlace, 
                 nation: nation,
                 telephone: telephone,
-                uptCompany: uptCompany,
-                uptUser: uptUser,
+                modifyCompany: modifyCompany,
+                modifyUser: modifyUser,
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("company", "update", param, format);
@@ -163,6 +163,7 @@ module.exports = {
 
             await transaction.begin();
             try {
+
                 for (let i = 0; i < companyNos.length; i++) {
                     let param = {
                         companyNo: companyNos[i],
@@ -172,7 +173,6 @@ module.exports = {
 
                     let request = new sql.Request(transaction);
                     let result = await request.query(query);
-
                     count += result.rowsAffected[0];
                 }
 

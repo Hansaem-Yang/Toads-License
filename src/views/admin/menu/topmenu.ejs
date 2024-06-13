@@ -12,7 +12,7 @@
         <script>
             $(document).ready(function() {
                 // 로그아웃
-                $("#logout").click(function(event) {
+                $(".logout").click(function(event) {
                     event.preventDefault();
 
                     var email = "<%= session.user.email %>";
@@ -38,10 +38,28 @@
                     });
                 });
 
-                $('#logo').click(function(event) {
+                $('.logo').click(function(event) {
                     event.preventDefault();
 
-                    window.parent.location.href = "./main";
+                    $.ajax({
+                        url: "../session",
+                        method: "POST",
+                        success: function (data) {
+                            switch (data) {
+                                case "SESSION":
+                                    window.parent.location.href = "./main";
+                                    break;
+                                case "NO SESSION":
+                                    alert("세션이 만료되었습니다.");
+                                    window.parent.location.href = "./login";
+                                    break;
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert("서버 요청에 실패했습니다.");
+                            window.location.href = "./login";
+                        },
+                    });
                 });
             });
         </script>
@@ -53,10 +71,10 @@
                     <nav>
                         <%= session.user.companyName %>&nbsp;<%= session.user.userName %>님
                         <a href="./user/mypage">내정보</a>
-                        <a href="#" id="logout">로그아웃</a>
+                        <a href="#" class="logout">로그아웃</a>
                     <nav>
                 </div>
-                <div class="logo" id="logo"/>
+                <div class="logo"/>
             </div>
         </form>
     </body>

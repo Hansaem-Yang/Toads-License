@@ -192,7 +192,7 @@ footer {
     opacity: 1;
 }
 
-.login-text {
+.id, .password {
     /* Layout Properties */
     position: absolute;
     top: 5px;

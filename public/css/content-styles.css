@@ -46,13 +46,16 @@ table {
     border: 2px solid rgb(51, 54, 58); /* 테이블 외곽선 생성 */
     border-collapse: collapse; /* 셀 간의 이중 경계선을 단일 경계선으로 합침 */
 }
+
 tbody :hover {
     transition: background-color 0.3s;
     background: #cae4ff 0% 0% no-repeat padding-box;
 }
+
 tr {
     height: 30px;
 }
+
 th, td {
     font-size: 14px;
     border: 1px solid rgb(51, 54, 58); /* 테이블 외곽선 생성 */
@@ -60,79 +63,55 @@ th, td {
     align-items: center;
 }
 
-.selected {
-    background: #88c1fd 0% 0% no-repeat padding-box;
-}
-
-.search-text {
-    height: 28px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font: normal normal medium 12px/16px Pretendard;
-    font-size: 14px;
-    letter-spacing: 0px;
-    color: #3c4047;
-}
-.search-select {
-    height: 28px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    font: normal normal medium 12px/16px Pretendard;
-    font-size: 14px;
-    letter-spacing: 0px;
-    color: #3c4047;
-}
-.button {
-    width: 100px;
-    height: 26px;
-    /* UI Properties */
-    background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
-    box-shadow: 0px 5px 6px #00000029;
-    font: normal normal medium 24px/35px Pretendard;
-    font-size: 14px;
-    letter-spacing: 0px;
-    color: #ffffff;
-    cursor: pointer;
-}
-.status-button {
-    width: 80px;
-    height: 26px;
-    /* UI Properties */
-    background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
-    box-shadow: 0px 5px 6px #00000029;
-    font: normal normal medium 24px/35px Pretendard;
-    font-size: 14px;
-    letter-spacing: 0px;
-    color: #ffffff;
-    cursor: pointer;
-}
-.input-text {
-    height: 28px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
+input[type='text'], input[type='date'] {
+    height:26px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
     box-sizing: border-box;
     font: normal normal medium 12px/14px Pretendard;
     font-size: 14px;
     letter-spacing: 0px;
     color: #3c4047;
 }
-.input-button {
-    width: 80px;
-    height: 26px;
+
+input[type='text']:read-only {
+    background-color: #f0f0f0; /* 회색 배경 */
+    color: #666666;           /* 어두운 텍스트 색상 */
+    border: 1px solid #ccc;   /* 테두리 색상 */
+}
+
+input[type='button'] {
+    height:26px;
     /* UI Properties */
+    padding: 4, 0, 4, 0;
+    border-radius: 2px;
     background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
     box-shadow: 0px 5px 6px #00000029;
-    font: normal normal medium 24px/35px Pretendard;
+    font: normal normal medium 12px/14px Pretendard;
     font-size: 14px;
     letter-spacing: 0px;
     color: #ffffff;
     cursor: pointer;
 }
-.input-select {
-    height: 28px;
-    border: 2px solid #ccc;
+
+.save, .cancel, .search {
+    width:80px;
+    height:30px;
+    /* UI Properties */
+    padding: 4, 0, 4, 0;
+    border-radius: 2px;
+    background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
+    box-shadow: 0px 5px 6px #00000029;
+    font: normal normal medium 12px/14px Pretendard;
+    font-size: 14px;
+    letter-spacing: 0px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+select {
+    height:26px;
+    border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
     font: normal normal medium 12px/16px Pretendard;
@@ -140,26 +119,54 @@ th, td {
     letter-spacing: 0px;
     color: #3c4047;
 }
+
+.selected {
+    background: #88c1fd 0% 0% no-repeat padding-box;
+}
+
+.bottom-button {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
 .top-right-button {
     position: absolute;
     top: 0;
     right: 0;
 }
+
 .align-container {
     display: flex;
+    justify-content: left;
     align-items: center;
 }
+
 .align-container p {
     margin: 0 6px 0 0;
 }
+
+.align-container-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.align-container-center p {
+    margin: 0 6px 0 0;
+}
+
 .left-align {
     text-align: left;
     vertical-align: middle;
 }
+
 .center-align {
     text-align: center;
     vertical-align: middle;
 }
+
 .right-align {
     text-align: right;
     vertical-align: middle;
@@ -202,13 +209,6 @@ th, td {
     color: black;
     text-decoration: none;
     cursor: pointer;
-}
-
-.bottom-button {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
 }
 
 .satellite-usage-container {

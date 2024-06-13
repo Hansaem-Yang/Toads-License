@@ -11,224 +11,199 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
         <script src="/public/js/common/common_variables.js"></script>
-        <script src="/public/js/models/license.js"></script>
         <script>
             $(document).ready(function() {
-                var companys = [];
-
-                $.ajax({
-                    url: "../admin/company/codes",
-                    method: "POST",
-                    success: function (data) {
-                        if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
-                            window.parent.location.href = "./login";
-                        } else if (data === 'NO DATA') {
-                            alert("조회된 데이터가 없습니다.");
-                        } else {
-                            if (Array.isArray(data)) {
-                                $.each(data, function(index, post) {
-                                    companys.push({
-                                        code:post.companyNo, 
-                                        name:post.companyName, 
-                                    });
-                                });
-
-                                CreateCompanysSelection($('.s_company_no'), companys);
-                            }
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        alert('서버 요청에 실패하였습니다.');
-                    },
-                });
-                
                 var Search = function() {
-                    $('.contract tbody').empty();
+                    Clear();
 
-                    var companyNo = $('.s_company_no option:selected').val();
-                    if (companyNo === '')
-                    {
-                        alert("고객사를 선택하세요.");
-                        return;
-                    }
+                    var companyNo = $('.company_no').val();
+                    var contractNo = $('.contract_no').val();
 
+                    // 행 데이터 출력
                     $.ajax({
-                        url: "../admin/contract/status",
+                        url: "../../admin/contract/detail",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
+                            contractNo: contractNo,
                         },
                         success: function (data) {
-                            $('.contract tbody').empty();
-
                             if (data === 'NO SESSION') {
                                 alert("세션이 만료되었습니다.");
                                 window.parent.location.href = "./login";
+                                return;
                             } else if (data === 'NO DATA') {
-                                var newRow = '<tr><td colspan="8" class="left-align">조회된 데이터가 없습니다.</td></tr>';
-                                $('.contract tbody').append(newRow);
+                                alert("조회된 데이터가 없습니다.");
+                                return;
                             } else {
-                                if (Array.isArray(data)) {
-                                    $.each(data, function(index, post) {
-                                        var newRow = 
-                                            '<tr>' +
-                                                '<td class="center-align">' + post.contractNo + '</td>' +
-                                                '<td class="left-align">' + post.contractName + '</td>' +
-                                                '<td class="center-align">' + post.contractDate + '</td>' +
-                                                '<td class="center-align">' + post.contractor + '</td>' +
-                                                '<td class="center-align"><div class="align-container-center"><p>' + post.startDate + '</p><p>~</p>' + post.endDate + '</div></td>' +
-                                                '<td class="center-align">' + post.monetaryUnit + '</td>' +
-                                                '<td class="right-align">' + post.exchangeRate + '</td>' +
-                                                '<td class="right-align">' + post.actualAmount + '</td>' +
-                                            '</tr>';
-                                        $('.contract tbody').append(newRow);
-                                    });
-                                }
+                                $('.cell_company_name').text(data.companyName);
+                                $('.cell_contract_no').text(data.contractNo);
+                                $('.cell_contract_name').text(data.contractName);
+                                $('.cell_contract_date').text(data.contractDate);
+                                $('.cell_contractor').text(data.contractor);
+                                $('.cell_contract_period').text(contractPeriods[data.contractPeriod]);
+                                $('.cell_start_date').text(data.startDate);
+                                $('.cell_end_date').text(data.endDate);
+                                $('.cell_monetary_unit').text(monetaryUnits[data.monetaryUnit]);
+                                $('.cell_exchange_rate').text(data.exchangeRate);
+                                $('.cell_amount').text(data.amount);
+                                $('.cell_discounted_amount').text(data.discountedAmount);
+                                $('.cell_actual_amount').text(data.actualAmount);
+                                $('.cell_remark').text(data.remark);
+                                
+                                data.licenses.forEach(function(license, index){
+                                    var newRow = $('.view_license tbody tr').first().clone().removeClass('hidden');
+
+                                    $(newRow).find('.cell_license_no').text(license.licenseNo);
+                                    $(newRow).find('.cell_license_type').text(licenseTypes[license.licenseType]);
+                                    $(newRow).find('.cell_app_name').text(appNames[license.appName]);
+                                    $(newRow).find('.cell_license_start_date').text(license.startDate);
+                                    $(newRow).find('.cell_license_end_date').text(license.endDate);
+                                    $(newRow).find('.cell_license_count').text(license.licenseCount);
+                                    $(newRow).find('.cell_unit_price').text(license.unitPrice);
+                                    $(newRow).find('.cell_license_amount').text(license.amount);
+                                    $(newRow).find('.cell_license_discounted_amount').text(license.discountedAmount);
+                                    $(newRow).find('.cell_license_actual_amount').text(license.actualAmount);
+
+                                    $('.view_license tbody').append(newRow);
+                                });
                             }
                         },
                         error: function (xhr, status, error) {
-                            $('.contract tbody').empty();
+                            $('.view_license tbody').empty();
 
-                            var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
-                            $('.contract tbody').append(newRow);
+                            alert("서버 요청에 실패하였습니다.");
+
+                            window.history(-1);
                         },
                     });
                 };
 
-                $('.s_company_no').change(function() {
-                    Search();
-                });
-
-                $('.add').click(function() {
-                    ClearModal();
-
-                    var companyNo = $('.s_company_no option:selected').val();
-                    var companyName = $('.s_company_no option:selected').text();
-
-                    if (companyNo === '')
-                    {
-                        alert("고객사를 선택하세요.");
-                        return;
-                    }
-
-                    var today = new Date();
-                    $('.company_no').val(companyNo);
-                    $('.company_name').val(companyName);
-                    $('.contract_date').val(getFormattedDate(today));
-
-                    $('.modal').show();
-                });
-
                 $('.modify').click(function() {
-                    ClearModal();
+                    var companyNo = $('.company_no').val();
+                    var contractNo = $('.contract_no').val();
 
-                    var companyNo = $('.s_company_no').val();
-                    if (companyNo === '')
+                    // 행 데이터 출력
+                    $.ajax({
+                        url: "../../admin/contract/detail",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                            contractNo: contractNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                                return;
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                                return;
+                            } else {
+                                $('.company_no').val(data.companyNo);
+                                $('.company_name').val(data.companyName);
+                                $('.contract_no').val(data.contractNo);
+                                $('.contract_name').val(data.contractName);
+                                $('.contract_date').val(data.contractDate);
+                                $('.contractor').val(data.contractor);
+                                $('.contract_period').val(data.contractPeriod);
+                                $('.start_date').val(data.startDate);
+                                $('.end_date').val(data.endDate);
+                                $('.monetary_unit').val(data.monetaryUnit);
+                                $('.exchange_rate').val(data.exchangeRate);
+                                $('.amount').val(data.amount);
+                                $('.discounted_amount').val(data.discountedAmount);
+                                $('.actual_amount').val(data.actualAmount);
+                                $('.remark').val(data.remark);
+                                
+                                data.licenses.forEach(function(license, index){
+                                    var newRow = $('.license tr.hidden').clone().removeClass('hidden');
+
+                                    $(newRow).find('.mode').val('U');
+                                    $(newRow).find('.license_no').val(license.licenseNo);
+                                    $(newRow).find('.license_type').val(license.licenseType);
+                                    $(newRow).find('.app_name').val(license.appName);
+                                    $(newRow).find('.license_start_date').val(license.startDate);
+                                    $(newRow).find('.license_end_date').val(license.endDate);
+                                    $(newRow).find('.license_count').val(license.licenseCount);
+                                    $(newRow).find('.unit_price').val(license.unitPrice);
+                                    $(newRow).find('.license_amount').val(license.amount);
+                                    $(newRow).find('.license_discounted_amount').val(license.discountedAmount);
+                                    $(newRow).find('.license_actual_amount').val(license.actualAmount);
+
+                                    $('.license tbody').append(newRow);
+                                });
+
+                                $('.modal').show();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert('서버 요청에 실패하였습니다.');
+                        },
+                    });
+                });
+
+                $('.delete').click(function() {
+                    if (confirm('데이터를 삭제 하시겠습니까?') == true)
                     {
-                        alert("고객사를 선택하세요.");
-                        return;
-                    }
+                        var contractNos = [];
 
-                    var selectedRow = $(".contract tr.selected");
-                    if (selectedRow.length > 0) {
-                        // 선택된 행의 데이터를 배열로 저장
-                        var rowData = [];
-                        selectedRow.find("td").each(function() {
-                            rowData.push($(this).text());
+                        contractNos.push({
+                            companyNo: $('.company_no').val(),
+                            contractNo: $('.contract_no').val(),
                         });
-
                         // 행 데이터 출력
                         $.ajax({
-                            url: "../admin/contract/detail",
+                            url: "../../admin/contract/delete",
                             method: "POST",
                             data: {
-                                companyNo: companyNo,
-                                contractNo: rowData[0],
+                                contractNos: contractNos,
                             },
                             success: function (data) {
-                                if (data === 'NO SESSION') {
-                                    alert("세션이 만료되었습니다.");
-                                    window.parent.location.href = "./login";
-                                } else if (data === 'NO DATA') {
-                                    alert("조회된 데이터가 없습니다.");
-                                } else {
-                                    $('.company_no').val(data.companyNo);
-                                    $('.company_name').val(data.companyName);
-                                    $('.contract_no').val(data.contractNo);
-                                    $('.contract_name').val(data.contractName);
-                                    $('.contract_date').val(data.contractDate);
-                                    $('.contractor').val(data.contractor);
-                                    $('.contract_period').val(data.contractPeriod);
-                                    $('.start_date').val(data.startDate);
-                                    $('.end_date').val(data.endDate);
-                                    $('.monetary_unit').val(data.monetaryUnit);
-                                    $('.exchange_rate').val(data.exchangeRate);
-                                    $('.amount').val(data.amount);
-                                    $('.discounted_amount').val(data.discountedAmount);
-                                    $('.actual_amount').val(data.actualAmount);
-                                    $('.remark').val(data.remark);
-                                    
-                                    data.licenses.forEach(function(license, index){
-                                        var newRow = $('.license tr.hidden').clone().removeClass('hidden');
-
-                                        $(newRow).find('.mode').val('U');
-                                        $(newRow).find('.license_no').val(license.licenseNo);
-                                        $(newRow).find('.license_type').val(license.licenseType);
-                                        $(newRow).find('.app_name').val(license.appName);
-                                        $(newRow).find('.license_start_date').val(license.startDate);
-                                        $(newRow).find('.license_end_date').val(license.endDate);
-                                        $(newRow).find('.license_count').val(license.licenseCount);
-                                        $(newRow).find('.unit_price').val(license.unitPrice);
-                                        $(newRow).find('.license_amount').val(license.amount);
-                                        $(newRow).find('.license_discounted_amount').val(license.discountedAmount);
-                                        $(newRow).find('.license_actual_amount').val(license.actualAmount);
-
-                                        $('.license tbody').append(newRow);
-                                    });
-                                    $('.modal').show();
+                                switch (data) {
+                                    case "NO SESSION":
+                                        alert("세션이 만료되었습니다.");
+                                        window.parent.location.href = "./login";
+                                    case "FAIL":
+                                        alert('데이터 삭제에 실패 하였습니다.');
+                                        return;
+                                    case "SUCCESS":
+                                        alert('데이터 삭제를 완료 하였습니다.');
+                                        window.location.href = "../../view/contract";
+                                        return;
                                 }
                             },
                             error: function (xhr, status, error) {
-                               alert('서버 요청에 실패하였습니다.');
+                                alert('서버 요청에 실패하였습니다.');
                             },
                         });
-                    } else {
-                        alert("계약 목록에서 행을 선택하세요.");
                     }
                 });
 
-                $('.detail').click(function() {
-                    var companyNo = $('.s_company_no').val();
-                    if (companyNo === '')
-                    {
-                        alert("고객사를 선택하세요.");
-                        return;
-                    }
+                var Clear = function() {
+                    $('.cell_company_name').text('');
+                    $('.cell_contract_name').text('');
+                    $('.cell_contract_date').text('');
+                    $('.cell_contractor').text('');
+                    $('.cell_contract_period').text('');
+                    $('.cell_start_date').text('');
+                    $('.cell_end_date').text('');
+                    $('.cell_monetary_unit').text('');
+                    $('.cell_exchange_rate').text('0');
+                    $('.cell_amount').text('0');
+                    $('.cell_discounted_amount').text('0');
+                    $('.cell_actual_amount').text('0');
+                    $('.cell_remark').text('');
 
-                    var selectedRow = $(".contract tr.selected");
-                    if (selectedRow.length > 0) {
-                        // 선택된 행의 데이터를 배열로 저장
-                        var rowData = [];
-                        selectedRow.find("td").each(function() {
-                            rowData.push($(this).text());
-                        });
-                        
-                        window.location.href = "../view/contract/detail?companyNo=" + companyNo + "&contractNo=" + rowData[0];
-                    } else {
-                        alert("계약 목록에서 행을 선택하세요.");
-                    }
-                });
-
-                $('.contract tbody').on('click', 'tr', function() {
-                    $(this).addClass('selected').siblings().removeClass('selected');
-                });
+                    const rows = document.querySelectorAll(".view_license tbody tr:not(:first-child)");
+                    rows.forEach(row => {
+                        row.remove();
+                    });
+                };
 
                 // Modal Event And Function
                 var ClearModal = function() {
-                    $('.company_no').val('');
                     $('.company_name').val('');
-                    $('.contract_no').val('');
                     $('.contract_name').val('');
                     $('.contract_date').val('');
                     $('.contractor').val('');
@@ -298,12 +273,12 @@
                     var selectedRow = $('.license tr.selected');
                     if ($(selectedRow).length > 0) {
                         var index = $(selectedRow).index();
-                        var hidMode = $(selectedRow).find('.mode');
+                        var mode = $(selectedRow).find('.mode');
 
-                        if (hidMode.val() == 'I') {
+                        if (mode.val() == 'I') {
                             $('.license tr.selected').remove();
                         } else {
-                            hidMode.val('D');
+                            mode.val('D');
                             $('.license tr.selected').addClass('hidden');
                         }
                     }
@@ -450,15 +425,8 @@
                             });
                         });
 
-                        var url = "../admin/contract/insert";
-                        if (contractNo === ''){
-                            url = "../admin/contract/insert";
-                        } else {
-                            url = "../admin/contract/update";
-                        }
-
                         $.ajax({
-                            url: url,
+                            url: "../../admin/contract/update",
                             method: "POST",
                             data: {
                                 companyNo: companyNo,
@@ -511,68 +479,124 @@
                         ClearModal();
                     }
                 });
-                
+
                 CreateVariablesSelection($('.monetary_unit'), monetaryUnits);
                 CreateVariablesSelection($('.contract_period'), contractPeriods);
                 CreateVariablesSelection($('.app_name'), appNames);
                 CreateVariablesSelection($('.license_type'), licenseTypes);
+
+                Search();
             });
         </script>
     </head>
     <body>
-        <form class="company-detail-form">
+        <form class="contract-status-form">
+            <input type="hidden" class="language" value="<%=session.language%>"/>
+            
             <div class="content">
-                <div>
-                    <div class="title">조회 조건</div>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th width="120px" class="right-align">고객사</th>
-                                    <td class="left-align">
-                                        <select class="s_company_no" style="width:240px;">
-                                    </td>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div></br></br></br>
-                <div class="contents-container">
-                    <div class="title">계약 목록</div>
+                <div  class="contents-container">
+                    <div class="title">계약 정보</div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="add" value="등록"/></p>
                             <p><input type="button" class="modify" value="수정"/></p>
-                            <input type="button" class="detail" value="상세보기"/>
+                            <input type="button" class="delete" value="삭제"/>
                         </div>
                     </div>
                     <div>
                         <table class="contract">
                             <thead>
                                 <tr>
-                                    <th width="100px">계약번호</th>
-                                    <th width="240px">계약명</th>
-                                    <th width="100px">계약일자</th>
-                                    <th width="100px">담당자</th>
-                                    <th width="180px">계약기간</th>
-                                    <th width="70px">화폐단위</th>
-                                    <th width="70px">기준환율</th>
-                                    <th width="120px">실계약금액</th>
+                                    <th class="right-align" width="120px">고객사</th>
+                                    <td class="cell_company_name" width="980" colspan="3"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align" width="120px">계약번호</th>
+                                    <td class="cell_contract_no" width="430"></td>
+                                    <th class="right-align" width="120px">계약명</th>
+                                    <td class="cell_contract_name" width="430"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">계약일자</th>
+                                    <td class="cell_contract_date"></td>
+                                    <th class="right-align">담당자</th>
+                                    <td class="cell_contractor"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">계약기간</th>
+                                    <td colspan="3">
+                                        <div class="align-container">
+                                            <p class="cell_contract_period"></p>
+                                            <p class="cell_start_date"></p>
+                                            <p>~</p>
+                                            <p class="cell_end_date"></p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">화폐단위</th>
+                                    <td class="cell_monetary_unit"></td>
+                                    <th class="right-align">기준환율</th>
+                                    <td class="cell_exchange_rate"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">계약금액</th>
+                                    <td class="cell_amount"></td>
+                                    <th class="right-align">할인금액</th>
+                                    <td class="cell_discounted_amount"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">실계약금액</th>
+                                    <td class="cell_actual_amount" colspan="3"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">비고</th>
+                                    <td class="cell_remark" style="height:100px" colspan="3"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div></br>
+                    <div class="table-container">
+                        <div class="title">라이센스 목록</div>
+                        <table class="view_license">
+                            <thead>
+                                <tr>
+                                    <th width="100px">라이센스번호</th>
+                                    <th width="126px">타입</th>
+                                    <th width="120px">프로그램</th>
+                                    <th width="230px">기간</th>
+                                    <th width="60px">수량</th>
+                                    <th width="90px">단가</th>
+                                    <th width="110px">금액</th>
+                                    <th width="110px">할인금액</th>
+                                    <th width="110px">실금액</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                <tr class="hidden">
+                                    <td class="cell_license_no" style="text-align: center;"></td>
+                                    <td class="cell_license_type" style="text-align: center;"></td>
+                                    <td class="cell_app_name" style="text-align: center;"></td>
+                                    <td>
+                                        <div class="align-container-center">
+                                            <p class="cell_license_start_date"></p>~
+                                            <p class="cell_license_end_date"></p>
+                                        </div>
+                                    </td>
+                                    <td class="cell_license_count" style="text-align: right;"></td>
+                                    <td class="cell_unit_price" style="text-align: right;"></td>
+                                    <td class="cell_license_amount" style="text-align: right;"></td>
+                                    <td class="cell_license_discounted_amount" style="text-align: right;"></td>
+                                    <td class="cell_license_actual_amount" style="text-align: right;"></td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div></br>
+                <div>
+                    <div class="title">위성통신 사용량</div>
+                    <div class="satellite-usage-container">
+                        <div class="daliy-usage"></div>
+                        <div class="monthly-usage"></div>
                     </div>
                 </div>
             </div>
@@ -588,14 +612,14 @@
                                 <tr>
                                     <th width="120px" class="right-align">*고객사</th>
                                     <td width="1000px" class="left-align" colspan="3">
-                                        <input type="hidden" class="company_no"/>
+                                        <input type="hidden" class="company_no" value="<%=companyNo%>"/>
                                         <input type="text" class="company_name" style="width: 240px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th width="120px" class="right-align">*계약번호</th>
                                     <td width="390px" class="left-align">
-                                        <input type="text" class="contract_no" style="width: 240px;" readonly/>
+                                        <input type="text" class="contract_no" value="<%=contractNo%>" style="width: 240px;" readonly/>
                                     </td>
                                     <th width="120px" class="right-align">*계약명</th>
                                     <td width="390px" class="left-align" colspan="3">

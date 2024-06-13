@@ -95,6 +95,18 @@ module.exports = function (app) {
             res.render("user/contract/status");
         }
     });
+
+    app.get("/view/contract/detail", (req, res) => {
+        res.locals.companyNo = req.query.companyNo;
+        res.locals.contractNo = req.query.contractNo;
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/contract/detail");
+        }
+        else {
+            res.render("user/contract/detail");
+        }
+    });
     
     // 라이센스 관리 페이지
     app.get("/view/license", (req, res) => {

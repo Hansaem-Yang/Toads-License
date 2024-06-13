@@ -1,4 +1,4 @@
-const companyDiv = {
+const companyDivs = {
     A:'조선사', 
     B:'설계회사', 
     1:'선사', 
@@ -9,17 +9,17 @@ const companyDiv = {
     Z:'기타' 
 };
 
-const userType = {
+const userTypes = {
     T:'Trial',
     R:'Release'
 }
 
-const device = {
+const devices = {
     P:'PC',
     M:'Mobile'
 }
 
-const montearyUnit = {
+const monetaryUnits = {
     KRW:'원화',
     USD:'미화',
     CNY:'위안화',
@@ -27,7 +27,7 @@ const montearyUnit = {
     EUR:'유로'
 }
 
-const contractPeriod = {
+const contractPeriods = {
     M1:'1개월', 
     M3:'3개월', 
     M6:'6개월', 
@@ -36,17 +36,17 @@ const contractPeriod = {
     Y3:'3년', 
 }
 
-const licenseType = {
+const licenseTypes = {
     OL:'Official license',
     SL:'Service license'
 }
 
-const appName = {
+const appNames = {
     TM:'Toads Marine',
     TS:'Toads S-Link'
 }
 
-const machinDiv = {
+const machinDivs = {
     M:'기장분야',
     D:'선실분야',
     E:'전장분야',

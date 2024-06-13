@@ -24,9 +24,13 @@ module.exports = {
                 item.setLicenseNo(record.license_no);
                 item.setLicenseType(record.license_type);
                 item.setAppName(record.app_name);
-                item.setLicenseCount(record.license_count);
                 item.setStartDate(record.start_date);
                 item.setEndDate(record.end_date);
+                item.setLicenseCount(record.license_count);
+                item.setUnitPrice(record.unit_price);
+                item.setAmount(record.amount);
+                item.setDiscountedAmount(record.discounted_amount);
+                item.setActualAmount(record.actual_amount);
 
                 list.push(item);
             });
@@ -53,14 +57,19 @@ module.exports = {
                 let record = result.recordset[0];
 
                 item = new License();
+                
                 item.setCompanyNo(record.company_no);
                 item.setContractNo(record.contract_no);
                 item.setLicenseNo(record.license_no);
                 item.setLicenseType(record.license_type);
                 item.setAppName(record.app_name);
-                item.setLicenseCount(record.license_count);
                 item.setStartDate(record.start_date);
                 item.setEndDate(record.end_date);
+                item.setLicenseCount(record.license_count);
+                item.setUnitPrice(record.unit_price);
+                item.setAmount(record.amount);
+                item.setDiscountedAmount(record.discounted_amount);
+                item.setActualAmount(record.actual_amount);
             }
 
             return item;
@@ -69,7 +78,7 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyId, contractNo, licenseType, appName, licenseCount, startDate, endDate, regMember) {
+    insert: async function (companyId, contractNo, licenseType, appName, licenseCount, startDate, endDate, registCompany, registUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -80,7 +89,8 @@ module.exports = {
                 licenseCount: licenseCount,
                 startDate: startDate,
                 endDate: endDate,
-                regMember: regMember
+                registCompany: registCompany,
+                registUser: registUser
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("license", "insert", param, format);
@@ -93,7 +103,7 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyId, contractNo, licenseNo, licenseType, appName, licenseCount, startDate, endDate, uptMember) {
+    update: async function (companyId, contractNo, licenseNo, licenseType, appName, licenseCount, startDate, endDate, modifyCompany, modifyUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -105,7 +115,8 @@ module.exports = {
                 licenseCount: licenseCount,
                 startDate: startDate,
                 endDate: endDate,
-                uptMember: uptMember
+                modifyCompany: modifyCompany,
+                modifyUser: modifyUser
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("license", "update", param, format);

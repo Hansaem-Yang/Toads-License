@@ -2,41 +2,70 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="contract">  
     <select id="status">
-        select company_no
-             , contract_no
-             , contract_name
-             , contract_date
-             , contractor
-             , contract_period
-             , start_date
-             , end_date
-             , monetary_unit
-             , exchange_rate
-             , amount
-             , discounted_amount
-             , actual_amount
-             , remark
-          from contract
-         where company_no = #{companyNo};
+        select a.company_no
+             , b.company_name
+             , a.contract_no
+             , a.contract_name
+             , a.contract_date
+             , a.contractor
+             , a.contract_period
+             , a.start_date
+             , a.end_date
+             , a.monetary_unit
+             , a.exchange_rate
+             , a.amount
+             , a.discounted_amount
+             , a.actual_amount
+             , a.remark
+          from contract as a
+         inner join company as b
+            on a.company_no = b.company_no
+         where a.company_no = #{companyNo};
     </select>
     <select id="detail">
+        select a.company_no
+             , b.company_name
+             , a.contract_no
+             , a.contract_name
+             , a.contract_date
+             , a.contractor
+             , a.contract_period
+             , a.start_date
+             , a.end_date
+             , a.monetary_unit
+             , a.exchange_rate
+             , a.amount
+             , a.discounted_amount
+             , a.actual_amount
+             , a.remark
+          from contract as a
+         inner join company as b
+            on a.company_no = b.company_no
+         where a.company_no = #{companyNo}
+           and a.contract_no = #{contractNo};
+    </select>
+    <select id="license_status">
         select company_no
              , contract_no
-             , contract_name
-             , contract_date
-             , contractor
-             , contract_period
+             , license_no
+             , license_type
+             , app_name
+             , license_count
              , start_date
              , end_date
-             , monetary_unit
-             , exchange_rate
+             , unit_price
              , amount
              , discounted_amount
              , actual_amount
-             , remark
-          from contract
+          from license
          where company_no = #{companyNo}
            and contract_no = #{contractNo};
+    </select>
+    <select id="max_contract_no">
+        select max(contract_no) max_contract_no
+          from contract
+         where company_no = #{companyNo}
+           and contract_date = #{contractDate};
     </select>
     <insert id="insert">
         insert into contract (
@@ -50,16 +79,16 @@
                   , end_date
                   , monetary_unit
                   , exchange_rate
-                  , remark
                   , amount
                   , discounted_amount
                   , actual_amount
+                  , remark
                   , regist_datetime
                   , regist_company
                   , regist_user
         )
         values (
-                  , #{companyNo}
+                    #{companyNo}
                   , (select 'C' + convert(varchar(8), convert(datetime, #{contractDate}), 12) + format(isnull(max(company_no), 0) + 1, '000') 
                        from contract
                       where company_no = #{companyNo}
@@ -72,13 +101,13 @@
                   , #{endDate}
                   , #{monetaryUnit}
                   , #{exchangeRate}
-                  , #{remark}
                   , #{amount}
                   , #{discountedAmount}
                   , #{actualAmount}
+                  , #{remark}
                   , convert(varchar(20), getdate(), 20)
-                  , #{regCompany}
-                  , #{regUser}
+                  , #{registCompany}
+                  , #{registUser}
         );
     </insert>
     <update id="update">
@@ -96,8 +125,8 @@
              , discounted_amount = #{discountedAmount}
              , actual_amount = #{actualAmount}
              , modify_datetime = convert(varchar(20), getdate(), 20)
-             , modify_company = #{uptCompany}
-             , modify_user = #{uptUser}
+             , modify_company = #{modifyCompany}
+             , modify_user = #{modifyUser}
          where company_no = #{companyNo}
            and contract_no = #{contractNo};
     </update>
@@ -143,8 +172,8 @@
                   , #{discountedAmount}
                   , #{actualAmount}
                   , convert(varchar(20), getdate(), 20)
-                  , #{regCompany}
-                  , #{regUser}
+                  , #{registCompany}
+                  , #{registUser}
         );
     </insert>
     <update id="license_update">
@@ -157,8 +186,8 @@
              , discounted_amount = #{discountedAmount}
              , actual_amount = #{actualAmount}
              , modify_datetime = convert(varchar(20), getdate(), 20)
-             , modify_company = #{uptCompany}
-             , modify_user = #{uptUser}
+             , modify_company = #{modifyCompany}
+             , modify_user = #{modifyUser}
          where company_no = #{companyNo}
            and contract_no = #{contractNo}
            and license_no = #{licenseNo};

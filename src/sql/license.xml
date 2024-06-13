@@ -14,12 +14,6 @@
              , amount
              , discounted_amount
              , actual_amount
-             , regist_datetime
-             , regist_company
-             , regist_user
-             , modify_datetime
-             , modify_company
-             , modify_user
           from license
          where company_no = #{companyNo}
            and contract_no = #{contractNo};
@@ -37,12 +31,6 @@
              , amount
              , discounted_amount
              , actual_amount
-             , regist_datetime
-             , regist_company
-             , regist_user
-             , modify_datetime
-             , modify_company
-             , modify_user
           from license
          where company_no = #{companyNo}
            and contract_no = #{contractNo}
@@ -84,8 +72,8 @@
                   , #{discountedAmount}
                   , #{actualAmount}
                   , convert(varchar(20), getdate(), 20)
-                  , #{regCompany}
-                  , #{regUser}
+                  , #{registCompany}
+                  , #{registUser}
         );
     </insert>
     <update id="update">
@@ -98,8 +86,8 @@
              , discounted_amount = #{discountedAmount}
              , actual_amount = #{actualAmount}
              , modify_datetime = convert(varchar(20), getdate(), 20)
-             , modify_company = #{uptCompany}
-             , modify_user = #{uptUser}
+             , modify_company = #{modifyCompany}
+             , modify_user = #{modifyUser}
          where company_no = #{companyNo}
            and contract_no = #{contractNo}
            and license_no = #{licenseNo};

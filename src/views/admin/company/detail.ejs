@@ -30,7 +30,7 @@
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
                             
-                            CreateNationsSelection($('#sel_nation'), nation_options, $('#hid_language').val());
+                            CreateNationsSelection($('.nation'), nation_options, $('.language').val());
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -42,7 +42,7 @@
                                     });
                                 });
                                 
-                                CreateNationsSelection($('#sel_nation'), nation_options, $('#hid_language').val());
+                                CreateNationsSelection($('.nation'), nation_options, $('.language').val());
                             }
                         }
                     },
@@ -52,7 +52,7 @@
                 });
 
                 var Search = function() {
-                    var companyNo = '<%= companyNo %>';
+                    var companyNo = $('.company_no').val();
 
                     // 행 데이터 출력
                     $.ajax({
@@ -65,47 +65,37 @@
                             if (data === 'NO SESSION') {
                                 alert("세션이 만료되었습니다.");
                                 window.parent.location.href = "./login";
+                                return;
                             } else if (data === 'NO DATA') {
                                 alert("조회된 데이터가 없습니다.");
+                                return;
                             } else {
-                                $('#hid_company_no').val(data.companyNo);
-                                $('#hid_company_name').val(data.companyName);
-                                $('#hid_owner_name').val(data.ownerName);
-                                $('#hid_business_no').val(data.businessNo);
-                                $('#hid_resident_no').val(data.residentNo);
-                                $('#hid_company_div').val(data.companyDiv);
-                                $('#hid_nation').val(data.nation);
-                                $('#hid_nation_code').val(data.nationCode);
-                                $('#hid_telephone').val(data.telephone);
-                                $('#hid_post_code').val(data.postCode);
-                                $('#hid_business_place').val(data.businessPlace);
-
-                                $('#company_no').text(data.companyNo);
-                                $('#company_name').text(data.companyName);
-                                $('#owner_name').text(data.ownerName);
-                                $('#business_no').text(data.businessNo);
-                                $('#resident_no').text(data.residentNo);
-                                $('#company_div').text(companyDiv[data.companyDiv]);
+                                $('.cell_company_no').text(data.companyNo);
+                                $('.cell_company_name').text(data.companyName);
+                                $('.cell_owner_name').text(data.ownerName);
+                                $('.cell_business_no').text(data.businessNo);
+                                $('.cell_resident_no').text(data.residentNo);
+                                $('.cell_company_div').text(companyDivs[data.companyDiv]);
                                 
                                 var option = nation_options.find(option => option.code === data.nation);
-                                $('#nation').text(option.kname);
-                                $('#nation_code').text(data.nationCode);
-                                $('#telephone').text(data.telephone);
-                                $('#post_code').text(data.postCode);
-                                $('#business_place').text(data.businessPlace);
+                                $('.cell_nation').text(option.kname);
+                                $('.cell_nation_code').text(data.nationCode);
+                                $('.cell_telephone').text(data.telephone);
+                                $('.cell_post_code').text(data.postCode);
+                                $('.cell_business_place').text(data.businessPlace);
                             }
                         },
                         error: function (xhr, status, error) {
-                            $('#company tbody').empty();
+                            $('.company tbody').empty();
 
-                            var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
-                            $('#company').append(newRow);
+                            alert('서버 요청에 실패하였습니다.');
                         },
                     });
                 };
 
-                $('#btn_modify').click(function() {
-                    var companyNo = $('#hid_company_no').val();
+                $('.modify').click(function() {
+                    var companyNo = $('.company_no').val();
+
                     // 행 데이터 출력
                     $.ajax({
                         url: "../../admin/company/detail",
@@ -117,35 +107,37 @@
                             if (data === 'NO SESSION') {
                                 alert("세션이 만료되었습니다.");
                                 window.parent.location.href = "./login";
+                                return;
                             } else if (data === 'NO DATA') {
                                 alert("조회된 데이터가 없습니다.");
+                                return;
                             } else {
-                                $('#hid_company_no').val(data.companyNo);
-                                $('#txt_company_name').val(data.companyName);
-                                $('#txt_owner_name').val(data.ownerName);
-                                $('#txt_business_no').val(data.businessNo);
-                                $('#txt_resident_no').val(data.residentNo);
-                                $('#sel_company_div').val(data.companyDiv);
-                                $('#sel_nation').val(data.nation);
-                                $('#txt_nation_code').val(data.nationCode);
-                                $('#txt_telephone').val(data.telephone);
-                                $('#txt_post_code').val(data.postCode);
-                                $('#txt_business_place').val(data.businessPlace);
+                                $('.company_no').val(data.companyNo);
+                                $('.company_name').val(data.companyName);
+                                $('.owner_name').val(data.ownerName);
+                                $('.business_no').val(data.businessNo);
+                                $('.resident_no').val(data.residentNo);
+                                $('.company_div').val(data.companyDiv);
+                                $('.nation').val(data.nation);
+                                $('.nation_code').val(data.nationCode);
+                                $('.telephone').val(data.telephone);
+                                $('.post_code').val(data.postCode);
+                                $('.business_place').val(data.businessPlace);
 
-                                $('#modal').show();
+                                $('.modal').show();
                             }
                         },
                         error: function (xhr, status, error) {
-                            var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
+                            alert('서버 요청에 실패하였습니다.');
                         },
                     });
                 });
 
-                $('#btn_delete').click(function() {
+                $('.delete').click(function() {
                     if (confirm('데이터를 삭제 하시겠습니까?') == true)
                     {
                         var companyNos = [];
-                        companyNos.push($('#hid_company_no').val());
+                        companyNos.push($('.company_no').val());
                         // 행 데이터 출력
                         $.ajax({
                             url: "../../admin/company/delete",
@@ -176,68 +168,67 @@
 
                 // Modal Event And Function
                 var ClearModal = function() {
-                    $('#hid_company_no').val('');
-                    $('#txt_company_name').val('');
-                    $('#txt_owner_name').val('');
-                    $('#txt_business_no').val('');
-                    $('#txt_resident_no').val('');
-                    $('#sel_company_div').val('');
-                    $('#sel_nation').val('');
-                    $('#txt_nation_code').val('');
-                    $('#txt_telephone').val('');
-                    $('#txt_post_code').val('');
-                    $('#txt_business_place').val('');
+                    $('.company_name').val('');
+                    $('.owner_name').val('');
+                    $('.business_no').val('');
+                    $('.resident_no').val('');
+                    $('.company_div').val('');
+                    $('.nation').val('');
+                    $('.nation_code').val('');
+                    $('.telephone').val('');
+                    $('.post_code').val('');
+                    $('.business_place').val('');
                 };
 
-                $('#sel_nation').change(function() {
+                $('.nation').change(function() {
                     var value = $(this).val();
                     if (value === '')
                         return;
 
                     var option = nation_options.find(option => option.code === value);
-                    $('#txt_nation_code').val(option.country);
+                    $('.nation_code').val(option.country);
                 });
 
-                $('#close').click(function() {
-                    $('#modal').hide();
+                $('.close').click(function() {
+                    $('.modal').hide();
                 });
 
-                $('#btn_save').click(function() {
+                $('.save').click(function() {
                     if (confirm('데이터를 저장 하시겠습니까?') == true)
                     {
-                        var companyNo = $('#hid_company_no').val();
-                        var companyName = $('#txt_company_name').val();
-                        var ownerName = $('#txt_owner_name').val();
-                        var businessNo = $('#txt_business_no').val();
-                        var residentNo = $('#txt_resident_no').val();
-                        var companyDiv = $('#sel_company_div').val();
-                        var nation = $('#sel_nation').val();
-                        var nationCode = $('#txt_nation_code').val();
-                        var telephone = $('#txt_telephone').val();
-                        var postCode = $('#txt_post_code').val();
-                        var businessPlace = $('#txt_business_place').val();
+                        var companyNo = $('.company_no').val();
+                        var companyName = $('.company_name').val();
+                        var ownerName = $('.owner_name').val();
+                        var businessNo = $('.business_no').val();
+                        var residentNo = $('.resident_no').val();
+                        var companyDiv = $('.company_div').val();
+                        var nation = $('.nation').val();
+                        var nationCode = $('.nation_code').val();
+                        var telephone = $('.telephone').val();
+                        var postCode = $('.post_code').val();
+                        var businessPlace = $('.business_place').val();
 
                         if (companyName === '') {
                             alert('법인명을 입력하세요.');
                             return;
                         }
 
-                        if ($('#txt_owner_name').val() === '') {
+                        if ($('.owner_name').val() === '') {
                             alert('대표자명을 입력하세요.');
                             return;
                         }
 
-                        if ($('#sel_company_div').val() === '') {
+                        if ($('.company_div').val() === '') {
                             alert('회사구분을 선택하세요.');
                             return;
                         }
                         
-                        if ($('#sel_nation').val() === '') {
+                        if ($('.nation').val() === '') {
                             alert('국가를 선택하세요.');
                             return;
                         }
                         
-                        if ($('#txt_telephone').val() === '') {
+                        if ($('.telephone').val() === '') {
                             alert('연락처를 입력하세요.');
                             return;
                         }
@@ -262,6 +253,7 @@
                                     case "NO SESSION":
                                         alert("세션이 만료되었습니다.");
                                         window.parent.location.href = "./login";
+                                        return;
                                     case "FAIL":
                                         alert('데이터 저장에 실패 하였습니다.');
                                         return;
@@ -270,7 +262,7 @@
                                         break;
                                 }
 
-                                $('#modal').hide();
+                                $('.modal').hide();
                                 Search();
 
                                 ClearModal();
@@ -282,82 +274,71 @@
                     }
                 });
 
-                $('#btn_cancel').click(function() {
+                $('.cancel').click(function() {
                     if (confirm('입력을 취소 하시겠습니까?') == true)
                     {
-                        $('#modal').hide();
+                        $('.modal').hide();
                         
                         ClearModal();
                     }
                 });
 
-                CreateVariablesSelection($('#sel_company_div'), companyDiv);
+                CreateVariablesSelection($('.company_div'), companyDivs);
                 Search();
             });
         </script>
     </head>
     <body>
-        <form id="company-status-form">
-            <input type="hidden" id="hid_language" value="<%=session.language%>"/>
-            <input type="hidden" id="hid_company_no"/>
-            <input type="hidden" id="hid_company_name"/>
-            <input type="hidden" id="hid_owner_name"/>
-            <input type="hidden" id="hid_business_no"/>
-            <input type="hidden" id="hid_resident_no"/>
-            <input type="hidden" id="hid_company_div"/>
-            <input type="hidden" id="hid_nation"/>
-            <input type="hidden" id="hid_nation_code"/>
-            <input type="hidden" id="hid_telephone"/>
-            <input type="hidden" id="hid_post_code"/>
-            <input type="hidden" id="hid_business_place"/>
+        <form class="company-status-form">
+            <input type="hidden" class="language" value="<%=session.language%>"/>
             
             <div class="content">
                 <div  class="contents-container">
                     <div class="title">고객사 정보</div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" id="btn_modify" class="status-button" value="수정"/></p>
-                            <input type="button" id="btn_delete" class="status-button" value="삭제"/>
+                            <p><input type="button" class="modify" value="수정"/></p>
+                            <input type="button" class="delete" value="삭제"/>
                         </div>
                     </div>
                     <div>
-                        <table id="company">
+                        <table class="company">
                             <thead>
                                 <tr>
                                     <th class="right-align" width="120px">고객사번호</th>
-                                    <td id="company_no" width="300"></td>
+                                    <td class="cell_company_no" width="300"></td>
                                     <th class="right-align" width="120px">법인명</th>
-                                    <td id="company_name" width="300"></td>
+                                    <td class="cell_company_name" width="300"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">대표자명</th>
-                                    <td id="owner_name"></td>
+                                    <td class="cell_owner_name"></td>
                                     <th class="right-align">연락처</th>
                                     <td>
                                         <div class="align-container">
-                                            <p id="nation_code"></p>-
-                                            <p id="telephone"></p>
+                                            <p class="cell_nation_code"></p>-
+                                            <p class="cell_telephone"></p>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">사업자등록번호</th>
-                                    <td id="business_no"></td>
+                                    <td class="cell_business_no"></td>
                                     <th class="right-align">법인등록번호</th>
-                                    <td id="resident_no"></td>
+                                    <td class="cell_resident_no"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">회사구분</th>
-                                    <td id="company_div"></td>
+                                    <td class="cell_company_div"></td>
                                     <th class="right-align">국가</th>
-                                    <td id="nation"></td>
+                                    <td class="cell_nation"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">사업장소재지</th>
                                     <td colspan="3">
                                         <div class="align-container">
-                                            <p id="post_code"></p>
-                                            <p id="business_place"></p>
+                                            <p class="cell_post_code"></p>
+                                            <p class="cell_business_place"></p>
                                         </div>
                                     </td>
                                 </tr>
@@ -374,56 +355,57 @@
                 </div>
             </div>
         </form>
-        <div id="modal" class="modal">
+        <div class="modal">
             <div class="modal-content" style="width:630px">
                 <div class="contents-container">
-                    <span id="close" class="close">&times;</span>
+                    <span class="close">&times;</span>
                     <div class="title">고객사 등록</div>
                     <div>
-                        <table id="content">
+                        <table>
                             <thead>
                                 <tr>
                                     <th width="120px" class="right-align">*법인명</th>
                                     <td width="480px" class="left-align">
-                                        <input type="text" id="txt_company_name" class="input-text" style="width: 240px;"/>
+                                        <input type="hidden" class="company_no" value="<%=companyNo%>"/>
+                                        <input type="text" class="company_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th width="120px" class="right-align">*대표자명</th>
                                     <td width="480px" class="left-align">
-                                        <input type="text" id="txt_owner_name" class="input-text" style="width: 240px;"/>
+                                        <input type="text" class="owner_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th width="120px" class="right-align">사업자등록번호</th>
                                     <td width="480px" class="left-align">
-                                        <input type="text" id="txt_business_no" class="input-text" style="width: 160px;"/>
+                                        <input type="text" class="business_no" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th width="120px" class="right-align">법인등록번호</th>
                                     <td width="480px" class="left-align">
-                                        <input type="text" id="txt_resident_no" class="input-text" style="width: 160px;"/>
+                                        <input type="text" class="resident_no" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th width="120px" class="right-align">*회사구분</th>
                                     <td width="480px" class="left-align">
-                                        <select id="sel_company_div" class="input-select"></select>
+                                        <select class="company_div"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th width="120px" class="right-align">*국가</th>
                                     <td width="480px" class="left-align">
-                                        <select id="sel_nation" class="input-select"></select>
+                                        <select class="nation"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th width="120px" class="right-align">*연락처</th>
                                     <td width="480px" class="left-align">
                                         <div class="align-container">
-                                            <p>+<input type="text" id="txt_nation_code" class="input-text" style="width:30px" readonly/></p>
-                                            <input type="text" id="txt_telephone" class="input-text" style="width: 120px;"/>
+                                            <p>+<input type="text" class="nation_code" style="width:30px" readonly/></p>
+                                            <input type="text" class="telephone" style="width: 120px;"/>
                                         </div>
                                     </td>
                                 </tr>
@@ -431,10 +413,10 @@
                                     <th width="120px" class="right-align">사업장소재지</th>
                                     <td width="480px" class="left-align">
                                         <div class="align-container">
-                                            <p><input type="text" id="txt_post_code" class="input-text" style="width:80px"/></p>
-                                            <input type="button" id="btn_search_address" class="input-button" value="주소검색"/>
+                                            <p><input type="text" class="post_code" style="width:80px"/></p>
+                                            <input type="button" class="search_address" value="주소검색"/>
                                         </div>
-                                        <input type="text" id="txt_business_place" class="input-text" style="width:480px"/>
+                                        <input type="text" class="business_place" style="width:480px"/>
                                     </td>
                                 </tr>
                             </thead>
@@ -442,8 +424,8 @@
                     </div>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" id="btn_save" class="button" value="저장"/></p>
-                            <input type="button" id="btn_cancel" class="button" value="취소"/>
+                            <p><input type="button" class="save" value="저장"/></p>
+                            <input type="button" class="cancel" value="취소"/>
                         </div>
                     </div>
                 </div>

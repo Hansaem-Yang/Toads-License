@@ -12,11 +12,11 @@
         <script>
             $(document).ready(function() {
                 // 로그인 화면 Submit 처리
-                $("#login-form").submit((event) => {
+                $(".login-form").submit((event) => {
                     event.preventDefault();
 
-                    var email = $("#email").val();
-                    var password = $("#password").val();
+                    var email = $(".id").val();
+                    var password = $(".password").val();
                     
                     // 아이디와 비번에 대한 Validation 처리
                     if (email.trim() === "" || password.trim() === "") {
@@ -57,12 +57,12 @@
         <title>로그인</title>
     </head>
     <body>
-        <form id="login-form">
+        <form class="login-form">
             <div class="login-container">
                 <div class="login-content">
                     <div class="login-logo"></div>
-                    <div class="login-id"><input type="text" id="email" class="login-text" placeholder="E-Mail"/></div>
-                    <div class="login-password"><input type="password" id="password" class="login-text" placeholder="Password"/></div>
+                    <div class="login-id"><input type="text" class="id" placeholder="E-Mail"/></div>
+                    <div class="login-password"><input type="password" class="password" placeholder="Password"/></div>
                     <div class="login-button"><button type="submit" class="login-submit">로그인</button></div>
                 </div>
 
