@@ -8,11 +8,6 @@
              , nation_kname
              , nation_code
           from nations
-        <if test="language == 'KR'">
-         order by nation_kname
-        </if>
-        <if test="language == 'EN'">
-         order by nation_ename
-        </if>;
+         order by nation_ename;
     </select>
 </mapper>

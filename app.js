@@ -67,7 +67,6 @@ require("./src/routes/member_route")(app);
 require("./src/routes/nations_route")(app);
 require("./src/routes/admin/company_route")(app);
 require("./src/routes/admin/contract_route")(app);
-require("./src/routes/admin/license_route")(app);
 require("./src/routes/admin/dashboard_route")(app);
 
 app.listen(config.web.port, function () {

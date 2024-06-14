@@ -6,10 +6,10 @@ const logger = require("../logger/logger.js");
 mybatisMapper.createMapper(["./src/sql/member.xml"]);
 
 module.exports = {
-    status: async function (companyId) {
+    status: async function (companyNo) {
         try {
             let pool = await poolPromise;
-            let param = { companyId: companyId };
+            let param = { companyNo: companyNo };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("member", "status", param, format);
 
@@ -20,16 +20,17 @@ module.exports = {
                 let item = new Member();
 
                 item.setCompanyNo(record.company_no);
-                item.setMemberId(record.member_id);
-                item.setMemberName(record.member_name);
+                item.setCompanyName(record.company_name);
+                item.setAccountNo(record.account_no);
+                item.setUserName(record.user_name);
                 item.setEmail(record.email);
                 item.setPassword(record.password);
-                item.setMemberType(record.member_type);
-                item.setRoleCode(record.role_code);
-                item.setPhone(record.phone);
+                item.setUserType(record.member_type);
+                item.setNationCode(record.nation_code);
+                item.setPhoneNumber(record.phone_number);
                 item.setUseStatus(record.use_status);
 
-                list.push(member);
+                list.push(item);
             });
 
             return list;
@@ -38,12 +39,12 @@ module.exports = {
             return null;
         }
     },
-    detail: async function (companyId, contractNo) {
+    detail: async function (companyNo, accountNo) {
         try {
             let pool = await poolPromise;
             let param = { 
-                companyId: companyId, 
-                contractNo: contractNo 
+                companyNo: companyNo, 
+                accountNo: accountNo 
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("member", "detail", param, format);
@@ -55,13 +56,14 @@ module.exports = {
 
                 item = new Member();
                 item.setCompanyNo(record.company_no);
-                item.setMemberId(record.member_id);
-                item.setMemberName(record.member_name);
+                item.setCompanyName(record.company_name);
+                item.setAccountNo(record.account_no);
+                item.setUserName(record.user_name);
                 item.setEmail(record.email);
                 item.setPassword(record.password);
-                item.setMemberType(record.member_type);
-                item.setRoleCode(record.role_code);
-                item.setPhone(record.phone);
+                item.setUserType(record.user_type);
+                item.setNationCode(record.nation_code);
+                item.setPhoneNumber(record.phone_number);
                 item.setUseStatus(record.use_status);
             }
 
@@ -71,17 +73,17 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyId, memberName, email, password, memberType, roleCode, phone, useStatus, registCompany, registUser) {
+    insert: async function (companyNo, userName, email, password, userType, nationCode, phoneNumber, useStatus, registCompany, registUser) {
         try {
             let pool = await poolPromise;
             let param = {
-                companyId: companyId,
-                memberName: memberName,
+                companyNo: companyNo,
+                userName: userName,
                 email: email,
                 password: password,
-                memberType: memberType,
-                roleCode: roleCode,
-                phone: phone,
+                userType: userType,
+                nationCode: nationCode,
+                phoneNumber: phoneNumber,
                 useStatus: useStatus,
                 registCompany: registCompany,
                 registUser: registUser
@@ -97,18 +99,18 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyId, memberId, memberName, email, password, memberType, roleCode, phone, useStatus, modifyCompany, modifyUser) {
+    update: async function (companyNo, accountNo, userName, email, password, userType, nationCode, phoneNumber, useStatus, modifyCompany, modifyUser) {
         try {
             let pool = await poolPromise;
             let param = {
-                companyId: companyId,
-                memberId: memberId,
-                memberName: memberName,
+                companyNo: companyNo,
+                accountNo: accountNo,
+                userName: userName,
                 email: email,
                 password: password,
-                memberType: memberType,
-                roleCode: roleCode,
-                phone: phone,
+                userType: userType,
+                nationCode: nationCode,
+                phoneNumber: phoneNumber,
                 useStatus: useStatus,
                 modifyCompany: modifyCompany,
                 modifyUser: modifyUser,
@@ -124,7 +126,7 @@ module.exports = {
             return -1;
         }
     },
-    delete: async function (companyId, memberId) {
+    delete: async function (companyNo, accountNo) {
         let count = 0;
         try {
             let pool = await poolPromise;
@@ -132,10 +134,10 @@ module.exports = {
 
             await transaction.begin();
             try {
-                for (let i = 0; i < memberId.length; i++) {
+                for (let i = 0; i < accountNo.length; i++) {
                     let param = {
-                        companyId: companyId,
-                        memberId: memberId[i],
+                        companyNo: companyNo,
+                        accountNo: accountNo[i],
                     };
                     let format = { language: "sql", indent: " " };
                     let query = mybatisMapper.getStatement("member", "delete", param, format);

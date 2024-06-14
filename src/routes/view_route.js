@@ -108,29 +108,16 @@ module.exports = function (app) {
         }
     });
     
-    // 라이센스 관리 페이지
-    app.get("/view/license", (req, res) => {
-        req.session.menuId = 'license';
-        res.locals.session = req.session;
-
-        if (req.session.user.companyDiv === 'T') {
-            res.render("admin/license/status");
-        }
-        else {
-            res.render("user/license/status");
-        }
-    });
-    
     // 사용자 관리 페이지
-    app.get("/view/user", (req, res) => {
-        req.session.menuId = 'user';
+    app.get("/view/member", (req, res) => {
+        req.session.menuId = 'member';
         res.locals.session = req.session;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/user/status");
+            res.render("admin/member/status");
         }
         else {
-            res.render("user/user/status");
+            res.render("user/member/status");
         }
     });
     

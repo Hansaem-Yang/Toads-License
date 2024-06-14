@@ -3,9 +3,9 @@ const constants = require("../common/constants");
 
 module.exports = function (app) {
     app.post("/member/status", (req, res) => {
-        let companyId = req.body.companyId;
+        let companyNo = req.body.companyNo;
 
-        manager.status(companyId).then((data) => {
+        manager.status(companyNo).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -14,9 +14,10 @@ module.exports = function (app) {
         });
     });
     app.post("/member/detail", (req, res) => {
-        let memberId = req.body.memberId;
+        let companyNo = req.body.companyNo;
+        let accountNo = req.body.accountNo;
 
-        manager.detail(companyId, memberId).then((data) => {
+        manager.detail(companyNo, accountNo).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -25,10 +26,10 @@ module.exports = function (app) {
         });
     });
     app.post("/member/checkEmail", (req, res) => {
-        let memberId = req.body.memberId;
+        let accountNo = req.body.accountNo;
         let email = req.body.email;
 
-        manager.checkEmail(memberId, email).then((data) => {
+        manager.checkEmail(accountNo, email).then((data) => {
             if (data == 0) {
                 res.send(constants.SUCCESS);
             } else if (data > 0) {
@@ -39,7 +40,7 @@ module.exports = function (app) {
         });
     });
     app.post("/member/insert", (req, res) => {
-        let companyId = req.body.companyId;
+        let companyNo = req.body.companyNo;
         let memberName = req.body.memberName;
         let email = req.body.email;
         let password = req.body.password;
@@ -50,7 +51,7 @@ module.exports = function (app) {
         let registCompany = req.session.user.companyNo;
         let registUser = req.session.user.accountNo;
 
-        manager.insert(companyId, memberName, email, password, memberType, roleCode, phone, useStatus, registCompany, registUser).then((data) => {
+        manager.insert(companyNo, memberName, email, password, memberType, roleCode, phone, useStatus, registCompany, registUser).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.FAIL);
             } else {
@@ -59,7 +60,7 @@ module.exports = function (app) {
         });
     });
     app.post("/member/update", (req, res) => {
-        let memberId = req.body.memberId;
+        let accountNo = req.body.accountNo;
         let memberName = req.body.memberName;
         let email = req.body.email;
         let memberType = req.body.memberType;
@@ -69,7 +70,7 @@ module.exports = function (app) {
         let modifyCompany = req.session.user.companyNo;
         let modifyUser = req.session.user.accountNo;
 
-        manager.update(memberId, memberName, email, memberType, roleCode, phone, useStatus, modifyCompany, modifyUser).then((data) => {
+        manager.update(accountNo, memberName, email, memberType, roleCode, phone, useStatus, modifyCompany, modifyUser).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.FAIL);
             } else {
@@ -78,9 +79,9 @@ module.exports = function (app) {
         });
     });
     app.post("/member/delete", (req, res) => {
-        let memberId = req.body.memberId;
+        let accountNo = req.body.accountNo;
 
-        manager.delete(memberId).then((data) => {
+        manager.delete(accountNo).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.FAIL);
             } else {

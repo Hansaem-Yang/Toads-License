@@ -2,9 +2,8 @@ const manager = require("../../manager/admin/license_manager");
 const constants = require("../../common/constants");
 
 module.exports = function (app) {
-    app.post("/admin/license/status", (req, res) => {
+    app.post("/admin/user/status", (req, res) => {
         let companyId = req.body.companyId;
-        let contractNo = req.body.contractNo;
 
         manager.status(companyId, contractNo).then((data) => {
             if (data == null || data.length <= 0) {
@@ -14,7 +13,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/license/detail", (req, res) => {
+    app.post("/admin/user/detail", (req, res) => {
         let companyId = req.body.companyId;
         let contractNo = req.body.contractNo;
         let licenseNo = req.body.licenseNo;
@@ -27,7 +26,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/license/insert", (req, res) => {
+    app.post("/admin/user/insert", (req, res) => {
         let companyId = req.body.companyId;
         let contractNo = req.body.contractNo;
         let appName = req.body.appName;
@@ -45,7 +44,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/license/modify", (req, res) => {
+    app.post("/admin/user/modify", (req, res) => {
         let companyId = req.body.companyId;
         let contractNo = req.body.contractNo;
         let licenseNo = req.body.licenseNo;
@@ -65,7 +64,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/license/delete", (req, res) => {
+    app.post("/admin/user/delete", (req, res) => {
         let companyId = req.body.companyId;
         let contractNo = req.body.contractNo;
         let licenseNo = req.body.licenseNo;

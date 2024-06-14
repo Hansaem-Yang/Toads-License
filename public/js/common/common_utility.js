@@ -6,17 +6,28 @@ var CreateNationsSelection = function(object, data, language) {
 
     $.each(data, function(index, option)
     {
-        if (language == 'KR') {
-            object.append($('<option>', { 
-                value:option.code, 
-                text:option.kname
-            }));
-        } else {
-            object.append($('<option>', { 
-                value:option.code, 
-                text:option.ename
-            }));
-        }
+        object.append($('<option>', { 
+            value:option.code, 
+            text:option.ename
+        }));
+    });
+};
+
+var CreateNationsCodeSelection = function(object, data, language) {
+    object.append($('<option>', { 
+        value:'', 
+        text:'선택하세요.'
+    }));
+
+    $.each(data, function(index, option)
+    {
+        if (option.country === '' || option.country === null)
+            return;
+
+        object.append($('<option>', { 
+            value: option.country, 
+            text: padString(`+${option.country}`, 5) + option.ename
+        }));
     });
 };
 
@@ -84,3 +95,7 @@ var AddYear = function(date, year) {
 
     return getFormattedDate(date);
 };
+
+var padString = function(str, targetLength) {
+    return str.padEnd(targetLength, ' ');
+}

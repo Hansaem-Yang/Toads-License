@@ -74,8 +74,7 @@
                             $('.view_license tbody').empty();
 
                             alert("서버 요청에 실패하였습니다.");
-
-                            window.history(-1);
+                            window.history.back();
                         },
                     });
                 };
@@ -179,6 +178,10 @@
                             },
                         });
                     }
+                });
+
+                $('.back').click(function() {
+                    window.history.back();
                 });
 
                 var Clear = function() {
@@ -500,7 +503,8 @@
                     <div class="top-right-button">
                         <div class="align-container">
                             <p><input type="button" class="modify" value="수정"/></p>
-                            <input type="button" class="delete" value="삭제"/>
+                            <p><input type="button" class="delete" value="삭제"/></p>
+                            <input type="button" class="back" value="뒤로"/>
                         </div>
                     </div>
                     <div>
@@ -606,7 +610,7 @@
             <div class="modal-content" style="width:1140px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">계약 등록</div>
+                    <div class="title">계약 관리</div>
                     <div>
                         <table>
                             <thead>
@@ -684,7 +688,7 @@
                         </table></br>
                     </div>
                     <div class="table-container" style="height:200px">
-                        <div class="title">라이센스 등록</div>
+                        <div class="title">라이센스 관리</div>
                         <div class="top-right-button">
                             <div class="align-container">
                                 <p><input type="button" class="license_add" value="추가"/></p>

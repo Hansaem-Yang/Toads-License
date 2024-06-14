@@ -90,6 +90,7 @@
                             $('.company tbody').empty();
 
                             alert('서버 요청에 실패하였습니다.');
+                            window.history.back();
                         },
                     });
                 };
@@ -165,6 +166,10 @@
                             },
                         });
                     }
+                });
+
+                $('.back').click(function() {
+                    window.history.back();
                 });
 
                 // Modal Event And Function
@@ -299,7 +304,8 @@
                     <div class="top-right-button">
                         <div class="align-container">
                             <p><input type="button" class="modify" value="수정"/></p>
-                            <input type="button" class="delete" value="삭제"/>
+                            <p><input type="button" class="delete" value="삭제"/></p>
+                            <input type="button" class="back" value="뒤로"/>
                         </div>
                     </div>
                     <div>
@@ -361,53 +367,53 @@
             </div>
         </form>
         <div class="modal">
-            <div class="modal-content" style="width:630px">
+            <div class="modal-content" style="width:640px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">고객사 등록</div>
+                    <div class="title">고객사 관리</div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
                                     <th width="120px" class="right-align">*법인명</th>
-                                    <td width="480px" class="left-align">
+                                    <td width="500px" class="left-align">
                                         <input type="hidden" class="company_no" value="<%=companyNo%>"/>
                                         <input type="text" class="company_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align">*대표자명</th>
-                                    <td width="480px" class="left-align">
+                                    <th class="right-align">*대표자명</th>
+                                    <td class="left-align">
                                         <input type="text" class="owner_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align">사업자등록번호</th>
-                                    <td width="480px" class="left-align">
+                                    <th class="right-align">사업자등록번호</th>
+                                    <td class="left-align">
                                         <input type="text" class="business_no" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align">법인등록번호</th>
-                                    <td width="480px" class="left-align">
+                                    <th class="right-align">법인등록번호</th>
+                                    <td class="left-align">
                                         <input type="text" class="resident_no" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align">*회사구분</th>
-                                    <td width="480px" class="left-align">
+                                    <th class="right-align">*회사구분</th>
+                                    <td class="left-align">
                                         <select class="company_div"></select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align">*국가</th>
-                                    <td width="480px" class="left-align">
+                                    <th class="right-align">*국가</th>
+                                    <td class="left-align">
                                         <select class="nation"></select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align">*연락처</th>
-                                    <td width="480px" class="left-align">
+                                    <th class="right-align">*연락처</th>
+                                    <td class="left-align">
                                         <div class="align-container">
                                             <p>+<input type="text" class="nation_code" style="width:30px" readonly/></p>
                                             <input type="text" class="telephone" style="width: 120px;"/>
@@ -415,13 +421,13 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align">사업장소재지</th>
-                                    <td width="480px" class="left-align">
+                                    <th class="right-align">사업장소재지</th>
+                                    <td class="left-align">
                                         <div class="align-container">
                                             <p><input type="text" class="post_code" style="width:80px"/></p>
                                             <input type="button" class="search_address" value="주소검색"/>
                                         </div>
-                                        <input type="text" class="business_place" style="width:480px"/>
+                                        <input type="text" class="business_place" style="width:490px"/>
                                     </td>
                                 </tr>
                             </thead>

@@ -53,3 +53,8 @@ const machinDivs = {
     T:'통신분야',
     Z:'기타'
 }
+
+const useStatus = {
+    Y:'사용',
+    N:'미사용'
+}

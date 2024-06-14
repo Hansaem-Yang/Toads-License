@@ -20,11 +20,12 @@ object, iframe {
 
 nav {
     display: block;
+    color: #bfbebe;
     font-size: 14px;
 }
 
 nav a {
-    color: white;
+    color: #f6f7fb;
     text-decoration: none;
     font-size: 14px;
     padding: 2px;
@@ -45,12 +46,12 @@ footer {
     position: fixed;
     top: 0;
     left: 0;
-    background: #53a8fd 0% 0% no-repeat padding-box;
+    background: #1a2b46 0% 0% no-repeat padding-box;
     overflow: hidden;
     z-index: 1000;
 }
 .topmenu a {
-    color: white;
+    color: #f6f7fb;
     text-decoration: none;
 }
 .topmenu a:hover {
@@ -69,10 +70,10 @@ footer {
     position: absolute;
     top: 10px;
     left: 10px;
-    width: 120px;
-    height: 40px;
+    width: 150px;
+    height: 46px;
     background-size: cover;
-    background-image: url('/public/images/logo.png');
+    background-image: url('/public/images/logo-white.png');
     margin: 0;
 
     cursor: pointer;
@@ -85,18 +86,19 @@ footer {
 }
 .sidebar {
     width: 250px;
-    color: rgb(0, 50, 74);
+    color: #323333;
     padding: 12px;
     box-sizing: border-box;
     position: fixed;
     top: 80px; /* 상단 메뉴 바로 아래에 위치 */
     bottom: 0px;
-    border-right: 2px solid #0056ad;
+    border-right: 2px solid #1a2b46;
     overflow: hidden;
 }
 .side-menu {
     width: 220px;
-    color: rgb(0, 37, 69);
+    color: #323333;
+    font-weight: bold;
     box-sizing: border-box;
     position: fixed;
     top: 0px; /* 상단 메뉴 바로 아래에 위치 */
@@ -113,11 +115,13 @@ footer {
     border-radius: 18px;
 }
 .side-menu div:hover {
+    color: #f6f7fb;
     transition: background-color 0.3s;
-    background: #51a8ff 0% 0% no-repeat padding-box;
+    background: rgb(119, 156, 207) 0% 0% no-repeat padding-box;
 }
 .side-menu-selected {
-    background: #67b3ff 0% 0% no-repeat padding-box;
+    color: #f6f7fb;
+    background: #3b7bbf 0% 0% no-repeat padding-box;
 }
 
 .content {
@@ -129,7 +133,7 @@ footer {
     left:0px;
     right:0px;
     bottom: 0px;
-    background-color: #ffffff;
+    background-color: #f6f7fb;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -151,7 +155,7 @@ footer {
     box-sizing: border-box;
     border-radius: 18px;
     /* UI Properties */
-    background: #53a8fd 0% 0% no-repeat padding-box;
+    background: #1a2b46 0% 0% no-repeat padding-box;
     opacity: 1;
 }
 
@@ -162,7 +166,7 @@ footer {
     width: 225px;
     height: 75px;
     background-size: cover;
-    background-image: url('/public/images/logo.png');
+    background-image: url('/public/images/logo-white.png');
     margin: 0;
 }
 
@@ -174,7 +178,7 @@ footer {
     width: 600px;
     height: 58px;
     /* UI Properties */
-    background: #ffffff 0% 0% no-repeat padding-box;
+    background: #f6f6fb 0% 0% no-repeat padding-box;
     border-radius: 8px;
     opacity: 1;
 }
@@ -187,7 +191,7 @@ footer {
     width: 600px;
     height: 58px;
     /* UI Properties */
-    background: #ffffff 0% 0% no-repeat padding-box;
+    background: #f6f6fb 0% 0% no-repeat padding-box;
     border-radius: 8px;
     opacity: 1;
 }
@@ -202,9 +206,9 @@ footer {
     /* UI Properties */
     text-align: left;
     font: normal normal 300 26px/30px Pretendard;
-    background: #ffffff 0% 0% no-repeat padding-box;
+    background: #f6f6fb 0% 0% no-repeat padding-box;
     letter-spacing: 0px;
-    color: #484848;
+    color: #323333;
     opacity: 1;
     border: none;
     outline: none;
@@ -218,8 +222,8 @@ footer {
     width: 600px;
     height: 64px;
     /* UI Properties */
-    background: rgb(16, 43, 78) 0% 0% no-repeat padding-box;
-    box-shadow: 0px 5px 6px #00000029;
+    background: #365b96 0% 0% no-repeat padding-box;
+    box-shadow: 0px 5px 6px #323333;
     border-radius: 8px;
     opacity: 1;
 
@@ -236,7 +240,7 @@ footer {
     font: normal normal medium 24px/35px Pretendard;
     font-size: 32px;
     letter-spacing: 0px;
-    color: #ffffff;
+    color: #f6f6fb;
     opacity: 1;
     border: none;
     outline: none;

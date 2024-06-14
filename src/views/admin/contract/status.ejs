@@ -44,7 +44,7 @@
                 });
                 
                 var Search = function() {
-                    $('.contract tbody').empty();
+                    ClearContract();
 
                     var companyNo = $('.s_company_no option:selected').val();
                     if (companyNo === '')
@@ -60,7 +60,6 @@
                             companyNo: companyNo,
                         },
                         success: function (data) {
-                            $('.contract tbody').empty();
 
                             if (data === 'NO SESSION') {
                                 alert("세션이 만료되었습니다.");
@@ -71,25 +70,24 @@
                             } else {
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
-                                        var newRow = 
-                                            '<tr>' +
-                                                '<td class="center-align">' + post.contractNo + '</td>' +
-                                                '<td class="left-align">' + post.contractName + '</td>' +
-                                                '<td class="center-align">' + post.contractDate + '</td>' +
-                                                '<td class="center-align">' + post.contractor + '</td>' +
-                                                '<td class="center-align"><div class="align-container-center"><p>' + post.startDate + '</p><p>~</p>' + post.endDate + '</div></td>' +
-                                                '<td class="center-align">' + post.monetaryUnit + '</td>' +
-                                                '<td class="right-align">' + post.exchangeRate + '</td>' +
-                                                '<td class="right-align">' + post.actualAmount + '</td>' +
-                                            '</tr>';
+                                        var newRow = $('.contract tbody tr').first().clone().removeClass('hidden');
+
+                                        $(newRow).find('.cell_contract_no').text(post.contractNo);
+                                        $(newRow).find('.cell_contract_name').text(post.contractName);
+                                        $(newRow).find('.cell_contract_date').text(post.contractDate);
+                                        $(newRow).find('.cell_contractor').text(post.contractor);
+                                        $(newRow).find('.cell_start_date').text(post.startDate);
+                                        $(newRow).find('.cell_end_date').text(post.endDate);
+                                        $(newRow).find('.cell_monetary_unit').text(post.monetaryUnit);
+                                        $(newRow).find('.cell_exchange_rate').text(post.exchangeRate);
+                                        $(newRow).find('.cell_actual_amount').text(post.actualAmount);
+
                                         $('.contract tbody').append(newRow);
                                     });
                                 }
                             }
                         },
                         error: function (xhr, status, error) {
-                            $('.contract tbody').empty();
-
                             var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
                             $('.contract tbody').append(newRow);
                         },
@@ -132,11 +130,7 @@
 
                     var selectedRow = $(".contract tr.selected");
                     if (selectedRow.length > 0) {
-                        // 선택된 행의 데이터를 배열로 저장
-                        var rowData = [];
-                        selectedRow.find("td").each(function() {
-                            rowData.push($(this).text());
-                        });
+                        var contractNo = selectedRow.find('.cell_contract_no').text();
 
                         // 행 데이터 출력
                         $.ajax({
@@ -144,7 +138,7 @@
                             method: "POST",
                             data: {
                                 companyNo: companyNo,
-                                contractNo: rowData[0],
+                                contractNo: contractNo,
                             },
                             success: function (data) {
                                 if (data === 'NO SESSION') {
@@ -170,7 +164,7 @@
                                     $('.remark').val(data.remark);
                                     
                                     data.licenses.forEach(function(license, index){
-                                        var newRow = $('.license tr.hidden').clone().removeClass('hidden');
+                                        var newRow = $('.license tbody tr').first().clone().removeClass('hidden');
 
                                         $(newRow).find('.mode').val('U');
                                         $(newRow).find('.license_no').val(license.licenseNo);
@@ -223,6 +217,13 @@
                 $('.contract tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
+
+                var ClearContract = function() {
+                    const rows = document.querySelectorAll(".contract tbody tr:not(:first-child)");
+                    rows.forEach(row => {
+                        row.remove();
+                    });
+                }
 
                 // Modal Event And Function
                 var ClearModal = function() {
@@ -561,15 +562,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
+                                <tr class="hidden">
+                                    <td class="cell_contract_no" style="text-align: center;"></td>
+                                    <td class="cell_contract_name" style="text-align: left;"></td>
+                                    <td class="cell_contract_date" style="text-align: center;"></td>
+                                    <td class="cell_contractor" style="text-align: left;"></td>
+                                    <td>
+                                        <div class="align-container-center">
+                                            <p class="cell_start_date"></p>
+                                            <p class="">~</p>
+                                            <p class="cell_end_date"></p>
+                                        </div></td>
+                                    </td>
+                                    <td class="cell_monetary_unit" style="text-align: center;"></td>
+                                    <td class="cell_exchange_rate" style="text-align: right;"></td>
+                                    <td class="cell_actual_amount" style="text-align: right;"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -581,7 +588,7 @@
             <div class="modal-content" style="width:1140px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">계약 등록</div>
+                    <div class="title">계약 관리</div>
                     <div>
                         <table>
                             <thead>
@@ -659,7 +666,7 @@
                         </table></br>
                     </div>
                     <div class="table-container" style="height:200px">
-                        <div class="title">라이센스 등록</div>
+                        <div class="title">라이센스 관리</div>
                         <div class="top-right-button">
                             <div class="align-container">
                                 <p><input type="button" class="license_add" value="추가"/></p>
