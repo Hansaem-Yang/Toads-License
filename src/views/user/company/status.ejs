@@ -9,6 +9,7 @@
         <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
         -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
         <script src="/public/js/common/common_variables.js"></script>
         <script>
@@ -16,7 +17,7 @@
                 var nation_options = [];
 
                 $.ajax({
-                    url: "../nations/status",
+                    url: "../../nations/status",
                     method: "POST",
                     success: function (data) {
                         if (data === 'NO SESSION') {
@@ -41,137 +42,101 @@
                                         country:post.nationCode
                                     });
                                 });
-
+                                
                                 CreateNationsSelection($('.nation'), nation_options, $('.language').val());
                             }
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert("서버 요청에 실패하였습니다.");
+                        alert('서버 요청에 실패하였습니다.');
                     },
                 });
 
-                $('.search').click(() => {
-                    ClearCompany();
-                    var companyName = $('.s_company_name').val();
+                var Search = function() {
+                    var companyNo = $('.company_no').val();
 
+                    // 행 데이터 출력
                     $.ajax({
-                        url: "../company/status",
+                        url: "../../company/detail",
                         method: "POST",
                         data: {
-                            companyName: companyName,
+                            companyNo: companyNo,
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
                                 alert("세션이 만료되었습니다.");
                                 window.parent.location.href = "./login";
+                                return;
                             } else if (data === 'NO DATA') {
-                                var newRow = '<tr><td colspan="7" class="left-align">조회된 데이터가 없습니다.</td></tr>';
-                                $('.company tbody').append(newRow);
+                                alert("조회된 데이터가 없습니다.");
+                                return;
                             } else {
-                                if (Array.isArray(data)) {
-                                    $.each(data, function(index, post) {
-                                        var newRow = $('.company tbody tr').first().clone().removeClass('hidden');
-
-                                        $(newRow).find('.cell_company_no').text(post.companyNo);
-                                        $(newRow).find('.cell_company_name').text(post.companyName);
-                                        $(newRow).find('.cell_owner_name').text(post.ownerName);
-                                        $(newRow).find('.cell_company_div').text(companyDivs[post.companyDiv]);
-                                        $(newRow).find('.cell_telephone').text(GetTelephone(post.nationCode, post.telephone));
-                                        $(newRow).find('.cell_total_licenses').text(post.totalLicenses);
-                                        $(newRow).find('.cell_total_users').text(post.totalUsers);
-
-                                        $('.company tbody').append(newRow);
-                                    });
-                                }
+                                $('.cell_company_no').text(data.companyNo);
+                                $('.cell_company_name').text(data.companyName);
+                                $('.cell_owner_name').text(data.ownerName);
+                                $('.cell_business_no').text(data.businessNo);
+                                $('.cell_resident_no').text(data.residentNo);
+                                $('.cell_company_div').text(companyDivs[data.companyDiv]);
+                                
+                                var option = nation_options.find(option => option.code === data.nation);
+                                $('.cell_nation').text(option.kname);
+                                $('.cell_nation_code').text(data.nationCode);
+                                $('.cell_telephone').text(data.telephone);
+                                $('.cell_post_code').text(data.postCode);
+                                $('.cell_business_place').text(data.businessPlace);
                             }
                         },
                         error: function (xhr, status, error) {
-                            var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
-                            $('.company tbody').append(newRow);
+                            $('.company tbody').empty();
+
+                            alert('서버 요청에 실패하였습니다.');
+                            window.history.back();
+                        },
+                    });
+                };
+
+                $('.modify').click(function() {
+                    var companyNo = $('.company_no').val();
+
+                    // 행 데이터 출력
+                    $.ajax({
+                        url: "../../company/detail",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                                return;
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                                return;
+                            } else {
+                                $('.company_no').val(data.companyNo);
+                                $('.company_name').val(data.companyName);
+                                $('.owner_name').val(data.ownerName);
+                                $('.business_no').val(data.businessNo);
+                                $('.resident_no').val(data.residentNo);
+                                $('.company_div').val(data.companyDiv);
+                                $('.nation').val(data.nation);
+                                $('.nation_code').val(data.nationCode);
+                                $('.telephone').val(data.telephone);
+                                $('.post_code').val(data.postCode);
+                                $('.business_place').val(data.businessPlace);
+
+                                $('.modal').show();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert('서버 요청에 실패하였습니다.');
                         },
                     });
                 });
 
-                $('.add').click(function() {
-                    ClearModal();
-
-                    $('.modal').show();
-                });
-
-                $('.modify').click(function() {
-                    ClearModal();
-
-                    var selectedRow = $(".company tr.selected");
-                    if (selectedRow.length > 0) {
-                        var companyNo = selectedRow.find('.cell_company_no').text();
-
-                        // 행 데이터 출력
-                        $.ajax({
-                            url: "../company/detail",
-                            method: "POST",
-                            data: {
-                                companyNo: companyNo,
-                            },
-                            success: function (data) {
-                                if (data === 'NO SESSION') {
-                                    alert("세션이 만료되었습니다.");
-                                    window.parent.location.href = "./login";
-                                } else if (data === 'NO DATA') {
-                                    alert("조회된 데이터가 없습니다.");
-                                } else {
-                                    $('.company_no').val(data.companyNo);
-                                    $('.company_name').val(data.companyName);
-                                    $('.owner_name').val(data.ownerName);
-                                    $('.business_no').val(data.businessNo);
-                                    $('.resident_no').val(data.residentNo);
-                                    $('.company_div').val(data.companyDiv);
-                                    $('.nation').val(data.nation);
-                                    $('.nation_code').val(data.nationCode);
-                                    $('.telephone').val(data.telephone);
-                                    $('.post_code').val(data.postCode);
-                                    $('.business_place').val(data.businessPlace);
-
-                                    $('.modal').show();
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                               alert('서버 요청에 실패하였습니다.');
-                            },
-                        });
-                    } else {
-                        alert("목록에서 행을 선택하세요.");
-                    }
-                });
-
-                $('.detail').click(function() {
-                    var selectedRow = $(".company tr.selected");
-                    if (selectedRow.length > 0) {
-                        // 선택된 행의 데이터를 배열로 저장
-                        var rowData = [];
-                        selectedRow.find("td").each(function() {
-                            rowData.push($(this).text());
-                        });
-                        
-                        window.location.href = "../view/company/detail?companyNo=" + rowData[0];
-                    } else {
-                        alert("목록에서 행을 선택하세요.");
-                    }
-                });
-
-                $('.company tbody').on('click', 'tr', function() {
-                    $(this).addClass('selected').siblings().removeClass('selected');
-                });
-
-                var ClearCompany = function() {
-                    const rows = document.querySelectorAll(".company tbody tr:not(:first-child)");
-                    rows.forEach(row => {
-                        row.remove();
-                    });
-                }
                 // Modal Event And Function
                 var ClearModal = function() {
-                    $('.company_no').val('');
                     $('.company_name').val('');
                     $('.owner_name').val('');
                     $('.business_no').val('');
@@ -200,7 +165,19 @@
                 $('.save').click(function() {
                     if (confirm('데이터를 저장 하시겠습니까?') == true)
                     {
-                        if ($('.company_name').val() === '') {
+                        var companyNo = $('.company_no').val();
+                        var companyName = $('.company_name').val();
+                        var ownerName = $('.owner_name').val();
+                        var businessNo = $('.business_no').val();
+                        var residentNo = $('.resident_no').val();
+                        var companyDiv = $('.company_div').val();
+                        var nation = $('.nation').val();
+                        var nationCode = $('.nation_code').val();
+                        var telephone = $('.telephone').val();
+                        var postCode = $('.post_code').val();
+                        var businessPlace = $('.business_place').val();
+
+                        if (companyName === '') {
                             alert('법인명을 입력하세요.');
                             return;
                         }
@@ -224,29 +201,9 @@
                             alert('연락처를 입력하세요.');
                             return;
                         }
-                        
-                        var companyNo     = $('.company_no').val();
-                        var companyName   = $('.company_name').val();
-                        var ownerName     = $('.owner_name').val();
-                        var businessNo    = $('.business_no').val();
-                        var residentNo    = $('.resident_no').val();
-                        var companyDiv    = $('.company_div').val();
-                        var nation        = $('.nation').val();
-                        var nationCode    = $('.nation_code').val();
-                        var telephone     = $('.telephone').val();
-                        var postCode      = $('.post_code').val();
-                        var businessPlace = $('.business_place').val();
-
-                        var url = "../company/insert";
-                        if (companyNo === ''){
-                            url = "../company/insert";
-                        } else {
-                            url = "../company/update";
-                        }
-
 
                         $.ajax({
-                            url: url,
+                            url: "../../company/update",
                             method: "POST",
                             data: {
                                 companyNo: companyNo,
@@ -275,8 +232,8 @@
                                 }
 
                                 $('.modal').hide();
-                                $('.search').click();
-                                
+                                Search();
+
                                 ClearModal();
                             },
                             error: function (xhr, status, error) {
@@ -296,66 +253,74 @@
                 });
 
                 CreateVariablesSelection($('.company_div'), companyDivs);
-                $('.search').click();
+                Search();
             });
         </script>
     </head>
     <body>
-        <form class="company-detail-form">
+        <form class="company-status-form">
             <input type="hidden" class="language" value="<%=session.language%>"/>
+            
             <div class="content">
-                <div>
-                    <div class="title">조회 조건</div>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th width="120px" class="right-align">법인명</th>
-                                    <td class="left-align">
-                                        <div class="align-container">
-                                            <p><input type="text" class="s_company_name"/></p>
-                                            <input type="button" class="search" value="조회"/>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div></br></br></br>
                 <div  class="contents-container">
-                    <div class="title">고객사 목록</div>
+                    <div class="title">고객사 정보</div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="add" value="등록"/></p>
-                            <p><input type="button" class="modify" value="수정"/></p>
-                            <input type="button" class="detail" value="상세보기"/>
+                            <input type="button" class="modify" value="수정"/>
                         </div>
                     </div>
                     <div>
                         <table class="company">
                             <thead>
                                 <tr>
-                                    <th width="100px">고객사번호</th>
-                                    <th width="240px">법인명</th>
-                                    <th width="120px">대표자명</th>
-                                    <th width="120px">회사구분</th>
-                                    <th width="160px">연락처</th>
-                                    <th width="120px">라이센스 수</th>
-                                    <th width="120px">사용자 수</th>
+                                    <th width="120px" class="right-align">고객사번호</th>
+                                    <td width="300px" class="cell_company_no"></td>
+                                    <th width="120px" class="right-align">법인명</th>
+                                    <td width="300px" class="cell_company_name"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">대표자명</th>
+                                    <td class="cell_owner_name"></td>
+                                    <th class="right-align">연락처</th>
+                                    <td>
+                                        <div class="align-container">
+                                            <p class="cell_nation_code"></p>-
+                                            <p class="cell_telephone"></p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">사업자등록번호</th>
+                                    <td class="cell_business_no"></td>
+                                    <th class="right-align">법인등록번호</th>
+                                    <td class="cell_resident_no"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">회사구분</th>
+                                    <td class="cell_company_div"></td>
+                                    <th class="right-align">국가</th>
+                                    <td class="cell_nation"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">사업장소재지</th>
+                                    <td height="60px" colspan="3">
+                                        <div class="cell_post_code"></div>
+                                        <div class="cell_business_place"></div>
+                                    </td>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr class="hidden">
-                                    <td class="cell_company_no" style="text-align: center;"></td>
-                                    <td class="cell_company_name" style="text-align: left;"></td>
-                                    <td class="cell_owner_name" style="text-align: left;"></td>
-                                    <td class="cell_company_div" style="text-align: center;"></td>
-                                    <td class="cell_telephone" style="text-align: center;"></td>
-                                    <td class="cell_total_licenses" style="text-align: right;"></td>
-                                    <td class="cell_total_users" style="text-align: right;"></td>
-                                </tr>
-                            </tbody>
                         </table>
+                    </div>
+                </div></br></br></br>
+                <div>
+                    <div class="title">위성통신 사용량</div>
+                    <div class="satellite-usage-container">
+                        <div class="daliy-usage">
+                            <canvas class="daliy-usage-chart"></canvas>
+                        </div>
+                        <div class="monthly-usage">
+                            <canvas class="monthly-usage-chart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -364,14 +329,14 @@
             <div class="modal-content" style="width:640px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">고객사 관리</div>
+                    <div class="title">회사 관리</div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
                                     <th width="120px" class="right-align">*법인명</th>
                                     <td width="500px" class="left-align">
-                                        <input type="hidden" class="company_no"/>
+                                        <input type="hidden" class="company_no" value="<%=session.user.companyNo%>"/>
                                         <input type="text" class="company_name" style="width: 240px;"/>
                                     </td>
                                 </tr>

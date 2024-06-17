@@ -34,7 +34,7 @@ app.use('/view', (req, res, next) => {
     next();
   }
   else {
-    res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+    res.sendFile(path.join(config.root, "/src/views/login.html"));
   }
 });
 
@@ -63,11 +63,12 @@ app.set('views', __dirname + '/src/views');
 // Route 파일 설정
 require("./src/routes/view_route")(app);
 require("./src/routes/login_route")(app);
+require("./src/routes/mypage_route")(app);
 require("./src/routes/member_route")(app);
 require("./src/routes/nations_route")(app);
-require("./src/routes/admin/company_route")(app);
-require("./src/routes/admin/contract_route")(app);
-require("./src/routes/admin/dashboard_route")(app);
+require("./src/routes/company_route")(app);
+require("./src/routes/contract_route")(app);
+require("./src/routes/dashboard_route")(app);
 
 app.listen(config.web.port, function () {
     logger.info(`Express server has started on port (${config.web.port})`);

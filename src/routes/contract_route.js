@@ -1,8 +1,8 @@
-const manager = require("../../manager/admin/contract_manager");
-const constants = require("../../common/constants");
+const manager = require("../manager/contract_manager");
+const constants = require("../common/constants");
 
 module.exports = function (app) {
-    app.post("/admin/contract/status", (req, res) => {
+    app.post("/contract/status", (req, res) => {
         let companyNo = req.body.companyNo;
 
         manager.status(companyNo).then((data) => {
@@ -13,7 +13,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/contract/detail", (req, res) => {
+    app.post("/contract/detail", (req, res) => {
         let companyNo = req.body.companyNo;
         let contractNo = req.body.contractNo;
 
@@ -25,7 +25,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/contract/insert", (req, res) => {
+    app.post("/contract/insert", (req, res) => {
         let companyNo = req.body.companyNo;
         let contractName = req.body.contractName;
         let contractDate = req.body.contractDate;
@@ -52,7 +52,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/contract/update", (req, res) => {
+    app.post("/contract/update", (req, res) => {
         let companyNo = req.body.companyNo;
         let contractNo = req.body.contractNo;
         let contractName = req.body.contractName;
@@ -80,7 +80,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/contract/delete", (req, res) => {
+    app.post("/contract/delete", (req, res) => {
         let companyNo = req.body.companyNo;
         let contractNo = req.body.contractNo;
 

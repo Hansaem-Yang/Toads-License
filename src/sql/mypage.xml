@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mypage">  
+    <select id="info">
+        select a.company_no
+             , b.company_name
+             , b.owner_name
+             , isnull(b.business_no, '') business_no
+             , isnull(b.resident_no, '') resident_no
+             , isnull(b.company_div, '') company_div
+             , isnull(b.post_code, '') post_code
+             , isnull(b.business_place, '') business_place
+             , isnull(b.nation, '') nation
+             , isnull(c.nation_code, '') nation_code
+             , isnull(b.telephone, '') telephone
+             , a.account_no
+             , a.user_name
+             , a.email
+             , convert(varchar(max), a.password) password
+             , a.user_type
+             , a.nation_code as user_nation
+             , a.phone_number
+             , a.use_status
+          from member as a
+         inner join company as b
+            on a.company_no = b.company_no
+          left outer join nations as c
+            on b.nation = c.nation_iso2
+         where a.company_no = #{companyNo}
+           and a.account_no = #{accountNo};
+    </select>
+</mapper>

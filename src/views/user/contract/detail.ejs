@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/public/css/content-styles.css">
+        <!--
+        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
+        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
+        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
+        -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="/public/js/common/common_utility.js"></script>
+        <script src="/public/js/common/common_variables.js"></script>
+        <script>
+            $(document).ready(function() {
+                var Search = function() {
+                    Clear();
+
+                    var companyNo = $('.company_no').val();
+                    var contractNo = $('.contract_no').val();
+
+                    // 행 데이터 출력
+                    $.ajax({
+                        url: "../../contract/detail",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                            contractNo: contractNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                                return;
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                                return;
+                            } else {
+                                $('.cell_company_name').text(data.companyName);
+                                $('.cell_contract_no').text(data.contractNo);
+                                $('.cell_contract_name').text(data.contractName);
+                                $('.cell_contract_date').text(data.contractDate);
+                                $('.cell_contractor').text(data.contractor);
+                                $('.cell_contract_period').text(contractPeriods[data.contractPeriod]);
+                                $('.cell_start_date').text(data.startDate);
+                                $('.cell_end_date').text(data.endDate);
+                                $('.cell_monetary_unit').text(monetaryUnits[data.monetaryUnit]);
+                                $('.cell_exchange_rate').text(data.exchangeRate);
+                                $('.cell_amount').text(data.amount);
+                                $('.cell_discounted_amount').text(data.discountedAmount);
+                                $('.cell_actual_amount').text(data.actualAmount);
+                                $('.cell_remark').text(data.remark);
+                                
+                                data.licenses.forEach(function(license, index){
+                                    var newRow = $('.view_license tbody tr').first().clone().removeClass('hidden');
+
+                                    $(newRow).find('.cell_license_no').text(license.licenseNo);
+                                    $(newRow).find('.cell_license_type').text(licenseTypes[license.licenseType]);
+                                    $(newRow).find('.cell_app_name').text(appNames[license.appName]);
+                                    $(newRow).find('.cell_license_start_date').text(license.startDate);
+                                    $(newRow).find('.cell_license_end_date').text(license.endDate);
+                                    $(newRow).find('.cell_license_count').text(license.licenseCount);
+                                    $(newRow).find('.cell_unit_price').text(license.unitPrice);
+                                    $(newRow).find('.cell_license_amount').text(license.amount);
+                                    $(newRow).find('.cell_license_discounted_amount').text(license.discountedAmount);
+                                    $(newRow).find('.cell_license_actual_amount').text(license.actualAmount);
+
+                                    $('.view_license tbody').append(newRow);
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            $('.view_license tbody').empty();
+
+                            alert("서버 요청에 실패하였습니다.");
+                            window.history.back();
+                        },
+                    });
+                };
+
+                $('.back').click(function() {
+                    window.history.back();
+                });
+
+                $('.license tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+                
+                var Clear = function() {
+                    $('.cell_company_name').text('');
+                    $('.cell_contract_name').text('');
+                    $('.cell_contract_date').text('');
+                    $('.cell_contractor').text('');
+                    $('.cell_contract_period').text('');
+                    $('.cell_start_date').text('');
+                    $('.cell_end_date').text('');
+                    $('.cell_monetary_unit').text('');
+                    $('.cell_exchange_rate').text('0');
+                    $('.cell_amount').text('0');
+                    $('.cell_discounted_amount').text('0');
+                    $('.cell_actual_amount').text('0');
+                    $('.cell_remark').text('');
+
+                    const rows = document.querySelectorAll(".view_license tbody tr:not(:first-child)");
+                    rows.forEach(row => {
+                        row.remove();
+                    });
+                };
+
+                Search();
+            });
+        </script>
+    </head>
+    <body>
+        <form class="contract-status-form">
+            <input type="hidden" class="language" value="<%=session.language%>"/>
+            <input type="hidden" class="company_no" value="<%=companyNo%>"/>
+            <input type="hidden" class="contract_no" value="<%=contractNo%>"/>
+            
+            <div class="content">
+                <div  class="contents-container">
+                    <div class="title">계약 정보</div>
+                    <div class="top-right-button">
+                        <div class="align-container">
+                            <input type="button" class="back" value="뒤로"/>
+                        </div>
+                    </div>
+                    <div>
+                        <table class="contract">
+                            <thead>
+                                <tr>
+                                    <th width="120px" class="right-align">고객사</th>
+                                    <td width="980px" class="cell_company_name" colspan="3"></td>
+                                </tr>
+                                <tr>
+                                    <th width="120px" class="right-align">계약번호</th>
+                                    <td width="380px" class="cell_contract_no"></td>
+                                    <th width="120px" class="right-align">계약명</th>
+                                    <td width="380px" class="cell_contract_name"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">계약일자</th>
+                                    <td class="cell_contract_date"></td>
+                                    <th class="right-align">담당자</th>
+                                    <td class="cell_contractor"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">계약기간</th>
+                                    <td colspan="3">
+                                        <div class="align-container">
+                                            <p class="cell_contract_period"></p>
+                                            <p class="cell_start_date"></p>
+                                            <p>~</p>
+                                            <p class="cell_end_date"></p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">화폐단위</th>
+                                    <td class="cell_monetary_unit"></td>
+                                    <th class="right-align">기준환율</th>
+                                    <td class="cell_exchange_rate"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">계약금액</th>
+                                    <td class="cell_amount"></td>
+                                    <th class="right-align">할인금액</th>
+                                    <td class="cell_discounted_amount"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">실계약금액</th>
+                                    <td class="cell_actual_amount" colspan="3"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">비고</th>
+                                    <td class="cell_remark" style="height:100px" colspan="3"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div></br>
+                    <div class="table-container">
+                        <div class="title">라이센스 목록</div>
+                        <table class="view_license">
+                            <thead>
+                                <tr>
+                                    <th width="100px">라이센스번호</th>
+                                    <th width="140px">타입</th>
+                                    <th width="140px">프로그램</th>
+                                    <th width="240px">기간</th>
+                                    <th width="60px">수량</th>
+                                    <th width="90px">단가</th>
+                                    <th width="110px">금액</th>
+                                    <th width="110px">할인금액</th>
+                                    <th width="110px">실금액</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hidden">
+                                    <td class="cell_license_no" style="text-align: center;"></td>
+                                    <td class="cell_license_type" style="text-align: center;"></td>
+                                    <td class="cell_app_name" style="text-align: center;"></td>
+                                    <td>
+                                        <div class="align-container-center">
+                                            <p class="cell_license_start_date"></p>~
+                                            <p class="cell_license_end_date"></p>
+                                        </div>
+                                    </td>
+                                    <td class="cell_license_count" style="text-align: right;"></td>
+                                    <td class="cell_unit_price" style="text-align: right;"></td>
+                                    <td class="cell_license_amount" style="text-align: right;"></td>
+                                    <td class="cell_license_discounted_amount" style="text-align: right;"></td>
+                                    <td class="cell_license_actual_amount" style="text-align: right;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div></br>
+                <div>
+                    <div class="title">위성통신 사용량</div>
+                    <div class="satellite-usage-container">
+                        <div class="daliy-usage"></div>
+                        <div class="monthly-usage"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

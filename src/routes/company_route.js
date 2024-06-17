@@ -1,8 +1,8 @@
-const manager = require("../../manager/admin/company_manager");
-const constants = require("../../common/constants");
+const manager = require("../manager/company_manager");
+const constants = require("../common/constants");
 
 module.exports = function (app) {
-    app.post("/admin/company/codes", (req, res) => {
+    app.post("/company/codes", (req, res) => {
         manager.codes().then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
@@ -11,7 +11,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/company/status", (req, res) => {
+    app.post("/company/status", (req, res) => {
         let companyName = req.body.companyName;
 
         manager.status(companyName).then((data) => {
@@ -22,7 +22,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/company/detail", (req, res) => {
+    app.post("/company/detail", (req, res) => {
         let companyNo = req.body.companyNo;
 
         manager.detail(companyNo).then((data) => {
@@ -33,7 +33,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/company/insert", (req, res) => {
+    app.post("/company/insert", (req, res) => {
         let companyName = req.body.companyName;
         let ownerName = req.body.ownerName;
         let businessNo = req.body.businessNo;
@@ -56,7 +56,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/company/update", (req, res) => {
+    app.post("/company/update", (req, res) => {
         let companyNo = req.body.companyNo;
         let companyName = req.body.companyName;
         let ownerName = req.body.ownerName;
@@ -79,7 +79,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/company/delete", (req, res) => {
+    app.post("/company/delete", (req, res) => {
         let companyNos = req.body.companyNos;
 
         manager.delete(companyNos).then((data) => {

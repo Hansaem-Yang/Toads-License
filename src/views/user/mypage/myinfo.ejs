@@ -30,8 +30,6 @@
                                 { code:'JP', ename:'Japan', kname:'일본', country:'81' },
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
-                            
-                            CreateNationsSelection($('.nation'), nation_options, $('.language').val());
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -42,8 +40,6 @@
                                         country:post.nationCode
                                     });
                                 });
-                                
-                                CreateNationsSelection($('.nation'), nation_options, $('.language').val());
                             }
                         }
                     },
@@ -53,14 +49,18 @@
                 });
 
                 var Search = function() {
+                    ClearModal();
+
                     var companyNo = $('.company_no').val();
+                    var accountNo = $('.account_no').val();
 
                     // 행 데이터 출력
                     $.ajax({
-                        url: "../../company/detail",
+                        url: "../../mypage/info",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
+                            accountNo: accountNo,
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
@@ -84,48 +84,58 @@
                                 $('.cell_telephone').text(data.telephone);
                                 $('.cell_post_code').text(data.postCode);
                                 $('.cell_business_place').text(data.businessPlace);
+                                
+                                $('.cell_user_name').text(data.userName);
+                                $('.cell_email').text(data.email);
+                                $('.cell_user_type').text(userTypes[data.userType]);
+                                $('.cell_phone_number').text(GetTelephone(data.userNation, data.phoneNumber));
+                                $('.cell_use_status').text(useStatus[data.useStatus]);
                             }
                         },
                         error: function (xhr, status, error) {
-                            $('.company tbody').empty();
-
                             alert('서버 요청에 실패하였습니다.');
                             window.history.back();
                         },
                     });
+
                 };
 
                 $('.modify').click(function() {
+                    ClearModal();
+
                     var companyNo = $('.company_no').val();
+                    var accountNo = $('.account_no').val();
 
                     // 행 데이터 출력
                     $.ajax({
-                        url: "../../company/detail",
+                        url: "../../member/detail",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
+                            accountNo: accountNo,
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
                                 alert("세션이 만료되었습니다.");
                                 window.parent.location.href = "./login";
-                                return;
                             } else if (data === 'NO DATA') {
                                 alert("조회된 데이터가 없습니다.");
-                                return;
                             } else {
                                 $('.company_no').val(data.companyNo);
                                 $('.company_name').val(data.companyName);
-                                $('.owner_name').val(data.ownerName);
-                                $('.business_no').val(data.businessNo);
-                                $('.resident_no').val(data.residentNo);
-                                $('.company_div').val(data.companyDiv);
-                                $('.nation').val(data.nation);
+                                $('.account_no').val(data.accountNo);
+                                $('.user_name').val(data.userName);
+                                $('.email').val(data.email);
+                                $('.password').val(data.password);
+                                $('.password_check').val(data.password);
+                                $('.user_type').val(data.userType);
                                 $('.nation_code').val(data.nationCode);
-                                $('.telephone').val(data.telephone);
-                                $('.post_code').val(data.postCode);
-                                $('.business_place').val(data.businessPlace);
+                                $('.phone_number').val(data.phoneNumber);
+                                $('.use_status').val(data.useStatus);
 
+                                $('.password').attr('readonly', true);
+                                $('.password_check').attr('readonly', true);
+                                
                                 $('.modal').show();
                             }
                         },
@@ -134,66 +144,18 @@
                         },
                     });
                 });
-
-                $('.delete').click(function() {
-                    if (confirm('데이터를 삭제 하시겠습니까?') == true)
-                    {
-                        var companyNos = [];
-                        companyNos.push($('.company_no').val());
-                        // 행 데이터 출력
-                        $.ajax({
-                            url: "../../company/delete",
-                            method: "POST",
-                            data: {
-                                companyNos: companyNos,
-                            },
-                            success: function (data) {
-                                switch (data) {
-                                    case "NO SESSION":
-                                        alert("세션이 만료되었습니다.");
-                                        window.parent.location.href = "./login";
-                                    case "FAIL":
-                                        alert('데이터 삭제에 실패 하였습니다.');
-                                        return;
-                                    case "SUCCESS":
-                                        alert('데이터 삭제를 완료 하였습니다.');
-                                        window.location.href = "../../view/company";
-                                        return;
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
-                            },
-                        });
-                    }
-                });
-
-                $('.back').click(function() {
-                    window.history.back();
-                });
-
+                
                 // Modal Event And Function
                 var ClearModal = function() {
-                    $('.company_name').val('');
-                    $('.owner_name').val('');
-                    $('.business_no').val('');
-                    $('.resident_no').val('');
-                    $('.company_div').val('');
-                    $('.nation').val('');
+                    $('.user_name').val('');
+                    $('.email').val('');
+                    $('.password').val('');
+                    $('.password_check').val('');
+                    $('.user_type').val('');
                     $('.nation_code').val('');
-                    $('.telephone').val('');
-                    $('.post_code').val('');
-                    $('.business_place').val('');
+                    $('.phone_number').val('');
+                    $('.use_status').val('');
                 };
-
-                $('.nation').change(function() {
-                    var value = $(this).val();
-                    if (value === '')
-                        return;
-
-                    var option = nation_options.find(option => option.code === value);
-                    $('.nation_code').val(option.country);
-                });
 
                 $('.close').click(function() {
                     $('.modal').hide();
@@ -202,57 +164,62 @@
                 $('.save').click(function() {
                     if (confirm('데이터를 저장 하시겠습니까?') == true)
                     {
+                        if ($('.user_name').val() === '') {
+                            alert('사용자명을 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.password').val() === '') {
+                            alert('비밀번호를 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.password_check').val() === '') {
+                            alert('비밀번호 확인을 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.password').val() != $('.password_check').val()) {
+                            alert('비밀번호가 일치하지 않습니다.');
+                            return;
+                        }
+                        
+                        if ($('.email').val() === '') {
+                            alert('이메일을 입력하세요.');
+                            return;
+                        }
+                        
+                        if ($('.user_type').val() === '') {
+                            alert('회원유형을 선택하세요.');
+                            return;
+                        }
+                        
+                        if ($('.use_status').val() === '') {
+                            alert('사용여부를 선택하세요.');
+                            return;
+                        }
+
                         var companyNo = $('.company_no').val();
-                        var companyName = $('.company_name').val();
-                        var ownerName = $('.owner_name').val();
-                        var businessNo = $('.business_no').val();
-                        var residentNo = $('.resident_no').val();
-                        var companyDiv = $('.company_div').val();
-                        var nation = $('.nation').val();
+                        var accountNo = $('.account_no').val();
+                        var userName = $('.user_name').val();
+                        var email = $('.email').val();
+                        var userType = $('.user_type').val();
                         var nationCode = $('.nation_code').val();
-                        var telephone = $('.telephone').val();
-                        var postCode = $('.post_code').val();
-                        var businessPlace = $('.business_place').val();
-
-                        if (companyName === '') {
-                            alert('법인명을 입력하세요.');
-                            return;
-                        }
-
-                        if ($('.owner_name').val() === '') {
-                            alert('대표자명을 입력하세요.');
-                            return;
-                        }
-
-                        if ($('.company_div').val() === '') {
-                            alert('회사구분을 선택하세요.');
-                            return;
-                        }
-                        
-                        if ($('.nation').val() === '') {
-                            alert('국가를 선택하세요.');
-                            return;
-                        }
-                        
-                        if ($('.telephone').val() === '') {
-                            alert('연락처를 입력하세요.');
-                            return;
-                        }
+                        var phoneNumber = $('.phone_number').val();
+                        var useStatus = $('.use_status').val();
 
                         $.ajax({
-                            url: "../../company/update",
+                            url: "../../member/update",
                             method: "POST",
                             data: {
-                                companyNo: companyNo,
-                                companyName: companyName,
-                                ownerName: ownerName,
-                                businessNo: businessNo,
-                                residentNo: residentNo,
-                                companyDiv: companyDiv,
-                                nation: nation,
-                                telephone: telephone,
-                                postCode: postCode,
-                                businessPlace: businessPlace,
+                                companyNo: companyNo, 
+                                accountNo: accountNo,
+                                userName: userName,
+                                email: email,
+                                userType: userType,
+                                nationCode: nationCode,
+                                phoneNumber: phoneNumber,
+                                useStatus: useStatus,
                             },
                             success: function (data) {
                                 switch (data) {
@@ -270,7 +237,7 @@
 
                                 $('.modal').hide();
                                 Search();
-
+                                
                                 ClearModal();
                             },
                             error: function (xhr, status, error) {
@@ -289,7 +256,83 @@
                     }
                 });
 
-                CreateVariablesSelection($('.company_div'), companyDivs);
+                var ClearPassword = function() {
+                    $('.old_password').val('');
+                    $('.new_password').val('');
+                    $('.new_password_check').val('');
+                };
+
+                $('.password-close').click(function() {
+                    $('.password-modal').hide();
+                });
+
+                $('.password-save').click(function() {
+                    if (confirm('데이터를 저장 하시겠습니까?') == true)
+                    {
+                        if ($('.new_password').val() === '') {
+                            alert('비밀번호를 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.new_password_check').val() === '') {
+                            alert('비밀번호 확인을 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.new_password').val() != $('.new_password_check').val()) {
+                            alert('비밀번호가 일치하지 않습니다.');
+                            return;
+                        }
+
+                        var companyNo = $('.company_no').val();
+                        var accountNo = $('.account_no').val();
+                        var password = $('.new_password').val();
+
+                        $.ajax({
+                            url: "../../member/changePassword",
+                            method: "POST",
+                            data: {
+                                companyNo: companyNo, 
+                                accountNo: accountNo,
+                                password: password,
+                            },
+                            success: function (data) {
+                                switch (data) {
+                                    case "NO SESSION":
+                                        alert("세션이 만료되었습니다.");
+                                        window.parent.location.href = "./login";
+                                        return;
+                                    case "FAIL":
+                                        alert('데이터 저장에 실패 하였습니다.');
+                                        return;
+                                    case "SUCCESS":
+                                        alert('데이터 저장을 완료 하였습니다.');
+                                        break;
+                                }
+
+                                $('.password-modal').hide();
+                                Search();
+                                
+                                ClearPassword();
+                            },
+                            error: function (xhr, status, error) {
+                                alert('서버 요청에 실패하였습니다.');
+                            },
+                        });
+                    }
+                });
+
+                $('.password-cancel').click(function() {
+                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    {
+                        $('.password-modal').hide();
+                        
+                        ClearModal();
+                    }
+                });
+
+                CreateVariablesSelection($('.user_type'), userTypes);
+                CreateVariablesSelection($('.use_status'), useStatus);
                 Search();
             });
         </script>
@@ -297,22 +340,17 @@
     <body>
         <form class="company-status-form">
             <input type="hidden" class="language" value="<%=session.language%>"/>
+            <input type="hidden" class="company_no" value="<%=session.user.companyNo%>"/>
+            <input type="hidden" class="account_no" value="<%=session.user.accountNo%>"/>
             
             <div class="content">
                 <div  class="contents-container">
-                    <div class="title">고객사 정보</div>
-                    <div class="top-right-button">
-                        <div class="align-container">
-                            <p><input type="button" class="modify" value="수정"/></p>
-                            <p><input type="button" class="delete" value="삭제"/></p>
-                            <input type="button" class="back" value="뒤로"/>
-                        </div>
-                    </div>
+                    <div class="title">회사 정보</div>
                     <div>
                         <table class="company">
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align">고객사번호</th>
+                                    <th width="120px" class="right-align">회사번호</th>
                                     <td width="300px" class="cell_company_no"></td>
                                     <th width="120px" class="right-align">법인명</th>
                                     <td width="300px" class="cell_company_name"></td>
@@ -350,16 +388,43 @@
                             </thead>
                         </table>
                     </div>
-                </div></br></br></br>
-                <div>
-                    <div class="title">위성통신 사용량</div>
-                    <div class="satellite-usage-container">
-                        <div class="daliy-usage">
-                            <canvas class="daliy-usage-chart"></canvas>
+                </div></br></br>
+                <div class="contents-container">
+                    <div class="title">사용자 정보</div>
+                    <div class="top-right-button">
+                        <div class="align-container">
+                            <input type="button" class="modify" value="수정"/>
                         </div>
-                        <div class="monthly-usage">
-                            <canvas class="monthly-usage-chart"></canvas>
-                        </div>
+                    </div>
+                    <div>
+                        <table class="member">
+                            <thead>
+                                <tr>
+                                    <th width="120px" class="right-align" >사용자명</th>
+                                    <td width="720px" class="cell_user_name"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">이메일</th>
+                                    <td class="cell_email"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*비밀번호</th>
+                                    <td class="left-align"><a href="#" class="change_password">비밀번호 변경</a></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">회원유형</th>
+                                    <td class="cell_user_type"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">연락처</th>
+                                    <td class="cell_phone_number"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">사용여부</th>
+                                    <td class="cell_use_status"></td>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -368,73 +433,103 @@
             <div class="modal-content" style="width:640px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">고객사 관리</div>
+                    <div class="title">사용자 관리</div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align">*법인명</th>
-                                    <td width="500px" class="left-align">
-                                        <input type="hidden" class="company_no" value="<%=companyNo%>"/>
-                                        <input type="text" class="company_name" style="width: 240px;"/>
+                                    <th width="120px" class="right-align">*고객사</th>
+                                    <td width="540px" class="left-align">
+                                        <input type="text" class="company_name" style="width: 240px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*대표자명</th>
+                                    <th class="right-align">*사용자명</th>
                                     <td class="left-align">
-                                        <input type="text" class="owner_name" style="width: 240px;"/>
+                                        <input type="text" class="user_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">사업자등록번호</th>
+                                    <th class="right-align">*이메일</th>
                                     <td class="left-align">
-                                        <input type="text" class="business_no" style="width: 160px;"/>
+                                        <input type="text" class="email" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">법인등록번호</th>
+                                    <th class="right-align">*비밀번호</th>
                                     <td class="left-align">
-                                        <input type="text" class="resident_no" style="width: 160px;"/>
+                                        <input type="password" class="password" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*회사구분</th>
+                                    <th class="right-align">*비밀번호확인</th>
                                     <td class="left-align">
-                                        <select class="company_div"></select>
+                                        <input type="password" class="password_check" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*국가</th>
+                                    <th class="right-align">*회원유형</th>
                                     <td class="left-align">
-                                        <select class="nation"></select>
+                                        <select class="user_type"></select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*연락처</th>
+                                    <th class="right-align">국가코드</th>
                                     <td class="left-align">
-                                        <div class="align-container">
-                                            <p>+<input type="text" class="nation_code" style="width:30px" readonly/></p>
-                                            <input type="text" class="telephone" style="width: 120px;"/>
-                                        </div>
+                                        <select class="nation_code"></select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">사업장소재지</th>
+                                    <th class="right-align">연락처</th>
                                     <td class="left-align">
-                                        <div class="align-container">
-                                            <p><input type="text" class="post_code" style="width:80px"/></p>
-                                            <input type="button" class="search_address" value="주소검색"/>
-                                        </div>
-                                        <input type="text" class="business_place" style="width:490px"/>
+                                        <input type="text" class="phone_number" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*사용여부</th>
+                                    <td class="left-align">
+                                        <select class="use_status"></select>
                                     </td>
                                 </tr>
                             </thead>
-                        </table></br>
-                    </div>
+                        </table>
+                    </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
                             <p><input type="button" class="save" value="저장"/></p>
                             <input type="button" class="cancel" value="취소"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="password-modal">
+            <div class="modal-content" style="width:340px">
+                <div class="contents-container">
+                    <span class="password-close">&times;</span>
+                    <div class="title">비밀번호 변경</div>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th width="120px" class="right-align">*비밀번호</th>
+                                    <td width="200px" class="left-align">
+                                        <input type="password" class="new_password" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*비밀번호확인</th>
+                                    <td class="left-align">
+                                        <input type="password" class="new_password_check" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div></br>
+                    <div class="bottom-button">
+                        <div class="align-container">
+                            <p><input type="button" class="password-save" value="변경"/></p>
+                            <input type="button" class="password-cancel" value="취소"/>
                         </div>
                     </div>
                 </div>

@@ -9,9 +9,21 @@
           from (select a.company_no
                      , count(1) as users
                   from company as a
-                 inner join member as b
+                  left join member as b
                     on a.company_no = b.company_no
                  group by a.company_no) as a
+    </select>
+    <select id="user_satellite_usage">
+        select (select count(1) 
+                  from contract
+                 where company_no = a.company_no) as total_contracts
+             , (select count(1) 
+                  from member
+                 where company_no = a.company_no) as total_users
+             , 0 as daliy_usage
+             , 0 as monthly_usage
+          from company as a
+         where company_no = #{companyNo}
     </select>
     <select id="company_all">
     <![CDATA[
@@ -33,6 +45,29 @@
           from company as a
           left outer join nations as b
             on a.nation = b.nation_iso2
+    ]]>
+    </select>
+    <select id="company">
+    <![CDATA[
+        select a.company_no
+             , a.company_name
+             , a.owner_name
+             , isnull(a.company_div, '') company_div
+             , isnull(a.nation, '') nation
+             , isnull(b.nation_code, '') nation_code
+             , isnull(a.telephone, '') telephone
+             , (select isnull(sum(license_count), 0) from license
+                 where company_no = a.company_no
+                   and start_date >= convert(varchar(10), getdate(), 20)
+                   and end_date <= convert(varchar(10), getdate(), 20)) as total_licenses
+             , (select count(1) from member
+                 where company_no = a.company_no
+                   and use_status = 'Y') as total_users
+             , 0 as total_satellite_usage
+          from company as a
+          left outer join nations as b
+            on a.nation = b.nation_iso2
+         where a.company_no = #{companyNo}
     ]]>
     </select>
 </mapper>

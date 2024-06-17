@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/public/css/content-styles.css">
+        <!--
+        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
+        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
+        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
+        -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="/public/js/common/common_utility.js"></script>
+        <script src="/public/js/common/common_variables.js"></script>
+        <script>
+            $(document).ready(function() {
+                var nation_options = [];
+
+                $.ajax({
+                    url: "../../nations/status",
+                    method: "POST",
+                    success: function (data) {
+                        if (data === 'NO SESSION') {
+                            alert("세션이 만료되었습니다.");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            nation_options = [
+                                { code:'CN', ename:'China', kname:'중국', country:'86' },
+                                { code:'KR', ename:'Republic of Korea', kname:'대한민국', country:'82' },
+                                { code:'JP', ename:'Japan', kname:'일본', country:'81' },
+                                { code:'US', ename:'United States of America', kname:'미국', country:'1' },
+                            ];
+                            
+                            CreateNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    nation_options.push({
+                                        code:post.nationIso2, 
+                                        ename:post.nationEname, 
+                                        kname:post.nationKname, 
+                                        country:post.nationCode
+                                    });
+                                });
+                                
+                                CreateNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('서버 요청에 실패하였습니다.');
+                    },
+                });
+
+                var Search = function() {
+                    var companyNo = $('.company_no').val();
+                    var accountNo = $('.account_no').val();
+
+                    // 행 데이터 출력
+                    $.ajax({
+                        url: "../../member/detail",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                            accountNo: accountNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                                return;
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                                return;
+                            } else {
+                                $('.cell_company_name').text(data.companyName);
+                                $('.cell_user_name').text(data.userName);
+                                $('.cell_email').text(data.email);
+                                $('.cell_user_type').text(userTypes[data.userType]);
+                                $('.cell_phone_number').text(GetTelephone(data.nationCode, data.phoneNumber));
+                                $('.cell_use_status').text(useStatus[data.useStatus]);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            $('.company tbody').empty();
+
+                            alert('서버 요청에 실패하였습니다.');
+                            window.history.back();
+                        },
+                    });
+                };
+
+                $('.modify').click(function() {
+                    ClearModal();
+
+                    var companyNo = $('.company_no').val();
+                    var accountNo = $('.account_no').val();
+
+                    // 행 데이터 출력
+                    $.ajax({
+                        url: "../../member/detail",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                            accountNo: accountNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                            } else {
+                                $('.company_no').val(data.companyNo);
+                                $('.company_name').val(data.companyName);
+                                $('.account_no').val(data.accountNo);
+                                $('.user_name').val(data.userName);
+                                $('.email').val(data.email);
+                                $('.password').val(data.password);
+                                $('.password_check').val(data.password);
+                                $('.user_type').val(data.userType);
+                                $('.nation_code').val(data.nationCode);
+                                $('.phone_number').val(data.phoneNumber);
+                                $('.use_status').val(data.useStatus);
+
+                                $('.password').attr('readonly', true);
+                                $('.password_check').attr('readonly', true);
+                                
+                                $('.modal').show();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert('서버 요청에 실패하였습니다.');
+                        },
+                    });
+                });
+
+                $('.delete').click(function() {
+                    if (confirm('데이터를 삭제 하시겠습니까?') == true)
+                    {
+                        var accountNos = [];
+                        accountNos.push({
+                            companyNo : $('.company_no').val(),
+                            accountNo : $('.account_no').val()
+                        });
+
+                        // 행 데이터 출력
+                        $.ajax({
+                            url: "../../member/delete",
+                            method: "POST",
+                            data: {
+                                accountNos: accountNos,
+                            },
+                            success: function (data) {
+                                switch (data) {
+                                    case "NO SESSION":
+                                        alert("세션이 만료되었습니다.");
+                                        window.parent.location.href = "./login";
+                                    case "FAIL":
+                                        alert('데이터 삭제에 실패 하였습니다.');
+                                        return;
+                                    case "SUCCESS":
+                                        alert('데이터 삭제를 완료 하였습니다.');
+                                        window.location.href = "../../view/member";
+                                        return;
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                alert('서버 요청에 실패하였습니다.');
+                            },
+                        });
+                    }
+                });
+
+                $('.change_password').click(function() {
+                    ClearPassword();
+
+
+                    var companyNo = $('.company_no').val();
+                    var accountNo = $('.account_no').val();
+
+                    // 행 데이터 출력
+                    $.ajax({
+                        url: "../../member/detail",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                            accountNo: accountNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                            } else {
+                                $('.company_no').val(data.companyNo);
+                                $('.account_no').val(data.accountNo);
+                                $('.password').val(data.password);
+                                
+                                $('.password-modal').show();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert('서버 요청에 실패하였습니다.');
+                        },
+                    });
+                });
+
+                $('.back').click(function() {
+                    window.history.back();
+                });
+
+                // Modal Event And Function
+                var ClearModal = function() {
+                    $('.user_name').val('');
+                    $('.email').val('');
+                    $('.password').val('');
+                    $('.password_check').val('');
+                    $('.user_type').val('');
+                    $('.nation_code').val('');
+                    $('.phone_number').val('');
+                    $('.use_status').val('');
+                };
+
+                $('.close').click(function() {
+                    $('.modal').hide();
+                });
+
+                $('.save').click(function() {
+                    if (confirm('데이터를 저장 하시겠습니까?') == true)
+                    {
+                        if ($('.user_name').val() === '') {
+                            alert('사용자명을 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.password').val() === '') {
+                            alert('비밀번호를 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.password_check').val() === '') {
+                            alert('비밀번호 확인을 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.password').val() != $('.password_check').val()) {
+                            alert('비밀번호가 일치하지 않습니다.');
+                            return;
+                        }
+                        
+                        if ($('.email').val() === '') {
+                            alert('이메일을 입력하세요.');
+                            return;
+                        }
+                        
+                        if ($('.user_type').val() === '') {
+                            alert('회원유형을 선택하세요.');
+                            return;
+                        }
+                        
+                        if ($('.use_status').val() === '') {
+                            alert('사용여부를 선택하세요.');
+                            return;
+                        }
+
+                        var companyNo = $('.company_no').val();
+                        var accountNo = $('.account_no').val();
+                        var userName = $('.user_name').val();
+                        var email = $('.email').val();
+                        var userType = $('.user_type').val();
+                        var nationCode = $('.nation_code').val();
+                        var phoneNumber = $('.phone_number').val();
+                        var useStatus = $('.use_status').val();
+
+                        $.ajax({
+                            url: "../../member/update",
+                            method: "POST",
+                            data: {
+                                companyNo: companyNo, 
+                                accountNo: accountNo,
+                                userName: userName,
+                                email: email,
+                                userType: userType,
+                                nationCode: nationCode,
+                                phoneNumber: phoneNumber,
+                                useStatus: useStatus,
+                            },
+                            success: function (data) {
+                                switch (data) {
+                                    case "NO SESSION":
+                                        alert("세션이 만료되었습니다.");
+                                        window.parent.location.href = "./login";
+                                        return;
+                                    case "FAIL":
+                                        alert('데이터 저장에 실패 하였습니다.');
+                                        return;
+                                    case "SUCCESS":
+                                        alert('데이터 저장을 완료 하였습니다.');
+                                        break;
+                                }
+
+                                $('.modal').hide();
+                                Search();
+                                
+                                ClearModal();
+                            },
+                            error: function (xhr, status, error) {
+                                alert('서버 요청에 실패하였습니다.');
+                            },
+                        });
+                    }
+                });
+
+                $('.cancel').click(function() {
+                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    {
+                        $('.modal').hide();
+                        
+                        ClearModal();
+                    }
+                });
+
+                var ClearPassword = function() {
+                    $('.old_password').val('');
+                    $('.new_password').val('');
+                    $('.new_password_check').val('');
+                };
+
+                $('.password-close').click(function() {
+                    $('.password-modal').hide();
+                });
+
+                $('.password-save').click(function() {
+                    if (confirm('데이터를 저장 하시겠습니까?') == true)
+                    {
+                        if ($('.new_password').val() === '') {
+                            alert('비밀번호를 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.new_password_check').val() === '') {
+                            alert('비밀번호 확인을 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.new_password').val() != $('.new_password_check').val()) {
+                            alert('비밀번호가 일치하지 않습니다.');
+                            return;
+                        }
+
+                        var companyNo = $('.company_no').val();
+                        var accountNo = $('.account_no').val();
+                        var password = $('.new_password').val();
+
+                        $.ajax({
+                            url: "../../member/changePassword",
+                            method: "POST",
+                            data: {
+                                companyNo: companyNo, 
+                                accountNo: accountNo,
+                                password: password,
+                            },
+                            success: function (data) {
+                                switch (data) {
+                                    case "NO SESSION":
+                                        alert("세션이 만료되었습니다.");
+                                        window.parent.location.href = "./login";
+                                        return;
+                                    case "FAIL":
+                                        alert('데이터 저장에 실패 하였습니다.');
+                                        return;
+                                    case "SUCCESS":
+                                        alert('데이터 저장을 완료 하였습니다.');
+                                        break;
+                                }
+
+                                $('.password-modal').hide();
+                                Search();
+                                
+                                ClearPassword();
+                            },
+                            error: function (xhr, status, error) {
+                                alert('서버 요청에 실패하였습니다.');
+                            },
+                        });
+                    }
+                });
+
+                $('.password-cancel').click(function() {
+                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    {
+                        $('.password-modal').hide();
+                        
+                        ClearModal();
+                    }
+                });
+
+                CreateVariablesSelection($('.user_type'), userTypes);
+                CreateVariablesSelection($('.use_status'), useStatus);
+                Search();
+            });
+        </script>
+    </head>
+    <body>
+        <form class="company-status-form">
+            <input type="hidden" class="language" value="<%=session.language%>"/>
+            
+            <div class="content">
+                <div  class="contents-container">
+                    <div class="title">사용자 정보</div>
+                    <div class="top-right-button">
+                        <div class="align-container">
+                            <p><input type="button" class="modify" value="수정"/></p>
+                            <p><input type="button" class="delete" value="삭제"/></p>
+                            <input type="button" class="back" value="뒤로"/>
+                        </div>
+                    </div>
+                    <div>
+                        <table class="company">
+                            <thead>
+                                <tr>
+                                    <th width="120px" class="right-align">법인명</th>
+                                    <td width="720px" class="cell_company_name"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">사용자명</th>
+                                    <td class="cell_user_name"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">이메일</th>
+                                    <td class="cell_email"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*비밀번호</th>
+                                    <td class="left-align"><a href="#" class="change_password">비밀번호 변경</a></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">회원유형</th>
+                                    <td class="cell_user_type"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">연락처</th>
+                                    <td class="cell_phone_number"></td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">사용여부</th>
+                                    <td class="cell_use_status"></td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div></br></br></br>
+                <div>
+                    <div class="title">위성통신 사용량</div>
+                    <div class="satellite-usage-container">
+                        <div class="daliy-usage">
+                            <canvas class="daliy-usage-chart"></canvas>
+                        </div>
+                        <div class="monthly-usage">
+                            <canvas class="monthly-usage-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal">
+            <div class="modal-content" style="width:640px">
+                <div class="contents-container">
+                    <span class="close">&times;</span>
+                    <div class="title">사용자 관리</div>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th width="120px" class="right-align">*고객사</th>
+                                    <td width="540px" class="left-align">
+                                        <input type="hidden" class="company_no" value="<%=companyNo%>"/>
+                                        <input type="text" class="company_name" style="width: 240px;" readonly/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*사용자명</th>
+                                    <td class="left-align">
+                                        <input type="hidden" class="account_no" value="<%=accountNo%>"/>
+                                        <input type="text" class="user_name" style="width: 240px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*이메일</th>
+                                    <td class="left-align">
+                                        <input type="text" class="email" style="width: 240px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*비밀번호</th>
+                                    <td class="left-align">
+                                        <input type="password" class="password" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*비밀번호확인</th>
+                                    <td class="left-align">
+                                        <input type="password" class="password_check" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*회원유형</th>
+                                    <td class="left-align">
+                                        <select class="user_type"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">국가코드</th>
+                                    <td class="left-align">
+                                        <select class="nation_code"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">연락처</th>
+                                    <td class="left-align">
+                                        <input type="text" class="phone_number" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*사용여부</th>
+                                    <td class="left-align">
+                                        <select class="use_status"></select>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div></br>
+                    <div class="bottom-button">
+                        <div class="align-container">
+                            <p><input type="button" class="save" value="저장"/></p>
+                            <input type="button" class="cancel" value="취소"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="password-modal">
+            <div class="modal-content" style="width:340px">
+                <div class="contents-container">
+                    <span class="password-close">&times;</span>
+                    <div class="title">비밀번호 변경</div>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th width="120px" class="right-align">*비밀번호</th>
+                                    <td width="240px" class="left-align">
+                                        <input type="password" class="new_password" style="width: 200px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*비밀번호확인</th>
+                                    <td class="left-align">
+                                        <input type="password" class="new_password_check" style="width: 200px;"/>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div></br>
+                    <div class="bottom-button">
+                        <div class="align-container">
+                            <p><input type="button" class="password-save" value="변경"/></p>
+                            <input type="button" class="password-cancel" value="취소"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

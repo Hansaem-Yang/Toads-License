@@ -85,4 +85,10 @@
          where company_no = #{companyNo}
            and account_no = #{accountNo};
     </delete>
+    <update id="changePassword">
+        update member
+           set password = convert(varbinary(MAX), #{password})
+         where company_no = #{companyNo}
+           and account_no = #{accountNo};
+    </update>
 </mapper>

@@ -114,10 +114,12 @@ footer {
     box-sizing: border-box;
     border-radius: 18px;
 }
-.side-menu div:hover {
+.side-menu div:focus, .side-menu div:hover {
     color: #f6f7fb;
     transition: background-color 0.3s;
     background: rgb(119, 156, 207) 0% 0% no-repeat padding-box;
+    text-decoration: none;
+    cursor: pointer;
 }
 .side-menu-selected {
     color: #f6f7fb;

@@ -22,7 +22,7 @@
 
                     // 행 데이터 출력
                     $.ajax({
-                        url: "../../admin/contract/detail",
+                        url: "../../contract/detail",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
@@ -85,7 +85,7 @@
 
                     // 행 데이터 출력
                     $.ajax({
-                        url: "../../admin/contract/detail",
+                        url: "../../contract/detail",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
@@ -154,7 +154,7 @@
                         });
                         // 행 데이터 출력
                         $.ajax({
-                            url: "../../admin/contract/delete",
+                            url: "../../contract/delete",
                             method: "POST",
                             data: {
                                 contractNos: contractNos,
@@ -430,7 +430,7 @@
                         });
 
                         $.ajax({
-                            url: "../../admin/contract/update",
+                            url: "../../contract/update",
                             method: "POST",
                             data: {
                                 companyNo: companyNo,
@@ -511,14 +511,14 @@
                         <table class="contract">
                             <thead>
                                 <tr>
-                                    <th class="right-align" width="120px">고객사</th>
-                                    <td class="cell_company_name" width="980" colspan="3"></td>
+                                    <th width="120px" class="right-align">고객사</th>
+                                    <td width="980px" class="cell_company_name" colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align" width="120px">계약번호</th>
-                                    <td class="cell_contract_no" width="430"></td>
-                                    <th class="right-align" width="120px">계약명</th>
-                                    <td class="cell_contract_name" width="430"></td>
+                                    <th width="120px" class="right-align">계약번호</th>
+                                    <td width="380px" class="cell_contract_no"></td>
+                                    <th width="120px" class="right-align">계약명</th>
+                                    <td width="380px" class="cell_contract_name"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">계약일자</th>
@@ -566,9 +566,9 @@
                             <thead>
                                 <tr>
                                     <th width="100px">라이센스번호</th>
-                                    <th width="126px">타입</th>
-                                    <th width="120px">프로그램</th>
-                                    <th width="230px">기간</th>
+                                    <th width="140px">타입</th>
+                                    <th width="140px">프로그램</th>
+                                    <th width="240px">기간</th>
                                     <th width="60px">수량</th>
                                     <th width="90px">단가</th>
                                     <th width="110px">금액</th>
@@ -607,7 +607,7 @@
             </div>
         </form>
         <div class="modal">
-            <div class="modal-content" style="width:1140px">
+            <div class="modal-content" style="width:1100px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
                     <div class="title">계약 관리</div>
@@ -616,18 +616,18 @@
                             <thead>
                                 <tr>
                                     <th width="120px" class="right-align">*고객사</th>
-                                    <td width="1000px" class="left-align" colspan="3">
+                                    <td width="980px" class="left-align" colspan="3">
                                         <input type="hidden" class="company_no" value="<%=companyNo%>"/>
                                         <input type="text" class="company_name" style="width: 240px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th width="120px" class="right-align">*계약번호</th>
-                                    <td width="390px" class="left-align">
+                                    <td width="380px" class="left-align">
                                         <input type="text" class="contract_no" value="<%=contractNo%>" style="width: 240px;" readonly/>
                                     </td>
                                     <th width="120px" class="right-align">*계약명</th>
-                                    <td width="390px" class="left-align" colspan="3">
+                                    <td width="380px" class="left-align" colspan="3">
                                         <input type="text" class="contract_name" style="width: 400px;"/>
                                     </td>
                                 </tr>
@@ -681,7 +681,7 @@
                                 <tr>
                                     <th class="right-align">비고</th>
                                     <td class="left-align" colspan="3">
-                                        <textarea class="remark" style="width:940px; height:60px;"></textarea>
+                                        <textarea class="remark" style="width:920px; height:60px;"></textarea>
                                     </td>
                                 </tr>
                             </thead>
@@ -699,9 +699,9 @@
                             <thead>
                                 <tr>
                                     <th width="100px">라이센스번호</th>
-                                    <th width="126px">타입</th>
-                                    <th width="120px">프로그램</th>
-                                    <th width="230px">기간</th>
+                                    <th width="140px">타입</th>
+                                    <th width="140px">프로그램</th>
+                                    <th width="240px">기간</th>
                                     <th width="60px">수량</th>
                                     <th width="90px">단가</th>
                                     <th width="110px">금액</th>
@@ -728,11 +728,11 @@
                                             <input type="date" class="license_end_date" style="width:105px;">
                                         </div>
                                     </td>
-                                    <td><input type="text" class="license_count" style="width:60px; text-align:right" value="0"></td>
-                                    <td><input type="text" class="unit_price" style="width:90px; text-align:right" value="0"></td>
-                                    <td><input type="text" class="license_amount" style="width:110px; text-align:right" readonly value="0"></td>
-                                    <td><input type="text" class="license_discounted_amount" style="width:110px; text-align:right" value="0"></td>
-                                    <td><input type="text" class="license_actual_amount" style="width:110px; text-align:right" readonly value="0"></td>
+                                    <td><input type="text" class="license_count" style="width:50px; text-align:right" value="0"></td>
+                                    <td><input type="text" class="unit_price" style="width:80px; text-align:right" value="0"></td>
+                                    <td><input type="text" class="license_amount" style="width:100px; text-align:right" readonly value="0"></td>
+                                    <td><input type="text" class="license_discounted_amount" style="width:100px; text-align:right" value="0"></td>
+                                    <td><input type="text" class="license_actual_amount" style="width:100px; text-align:right" readonly value="0"></td>
                                 </tr>
                             </tbody>
                         </table>

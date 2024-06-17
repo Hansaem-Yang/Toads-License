@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/public/css/content-styles.css">
+        <!--
+        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
+        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
+        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
+        -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="/public/js/common/common_utility.js"></script>
+        <script src="/public/js/common/common_variables.js"></script>
+        <script src="/public/js/models/license.js"></script>
+        <script>
+            $(document).ready(function() {
+                var Search = function() {
+                    ClearContract();
+
+                    var companyNo = $('.company_no').val();
+                    if (companyNo === '')
+                    {
+                        alert("고객사를 선택하세요.");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "../contract/status",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                        },
+                        success: function (data) {
+
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                var newRow = '<tr><td colspan="8" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                                $('.contract tbody').append(newRow);
+                            } else {
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        var newRow = $('.contract tbody tr').first().clone().removeClass('hidden');
+
+                                        $(newRow).find('.cell_contract_no').text(post.contractNo);
+                                        $(newRow).find('.cell_contract_name').text(post.contractName);
+                                        $(newRow).find('.cell_contract_date').text(post.contractDate);
+                                        $(newRow).find('.cell_contractor').text(post.contractor);
+                                        $(newRow).find('.cell_start_date').text(post.startDate);
+                                        $(newRow).find('.cell_end_date').text(post.endDate);
+                                        $(newRow).find('.cell_monetary_unit').text(post.monetaryUnit);
+                                        $(newRow).find('.cell_exchange_rate').text(post.exchangeRate);
+                                        $(newRow).find('.cell_actual_amount').text(post.actualAmount);
+
+                                        $('.contract tbody').append(newRow);
+                                    });
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
+                            $('.contract tbody').append(newRow);
+                        },
+                    });
+                };
+
+                $('.detail').click(function() {
+                    var companyNo = $('.company_no').val();
+                    if (companyNo === '')
+                    {
+                        alert("고객사를 선택하세요.");
+                        return;
+                    }
+
+                    var selectedRow = $(".contract tr.selected");
+                    if (selectedRow.length > 0) {
+                        var contractNo = selectedRow.find('.cell_contract_no').text();
+                        
+                        window.location.href = "../view/contract/detail?companyNo=" + companyNo + "&contractNo=" + contractNo;
+                    } else {
+                        alert("목록에서 행을 선택하세요.");
+                    }
+                });
+
+                $('.contract tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+
+                var ClearContract = function() {
+                    const rows = document.querySelectorAll(".contract tbody tr:not(:first-child)");
+                    rows.forEach(row => {
+                        row.remove();
+                    });
+                }
+
+                // Modal Event And Function
+                var ClearModal = function() {
+                    const rows = document.querySelectorAll(".license tbody tr:not(:first-child)");
+                    rows.forEach(row => {
+                        row.remove();
+                    });
+                };
+
+                $('.license tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+                
+                Search();
+            });
+        </script>
+    </head>
+    <body>
+        <form class="company-detail-form">
+            <div class="content">
+                <input type="hidden" class="company_no" value="<%= session.user.companyNo %>"/>
+                <div class="contents-container">
+                    <div class="title">계약 목록</div>
+                    <div class="top-right-button">
+                        <div class="align-container">
+                            <input type="button" class="detail" value="상세보기"/>
+                        </div>
+                    </div>
+                    <div>
+                        <table class="contract">
+                            <thead>
+                                <tr>
+                                    <th width="100px">계약번호</th>
+                                    <th width="240px">계약명</th>
+                                    <th width="100px">계약일자</th>
+                                    <th width="100px">담당자</th>
+                                    <th width="180px">계약기간</th>
+                                    <th width="70px">화폐단위</th>
+                                    <th width="70px">기준환율</th>
+                                    <th width="120px">실계약금액</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hidden">
+                                    <td class="cell_contract_no" style="text-align: center;"></td>
+                                    <td class="cell_contract_name" style="text-align: left;"></td>
+                                    <td class="cell_contract_date" style="text-align: center;"></td>
+                                    <td class="cell_contractor" style="text-align: left;"></td>
+                                    <td>
+                                        <div class="align-container-center">
+                                            <p class="cell_start_date"></p>
+                                            <p class="">~</p>
+                                            <p class="cell_end_date"></p>
+                                        </div></td>
+                                    </td>
+                                    <td class="cell_monetary_unit" style="text-align: center;"></td>
+                                    <td class="cell_exchange_rate" style="text-align: right;"></td>
+                                    <td class="cell_actual_amount" style="text-align: right;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

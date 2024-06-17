@@ -13,10 +13,15 @@
         <script src="/public/js/common/common_utility.js"></script>
         <script>
             $(document).ready(function() {
+                var companyNo = $('.company_no').val();
+
                 $.ajax({
-                    url: "../dashboard/satelliteUsage",
+                    url: "../dashboard/userSatelliteUsage",
                     method: "POST",
                     dataType: 'json',
+                    data: {
+                        companyNo: companyNo,
+                    },
                     success: function (data) {
                         ClearUsage();
 
@@ -31,7 +36,7 @@
                                 $.each(data, function(index, post) {
                                     var newRow = $('.satellite-usage tbody tr').first().clone().removeClass('hidden');
 
-                                    $(newRow).find('.cell_total_companys').text(post.totalCompanys);
+                                    $(newRow).find('.cell_total_companys').text(post.totalContracts);
                                     $(newRow).find('.cell_total_users').text(post.totalUsers);
                                     $(newRow).find('.cell_daliy_usage').text(post.daliyUsage);
                                     $(newRow).find('.cell_monthly_usage').text(post.monthlyUsage);
@@ -48,9 +53,12 @@
                 });
                 
                 $.ajax({
-                    url: "../dashboard/companyAll",
+                    url: "../dashboard/company",
                     method: "POST",
                     dataType: 'json',
+                    data: {
+                        companyNo: companyNo,
+                    },
                     success: function (data) {
                         ClearCompany();
 
@@ -102,6 +110,8 @@
     </head>
     <body>
         <form class="home-form" class="container">
+            <input type="hidden" class="company_no" value="<%= session.user.companyNo %>"/>
+            <input type="hidden" class="account_no" value="<%= session.user.accountNo %>"/>
             <div class="content">
                 <div>
                     <div class="title">위성통신 전체 사용량</div>
@@ -109,7 +119,7 @@
                         <table class="satellite-usage">
                             <thead>
                                 <tr>
-                                    <th width="200px">전체 고객사 수</th>
+                                    <th width="200px">전체 계약 수</th>
                                     <th width="200px">전체 사용자 수</th>
                                     <th width="200px">일 사용량</th>
                                     <th width="200px">월 사용량</th>
@@ -127,12 +137,12 @@
                     </div>
                 </div></br></br></br>
                 <div>
-                    <div class="title">고객사 정보</div>
+                    <div class="title">회사 정보</div>
                     <div>
                         <table class="company">
                             <thead>
                                 <tr>
-                                    <th width="100px">고객사 번호</th>
+                                    <th width="100px">회사 번호</th>
                                     <th width="240px">법인명</th>
                                     <th width="120px">대표자명</th>
                                     <th width="120px">회사구분</th>

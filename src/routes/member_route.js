@@ -13,6 +13,7 @@ module.exports = function (app) {
             }
         });
     });
+
     app.post("/member/detail", (req, res) => {
         let companyNo = req.body.companyNo;
         let accountNo = req.body.accountNo;
@@ -25,6 +26,7 @@ module.exports = function (app) {
             }
         });
     });
+
     app.post("/member/checkEmail", (req, res) => {
         let accountNo = req.body.accountNo;
         let email = req.body.email;
@@ -39,50 +41,70 @@ module.exports = function (app) {
             }
         });
     });
+
     app.post("/member/insert", (req, res) => {
         let companyNo = req.body.companyNo;
-        let memberName = req.body.memberName;
+        let userName = req.body.userName;
         let email = req.body.email;
         let password = req.body.password;
-        let memberType = req.body.memberType;
-        let roleCode = req.body.roleCode;
-        let phone = req.body.phone;
+        let userType = req.body.userType;
+        let nationCode = req.body.nationCode;
+        let phoneNumber = req.body.phoneNumber;
         let useStatus = req.body.useStatus;
         let registCompany = req.session.user.companyNo;
         let registUser = req.session.user.accountNo;
 
-        manager.insert(companyNo, memberName, email, password, memberType, roleCode, phone, useStatus, registCompany, registUser).then((data) => {
-            if (data == null || data.length <= 0) {
+        manager.insert(companyNo, userName, email, password, userType, nationCode, phoneNumber, useStatus, registCompany, registUser).then((data) => {
+            if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {
                 res.send(constants.SUCCESS);
             }
         });
     });
+
     app.post("/member/update", (req, res) => {
+        let companyNo = req.body.companyNo;
         let accountNo = req.body.accountNo;
-        let memberName = req.body.memberName;
+        let userName = req.body.userName;
         let email = req.body.email;
-        let memberType = req.body.memberType;
-        let roleCode = req.body.roleCode;
-        let phone = req.body.phone;
+        let userType = req.body.userType;
+        let nationCode = req.body.nationCode;
+        let phoneNumber = req.body.phoneNumber;
         let useStatus = req.body.useStatus;
         let modifyCompany = req.session.user.companyNo;
         let modifyUser = req.session.user.accountNo;
 
-        manager.update(accountNo, memberName, email, memberType, roleCode, phone, useStatus, modifyCompany, modifyUser).then((data) => {
-            if (data == null || data.length <= 0) {
+        manager.update(companyNo, accountNo, userName, email, userType, nationCode, phoneNumber, useStatus, modifyCompany, modifyUser).then((data) => {
+            if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {
                 res.send(constants.SUCCESS);
             }
         });
     });
-    app.post("/member/delete", (req, res) => {
-        let accountNo = req.body.accountNo;
 
-        manager.delete(accountNo).then((data) => {
-            if (data == null || data.length <= 0) {
+    app.post("/member/delete", (req, res) => {
+        let accountNos = req.body.accountNos;
+
+        manager.delete(accountNos).then((data) => {
+            if (data == null || data <= 0) {
+                res.send(constants.FAIL);
+            } else {
+                res.send(constants.SUCCESS);
+            }
+        });
+    });
+    
+    app.post("/member/changePassword", (req, res) => {
+        let companyNo = req.body.companyNo;
+        let accountNo = req.body.accountNo;
+        let password = req.body.password;
+        let modifyCompany = req.session.user.companyNo;
+        let modifyUser = req.session.user.accountNo;
+
+        manager.changePassword(companyNo, accountNo, password, modifyCompany, modifyUser).then((data) => {
+            if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {
                 res.send(constants.SUCCESS);

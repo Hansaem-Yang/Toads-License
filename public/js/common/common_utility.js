@@ -26,7 +26,7 @@ var CreateNationsCodeSelection = function(object, data, language) {
 
         object.append($('<option>', { 
             value: option.country, 
-            text: padString(`+${option.country}`, 5) + option.ename
+            text: `${option.ename} (+${option.country})`
         }));
     });
 };

@@ -16,7 +16,7 @@ module.exports = function (app) {
     app.get("/view/login", (req, res) => {
         logger.info(`Login view`);
 
-        res.sendFile(path.join(config.root, "/src/views/user/login.html"));
+        res.sendFile(path.join(config.root, "/src/views/login.html"));
     });
 
     // 메인 페이지
@@ -26,6 +26,19 @@ module.exports = function (app) {
         }
         else {
             res.render("user/main");
+        }
+    });
+    
+    // 마이 페이지
+    app.get("/view/mypage", (req, res) => {
+        req.session.menuId = 'myinfo';
+        res.locals.session = req.session;
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/mypage");
+        }
+        else {
+            res.render("user/mypage");
         }
     });
 
@@ -44,6 +57,27 @@ module.exports = function (app) {
         }
         else {
             res.render("user/menu/sidebar");
+        }
+    });
+    
+    app.get("/view/mypage-sidebar", (req, res) => {
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/menu/mypage-sidebar");
+        }
+        else {
+            res.render("user/menu/mypage-sidebar");
+        }
+    });
+    
+    app.get("/view/myinfo", (req, res) => {
+        req.session.menuId = 'myinfo';
+        res.locals.session = req.session;
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/mypage/myinfo");
+        }
+        else {
+            res.render("user/mypage/myinfo");
         }
     });
     
@@ -118,6 +152,19 @@ module.exports = function (app) {
         }
         else {
             res.render("user/member/status");
+        }
+    });
+    
+    // 사용자 상세정보 페이지
+    app.get("/view/member/detail", (req, res) => {
+        res.locals.companyNo = req.query.companyNo;
+        res.locals.accountNo = req.query.accountNo;
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/member/detail");
+        }
+        else {
+            res.render("user/member/detail");
         }
     });
     

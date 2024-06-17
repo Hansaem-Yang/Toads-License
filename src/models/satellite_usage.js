@@ -1,6 +1,7 @@
 class SatelliteUsage {
     constructor() {
         this.totalCompanys = -1;
+        this.totalContracts = -1;
         this.totalUsers = -1;
         this.daliyUsage = -1;
         this.monthlyUsage = -1;
@@ -8,6 +9,9 @@ class SatelliteUsage {
 
     getTotalCompanys(){
         return this.totalCompanys;
+    }
+    getTotalContracts(){
+        return this.totalContracts;
     }
     getTotalUsers(){
         return this.totalUsers;
@@ -21,6 +25,9 @@ class SatelliteUsage {
 
     setTotalCompanys(totalCompanys){
         this.totalCompanys = totalCompanys;
+    }
+    setTotalContracts(totalContracts){
+        this.totalContracts = totalContracts;
     }
     setTotalUsers(totalUsers){
         this.totalUsers = totalUsers;

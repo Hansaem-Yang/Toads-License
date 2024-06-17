@@ -25,7 +25,7 @@ module.exports = {
                 item.setUserName(record.user_name);
                 item.setEmail(record.email);
                 item.setPassword(record.password);
-                item.setUserType(record.member_type);
+                item.setUserType(record.user_type);
                 item.setNationCode(record.nation_code);
                 item.setPhoneNumber(record.phone_number);
                 item.setUseStatus(record.use_status);
@@ -99,7 +99,7 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyNo, accountNo, userName, email, password, userType, nationCode, phoneNumber, useStatus, modifyCompany, modifyUser) {
+    update: async function (companyNo, accountNo, userName, email, userType, nationCode, phoneNumber, useStatus, modifyCompany, modifyUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -107,7 +107,6 @@ module.exports = {
                 accountNo: accountNo,
                 userName: userName,
                 email: email,
-                password: password,
                 userType: userType,
                 nationCode: nationCode,
                 phoneNumber: phoneNumber,
@@ -126,7 +125,7 @@ module.exports = {
             return -1;
         }
     },
-    delete: async function (companyNo, accountNo) {
+    delete: async function (accountNos) {
         let count = 0;
         try {
             let pool = await poolPromise;
@@ -134,10 +133,10 @@ module.exports = {
 
             await transaction.begin();
             try {
-                for (let i = 0; i < accountNo.length; i++) {
+                for (let i = 0; i < accountNos.length; i++) {
                     let param = {
-                        companyNo: companyNo,
-                        accountNo: accountNo[i],
+                        companyNo: accountNos[i].companyNo,
+                        accountNo: accountNos[i].accountNo,
                     };
                     let format = { language: "sql", indent: " " };
                     let query = mybatisMapper.getStatement("member", "delete", param, format);
@@ -154,6 +153,30 @@ module.exports = {
                 logger.error(`member.delete error : ${err}`);
                 return -1;
             }
+        } catch (err) {
+            logger.error(`member.delete error : ${err}`);
+            return -1;
+        }
+
+        return count;
+    },
+    changePassword: async function (companyNo, accountNo, password, modifyCompany, modifyUser) {
+        let count = 0;
+        try {
+            let pool = await poolPromise;
+            let param = {
+                companyNo: companyNo,
+                accountNo: accountNo,
+                password: password,
+                modifyCompany: modifyCompany,
+                modifyUser: modifyUser,
+            };
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("member", "changePassword", param, format);
+
+            let result = await pool.request().query(query);
+
+            return result.rowsAffected[0];
         } catch (err) {
             logger.error(`member.delete error : ${err}`);
             return -1;
