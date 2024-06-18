@@ -31,7 +31,7 @@
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
                             
-                            CreateNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
+                            createNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -43,7 +43,7 @@
                                     });
                                 });
 
-                                CreateNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
+                                createNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
                             }
                         }
                     },
@@ -328,8 +328,8 @@
                     }
                 });
                 
-                CreateVariablesSelection($('.user_type'), userTypes);
-                CreateVariablesSelection($('.use_status'), useStatus);
+                createVariablesSelection($('.user_type'), userTypes);
+                createVariablesSelection($('.use_status'), useStatus);
 
                 Search();
             });

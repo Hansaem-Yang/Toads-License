@@ -47,9 +47,9 @@
                                 $('.cell_end_date').text(data.endDate);
                                 $('.cell_monetary_unit').text(monetaryUnits[data.monetaryUnit]);
                                 $('.cell_exchange_rate').text(data.exchangeRate);
-                                $('.cell_amount').text(FormatCurrency(data.amount));
-                                $('.cell_discounted_amount').text(FormatCurrency(data.discountedAmount));
-                                $('.cell_actual_amount').text(FormatCurrency(data.actualAmount));
+                                $('.cell_amount').text(formatCurrency(data.amount));
+                                $('.cell_discounted_amount').text(formatCurrency(data.discountedAmount));
+                                $('.cell_actual_amount').text(formatCurrency(data.actualAmount));
                                 $('.cell_remark').text(data.remark);
                                 
                                 data.licenses.forEach(function(license, index){
@@ -61,10 +61,10 @@
                                     $(newRow).find('.cell_license_start_date').text(license.startDate);
                                     $(newRow).find('.cell_license_end_date').text(license.endDate);
                                     $(newRow).find('.cell_license_count').text(license.licenseCount);
-                                    $(newRow).find('.cell_unit_price').text(FormatCurrency(license.unitPrice));
-                                    $(newRow).find('.cell_license_amount').text(FormatCurrency(license.amount));
-                                    $(newRow).find('.cell_license_discounted_amount').text(FormatCurrency(license.discountedAmount));
-                                    $(newRow).find('.cell_license_actual_amount').text(FormatCurrency(license.actualAmount));
+                                    $(newRow).find('.cell_unit_price').text(formatCurrency(license.unitPrice));
+                                    $(newRow).find('.cell_license_amount').text(formatCurrency(license.amount));
+                                    $(newRow).find('.cell_license_discounted_amount').text(formatCurrency(license.discountedAmount));
+                                    $(newRow).find('.cell_license_actual_amount').text(formatCurrency(license.actualAmount));
 
                                     $('.view_license tbody').append(newRow);
                                 });
@@ -111,9 +111,9 @@
                                 $('.end_date').val(data.endDate);
                                 $('.monetary_unit').val(data.monetaryUnit);
                                 $('.exchange_rate').val(data.exchangeRate);
-                                $('.amount').val(FormatCurrency(data.amount));
-                                $('.discounted_amount').val(FormatCurrency(data.discountedAmount));
-                                $('.actual_amount').val(FormatCurrency(data.actualAmount));
+                                $('.amount').val(formatCurrency(data.amount));
+                                $('.discounted_amount').val(formatCurrency(data.discountedAmount));
+                                $('.actual_amount').val(formatCurrency(data.actualAmount));
                                 $('.remark').val(data.remark);
                                 
                                 data.licenses.forEach(function(license, index){
@@ -126,10 +126,10 @@
                                     $(newRow).find('.license_start_date').val(license.startDate);
                                     $(newRow).find('.license_end_date').val(license.endDate);
                                     $(newRow).find('.license_count').val(license.licenseCount);
-                                    $(newRow).find('.unit_price').val(FormatCurrency(license.unitPrice));
-                                    $(newRow).find('.license_amount').val(FormatCurrency(license.amount));
-                                    $(newRow).find('.license_discounted_amount').val(FormatCurrency(license.discountedAmount));
-                                    $(newRow).find('.license_actual_amount').val(FormatCurrency(license.actualAmount));
+                                    $(newRow).find('.unit_price').val(formatCurrency(license.unitPrice));
+                                    $(newRow).find('.license_amount').val(formatCurrency(license.amount));
+                                    $(newRow).find('.license_discounted_amount').val(formatCurrency(license.discountedAmount));
+                                    $(newRow).find('.license_actual_amount').val(formatCurrency(license.actualAmount));
 
                                     $('.license tbody').append(newRow);
                                 });
@@ -234,7 +234,7 @@
                         alert('라이센스틑 최대 4개까지 입력 가능합니다.');
                         return;
                     }
-                    
+
                     if ($('.contract_name').val() === '') {
                         alert('계약명을 입력하세요.');
                         return;
@@ -302,22 +302,22 @@
                     var date = new Date();
                     switch (contractPeriod) {
                         case 'M1':
-                            date = AddMonth(contractDate, 1);
+                            date = addMonth(contractDate, 1);
                             break;
                         case 'M3':
-                            date = AddMonth(contractDate, 3);
+                            date = addMonth(contractDate, 3);
                             break;
                         case 'M6':
-                            date = AddMonth(contractDate, 6);
+                            date = addMonth(contractDate, 6);
                             break;
                         case 'Y1':
-                            date = AddYear(contractDate, 1);
+                            date = addYear(contractDate, 1);
                             break;
                         case 'Y2':
-                            date = AddYear(contractDate, 2);
+                            date = addYear(contractDate, 2);
                             break;
                         case 'Y3':
-                            date = AddYear(contractDate, 3);
+                            date = addYear(contractDate, 3);
                             break;
                     } 
                     
@@ -328,13 +328,13 @@
                 let preventChange = false;
                 $('.amount, .discounted_amount').focus(function() {
                     preventChange = true;
-                    $(this).val(ParseCurrency($(this).val()));
+                    $(this).val(parseCurrency($(this).val()));
                     $(this).select();
                     preventChange = false;
                 });
 
                 $('.amount, .discounted_amount').blur(function() {
-                    $(this).val(FormatCurrency(ParseCurrency($(this).val())));
+                    $(this).val(formatCurrency(parseCurrency($(this).val())));
                 });
 
                 $('.amount, .discounted_amount').change(function() {
@@ -347,12 +347,12 @@
                         $(this).val('0');
                     }
 
-                    var amount = ParseCurrency($('.amount').val());
-                    var discounted_amount = ParseCurrency($('.discounted_amount').val());
+                    var amount = parseCurrency($('.amount').val());
+                    var discounted_amount = parseCurrency($('.discounted_amount').val());
 
-                    $('.amount').val(FormatCurrency(amount));
-                    $('.discounted_amount').val(FormatCurrency(discounted_amount));
-                    $('.actual_amount').val(FormatCurrency(amount - discounted_amount));
+                    $('.amount').val(formatCurrency(amount));
+                    $('.discounted_amount').val(formatCurrency(discounted_amount));
+                    $('.actual_amount').val(formatCurrency(amount - discounted_amount));
                     
                     preventChange = false;
                 })
@@ -364,14 +364,14 @@
                 $('.license').on('focus', '.unit_price, .license_discounted_amount', function() {
                     preventChange = true;
 
-                    $(this).val(ParseCurrency($(this).val()));
+                    $(this).val(parseCurrency($(this).val()));
                     $(this).select();
 
                     preventChange = false;
                 });
 
                 $('.license').on('blur', '.unit_price, .license_discounted_amount', function() {
-                    $(this).val(FormatCurrency(ParseCurrency($(this).val())));
+                    $(this).val(formatCurrency(parseCurrency($(this).val())));
                 });
 
                 $('.license').on('change', '.license_count, .unit_price, .license_discounted_amount', function() {
@@ -383,17 +383,17 @@
 
                     var row = $(this).closest('tr');
 
-                    var licenseCount = ParseCurrency($(row).find('.license_count').val());
-                    var unitPrice = ParseCurrency($(row).find('.unit_price').val());
-                    var discountedlicense_amount = ParseCurrency($(row).find('.license_discounted_amount').val());
+                    var licenseCount = parseCurrency($(row).find('.license_count').val());
+                    var unitPrice = parseCurrency($(row).find('.unit_price').val());
+                    var discountedlicense_amount = parseCurrency($(row).find('.license_discounted_amount').val());
 
                     var license_amount = licenseCount * unitPrice;
                     var actuallicense_amount = license_amount - discountedlicense_amount;
 
-                    $(row).find('.unit_price').val(FormatCurrency(unitPrice));
-                    $(row).find('.license_discounted_amount').val(FormatCurrency(discountedlicense_amount));
-                    $(row).find('.license_amount').val(FormatCurrency(license_amount));
-                    $(row).find('.license_actual_amount').val(FormatCurrency(actuallicense_amount));
+                    $(row).find('.unit_price').val(formatCurrency(unitPrice));
+                    $(row).find('.license_discounted_amount').val(formatCurrency(discountedlicense_amount));
+                    $(row).find('.license_amount').val(formatCurrency(license_amount));
+                    $(row).find('.license_actual_amount').val(formatCurrency(actuallicense_amount));
                     
                     preventChange = false;
                 });
@@ -455,9 +455,9 @@
                         var endDate = $('.end_date').val();
                         var monetaryUnit = $('.monetary_unit').val();
                         var exchangeRate = $('.exchange_rate').val();
-                        var amount = ParseCurrency($('.amount').val());
-                        var discountedAmount = ParseCurrency($('.discounted_amount').val());
-                        var actualAmount = ParseCurrency($('.actual_amount').val());
+                        var amount = parseCurrency($('.amount').val());
+                        var discountedAmount = parseCurrency($('.discounted_amount').val());
+                        var actualAmount = parseCurrency($('.actual_amount').val());
                         var remark = $('.remark').val();
 
                         var licenses = [];
@@ -473,10 +473,10 @@
                                 startDate: $(row).find('.license_start_date').val(),
                                 endDate: $(row).find('.license_end_date').val(),
                                 licenseCount: $(row).find('.license_count').val(),
-                                unitPrice: ParseCurrency($(row).find('.unit_price').val()),
-                                amount: ParseCurrency($(row).find('.license_amount').val()),
-                                discountedAmount: ParseCurrency($(row).find('.license_discounted_amount').val()),
-                                actualAmount: ParseCurrency($(row).find('.license_actual_amount').val()),
+                                unitPrice: parseCurrency($(row).find('.unit_price').val()),
+                                amount: parseCurrency($(row).find('.license_amount').val()),
+                                discountedAmount: parseCurrency($(row).find('.license_discounted_amount').val()),
+                                actualAmount: parseCurrency($(row).find('.license_actual_amount').val()),
                             });
                         });
 
@@ -535,10 +535,10 @@
                     }
                 });
 
-                CreateVariablesSelection($('.monetary_unit'), monetaryUnits);
-                CreateVariablesSelection($('.contract_period'), contractPeriods);
-                CreateVariablesSelection($('.app_name'), appNames);
-                CreateVariablesSelection($('.license_type'), licenseTypes);
+                createVariablesSelection($('.monetary_unit'), monetaryUnits);
+                createVariablesSelection($('.contract_period'), contractPeriods);
+                createVariablesSelection($('.app_name'), appNames);
+                createVariablesSelection($('.license_type'), licenseTypes);
 
                 Search();
             });

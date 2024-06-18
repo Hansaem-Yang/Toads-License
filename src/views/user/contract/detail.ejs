@@ -47,9 +47,9 @@
                                 $('.cell_end_date').text(data.endDate);
                                 $('.cell_monetary_unit').text(monetaryUnits[data.monetaryUnit]);
                                 $('.cell_exchange_rate').text(data.exchangeRate);
-                                $('.cell_amount').text(FormatCurrency(data.amount));
-                                $('.cell_discounted_amount').text(FormatCurrency(data.discountedAmount));
-                                $('.cell_actual_amount').text(FormatCurrency(data.actualAmount));
+                                $('.cell_amount').text(formatCurrency(data.amount));
+                                $('.cell_discounted_amount').text(formatCurrency(data.discountedAmount));
+                                $('.cell_actual_amount').text(formatCurrency(data.actualAmount));
                                 $('.cell_remark').text(data.remark);
                                 
                                 data.licenses.forEach(function(license, index){
@@ -61,10 +61,10 @@
                                     $(newRow).find('.cell_license_start_date').text(license.startDate);
                                     $(newRow).find('.cell_license_end_date').text(license.endDate);
                                     $(newRow).find('.cell_license_count').text(license.licenseCount);
-                                    $(newRow).find('.cell_unit_price').text(FormatCurrency(license.unitPrice));
-                                    $(newRow).find('.cell_license_amount').text(FormatCurrency(license.amount));
-                                    $(newRow).find('.cell_license_discounted_amount').text(FormatCurrency(license.discountedAmount));
-                                    $(newRow).find('.cell_license_actual_amount').text(FormatCurrency(license.actualAmount));
+                                    $(newRow).find('.cell_unit_price').text(formatCurrency(license.unitPrice));
+                                    $(newRow).find('.cell_license_amount').text(formatCurrency(license.amount));
+                                    $(newRow).find('.cell_license_discounted_amount').text(formatCurrency(license.discountedAmount));
+                                    $(newRow).find('.cell_license_actual_amount').text(formatCurrency(license.actualAmount));
 
                                     $('.view_license tbody').append(newRow);
                                 });

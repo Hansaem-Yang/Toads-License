@@ -31,7 +31,7 @@
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
 
-                            CreateNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
+                            createNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -44,7 +44,7 @@
                                 });
                             }
 
-                            CreateNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
+                            createNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
                         }
                     },
                     error: function (xhr, status, error) {
@@ -92,7 +92,7 @@
                                 $('.cell_user_name').text(data.userName);
                                 $('.cell_email').text(data.email);
                                 $('.cell_user_type').text(userTypes[data.userType]);
-                                $('.cell_phone_number').text(GetTelephone(data.userNation, data.phoneNumber));
+                                $('.cell_phone_number').text(getTelephone(data.userNation, data.phoneNumber));
                                 $('.cell_use_status').text(useStatus[data.useStatus]);
                             }
                         },
@@ -379,8 +379,8 @@
                     }
                 });
 
-                CreateVariablesSelection($('.user_type'), userTypes);
-                CreateVariablesSelection($('.use_status'), useStatus);
+                createVariablesSelection($('.user_type'), userTypes);
+                createVariablesSelection($('.use_status'), useStatus);
                 Search();
             });
         </script>

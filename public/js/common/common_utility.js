@@ -1,4 +1,4 @@
-function CreateNationsSelection(object, data, language) {
+function createNationsSelection(object, data, language) {
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -13,7 +13,7 @@ function CreateNationsSelection(object, data, language) {
     });
 }
 
-function CreateNationsCodeSelection(object, data, language) {
+function createNationsCodeSelection(object, data, language) {
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -31,7 +31,7 @@ function CreateNationsCodeSelection(object, data, language) {
     });
 }
 
-function CreateCompanysSelection(object, data) {
+function createCompanysSelection(object, data) {
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -46,7 +46,7 @@ function CreateCompanysSelection(object, data) {
     });
 }
 
-function CreateVariablesSelection(object, data) {
+function createVariablesSelection(object, data) {
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -60,7 +60,7 @@ function CreateVariablesSelection(object, data) {
     });
 }
 
-function GetTelephone(nationCode, telephone) {
+function getTelephone(nationCode, telephone) {
     var resultValue = '';
     if (nationCode === '') {
         resultValue = telephone;
@@ -73,7 +73,7 @@ function GetTelephone(nationCode, telephone) {
     return resultValue;
 }
 
-function GetFormattedDate(date) {
+function getFormattedDate(date) {
     var year = date.getFullYear();
     var month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
     var day = String(date.getDate()).padStart(2, '0');
@@ -82,33 +82,42 @@ function GetFormattedDate(date) {
     return `${year}-${month}-${day}`;
 }
 
-function AddMonth(date, month) {
+function addMonth(date, month) {
     date.setMonth(date.getMonth() + month);
     date.setDate(date.getDate() - 1);
 
-    return GetFormattedDate(date);
+    return getFormattedDate(date);
 }
 
-function AddYear(date, year) {
+function addYear(date, year) {
     date.setFullYear(date.getFullYear() + year);
     date.setDate(date.getDate() - 1);
 
-    return GetFormattedDate(date);
+    return getFormattedDate(date);
 }
 
-function PadString(str, targetLength) {
+function adString(str, targetLength) {
     return str.padEnd(targetLength, ' ');
 }
 
-function FormatCurrency(number) {
+function formatCurrency(number) {
     number = number + '';
 
     let currency = number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return currency;
 }
 
-function ParseCurrency(currencyStr) {
+function parseCurrency(currencyStr) {
     // 쉼표와 통화 기호를 제거하고 숫자로 변환
     let number = parseInt(currencyStr.replace(/[^0-9.-]+/g, ""));
     return number;
+}
+
+function isNumeric(input) {
+    return /^[0-9]*$/.test(input);
+}
+
+function isCurrency(input) {
+    // 숫자와 소수점, 쉼표로 이루어진 형식
+    return /^\d{1,3}(,\d{3})*(\.\d+)?$/.test(input);
 }
