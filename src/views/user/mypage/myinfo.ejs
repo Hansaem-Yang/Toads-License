@@ -30,6 +30,8 @@
                                 { code:'JP', ename:'Japan', kname:'일본', country:'81' },
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
+
+                            CreateNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -41,6 +43,8 @@
                                     });
                                 });
                             }
+
+                            CreateNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
                         }
                     },
                     error: function (xhr, status, error) {
@@ -261,6 +265,40 @@
                     $('.new_password').val('');
                     $('.new_password_check').val('');
                 };
+                
+                $('.change_password').click(function() {
+                    ClearPassword();
+
+                    var companyNo = $('.company_no').val();
+                    var accountNo = $('.account_no').val();
+
+                    // 행 데이터 출력
+                    $.ajax({
+                        url: "../../member/detail",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                            accountNo: accountNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                            } else {
+                                $('.company_no').val(data.companyNo);
+                                $('.account_no').val(data.accountNo);
+                                $('.password').val(data.password);
+                                
+                                $('.password-modal').show();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert('서버 요청에 실패하였습니다.');
+                        },
+                    });
+                });
 
                 $('.password-close').click(function() {
                     $('.password-modal').hide();
@@ -269,6 +307,11 @@
                 $('.password-save').click(function() {
                     if (confirm('데이터를 저장 하시겠습니까?') == true)
                     {
+                        if ($('.old_password').val() != $('.password').val()) {
+                            alert('기존 비밀번호를 잘못 입력하였습니다.');
+                            return;
+                        }
+
                         if ($('.new_password').val() === '') {
                             alert('비밀번호를 입력하세요.');
                             return;
@@ -281,6 +324,11 @@
 
                         if ($('.new_password').val() != $('.new_password_check').val()) {
                             alert('비밀번호가 일치하지 않습니다.');
+                            return;
+                        }
+
+                        if ($('.new_password').val() === $('.password').val()) {
+                            alert('기존 비밀번호와 신규 비밀번호가 동일합니다.\n다른 비밀번호를 입력하세요.');
                             return;
                         }
 
@@ -511,6 +559,12 @@
                     <div>
                         <table>
                             <thead>
+                                <tr>
+                                    <th width="120px" class="right-align">*기존 비밀번호</th>
+                                    <td width="200px" class="left-align">
+                                        <input type="password" class="old_password" style="width: 160px;"/>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <th width="120px" class="right-align">*비밀번호</th>
                                     <td width="200px" class="left-align">

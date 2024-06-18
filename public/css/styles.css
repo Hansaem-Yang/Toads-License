@@ -92,17 +92,19 @@ footer {
     position: fixed;
     top: 80px; /* 상단 메뉴 바로 아래에 위치 */
     bottom: 0px;
+    background-color: #f6f7fb;
     border-right: 2px solid #1a2b46;
     overflow: hidden;
 }
 .side-menu {
-    width: 220px;
+    width: 100%;
     color: #323333;
     font-weight: bold;
     box-sizing: border-box;
     position: fixed;
     top: 0px; /* 상단 메뉴 바로 아래에 위치 */
     bottom: 0px;
+    background-color: #f6f7fb;
     overflow: hidden;
 }
 .side-menu div {
@@ -123,7 +125,7 @@ footer {
 }
 .side-menu-selected {
     color: #f6f7fb;
-    background: #3b7bbf 0% 0% no-repeat padding-box;
+    background: #365b92 0% 0% no-repeat padding-box;
 }
 
 .content {

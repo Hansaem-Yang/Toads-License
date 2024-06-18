@@ -1,4 +1,4 @@
-var CreateNationsSelection = function(object, data, language) {
+function CreateNationsSelection(object, data, language) {
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -11,9 +11,9 @@ var CreateNationsSelection = function(object, data, language) {
             text:option.ename
         }));
     });
-};
+}
 
-var CreateNationsCodeSelection = function(object, data, language) {
+function CreateNationsCodeSelection(object, data, language) {
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -29,9 +29,9 @@ var CreateNationsCodeSelection = function(object, data, language) {
             text: `${option.ename} (+${option.country})`
         }));
     });
-};
+}
 
-var CreateCompanysSelection = function(object, data) {
+function CreateCompanysSelection(object, data) {
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -44,9 +44,9 @@ var CreateCompanysSelection = function(object, data) {
             text:option.name
         }));
     });
-};
+}
 
-var CreateVariablesSelection = function(object, data) {
+function CreateVariablesSelection(object, data) {
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -60,7 +60,7 @@ var CreateVariablesSelection = function(object, data) {
     });
 }
 
-var GetTelephone = function(nationCode, telephone) {
+function GetTelephone(nationCode, telephone) {
     var resultValue = '';
     if (nationCode === '') {
         resultValue = telephone;
@@ -71,31 +71,44 @@ var GetTelephone = function(nationCode, telephone) {
     }
     
     return resultValue;
-};
+}
 
-var getFormattedDate = function(date) {
+function GetFormattedDate(date) {
     var year = date.getFullYear();
     var month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
     var day = String(date.getDate()).padStart(2, '0');
     
     // YYYY-MM-DD 형식으로 날짜 만들기
     return `${year}-${month}-${day}`;
-};
+}
 
-var AddMonth = function(date, month) {
+function AddMonth(date, month) {
     date.setMonth(date.getMonth() + month);
     date.setDate(date.getDate() - 1);
 
-    return getFormattedDate(date);
-};
+    return GetFormattedDate(date);
+}
 
-var AddYear = function(date, year) {
+function AddYear(date, year) {
     date.setFullYear(date.getFullYear() + year);
     date.setDate(date.getDate() - 1);
 
-    return getFormattedDate(date);
-};
+    return GetFormattedDate(date);
+}
 
-var padString = function(str, targetLength) {
+function PadString(str, targetLength) {
     return str.padEnd(targetLength, ' ');
+}
+
+function FormatCurrency(number) {
+    number = number + '';
+
+    let currency = number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return currency;
+}
+
+function ParseCurrency(currencyStr) {
+    // 쉼표와 통화 기호를 제거하고 숫자로 변환
+    let number = parseInt(currencyStr.replace(/[^0-9.-]+/g, ""));
+    return number;
 }

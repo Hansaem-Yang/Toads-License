@@ -350,6 +350,11 @@
                             return;
                         }
 
+                        if ($('.new_password').val() === $('.password').val()) {
+                            alert('기존 비밀번호와 신규 비밀번호가 동일합니다.\n다른 비밀번호를 입력하세요.');
+                            return;
+                        }
+
                         var companyNo = $('.company_no').val();
                         var accountNo = $('.account_no').val();
                         var password = $('.new_password').val();

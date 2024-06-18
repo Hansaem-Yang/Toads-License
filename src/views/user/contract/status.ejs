@@ -51,7 +51,7 @@
                                         $(newRow).find('.cell_end_date').text(post.endDate);
                                         $(newRow).find('.cell_monetary_unit').text(post.monetaryUnit);
                                         $(newRow).find('.cell_exchange_rate').text(post.exchangeRate);
-                                        $(newRow).find('.cell_actual_amount').text(post.actualAmount);
+                                        $(newRow).find('.cell_actual_amount').text(FormatCurrency(post.actualAmount));
 
                                         $('.contract tbody').append(newRow);
                                     });
@@ -140,7 +140,7 @@
                                     <td class="cell_contract_no" style="text-align: center;"></td>
                                     <td class="cell_contract_name" style="text-align: left;"></td>
                                     <td class="cell_contract_date" style="text-align: center;"></td>
-                                    <td class="cell_contractor" style="text-align: left;"></td>
+                                    <td class="cell_contractor" style="text-align: center;"></td>
                                     <td>
                                         <div class="align-container-center">
                                             <p class="cell_start_date"></p>

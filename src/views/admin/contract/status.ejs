@@ -80,7 +80,7 @@
                                         $(newRow).find('.cell_end_date').text(post.endDate);
                                         $(newRow).find('.cell_monetary_unit').text(post.monetaryUnit);
                                         $(newRow).find('.cell_exchange_rate').text(post.exchangeRate);
-                                        $(newRow).find('.cell_actual_amount').text(post.actualAmount);
+                                        $(newRow).find('.cell_actual_amount').text(FormatCurrency(post.actualAmount));
 
                                         $('.contract tbody').append(newRow);
                                     });
@@ -113,7 +113,7 @@
                     var today = new Date();
                     $('.company_no').val(companyNo);
                     $('.company_name').val(companyName);
-                    $('.contract_date').val(getFormattedDate(today));
+                    $('.contract_date').val(GetFormattedDate(today));
 
                     $('.modal').show();
                 });
@@ -158,9 +158,9 @@
                                     $('.end_date').val(data.endDate);
                                     $('.monetary_unit').val(data.monetaryUnit);
                                     $('.exchange_rate').val(data.exchangeRate);
-                                    $('.amount').val(data.amount);
-                                    $('.discounted_amount').val(data.discountedAmount);
-                                    $('.actual_amount').val(data.actualAmount);
+                                    $('.amount').val(FormatCurrency(data.amount));
+                                    $('.discounted_amount').val(FormatCurrency(data.discountedAmount));
+                                    $('.actual_amount').val(FormatCurrency(data.actualAmount));
                                     $('.remark').val(data.remark);
                                     
                                     data.licenses.forEach(function(license, index){
@@ -173,10 +173,10 @@
                                         $(newRow).find('.license_start_date').val(license.startDate);
                                         $(newRow).find('.license_end_date').val(license.endDate);
                                         $(newRow).find('.license_count').val(license.licenseCount);
-                                        $(newRow).find('.unit_price').val(license.unitPrice);
-                                        $(newRow).find('.license_amount').val(license.amount);
-                                        $(newRow).find('.license_discounted_amount').val(license.discountedAmount);
-                                        $(newRow).find('.license_actual_amount').val(license.actualAmount);
+                                        $(newRow).find('.unit_price').val(FormatCurrency(license.unitPrice));
+                                        $(newRow).find('.license_amount').val(FormatCurrency(license.amount));
+                                        $(newRow).find('.license_discounted_amount').val(FormatCurrency(license.discountedAmount));
+                                        $(newRow).find('.license_actual_amount').val(FormatCurrency(license.actualAmount));
 
                                         $('.license tbody').append(newRow);
                                     });
@@ -246,6 +246,13 @@
                 };
 
                 $('.license_add').click(function() {
+                    var count = $('.license tbody tr').length;
+
+                    if (count > 4) {
+                        alert('라이센스틑 최대 4개까지 입력 가능합니다.');
+                        return;
+                    }
+
                     if ($('.contract_name').val() === '') {
                         alert('계약명을 입력하세요.');
                         return;
@@ -336,33 +343,77 @@
                     $('.end_date').val(date);
                 });
 
+                let preventChange = false;
+                $('.amount, .discounted_amount').focus(function() {
+                    preventChange = true;
+                    $(this).val(ParseCurrency($(this).val()));
+                    $(this).select();
+                    preventChange = false;
+                });
+
+                $('.amount, .discounted_amount').blur(function() {
+                    $(this).val(FormatCurrency(ParseCurrency($(this).val())));
+                });
+
                 $('.amount, .discounted_amount').change(function() {
+                    if (preventChange) {
+                        return;
+                    }
+
+                    preventChange = true;
                     if ($(this).val() === '') {
                         $(this).val('0');
                     }
 
-                    var license_amount = parseInt($(this).val(), 10);
-                    var discountedlicense_amount = parseInt($('.discounted_amount').val(), 10);
+                    var amount = ParseCurrency($('.amount').val());
+                    var discounted_amount = ParseCurrency($('.discounted_amount').val());
 
-                    $('.actual_amount').val(license_amount - discountedlicense_amount);
+                    $('.amount').val(FormatCurrency(amount));
+                    $('.discounted_amount').val(FormatCurrency(discounted_amount));
+                    $('.actual_amount').val(FormatCurrency(amount - discounted_amount));
+                    
+                    preventChange = false;
                 })
 
                 $('.license tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
+                $('.license').on('focus', '.unit_price, .license_discounted_amount', function() {
+                    preventChange = true;
+
+                    $(this).val(ParseCurrency($(this).val()));
+                    $(this).select();
+
+                    preventChange = false;
+                });
+
+                $('.license').on('blur', '.unit_price, .license_discounted_amount', function() {
+                    $(this).val(FormatCurrency(ParseCurrency($(this).val())));
+                });
+
                 $('.license').on('change', '.license_count, .unit_price, .license_discounted_amount', function() {
+                    if (preventChange) {
+                        return;
+                    }
+
+                    preventChange = true;
+
                     var row = $(this).closest('tr');
 
-                    var licenseCount = parseInt($(row).find('.license_count').val(), 10);
-                    var unitPrice = parseInt($(row).find('.unit_price').val(), 10);
-                    var discountedlicense_amount = parseInt($(row).find('.license_discounted_amount').val(), 10);
+                    var licenseCount = ParseCurrency($(row).find('.license_count').val());
+                    var unitPrice = ParseCurrency($(row).find('.unit_price').val());
+                    var discountedlicense_amount = ParseCurrency($(row).find('.license_discounted_amount').val());
 
                     var license_amount = licenseCount * unitPrice;
                     var actuallicense_amount = license_amount - discountedlicense_amount;
 
-                    $(row).find('.license_amount').val(license_amount);
-                    $(row).find('.license_actual_amount').val(actuallicense_amount);
+                    $(row).find('.unit_price').val(FormatCurrency(unitPrice));
+                    $(row).find('.license_discounted_amount').val(FormatCurrency(discountedlicense_amount));
+                    $(row).find('.license_amount').val(FormatCurrency(license_amount));
+                    $(row).find('.license_actual_amount').val(FormatCurrency(actuallicense_amount));
+                    
+                    preventChange = false;
                 });
 
                 $('.close').click(function() {
@@ -422,9 +473,9 @@
                         var endDate = $('.end_date').val();
                         var monetaryUnit = $('.monetary_unit').val();
                         var exchangeRate = $('.exchange_rate').val();
-                        var amount = $('.amount').val();
-                        var discountedAmount = $('.discounted_amount').val();
-                        var actualAmount = $('.actual_amount').val();
+                        var amount = ParseCurrency($('.amount').val());
+                        var discountedAmount = ParseCurrency($('.discounted_amount').val());
+                        var actualAmount = ParseCurrency($('.actual_amount').val());
                         var remark = $('.remark').val();
 
                         var licenses = [];
@@ -440,10 +491,10 @@
                                 startDate: $(row).find('.license_start_date').val(),
                                 endDate: $(row).find('.license_end_date').val(),
                                 licenseCount: $(row).find('.license_count').val(),
-                                unitPrice: $(row).find('.unit_price').val(),
-                                amount: $(row).find('.license_amount').val(),
-                                discountedAmount: $(row).find('.license_discounted_amount').val(),
-                                actualAmount: $(row).find('.license_actual_amount').val(),
+                                unitPrice: ParseCurrency($(row).find('.unit_price').val()),
+                                amount: ParseCurrency($(row).find('.license_amount').val()),
+                                discountedAmount: ParseCurrency($(row).find('.license_discounted_amount').val()),
+                                actualAmount: ParseCurrency($(row).find('.license_actual_amount').val()),
                             });
                         });
 
@@ -562,7 +613,7 @@
                                     <td class="cell_contract_no" style="text-align: center;"></td>
                                     <td class="cell_contract_name" style="text-align: left;"></td>
                                     <td class="cell_contract_date" style="text-align: center;"></td>
-                                    <td class="cell_contractor" style="text-align: left;"></td>
+                                    <td class="cell_contractor" style="text-align: center;"></td>
                                     <td>
                                         <div class="align-container-center">
                                             <p class="cell_start_date"></p>
