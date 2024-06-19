@@ -1,4 +1,5 @@
 function createNationsSelection(object, data, language) {
+    object.empty();
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -14,6 +15,7 @@ function createNationsSelection(object, data, language) {
 }
 
 function createNationsCodeSelection(object, data, language) {
+    object.empty();
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -31,7 +33,8 @@ function createNationsCodeSelection(object, data, language) {
     });
 }
 
-function createCompanysSelection(object, data) {
+function createSelection(object, data) {
+    object.empty();
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -47,6 +50,7 @@ function createCompanysSelection(object, data) {
 }
 
 function createVariablesSelection(object, data) {
+    object.empty();
     object.append($('<option>', { 
         value:'', 
         text:'선택하세요.'
@@ -58,6 +62,14 @@ function createVariablesSelection(object, data) {
             text:data[key]
         }));
     });
+}
+
+function clearSelection(object) {
+    object.empty();
+    object.append($('<option>', { 
+        value:'', 
+        text:'선택하세요.'
+    }));
 }
 
 function getTelephone(nationCode, telephone) {

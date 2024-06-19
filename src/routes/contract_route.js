@@ -2,6 +2,17 @@ const manager = require("../manager/contract_manager");
 const constants = require("../common/constants");
 
 module.exports = function (app) {
+    app.post("/contract/codes", (req, res) => {
+        let companyNo = req.body.companyNo;
+        
+        manager.codes(companyNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
     app.post("/contract/status", (req, res) => {
         let companyNo = req.body.companyNo;
 

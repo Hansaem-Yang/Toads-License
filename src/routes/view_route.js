@@ -168,6 +168,32 @@ module.exports = function (app) {
         }
     });
     
+    // 라이센스 유저 관리 페이지
+    app.get("/view/license", (req, res) => {
+        req.session.menuId = 'contract';
+        res.locals.session = req.session;
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/license/status");
+        }
+        else {
+            res.render("user/license/status");
+        }
+    });
+
+    app.get("/view/license/detail", (req, res) => {
+        res.locals.companyNo = req.query.companyNo;
+        res.locals.contractNo = req.query.contractNo;
+        res.locals.licenseNo = req.query.licenseNo;
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/license/detail");
+        }
+        else {
+            res.render("user/license/detail");
+        }
+    });
+    
     // 선박 관리 페이지
     app.get("/view/ship", (req, res) => {
         req.session.menuId = 'ship';

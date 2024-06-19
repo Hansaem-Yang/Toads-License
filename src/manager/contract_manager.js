@@ -7,6 +7,32 @@ const logger = require("../logger/logger.js");
 mybatisMapper.createMapper(["./src/sql/contract.xml"]);
 
 module.exports = {
+    codes: async function (companyNo) {
+        try {
+            let pool = await poolPromise;
+            let param = { companyNo: companyNo };
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("contract", "codes", param, format);
+
+            let result = await pool.request().query(query);
+            let list = [];
+
+            result.recordset.forEach((record) => {
+                let item = new Contract();
+
+                item.setCompanyNo(record.company_no);
+                item.setContractNo(record.contract_no);
+                item.setContractName(record.contract_name);
+                
+                list.push(item);
+            });
+
+            return list;
+        } catch (err) {
+            logger.error(`contract.codes error : ${err}`);
+            return null;
+        }
+    },
     status: async function (companyNo) {
         try {
             let pool = await poolPromise;

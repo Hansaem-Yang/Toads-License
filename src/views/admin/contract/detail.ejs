@@ -230,8 +230,8 @@
                 $('.license_add').click(function() {
                     var count = $('.license tbody tr').length;
 
-                    if (count > 4) {
-                        alert('라이센스틑 최대 4개까지 입력 가능합니다.');
+                    if (count - 1 == 4) {
+                        alert('라이센스는 최대 4개까지 입력 가능합니다.');
                         return;
                     }
 

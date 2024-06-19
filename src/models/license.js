@@ -3,8 +3,10 @@ const Common = require("./common");
 class License extends Common {
     constructor() {
         super();
-        this.companyNo = -1;
+        this.companyNo = null;
+        this.companyName = null;
         this.contractNo = null;
+        this.contractName = null;
         this.licenseNo = null;
         this.licenseType = null;
         this.appName = null;
@@ -20,8 +22,14 @@ class License extends Common {
     getCompanyNo(){
         return this.companyNo;
     }
+    getCompanyName(){
+        return this.companyName;
+    }
     getContractNo(){
         return this.contractNo;
+    }
+    getContractName(){
+        return this.contractName;
     }
     getLicenseNo(){
         return this.licenseNo;
@@ -57,8 +65,14 @@ class License extends Common {
     setCompanyNo(companyNo){
         this.companyNo = companyNo;
     }
+    setCompanyName(companyName){
+        this.companyName = companyName;
+    }
     setContractNo(contractNo){
         this.contractNo = contractNo;
+    }
+    setContractName(contractName){
+        this.contractName = contractName;
     }
     setLicenseNo(licenseNo){
         this.licenseNo = licenseNo;

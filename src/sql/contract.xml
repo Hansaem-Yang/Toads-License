@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="contract">  
+    <select id="codes">
+        select a.company_no
+             , a.contract_no
+             , a.contract_name
+          from contract as a
+         inner join company as b
+            on a.company_no = b.company_no
+         where a.company_no = #{companyNo};
+    </select>
     <select id="status">
         select a.company_no
              , b.company_name
