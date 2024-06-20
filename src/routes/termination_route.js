@@ -2,11 +2,12 @@ const manager = require("../manager/termination_manager");
 const constants = require("../common/constants");
 
 module.exports = function (app) {
-    app.post("/termination/list", (req, res) => {
-        let companyId = req.body.companyId;
+    app.post("/termination/status", (req, res) => {
+        let companyNo = req.body.companyNo;
         let contractNo = req.body.contractNo;
+        let terminationStatus = req.body.terminationStatus;
 
-        manager.list(companyId, contractNo).then((data) => {
+        manager.status(companyNo, contractNo, terminationStatus).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -15,11 +16,11 @@ module.exports = function (app) {
         });
     });
     app.post("/termination/detail", (req, res) => {
-        let companyId = req.body.companyId;
+        let companyNo = req.body.companyNo;
         let contractNo = req.body.contractNo;
         let terminationNo = req.body.terminationNo;
 
-        manager.detail(companyId, contractNo, terminationNo).then((data) => {
+        manager.detail(companyNo, contractNo, terminationNo).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -27,14 +28,14 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/termination/regist", (req, res) => {
-        let companyId = req.body.companyId;
+    app.post("/termination/insert", (req, res) => {
+        let companyNo = req.body.companyNo;
         let contractNo = req.body.contractNo;
         let terminationDate = req.body.terminationDate;
         let terminationType = req.body.terminationType;
         let terminationReasons = req.body.terminationReasons;
 
-        manager.regist(companyId, contractNo, terminationDate, terminationType, terminationReasons).then((data) => {
+        manager.insert(companyNo, contractNo, terminationDate, terminationType, terminationReasons).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -42,28 +43,15 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/termination/modify", (req, res) => {
-        let companyId = req.body.companyId;
+    app.post("/termination/update", (req, res) => {
+        let companyNo = req.body.companyNo;
         let contractNo = req.body.contractNo;
         let terminationNo = req.body.terminationNo;
         let terminationDate = req.body.terminationDate;
         let terminationType = req.body.terminationType;
         let terminationReasons = req.body.terminationReasons;
 
-        manager.modify(companyId, contractNo, terminationNo, terminationDate, terminationType, terminationReasons).then((data) => {
-            if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
-            } else {
-                res.send(data);
-            }
-        });
-    });
-    app.post("/termination/delete", (req, res) => {
-        let companyId = req.body.companyId;
-        let contractNo = req.body.contractNo;
-        let terminationNo = req.body.terminationNo;
-
-        manager.delete(companyId, contractNo, terminationNo).then((data) => {
+        manager.update(companyNo, contractNo, terminationNo, terminationDate, terminationType, terminationReasons).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
