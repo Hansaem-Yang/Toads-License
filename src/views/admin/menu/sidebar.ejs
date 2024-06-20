@@ -17,10 +17,24 @@
                     }
                 });
 
-                $('#dashboard, #company, #contract, #member, #license').click(function() {
-                    $('.side-menu-selected').removeClass('side-menu-selected');
+                $('.menu-item').click(function() {
+                    $('.menu-selected').removeClass('menu-selected');
+                    $(this).addClass('menu-selected');
 
-                    $(this).addClass('side-menu-selected');
+                    var submenu = $(this).next('.submenu');
+                    $('.submenu').not(submenu).slideUp();
+                    submenu.slideToggle();
+
+                    if ($(this).attr('id') === 'contract_parent')
+                        return;
+
+                    parent.onSelectMenu($(this).attr('id'));
+                });
+
+                $('.submenu-item').click(function() {
+                    $('.submenu-selected').removeClass('submenu-selected');
+                    $(this).addClass('submenu-selected');
+                    
                     parent.onSelectMenu($(this).attr('id'));
                 });
             });
@@ -29,12 +43,16 @@
     <body>
         <form id="sidebar-form">
             <input type="hidden" id="menu_id" value="<%=session.menuId%>"/>
-            <div class="side-menu">
-                <div id="dashboard">홈</div>
-                <div id="company">고객사관리</div>
-                <div id="contract">계약관리</div>
-                <div id="member">사용자관리</div>
-                <div id="license">라이센스관리</div>
+            <div class="menu">
+                <div id="dashboard" class="menu-item">홈</div>
+                <div id="company" class="menu-item">고객사관리</div>
+                <div id="contract_parent" class="menu-item">계약관리</div>
+                <div class="submenu">
+                    <div id="contract" class="submenu-item">- 계약관리</div>
+                    <div id="termination" class="submenu-item">- 계약해지관리</div>
+                </div>
+                <div id="member" class="menu-item">사용자관리</div>
+                <div id="license" class="menu-item">라이센스관리</div>
             </div>
         </form>
     </body>

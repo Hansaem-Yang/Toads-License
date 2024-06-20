@@ -96,36 +96,49 @@ footer {
     border-right: 2px solid #1a2b46;
     overflow: hidden;
 }
-.side-menu {
+.menu {
     width: 100%;
     color: #323333;
     font-weight: bold;
     box-sizing: border-box;
     position: fixed;
-    top: 0px; /* 상단 메뉴 바로 아래에 위치 */
+    top: 0px;
     bottom: 0px;
     background-color: #f6f7fb;
     overflow: hidden;
 }
-.side-menu div {
-    width: 100%;
-    height: 40px;
+.menu-item {
     padding-left: 20px;
-    padding-Top: 8px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #f6f7fb;
     border-radius: 18px;
+    cursor: pointer;
 }
-.side-menu div:focus, .side-menu div:hover {
-    color: #f6f7fb;
+.submenu {
+    display: none;
+    background-color: #f6f7fb;
+    padding: 5px;
+}
+.submenu-item {
+    padding: 5px 30px;
+    color: #323333;
+    font-size: 14px;
+    background-color: #f6f7fb;
+    border-radius: 15px;
+    cursor: pointer;
+}
+.menu-item:focus, .menu-item:hover {
+    color: rgb(119, 156, 207);
     transition: background-color 0.3s;
-    background: rgb(119, 156, 207) 0% 0% no-repeat padding-box;
     text-decoration: none;
     cursor: pointer;
 }
-.side-menu-selected {
-    color: #f6f7fb;
-    background: #365b92 0% 0% no-repeat padding-box;
+.menu-selected {
+    color:  #365b92;
+}
+.submenu-selected {
+    color:  #365b92;
 }
 
 .content {

@@ -103,4 +103,51 @@ module.exports = function (app) {
             }
         });
     });
-};
+    app.post("/contract/termination/status", (req, res) => {
+        let companyNo = req.body.companyNo;
+        let contractNo = req.body.contractNo;
+
+        manager.terminationStatus(companyNo, contractNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/contract/termination/insert", (req, res) => {
+        let companyNo = req.body.companyNo;
+        let contractNo = req.body.contractNo;
+        let terminationDate = req.body.terminationDate;
+        let terminationType = req.body.terminationType;
+        let terminationReasons = req.body.terminationReasons;
+        let registCompany = req.session.user.companyNo;
+        let registUser = req.session.user.accountNo;
+
+        manager.insertTermination(companyNo, contractNo, terminationDate, terminationType, terminationReasons, 
+            registCompany, registUser).then((data) => {
+            if (data == null || data <= 0) {
+                res.send(constants.FAIL);
+            } else {
+                res.send(constants.SUCCESS);
+            }
+        });
+    });
+    app.post("/contract/termination/update", (req, res) => {
+        let companyNo = req.body.companyNo;
+        let contractNo = req.body.contractNo;
+        let terminationNo = req.body.terminationNo;
+        let terminationStatus = req.body.terminationStatus;
+        let cancellationCharge = req.body.cancellationCharge;
+        let cancellationRefund = req.body.cancellationRefund;
+
+        manager.updateTermination(companyNo, contractNo, terminationNo, terminationStatus, cancellationCharge, cancellationRefund, 
+            modifyCompany, modifyUser).then((data) => {
+            if (data == null || data <= 0) {
+                res.send(constants.FAIL);
+            } else {
+                res.send(constants.SUCCESS);
+            }
+        });
+    });
+}

@@ -10,6 +10,7 @@ class Contract extends Common {
         this.contractDate = null;
         this.contractor = null;
         this.contractPeriod = null;
+        this.contractStatus = null;
         this.startDate = null;
         this.endDate = null;
         this.monetaryUnit = null;
@@ -41,6 +42,9 @@ class Contract extends Common {
     }
     getContractPeriod(){
         return this.contractPeriod;
+    }
+    getContractStatus(){
+        return this.contractStatus;
     }
     getStartDate(){
         return this.startDate;
@@ -90,6 +94,9 @@ class Contract extends Common {
     }
     setContractPeriod(contractPeriod){
         this.contractPeriod = contractPeriod;
+    }
+    setContractStatus(contractStatus){
+        this.contractStatus = contractStatus;
     }
     setStartDate(startDate){
         this.startDate = startDate;

@@ -58,3 +58,23 @@ const useStatus = {
     Y:'사용',
     N:'미사용'
 }
+
+const terminationTypes = {
+    T1: '고객변심',
+    T9: '기타'
+}
+
+const contractStatus = {
+    0: '계약',
+    1: '해지 신청',
+    2: '신청 처리중',
+    9: '해지 완료',
+    C: '해지 취소'
+}
+
+const terminationStatus = {
+    1: '해지 신청',
+    2: '신청 처리중',
+    9: '해지 완료',
+    C: '해지 취소'
+}

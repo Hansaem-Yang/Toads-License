@@ -18,6 +18,14 @@
              , a.contract_date
              , a.contractor
              , a.contract_period
+             , isnull((select termination_status
+                         from termination
+                        where company_no = a.company_no
+                          and contract_no = a.contract_no
+                          and termination_no = (select max(termination_no)
+                                                  from termination
+                                                 where company_no = a.company_no
+                                                   and contract_no = a.contract_no)), 0) as contract_status
              , a.start_date
              , a.end_date
              , a.monetary_unit
@@ -39,6 +47,14 @@
              , a.contract_date
              , a.contractor
              , a.contract_period
+             , isnull((select termination_status
+                         from termination
+                        where company_no = a.company_no
+                          and contract_no = a.contract_no
+                          and termination_no = (select max(termination_no)
+                                                  from termination
+                                                 where company_no = a.company_no
+                                                   and contract_no = a.contract_no)), 0) as contract_status
              , a.start_date
              , a.end_date
              , a.monetary_unit
@@ -207,4 +223,81 @@
            and contract_no = #{contractNo}
            and license_no = #{licenseNo};
     </delete>
+    <select id="termination_status">
+        select a.company_no
+             , b.company_name
+             , a.contract_no
+             , a.contract_name
+             , a.contract_date
+             , a.contractor
+             , a.contract_period
+             , a.start_date
+             , a.end_date
+             , a.monetary_unit
+             , a.exchange_rate
+             , a.amount
+             , a.discounted_amount
+             , a.actual_amount
+             , a.remark
+          from contract as a
+         inner join company as b
+            on a.company_no = b.company_no
+         where a.company_no = #{companyNo};
+    </select>
+    <insert id="insert_termination">
+        insert into termination (
+                    company_no
+                  , contract_no
+                  , termination_no
+                  , termination_date
+                  , termination_type
+                  , termination_reasons
+                  , cancellation_charge
+                  , cancellation_refund
+                  , termination_status
+                  , regist_datetime
+                  , regist_company
+                  , regist_user
+        )
+        values (
+                    #{companyNo}
+                  , #{contractNo}
+                  , (select #{contractNo} + format(isnull(substring(max(termination_no), 10, 2), 0) + 1, '00')
+                       from termination
+                      where company_no = #{companyNo}
+                        and contract_no = #{contractNo})
+                  , #{terminationDate}
+                  , #{terminationType}
+                  , #{terminationReasons}
+                  , 0
+                  , 0
+                  , '1'
+                  , convert(varchar(20), getdate(), 20)
+                  , #{registCompany}
+                  , #{registUser}
+        );
+    </insert>
+    <update id="update_termination">
+        update contract
+           set cancellation_charge = ${cancellationCharge}
+             , cancellation_refund = ${cancellationRefund}
+             , termination_status = ${terminationStatus}
+             , modify_datetime = convert(varchar(20), getdate(), 20)
+             , modify_company = #{modifyCompany}
+             , modify_user = #{modifyUser}
+         where company_no = #{companyNo}
+           and contract_no = #{contractNo}
+           and termination_no = #{terminationNo};
+    </update>
+    <update id="cancel_termination">
+        update contract
+           set termination_status = 'C'
+             , cancellation_date = convert(varchar(20), getdate(), 20)
+             , modify_datetime = convert(varchar(20), getdate(), 20)
+             , modify_company = #{modifyCompany}
+             , modify_user = #{modifyUser}
+         where company_no = #{companyNo}
+           and contract_no = #{contractNo}
+           and termination_no = #{terminationNo};
+    </update>
 </mapper>

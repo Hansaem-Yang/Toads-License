@@ -141,6 +141,15 @@ module.exports = function (app) {
             res.render("user/contract/detail");
         }
     });
+
+    app.get("/view/termination", (req, res) => {
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/termination/status");
+        }
+        else {
+            res.render("user/termination/status");
+        }
+    });
     
     // 사용자 관리 페이지
     app.get("/view/member", (req, res) => {

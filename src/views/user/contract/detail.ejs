@@ -45,6 +45,7 @@
                                 $('.cell_contract_period').text(contractPeriods[data.contractPeriod]);
                                 $('.cell_start_date').text(data.startDate);
                                 $('.cell_end_date').text(data.endDate);
+                                $('.cell_contract_status').text(contractStatus[data.contractStatus]);
                                 $('.cell_monetary_unit').text(monetaryUnits[data.monetaryUnit]);
                                 $('.cell_exchange_rate').text(data.exchangeRate);
                                 $('.cell_amount').text(formatCurrency(data.amount));
@@ -87,12 +88,25 @@
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
                 
+                $('.termination').click(function() {
+                    ClearModal();
+
+                    var today = new Date();
+                    $('.cell_tcompany_name').text($('.cell_company_name').text());
+                    $('.cell_tcontract_no').text($('.cell_contract_no').text());
+                    $('.cell_tcontract_name').text($('.cell_contract_name').text());
+                    $('.termination_date').val(getFormattedDate(today));
+
+                    $('.modal').show();
+                });
+                
                 var Clear = function() {
                     $('.cell_company_name').text('');
                     $('.cell_contract_name').text('');
                     $('.cell_contract_date').text('');
                     $('.cell_contractor').text('');
                     $('.cell_contract_period').text('');
+                    $('.cell_contract_status').text('');
                     $('.cell_start_date').text('');
                     $('.cell_end_date').text('');
                     $('.cell_monetary_unit').text('');
@@ -107,6 +121,90 @@
                         row.remove();
                     });
                 };
+                
+                var ClearModal = function() {
+                    $('.cell_tcompany_name').text('');
+                    $('.cell_tcontract_no').text('');
+                    $('.cell_tcontract_name').text('');
+                    $('.termination_date').val('');
+                    $('.termination_type').val('');
+                    $('.termination_reasons').val('');
+                };
+
+                $('.close').click(function() {
+                    $('.modal').hide();
+                });
+
+                $('.save').click(function() {
+                    if (confirm('데이터를 저장 하시겠습니까?') == true)
+                    {
+                        if ($('.termination_date').val() === '') {
+                            alert('계약해지일자를 입력하세요.');
+                            return;
+                        }
+
+                        if ($('.termination_type').val() === '') {
+                            alert('계약해지구분을 선택하세요.');
+                            return;
+                        }
+
+                        if ($('.termination_reasons').val() === '') {
+                            alert('계약해지사유를 입력하세요.');
+                            return;
+                        }
+
+                        var companyNo = $('.company_no').val();
+                        var contractNo = $('.contract_no').val();
+                        var terminationDate = $('.termination_date').val();
+                        var terminationType = $('.termination_type').val();
+                        var terminationReasons = $('.termination_reasons').val();
+
+                        $.ajax({
+                            url: "../../contract/termination/insert",
+                            method: "POST",
+                            data: {
+                                companyNo: companyNo,
+                                contractNo: contractNo,
+                                terminationDate: terminationDate,
+                                terminationType: terminationType,
+                                terminationReasons: terminationReasons,
+                            },
+                            success: function (data) {
+                                switch (data) {
+                                    case "NO SESSION":
+                                        alert("세션이 만료되었습니다.");
+                                        window.parent.location.href = "./login";
+                                        return;
+                                    case "FAIL":
+                                        alert('데이터 저장에 실패 하였습니다.');
+                                        return;
+                                    case "SUCCESS":
+                                        alert('데이터 저장을 완료 하였습니다.');
+                                        break;
+                                }
+
+                                $('.modal').hide();
+                                Search();
+                                
+                                ClearModal();
+                            },
+                            error: function (xhr, status, error) {
+                                alert('서버 요청에 실패하였습니다.');
+                            },
+                        });
+                    }
+                });
+
+                $('.cancel').click(function() {
+                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    {
+                        $('.modal').hide();
+                        
+                        ClearModal();
+                    }
+                });
+
+                createVariablesSelection($('.termination_type'), terminationTypes);
 
                 Search();
             });
@@ -123,6 +221,7 @@
                     <div class="title">계약 정보</div>
                     <div class="top-right-button">
                         <div class="align-container">
+                            <p><input type="button" class="termination" value="해지신청"/></p>
                             <input type="button" class="back" value="뒤로"/>
                         </div>
                     </div>
@@ -147,7 +246,7 @@
                                 </tr>
                                 <tr>
                                     <th class="right-align">계약기간</th>
-                                    <td colspan="3">
+                                    <td>
                                         <div class="align-container">
                                             <p class="cell_contract_period"></p>
                                             <p class="cell_start_date"></p>
@@ -155,6 +254,8 @@
                                             <p class="cell_end_date"></p>
                                         </div>
                                     </td>
+                                    <th class="right-align">계약상태</th>
+                                    <td class="cell_contract_status"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">화폐단위</th>
@@ -224,6 +325,54 @@
                     <div class="satellite-usage-container">
                         <div class="daliy-usage"></div>
                         <div class="monthly-usage"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal">
+                <div class="modal-content" style="width:640px">
+                    <div class="contents-container">
+                        <span class="close">&times;</span>
+                        <div class="title">계약해지신청</div>
+                        <div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th width="120px" class="right-align">고객사</th>
+                                        <td width="520px" class="cell_tcompany_name" colspan="3"></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="120px" class="right-align">계약번호</th>
+                                        <td width="200px" class="cell_tcontract_no"></td>
+                                        <th width="120px" class="right-align">계약명</th>
+                                        <td width="200px" class="cell_tcontract_name"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="right-align">*계약해지일자</th>
+                                        <td>
+                                            <input type="date" class="termination_date" style="width:105px;">
+                                        </td>
+                                        <th class="right-align">*계약해지구분</th>
+                                        <td>
+                                            <select class="termination_type">
+                                                <option value="">선택하세요.</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="right-align">*계약해지사유</th>
+                                        <td colspan="3">
+                                            <textarea class="termination_reasons" style="width:500px; height:120px;"></textarea>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div></br>
+                        <div class="bottom-button">
+                            <div class="align-container">
+                                <p><input type="button" class="save" value="저장"/></p>
+                                <input type="button" class="cancel" value="취소"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

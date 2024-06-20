@@ -2,6 +2,7 @@ const { poolPromise, sql } = require("../db/sql_manager.js");
 const mybatisMapper = require("mybatis-mapper");
 const Contract = require("../models/contract.js");
 const License = require("../models/license.js");
+const Termination = require("../models/termination.js");
 const logger = require("../logger/logger.js");
 
 mybatisMapper.createMapper(["./src/sql/contract.xml"]);
@@ -53,6 +54,7 @@ module.exports = {
                 item.setContractDate(record.contract_date);
                 item.setContractor(record.contractor);
                 item.setContractPeriod(record.contract_period);
+                item.setContractStatus(record.contract_status);
                 item.setStartDate(record.start_date);
                 item.setEndDate(record.end_date);
                 item.setMonetaryUnit(record.monetary_unit);
@@ -94,6 +96,7 @@ module.exports = {
                 item.setContractDate(record.contract_date);
                 item.setContractor(record.contractor);
                 item.setContractPeriod(record.contract_period);
+                item.setContractStatus(record.contract_status);
                 item.setStartDate(record.start_date);
                 item.setEndDate(record.end_date);
                 item.setMonetaryUnit(record.monetary_unit);
@@ -340,5 +343,122 @@ module.exports = {
         }
 
         return count;
+    },
+    terminationStatus: async function (companyNo, contractNo) {
+        try {
+            let pool = await poolPromise;
+            let param = { 
+                companyNo: companyNo,
+                contractNo: contractNo,
+            };
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("contract", "termination_status", param, format);
+
+            let result = await pool.request().query(query);
+            let list = [];
+
+            result.recordset.forEach((record) => {
+                let item = new Termination();
+
+                item.setCompanyNo(record.company_no);
+                item.setCompanyName(record.company_name);
+                item.setContractNo(record.contract_no);
+                item.setContractName(record.contract_name);
+                item.setContractDate(record.contract_date);
+                item.setTerminationNo(record.termination_no);
+                item.setTerminationDate(record.termination_date);
+                item.setTerminationType(record.termination_type);
+                item.setTerminationReasons(record.termination_reasons);
+                item.setCancellationCharge(record.cancellation_charge);
+                item.setCancellationRefund(record.cancellation_refund);
+
+                list.push(item);
+            });
+
+            return list;
+        } catch (err) {
+            logger.error(`contract_manager.terminationStatus error : ${err}`);
+            return null;
+        }
+    },
+    insertTermination: async function (companyNo, contractNo, terminationDate, terminationType, terminationReasons, 
+        registCompany, registUser) {
+        try {
+            let pool = await poolPromise;
+            let transaction = new sql.Transaction(pool);
+            let count = 0;
+
+            await transaction.begin();
+            try {
+                let param = {
+                    companyNo: companyNo, 
+                    contractNo: contractNo, 
+                    terminationDate: terminationDate, 
+                    terminationType: terminationType, 
+                    terminationReasons: terminationReasons, 
+                    registCompany: registCompany,
+                    registUser: registUser
+                };
+                let format = { language: "sql", indent: " " };
+                let query = mybatisMapper.getStatement("contract", "insert_termination", param, format);
+
+                let request = new sql.Request(transaction);
+                let result = await request.query(query);
+
+                count = result.rowsAffected[0];
+
+                await transaction.commit();
+            } catch (err) {
+                await transaction.rollback();
+                logger.error(`contract_manager.terminationInsert error : ${err}`);
+                return -1;
+            }
+
+            return count;
+        } catch (err) {
+            logger.error(`contract_manager.terminationInsert error : ${err}`);
+            return -1;
+        }
+    },
+    updateTermination: async function (companyNo, contractNo, terminationNo, terminationStatus, cancellationCharge, cancellationRefund, 
+        modifyCompany, modifyUser) {
+        try {
+            let pool = await poolPromise;
+            let transaction = new sql.Transaction(pool);
+            let count = 0;
+
+            await transaction.begin();
+            try {
+
+                let param = {
+                    companyNo: companyNo, 
+                    contractNo: contractNo,
+                    terminationNo: terminationNo, 
+                    terminationStatus: terminationStatus, 
+                    cancellationCharge: cancellationCharge, 
+                    cancellationRefund: cancellationRefund, 
+                    modifyCompany: modifyCompany,
+                    modifyUser: modifyUser
+                };
+                let format = { language: "sql", indent: " " };
+                let query = mybatisMapper.getStatement("contract", "update_termination", param, format);
+
+                let request = new sql.Request(transaction);
+                let result = await request.query(query);
+
+                count = result.rowsAffected[0];
+
+                await transaction.commit();
+            } catch (err) {
+                await transaction.rollback();
+                logger.error(`contract_manager.terminationUpdate error : ${err}`);
+                return -1;
+            }
+
+            return count;
+        } catch (err) {
+            logger.error(`contract_manager.terminationUpdate error : ${err}`);
+            return -1;
+        }
     },
 };
