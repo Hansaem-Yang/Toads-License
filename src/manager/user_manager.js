@@ -1,39 +1,32 @@
 const { poolPromise, sql } = require("../db/sql_manager.js");
 const mybatisMapper = require("mybatis-mapper");
-const Member = require("../models/member.js");
+const User = require("../models/user.js");
 const logger = require("../logger/logger.js");
 
 mybatisMapper.createMapper(["./src/sql/user.xml"]);
 
 module.exports = {
-    login: async function (email) {
+    login: async function (userId) {
         try {
             let pool = await poolPromise;
-            let param = { email: email };
+            let param = { userId: userId };
             let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("user", "member", param, format);
+            let query = mybatisMapper.getStatement("user", "dashboard_user", param, format);
 
             let result = await pool.request().query(query);
-            let item = new Member();
+            let item = new User();
 
             result.recordset.forEach((record) => {
+                item.setContractNo(record.contract_no);
                 item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);
                 item.setCompanyDiv(record.company_div);
-                item.setAccountNo(record.account_no);
+                item.setUserNo(record.user_no);
+                item.setUserId(record.user_id);
                 item.setUserName(record.user_name);
-                item.setEmail(record.email);
                 item.setPassword(record.password);
-                item.setUserType(record.user_type);
-                item.setNationCode(record.nation_code);
-                item.setPhoneNumber(record.phone_number);
-                item.setUseStatus(record.use_status);
-                item.setRegistDatetime(record.regist_datetime);
-                item.setRegistCompany(record.regist_company);
-                item.setRegistUser(record.regist_user);
-                item.setModifyDatetime(record.modify_datetime);
-                item.setModifyCompany(record.modify_company);
-                item.setModifyUser(record.modify_user);
+                item.setUserAuth(record.user_auth);
+                item.setUseYn(record.use_yn);
             });
 
             return item;
@@ -47,27 +40,22 @@ module.exports = {
             let pool = await poolPromise;
             let param = { email: email };
             let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("user", "member", param, format);
+            let query = mybatisMapper.getStatement("user", "dashboard_user", param, format);
 
             let result = await pool.request().query(query);
-            let item = new Member();
+            let item = new User();
 
             result.recordset.forEach((record) => {
+                item.setContractNo(record.contract_no);
                 item.setCompanyNo(record.company_no);
-                item.setAccountNo(record.account_no);
+                item.setCompanyName(record.company_name);
+                item.setCompanyDiv(record.company_div);
+                item.setUserNo(record.user_no);
+                item.setUserId(record.user_id);
                 item.setUserName(record.user_name);
-                item.setEmail(record.email);
                 item.setPassword(record.password);
-                item.setUserType(record.user_type);
-                item.setNationCode(record.nation_code);
-                item.setPhoneNumber(record.phone_number);
-                item.setUseStatus(record.use_status);
-                item.setRegistDatetime(record.regist_datetime);
-                item.setRegistCompany(record.regist_company);
-                item.setRegistUser(record.regist_user);
-                item.setModifyDatetime(record.modify_datetime);
-                item.setModifyCompany(record.modify_company);
-                item.setModifyUser(record.modify_user);
+                item.setUserAuth(record.user_auth);
+                item.setUseYn(record.use_yn);
             });
 
             return item;

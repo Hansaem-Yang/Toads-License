@@ -21,9 +21,9 @@
                  where company_no = a.company_no
                    and start_date >= convert(varchar(10), getdate(), 20)
                    and end_date <= convert(varchar(10), getdate(), 20)) as total_licenses
-             , (select count(1) from member
+             , (select count(1) from vw_dashboard_user
                  where company_no = a.company_no
-                   and use_status = 'Y') as total_users
+                   and use_yn = 'Y') as total_users
              , 0 as total_satellite_usage
           from company as a
           left outer join nations as b
@@ -38,17 +38,10 @@
              , isnull(a.business_no, '') business_no
              , isnull(a.resident_no, '') resident_no
              , isnull(a.company_div, '') company_div
-             , isnull(a.post_code, '') post_code
              , isnull(a.business_place, '') business_place
              , isnull(a.nation, '') nation
              , isnull(b.nation_code, '') nation_code
              , isnull(a.telephone, '') telephone
-             , a.regist_datetime
-             , a.regist_company
-             , a.regist_user
-             , a.modify_datetime
-             , a.modify_company
-             , a.modify_user
           from company as a
           left outer join nations as b
             on a.nation = b.nation_iso2
@@ -61,12 +54,10 @@
                   , business_no
                   , resident_no
                   , company_div
-                  , post_code
                   , business_place
                   , nation
                   , telephone
-                  , regist_datetime
-                  , regist_company
+                  , regist_date
                   , regist_user
         )
         values (
@@ -80,7 +71,6 @@
                   , #{nation}
                   , #{telephone}
                   , convert(varchar(20), getdate(), 20)
-                  , #{registCompany}
                   , #{registUser}
         );
     </insert>
@@ -91,12 +81,10 @@
              , business_no = #{businessNo}
              , resident_no = #{residentNo}
              , company_div = #{companyDiv}
-             , post_code = #{postCode}
              , business_place = #{businessPlace}
              , nation = #{nation}
              , telephone = #{telephone}
-             , modify_datetime = convert(varchar(20), getdate(), 20)
-             , modify_company = #{modifyCompany}
+             , modify_date = convert(varchar(20), getdate(), 20)
              , modify_user = #{modifyUser}
          where company_no = #{companyNo};
     </update>

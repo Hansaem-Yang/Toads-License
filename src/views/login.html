@@ -15,11 +15,11 @@
                 $(".login-form").submit((event) => {
                     event.preventDefault();
 
-                    var email = $(".id").val();
+                    var userId = $(".id").val();
                     var password = $(".password").val();
                     
                     // 아이디와 비번에 대한 Validation 처리
-                    if (email.trim() === "" || password.trim() === "") {
+                    if (userId.trim() === "" || password.trim() === "") {
                         alert("아이디와 비밀번호를 입력해주세요.");
                         return;
                     }
@@ -29,7 +29,7 @@
                         url: "../login",
                         method: "POST",
                         data: {
-                            email: email,
+                            userId: userId,
                             password: password,
                         },
                         success: function (data) {
@@ -51,7 +51,7 @@
                     });
                 });
 
-                $('#email').focus();
+                $('#id').focus();
             });
         </script>
         <title>로그인</title>

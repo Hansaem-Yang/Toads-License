@@ -85,7 +85,6 @@ module.exports = {
                 item.setCompanyDiv(record.company_div);
                 item.setBusinessNo(record.business_no);
                 item.setResidentNo(record.resident_no);
-                item.setPostCode(record.post_code);
                 item.setBusinessPlace(record.business_place);
                 item.setNation(record.nation);
                 item.setNationCode(record.nation_code);
@@ -99,7 +98,7 @@ module.exports = {
         }
     },
     insert: async function (companyName, ownerName, businessNo, residentNo, companyDiv,
-        postCode, businessPlace, nation, telephone, registCompany, registUser) {
+        businessPlace, nation, telephone, registUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -108,11 +107,9 @@ module.exports = {
                 businessNo: businessNo, 
                 residentNo: residentNo, 
                 companyDiv: companyDiv,
-                postCode: postCode,
                 businessPlace: businessPlace, 
                 nation: nation,
                 telephone: telephone,
-                regCompany: registCompany,
                 regUser: registUser
             };
             let format = { language: "sql", indent: " " };
@@ -127,7 +124,7 @@ module.exports = {
         }
     },
     update: async function (companyNo, companyName, ownerName, businessNo, residentNo, companyDiv,
-        postCode, businessPlace, nation, telephone, modifyCompany, modifyUser) {
+        businessPlace, nation, telephone, modifyUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -137,11 +134,9 @@ module.exports = {
                 businessNo: businessNo, 
                 residentNo: residentNo, 
                 companyDiv: companyDiv,
-                postCode: postCode,
                 businessPlace: businessPlace, 
                 nation: nation,
                 telephone: telephone,
-                modifyCompany: modifyCompany,
                 modifyUser: modifyUser,
             };
             let format = { language: "sql", indent: " " };
