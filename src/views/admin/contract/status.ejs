@@ -15,6 +15,7 @@
         <script>
             $(document).ready(function() {
                 var companys = [];
+                var employees = [];
 
                 $.ajax({
                     url: "../company/codes",
@@ -35,6 +36,34 @@
                                 });
 
                                 createSelection($('.s_company_no'), companys);
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('서버 요청에 실패하였습니다.');
+                    },
+                });
+                
+
+                $.ajax({
+                    url: "../employee/status",
+                    method: "POST",
+                    success: function (data) {
+                        if (data === 'NO SESSION') {
+                            alert("세션이 만료되었습니다.");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            alert("조회된 데이터가 없습니다.");
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    employees.push({
+                                        code:post.empNo, 
+                                        name:post.empName, 
+                                    });
+                                });
+
+                                createSelection($('.contract_manager'), employees);
                             }
                         }
                     },
@@ -95,61 +124,6 @@
                     });
                 };
                 
-                var SearchLicense = function() {
-                    ClearLicense();
-
-                    var companyNo = $('.s_company_no').val();
-                    var selectedRow = $('.contract tr.selected');
-                    if (selectedRow.length > 0) {
-                        var contractNo = selectedRow.find('.cell_contract_no').text();
-
-                        $.ajax({
-                            url: "../license/status",
-                            method: "POST",
-                            data: {
-                                companyNo: companyNo,
-                                contractNo: contractNo,
-                            },
-                            success: function (data) {
-
-                                if (data === 'NO SESSION') {
-                                    alert("세션이 만료되었습니다.");
-                                    window.parent.location.href = "./login";
-                                } else if (data === 'NO DATA') {
-                                    var newRow = '<tr><td colspan="9" class="left-align">조회된 데이터가 없습니다.</td></tr>';
-                                    $('.license_status tbody').append(newRow);
-                                } else {
-                                    if (Array.isArray(data)) {  
-                                        $.each(data, function(index, post) {
-                                            var newRow = $('.license_status tbody tr').first().clone().removeClass('hidden');
-
-                                            $(newRow).find('.cell_license_no').text(post.licenseNo);
-                                            $(newRow).find('.cell_license_type').text(licenseTypes[post.licenseType]);
-                                            $(newRow).find('.cell_app_name').text(appNames[post.appName]);
-                                            $(newRow).find('.cell_start_date').text(post.startDate);
-                                            $(newRow).find('.cell_end_date').text(post.endDate);
-                                            $(newRow).find('.cell_license_count').text(post.licenseCount);
-                                            $(newRow).find('.cell_unit_price').text(post.unitPrice);
-                                            $(newRow).find('.cell_amount').text(formatCurrency(post.amount));
-                                            $(newRow).find('.cell_discounted_amount').text(formatCurrency(post.discountedAmount));
-                                            $(newRow).find('.cell_actual_amount').text(formatCurrency(post.actualAmount));
-
-                                            $('.license_status tbody').append(newRow);
-                                        });
-                                    }
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                var newRow = '<tr><td colspan="9" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
-                                $('.license_status tbody').append(newRow);
-                            },
-                        });
-                    } else {
-                        alert("계약 목록에서 행을 선택하세요.");
-                    }
-
-                };
-
                 $('.s_company_no').change(function() {
                     Search();
                 });
@@ -268,23 +242,39 @@
 
                 $('.contract tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
-                    
-                    SearchLicense();
                 });
 
-                $('.license_status tbody').on('click', 'tr', function() {
-                    $(this).addClass('selected').siblings().removeClass('selected');
+                $('.contract_div').change(function() {
+                    var contractDiv = $(this).val();
+
+                    switch (contractDiv) {
+                        case 'L':
+                            ExpandedChildren($('#license_content'));
+                            break;
+                        case 'D':
+                        case 'A':
+                            ExpandedChildren($('#odm_content'));
+                            break;
+                        case 'S':
+                            ExpandedChildren($('#ships_content'));
+                            break;
+                    }
                 });
+
+                var HiddenChildren = function() {
+                    $('.expanded').addClass('hidden');
+                    $('.expanded').removeClass('expanded');
+                }
+
+                var ExpandedChildren = function(element) {
+                    HiddenChildren();
+
+                    $(element).removeClass("hidden");
+                    $(element).addClass("expanded");
+                }
 
                 var ClearContract = function() {
                     const rows = document.querySelectorAll(".contract tbody tr:not(:first-child)");
-                    rows.forEach(row => {
-                        row.remove();
-                    });
-                }
-
-                var ClearLicense = function() {
-                    const rows = document.querySelectorAll(".license_status tbody tr:not(:first-child)");
                     rows.forEach(row => {
                         row.remove();
                     });
@@ -298,69 +288,94 @@
                     $('.contract_name').val('');
                     $('.contract_date').val('');
                     $('.contractor').val('');
+                    $('.contract_service').val('');
+                    $('.contract_div').val('');
                     $('.contract_period').val('');
                     $('.start_date').val('');
                     $('.end_date').val('');
                     $('.monetary_unit').val('');
                     $('.exchange_rate').val('0');
-                    $('.amount').val('0');
-                    $('.discounted_amount').val('0');
-                    $('.actual_amount').val('0');
+                    $('.contract_manager').val('');
                     $('.remark').val('');
 
-                    const rows = document.querySelectorAll(".license tbody tr:not(:first-child)");
-                    rows.forEach(row => {
+                    const licenseRows = document.querySelectorAll(".license tbody tr:not(:first-child)");
+                    licenseRows.forEach(row => {
+                        row.remove();
+                    });
+                    
+                    const odmContractRows = document.querySelectorAll(".odm_contract tbody tr:not(:first-child)");
+                    odmContractRows.forEach(row => {
+                        row.remove();
+                    });
+                    
+                    const shipsContractRows = document.querySelectorAll(".ships_contract tbody tr:not(:first-child)");
+                    shipsContractRows.forEach(row => {
                         row.remove();
                     });
                 };
 
-                $('.license_add').click(function() {
-                    var count = $('.license tbody tr').length;
-
-                    if (count > 4) {
-                        alert('라이센스틑 최대 4개까지 입력 가능합니다.');
-                        return;
-                    }
-
+                var ValidationCheck = function() {
                     if ($('.contract_name').val() === '') {
                         alert('계약명을 입력하세요.');
-                        return;
+                        return false;
                     }
 
                     if ($('.contract_date').val() === '') {
                         alert('계약일자를 입력하세요.');
-                        return;
+                        return false;
                     }
 
                     if ($('.contractor').val() === '') {
-                        alert('담당자를 입력하세요.');
-                        return;
+                        alert('계약자를 입력하세요.');
+                        return false;
+                    }
+
+                    if ($('.contract_service').val() === '') {
+                        alert('계약서비스를 입력하세요.');
+                        return false;
+                    }
+
+                    if ($('.contract_div').val() === '') {
+                        alert('계약구분을 입력하세요.');
+                        return false;
                     }
                     
                     if ($('.contract_period').val() === '') {
                         alert('계약기간을 선택하세요.');
-                        return;
+                        return false;
                     }
                     
                     if ($('.start_date').val() === '' || $('.end_date').val() === '') {
                         alert('계약기간을 입력하세요.');
-                        return;
+                        return false;
                     }
                     
                     if ($('.monetary_unit').val() === '') {
                         alert('화폐단위를 선택하세요.');
-                        return;
+                        return false;
                     }
                     
                     if ($('.exchange_rate').val() === '') {
                         alert('기준환율을 입력하세요.');
+                        return false;
+                    }
+                    
+                    if ($('.contract_manager').val() === '') {
+                        alert('계약담당자를 입력하세요.');
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                /* 라이센스 관리 시작 */
+                $('.license_add').click(function() {
+                    if (!ValidationCheck()) {
                         return;
                     }
                     
                     var newRow = $('.license tbody tr').first().clone().removeClass('hidden');
 
-                    $(newRow).find('.license_type').val('OL');
-                    $(newRow).find('.app_name').val('TM');
                     $(newRow).find('.license_start_date').val($('.start_date').val());
                     $(newRow).find('.license_end_date').val($('.end_date').val());
 
@@ -484,46 +499,92 @@
                     
                     preventChange = false;
                 });
+                /* 라이센스 관리 끝 */
+
+                /* ODM 계약관리 시작 */
+                 $('.odm_contract_add').click(function() {
+                    if (!ValidationCheck()) {
+                        return;
+                    }
+                    
+                    var newRow = $('.odm_contract tbody tr').first().clone().removeClass('hidden');
+
+                    $(newRow).find('.pay_currency').val($('.monetary_unit').val());
+                    $(newRow).find('.apply_date').val($('.start_date').val());
+
+                    $('.odm_contract tbody').append(newRow);
+                });
+
+                $('.odm_contract_delete').click(function() {
+                    var selectedRow = $('.odm_contract tr.selected');
+
+                    if ($(selectedRow).length > 0) {
+                        var index = $(selectedRow).index();
+                        var hidMode = $(selectedRow).find('.mode');
+
+                        if (hidMode.val() == 'I') {
+                            $('.odm_contract tr.selected').remove();
+                        } else {
+                            hidMode.val('D');
+                            $('.odm_contract tr.selected').addClass('hidden');
+                        }
+                    }
+                });
+                
+                $('.odm_contract tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+
+                $('.odm_contract').on('focus', '.unit_price', function() {
+                    preventChange = true;
+
+                    $(this).val(parseCurrency($(this).val()));
+                    $(this).select();
+
+                    preventChange = false;
+                });
+
+                $('.odm_contract').on('blur', '.unit_price', function() {
+                    $(this).val(formatCurrency(parseCurrency($(this).val())));
+                });
+                /* ODM 계약관리 끝 */
+
+                /* 선박별 계약관리 시작 */
+                $('.ships_contract_add').click(function() {
+                    if (!ValidationCheck()) {
+                        return;
+                    }
+                    
+                    var newRow = $('.ships_contract tbody tr').first().clone().removeClass('hidden');
+
+
+                    $('.ships_contract tbody').append(newRow);
+                });
+
+                $('.ships_contract_delete').click(function() {
+                    var selectedRow = $('.ships_contract tr.selected');
+
+                    if ($(selectedRow).length > 0) {
+                        var index = $(selectedRow).index();
+                        var hidMode = $(selectedRow).find('.mode');
+
+                        if (hidMode.val() == 'I') {
+                            $('.ships_contract tr.selected').remove();
+                        } else {
+                            hidMode.val('D');
+                            $('.ships_contract tr.selected').addClass('hidden');
+                        }
+                    }
+                });
+                /* 선박별 계약관리 끝 */
 
                 $('.close').click(function() {
                     $('.modal').hide();
                 });
 
                 $('.save').click(function() {
-                    if (confirm('데이터를 저장 하시겠습니까?') == true)
-                    {
-                        if ($('.contract_name').val() === '') {
-                            alert('계약명을 입력하세요.');
-                            return;
-                        }
-
-                        if ($('.contract_date').val() === '') {
-                            alert('계약일자를 입력하세요.');
-                            return;
-                        }
-
-                        if ($('.contractor').val() === '') {
-                            alert('담당자를 입력하세요.');
-                            return;
-                        }
-                        
-                        if ($('.contract_period').val() === '') {
-                            alert('계약기간을 선택하세요.');
-                            return;
-                        }
-                        
-                        if ($('.start_date').val() === '' || $('.end_date').val() === '') {
-                            alert('계약기간을 입력하세요.');
-                            return;
-                        }
-                        
-                        if ($('.monetary_unit').val() === '') {
-                            alert('화폐단위를 선택하세요.');
-                            return;
-                        }
-                        
-                        if ($('.exchange_rate').val() === '') {
-                            alert('기준환율을 입력하세요.');
+                    if (confirm('데이터를 저장 하시겠습니까?')) {
+                        if (!ValidationCheck()) {
                             return;
                         }
 
@@ -629,10 +690,19 @@
                     }
                 });
                 
+                createVariablesSelection($('.contract_service'), contractServices);
+                createVariablesSelection($('.contract_div'), contractDivs);
+
                 createVariablesSelection($('.monetary_unit'), monetaryUnits);
                 createVariablesSelection($('.contract_period'), contractPeriods);
-                createVariablesSelection($('.app_name'), appNames);
                 createVariablesSelection($('.license_type'), licenseTypes);
+                createVariablesSelection($('.license_div'), licenseDivs);
+                
+                createVariablesSelection($('.odm_cont_div'), odmContractDivs);
+                createVariablesSelection($('.pay_currency'), monetaryUnits);
+                createVariablesSelection($('.pay_unit'), payUnits);
+                
+                createVariablesSelection($('.equip_lent'), useYn);
             });
         </script>
     </head>
@@ -704,48 +774,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div></br></br>
-                <div class="contents-container">
-                    <div class="title">라이센스 목록</div>
-                    <div>
-                        <table class="license_status">
-                            <thead>
-                                <tr>
-                                    <th width="100px">라이센스번호</th>
-                                    <th width="140px">타입</th>
-                                    <th width="140px">프로그램</th>
-                                    <th width="240px">기간</th>
-                                    <th width="60px">수량</th>
-                                    <th width="90px">단가</th>
-                                    <th width="110px">금액</th>
-                                    <th width="110px">할인금액</th>
-                                    <th width="110px">실금액</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="hidden">
-                                    <td class="cell_license_no" style="text-align: center;"></td>
-                                    <td class="cell_license_type" style="text-align: left;"></td>
-                                    <td class="cell_app_name" style="text-align: center;"></td>
-                                    <td>
-                                        <div class="align-container-center">
-                                            <p class="cell_start_date"></p>
-                                            <p class="">~</p>
-                                            <p class="cell_end_date"></p>
-                                        </div></td>
-                                    </td>
-                                    <td class="cell_license_count" style="text-align: right;"></td>
-                                    <td class="cell_unit_price" style="text-align: right;"></td>
-                                    <td class="cell_amount" style="text-align: right;"></td>
-                                    <td class="cell_discounted_amount" style="text-align: right;"></td>
-                                    <td class="cell_actual_amount" style="text-align: right;"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="9">데이터를 조회하세요.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
         </form>
@@ -779,9 +807,19 @@
                                     <td class="left-align">
                                         <input type="date" class="contract_date" style="width: 120px;"/>
                                     </td>
-                                    <th class="right-align">*담당자</th>
+                                    <th class="right-align">*계약자</th>
                                     <td class="left-align">
                                         <input type="text" class="contractor" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*계약서비스</th>
+                                    <td class="left-align">
+                                        <select class="contract_service"></select>
+                                    </td>
+                                    <th class="right-align">*계약구분</th>
+                                    <td class="left-align">
+                                        <select class="contract_div"></select>
                                     </td>
                                 </tr>
                                 <tr>
@@ -806,19 +844,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">계약금액</th>
-                                    <td class="left-align">
-                                        <input type="text" class="amount" style="width:160px; text-align: right;"/>
-                                    </td>
-                                    <th class="right-align">할인금액</th>
-                                    <td class="left-align">
-                                        <input type="text" class="discounted_amount" style="width:160px; text-align: right;"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align">실계약금액</th>
+                                    <th class="right-align">*계약담당자</th>
                                     <td class="left-align" colspan="3">
-                                        <input type="text" class="actual_amount" style="width:160px; text-align: right;" readonly/>
+                                        <select class="contract_manager"></select>
                                     </td>
                                 </tr>
                                 <tr>
@@ -831,54 +859,148 @@
                         </table></br>
                     </div>
                     <div class="table-container" style="height:200px">
-                        <div class="title">라이센스 관리</div>
-                        <div class="top-right-button">
-                            <div class="align-container">
-                                <p><input type="button" class="license_add" value="추가"/></p>
-                                <input type="button" class="license_delete" value="삭제"/>
+                        <!-- 라이센스 시작 -->
+                        <div id="license_content" class="hidden">
+                            <div class="title">라이센스</div>
+                            <div class="top-right-button">
+                                <div class="align-container">
+                                    <p><input type="button" class="license_add" value="추가"/></p>
+                                    <input type="button" class="license_delete" value="삭제"/>
+                                </div>
                             </div>
+                            <table class="license">
+                                <thead>
+                                    <tr>
+                                        <th width="100px">번호</th>
+                                        <th width="140px">타입</th>
+                                        <th width="140px">구분</th>
+                                        <th width="240px">기간</th>
+                                        <th width="60px">수량</th>
+                                        <th width="90px">단가</th>
+                                        <th width="110px">금액</th>
+                                        <th width="110px">할인금액</th>
+                                        <th width="110px">실금액</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hidden">
+                                        <td>
+                                            <input type="hidden" class="mode" value="I">
+                                            <input type="text" class="license_no" style="width:100px;" readonly>
+                                        </td>
+                                        <td>
+                                            <select class="license_type" style="width:126px;"></select>
+                                        </td>
+                                        <td>
+                                            <select class="license_div" style="width:126px"></select>
+                                        </td>
+                                        <td>
+                                            <div class="align-container">
+                                                <p><input type="date" class="license_start_date" style="width:105px;"></p>
+                                                <p>~</p>
+                                                <input type="date" class="license_end_date" style="width:105px;">
+                                            </div>
+                                        </td>
+                                        <td><input type="text" class="license_count" style="width:50px; text-align:right" value="0"></td>
+                                        <td><input type="text" class="unit_price" style="width:80px; text-align:right" value="0"></td>
+                                        <td><input type="text" class="license_amount" style="width:100px; text-align:right" readonly value="0"></td>
+                                        <td><input type="text" class="license_discounted_amount" style="width:100px; text-align:right" value="0"></td>
+                                        <td><input type="text" class="license_actual_amount" style="width:100px; text-align:right" readonly value="0"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <table class="license">
-                            <thead>
-                                <tr>
-                                    <th width="100px">라이센스번호</th>
-                                    <th width="140px">타입</th>
-                                    <th width="140px">프로그램</th>
-                                    <th width="240px">기간</th>
-                                    <th width="60px">수량</th>
-                                    <th width="90px">단가</th>
-                                    <th width="110px">금액</th>
-                                    <th width="110px">할인금액</th>
-                                    <th width="110px">실금액</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="hidden">
-                                    <td>
-                                        <input type="hidden" class="mode" value="I">
-                                        <input type="text" class="license_no" style="width:100px;" readonly>
-                                    </td>
-                                    <td>
-                                        <select class="license_type" style="width:126px;"></select>
-                                    </td>
-                                    <td>
-                                        <select class="app_name" style="width:120px"></select>
-                                    </td>
-                                    <td>
-                                        <div class="align-container">
-                                            <p><input type="date" class="license_start_date" style="width:105px;"></p>
-                                            <p>~</p>
-                                            <input type="date" class="license_end_date" style="width:105px;">
-                                        </div>
-                                    </td>
-                                    <td><input type="text" class="license_count" style="width:50px; text-align:right" value="0"></td>
-                                    <td><input type="text" class="unit_price" style="width:80px; text-align:right" value="0"></td>
-                                    <td><input type="text" class="license_amount" style="width:100px; text-align:right" readonly value="0"></td>
-                                    <td><input type="text" class="license_discounted_amount" style="width:100px; text-align:right" value="0"></td>
-                                    <td><input type="text" class="license_actual_amount" style="width:100px; text-align:right" readonly value="0"></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <!-- 라이센스 끝 -->
+                        <!-- ODM 계약 시작 -->
+                        <div id="odm_content" class="hidden">
+                            <div class="title">ODM 계약</div>
+                            <div class="top-right-button">
+                                <div class="align-container">
+                                    <p><input type="button" class="odm_contract_add" value="추가"/></p>
+                                    <input type="button" class="odm_contract_delete" value="삭제"/>
+                                </div>
+                            </div>
+                            <table class="odm_contract">
+                                <thead>
+                                    <tr>
+                                        <th width="60px">순번</th>
+                                        <th width="160px">계약구분</th>
+                                        <th width="140px">결제화폐</th>
+                                        <th width="260px">결제단위</th>
+                                        <th width="160px">결제주기(월)</th>
+                                        <th width="160px">결제단가</th>
+                                        <th width="160px">적용일</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hidden">
+                                        <td>
+                                            <input type="hidden" class="mode" value="I">
+                                            <input type="text" class="odm_seq" style="width:50px;" readonly>
+                                        </td>
+                                        <td>
+                                            <select class="odm_cont_div" style="width:150px;"></select>
+                                        </td>
+                                        <td>
+                                            <select class="pay_currency" style="width:130px"></select>
+                                        </td>
+                                        <td>
+                                            <select class="pay_unit" style="width:250px;"></select>
+                                        </td>
+                                        <td><input type="text" class="pay_term_mo" style="width:150px; text-align:right" value="0"></td>
+                                        <td><input type="text" class="unit_price" style="width:150px; text-align:right" value="0"></td>
+                                        <td><input type="date" class="apply_date" style="width:150px;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- ODM 계약 끝 -->
+                        <!-- 선박별 계약 시작 -->
+                        <div id="ships_content" class="hidden">
+                            <div class="title">선박별 구독계약</div>
+                            <div class="top-right-button">
+                                <div class="align-container">
+                                    <p><input type="button" class="ships_contract_add" value="추가"/></p>
+                                    <input type="button" class="ships_contract_delete" value="삭제"/>
+                                </div>
+                            </div>
+                            <table class="ships_contract">
+                                <thead>
+                                    <tr>
+                                        <th width="60px">순번</th>
+                                        <th width="200px">선명</th>
+                                        <th width="160px">IMO번호</th>
+                                        <th width="200px">장비렌탈구분</th>
+                                        <th width="300px">기간</th>
+                                        <th width="180px">요금제</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hidden">
+                                        <td>
+                                            <input type="hidden" class="mode" value="I">
+                                            <input type="text" class="ship_seq" style="width:50px;" readonly>
+                                        </td>
+                                        <td><input type="text" class="ship_name" style="width:190px;"></td>
+                                        <td><input type="text" class="imo_no" style="width:150px;"></td>
+                                        <td>
+                                            <select class="equip_lent" style="width:196px"></select>
+                                        </td>
+                                        <td>
+                                            <div class="align-container">
+                                                <p><input type="date" class="apply_start_date" style="width:125px;"></p>
+                                                <p>~</p>
+                                                <input type="date" class="apply_finish_date" style="width:125px;">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <select class="plan_id" style="width:170px"></select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 선박별 계약 끝 -->
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">

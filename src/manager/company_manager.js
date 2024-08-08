@@ -110,7 +110,7 @@ module.exports = {
                 businessPlace: businessPlace, 
                 nation: nation,
                 telephone: telephone,
-                regUser: registUser
+                registUser: registUser
             };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("company", "insert", param, format);

@@ -65,6 +65,7 @@ require("./src/routes/view_route")(app);
 require("./src/routes/login_route")(app);
 require("./src/routes/mypage_route")(app);
 require("./src/routes/dashboard_route")(app);
+require("./src/routes/employee_route")(app);
 require("./src/routes/member_route")(app);
 require("./src/routes/nations_route")(app);
 require("./src/routes/company_route")(app);

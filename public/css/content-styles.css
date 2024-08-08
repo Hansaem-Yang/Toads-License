@@ -247,3 +247,7 @@ select {
 .hidden {
     display: none;
 }
+
+.expanded {
+    display: block;
+}

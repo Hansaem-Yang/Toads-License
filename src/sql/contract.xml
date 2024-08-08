@@ -17,22 +17,14 @@
              , a.contract_name
              , a.contract_date
              , a.contractor
+             , a.contract_service
+             , a.contract_div
              , a.contract_period
-             , isnull((select termination_status
-                         from termination
-                        where company_no = a.company_no
-                          and contract_no = a.contract_no
-                          and termination_no = (select max(termination_no)
-                                                  from termination
-                                                 where company_no = a.company_no
-                                                   and contract_no = a.contract_no)), 0) as contract_status
              , a.start_date
              , a.end_date
              , a.monetary_unit
              , a.exchange_rate
-             , a.amount
-             , a.discounted_amount
-             , a.actual_amount
+             , a.contract_manager
              , a.remark
           from contract as a
          inner join company as b
@@ -46,35 +38,26 @@
              , a.contract_name
              , a.contract_date
              , a.contractor
+             , a.contract_service
+             , a.contract_div
              , a.contract_period
-             , isnull((select termination_status
-                         from termination
-                        where company_no = a.company_no
-                          and contract_no = a.contract_no
-                          and termination_no = (select max(termination_no)
-                                                  from termination
-                                                 where company_no = a.company_no
-                                                   and contract_no = a.contract_no)), 0) as contract_status
              , a.start_date
              , a.end_date
              , a.monetary_unit
              , a.exchange_rate
-             , a.amount
-             , a.discounted_amount
-             , a.actual_amount
+             , a.contract_manager
              , a.remark
           from contract as a
          inner join company as b
             on a.company_no = b.company_no
-         where a.company_no = #{companyNo}
-           and a.contract_no = #{contractNo};
+         where a.contract_no = #{contractNo};
     </select>
     <select id="license_status">
         select company_no
              , contract_no
              , license_no
              , license_type
-             , app_name
+             , license_div
              , license_count
              , start_date
              , end_date
@@ -83,8 +66,7 @@
              , discounted_amount
              , actual_amount
           from license
-         where company_no = #{companyNo}
-           and contract_no = #{contractNo};
+         where contract_no = #{contractNo};
     </select>
     <select id="max_contract_no">
         select max(contract_no) max_contract_no
@@ -99,39 +81,38 @@
                   , contract_name
                   , contract_date
                   , contractor
+                  , contract_service
+                  , contract_div
                   , contract_period
                   , start_date
                   , end_date
                   , monetary_unit
                   , exchange_rate
-                  , amount
-                  , discounted_amount
-                  , actual_amount
+                  , contract_manager
                   , remark
-                  , regist_datetime
-                  , regist_company
+                  , regist_date
                   , regist_user
         )
         values (
                     #{companyNo}
-                  , (select 'C' + convert(varchar(8), convert(datetime, #{contractDate}), 12) + format(isnull(max(company_no), 0) + 1, '000') 
+                  , (select #{contractDiv} + '-' + #{contractService} + '-' + convert(varchar(8), convert(datetime, #{contractDate}), 112) + '-' + format(isnull(right(max(contract_no), 3), 0) + 1, '000') 
                        from contract
-                      where company_no = #{companyNo}
+                      where contract_div = #{contractDiv}
+                        and contract_service = #{contractService}
                         and contract_date = #{contractDate})
                   , #{contractName}
                   , #{contractDate}
                   , #{contractor}
+                  , #{contractService}
+                  , #{contractDiv}
                   , #{contractPeriod}
                   , #{startDate}
                   , #{endDate}
                   , #{monetaryUnit}
                   , #{exchangeRate}
-                  , #{amount}
-                  , #{discountedAmount}
-                  , #{actualAmount}
+                  , #{contractManager}
                   , #{remark}
                   , convert(varchar(20), getdate(), 20)
-                  , #{registCompany}
                   , #{registUser}
         );
     </insert>
@@ -140,25 +121,22 @@
            set contract_name = #{contractName}
              , contract_date = #{contractDate}
              , contractor = #{contractor}
+             , contract_service = #{contractService}
+             , contract_div = #{contractDiv}
              , contract_period = #{contractPeriod}
              , start_date = #{startDate}
              , end_date = #{endDate}
              , monetary_unit = #{monetaryUnit}
              , exchange_rate = #{exchangeRate}
              , remark = #{remark}
-             , amount = #{amount}
-             , discounted_amount = #{discountedAmount}
-             , actual_amount = #{actualAmount}
-             , modify_datetime = convert(varchar(20), getdate(), 20)
-             , modify_company = #{modifyCompany}
+             , contract_manager = #{contractManager}
+             , modify_date = convert(varchar(20), getdate(), 20)
              , modify_user = #{modifyUser}
-         where company_no = #{companyNo}
-           and contract_no = #{contractNo};
+         where contract_no = #{contractNo};
     </update>
     <delete id="delete">
         delete from contract
-         where company_no = #{companyNo}
-           and contract_no = #{contractNo};
+         where contract_no = #{contractNo};
     </delete>
     
     <insert id="license_insert">
@@ -167,7 +145,7 @@
                   , contract_no
                   , license_no
                   , license_type
-                  , app_name
+                  , license_div
                   , license_count
                   , start_date
                   , end_date
@@ -182,13 +160,12 @@
         values (
                     #{companyNo}
                   , #{contractNo}
-                  , (select #{licenseType} + format(isnull(substring(max(license_no), 3, 2), 0) + 1, '00') + #{appName}
+                  , (select #{licenseType} + #{contractService} + '-' + convert(varchar(4), convert(datetime, #{contractDate}), 112) + '-' + right(convert(varchar(8), convert(datetime, #{contractDate}), 112), 4) + '-' + #{licenseDiv} + format(isnull(right(max(license_no), 3), 0) + 1, '000')
                        from license
-                      where company_no = #{companyNo}
-                        and contract_no = #{contractNo}
+                      where contract_no = #{contractNo}
                         and license_type = #{licenseType})
                   , #{licenseType}
-                  , #{appName}
+                  , #{licenseDiv}
                   , #{licenseCount}
                   , #{startDate}
                   , #{endDate}

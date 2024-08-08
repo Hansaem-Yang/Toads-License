@@ -5,7 +5,8 @@
     <![CDATA[
         select company_no
              , company_name
-          from company;
+          from company
+         where company_div != 'T';
     ]]>
     </select>
     <select id="status">
@@ -66,7 +67,6 @@
                   , #{businessNo}
                   , #{residentNo}
                   , #{companyDiv} 
-                  , #{postCode}
                   , #{businessPlace}
                   , #{nation}
                   , #{telephone}

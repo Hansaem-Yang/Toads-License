@@ -27,6 +27,18 @@ const monetaryUnits = {
     EUR:'유로'
 }
 
+const contractServices = {
+    M1:'Toads Marine',
+    S1:'Toads S-Link Basic'
+}
+
+const contractDivs = {
+    L:'License 계약',
+    D:'ODM 계약',
+    //A:'Agency 계약',
+    S:'Subcription 계약'
+}
+
 const contractPeriods = {
     M1:'1개월', 
     M3:'3개월', 
@@ -40,6 +52,24 @@ const licenseTypes = {
     OL:'Official license',
     SL:'Service license'
 }
+
+const licenseDivs = {
+    P:'Permanent License',
+    A:'Annual License',
+    M:'Monthly License'
+}
+
+const odmContractDivs = {
+    O:'본계약',
+    R:'갱신계약'
+}
+
+const payUnits = {
+    S:'선박척당 요금 적용',
+    T:'사용시간(시간) 요금 적용',
+    M:'사용시간(분) 요금 적용',
+    A:'일괄적용'
+}   
 
 const appNames = {
     TM:'Toads Marine',
@@ -77,4 +107,15 @@ const terminationStatus = {
     2: '신청 처리중',
     9: '해지 완료',
     C: '해지 취소'
+}
+
+const contractManagerAuth = {
+    C1:'ODM 등록 권한',
+    R1:'ODM 조회 권한',
+    S1:'Super 권한'
+}
+
+const useYn = {
+    Y:'Yes',
+    N:'No'
 }

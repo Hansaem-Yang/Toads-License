@@ -9,17 +9,19 @@ class Contract extends Common {
         this.contractName = null;
         this.contractDate = null;
         this.contractor = null;
+        this.contractService = null;
+        this.contractDiv = null;
         this.contractPeriod = null;
         this.contractStatus = null;
         this.startDate = null;
         this.endDate = null;
         this.monetaryUnit = null;
         this.exchangeRate = -1;
-        this.amount = -1;
-        this.discountedAmount = -1;
-        this.actualAmount = -1;
+        this.contractManager = null
         this.remark = null;
         this.licenses = [];
+        this.odmContracts = [];
+        this.shipsContracts = [];
     }
 
     getCompanyNo(){
@@ -40,6 +42,12 @@ class Contract extends Common {
     getContractor(){
         return this.contractor;
     }
+    getContractService(){
+        return this.contractService;
+    }
+    getContractDiv(){
+        return this.contractDiv;
+    }
     getContractPeriod(){
         return this.contractPeriod;
     }
@@ -53,25 +61,25 @@ class Contract extends Common {
         return this.endDate;
     }
     getMonetaryUnit(){
-        return monetaryUnit;
+        return this.monetaryUnit;
     }
     getExchangeRate(){
-        return exchangeRate;
+        return this.exchangeRate;
     }
-    getAmount(){
-        return amount;
-    }
-    getDiscountedAmount(){
-        return discountedAmount;
-    }
-    getActualAmount(){
-        return actualAmount;
+    getContractManager(){
+        return this.contractManager;
     }
     getRemark(){
         return this.remark;
     }
     getLicenses(){
         return this.licenses;
+    }
+    getOdmContracts(){
+        return this.odmContracts;
+    }
+    getShipsContracts(){
+        return this.shipsContracts;
     }
     
     setCompanyNo(companyNo){
@@ -92,6 +100,12 @@ class Contract extends Common {
     setContractor(contractor){
         this.contractor = contractor;
     }
+    setContractService(contractService){
+        this.contractService = contractService;
+    }
+    setContractDiv(contractDiv){
+        this.contractDiv = contractDiv;
+    }
     setContractPeriod(contractPeriod){
         this.contractPeriod = contractPeriod;
     }
@@ -110,20 +124,20 @@ class Contract extends Common {
     setExchangeRate(exchangeRate){
         this.exchangeRate = exchangeRate;
     }
-    setAmount(amount){
-        this.amount = amount;
-    }
-    setDiscountedAmount(discountedAmount){
-        this.discountedAmount = discountedAmount;
-    }
-    setActualAmount(actualAmount){
-        this.actualAmount = actualAmount;
+    setContractManager(contractManager){
+        this.contractManager = contractManager;
     }
     setRemark(remark){
         this.remark = remark;
     }
     setLicenses(licenses){
         this.licenses = licenses;
+    }
+    setOdmContracts(odmContracts){
+        this.odmContracts = odmContracts;
+    }
+    setShipsContracts(shipsContracts){
+        this.shipsContracts = shipsContracts;
     }
 }
 

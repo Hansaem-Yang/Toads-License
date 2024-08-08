@@ -26,7 +26,7 @@ module.exports = function (app) {
         let companyNo = req.body.companyNo;
 
         manager.detail(companyNo).then((data) => {
-            if (data == null || data.length <= 0) {
+            if (data == null) {
                 res.send(constants.NO_DATA);
             } else {
                 res.send(data);

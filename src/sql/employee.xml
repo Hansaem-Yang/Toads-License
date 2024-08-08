@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="employee">  
+    <select id="status">
+        select a.company_no
+             , b.company_name
+             , a.emp_no
+             , a.emp_name
+             , a.emp_ename
+             , a.email
+             , a.enter_date
+             , a.nation
+             , a.id_no
+             , a.quit_date
+          from employee as a
+         inner join company as b
+            on a.company_no = b.company_no;
+    </select>
+    <select id="detail">
+        select a.company_no
+             , b.company_name
+             , a.emp_no
+             , a.emp_name
+             , a.emp_ename
+             , a.email
+             , a.enter_date
+             , a.nation
+             , a.id_no
+             , a.quit_date
+          from employee as a
+         inner join company as b
+            on a.company_no = b.company_no
+         where a.emp_no = #{empNo};
+    </select>
+    <insert id="insert">
+        insert into employee (
+                    company_no
+                  , emp_no
+                  , emp_name
+                  , emp_ename
+                  , email
+                  , enter_date
+                  , nation
+                  , id_no
+                  , quit_date
+        )
+        values (
+                    #{companyNo}
+                  , #{empNo}
+                  , #{empName}
+                  , #{empEname}
+                  , #{email}
+                  , #{enterDate}
+                  , #{nation}
+                  , #{idNo}
+                  , #{quitDate}
+        );
+    </insert>
+    <update id="update">
+        update employee
+           set emp_name = #{empName}
+             , emp_ename = #{empEname}
+             , email = #{email}
+             , enter_date = #{enterDate}
+             , nation = #{nation}
+             , id_no = #{idNo}
+             , quit_date = #{quitDate}
+         where emp_no = #{empNo};
+    </update>
+    <delete id="delete">
+        delete from employee
+         where emp_no = #{empNo};
+    </delete>
+    <update id="changePassword">
+        update employee
+           set password = convert(varbinary(MAX), #{password})
+         where emp_no = #{empNo};
+    </update>
+</mapper>
