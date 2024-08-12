@@ -2,7 +2,7 @@ const manager = require("../manager/employee_manager");
 const constants = require("../common/constants");
 
 module.exports = function (app) {
-    app.post("/employee/status", (req, res) => {
+    app.post("/admin/employee/status", (req, res) => {
         manager.status().then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
@@ -12,7 +12,7 @@ module.exports = function (app) {
         });
     });
 
-    app.post("/employee/detail", (req, res) => {
+    app.post("/admin/employee/detail", (req, res) => {
         let empNo = req.body.empNo;
 
         manager.detail(empNo).then((data) => {
@@ -24,7 +24,7 @@ module.exports = function (app) {
         });
     });
 
-    app.post("/employee/checkEmail", (req, res) => {
+    app.post("/admin/employee/checkEmail", (req, res) => {
         let empNo = req.body.empNo;
         let email = req.body.email;
 
@@ -39,7 +39,7 @@ module.exports = function (app) {
         });
     });
 
-    app.post("/employee/insert", (req, res) => {
+    app.post("/admin/employee/insert", (req, res) => {
         let companyNo = req.body.companyNo;
         let empNo = req.body.empNo;
         let empName = req.body.empName;
@@ -58,7 +58,7 @@ module.exports = function (app) {
         });
     });
 
-    app.post("/employee/update", (req, res) => {
+    app.post("/admin/employee/update", (req, res) => {
         let companyNo = req.body.companyNo;
         let empNo = req.body.empNo;
         let empName = req.body.empName;
@@ -77,7 +77,7 @@ module.exports = function (app) {
         });
     });
 
-    app.post("/employee/delete", (req, res) => {
+    app.post("/admin/employee/delete", (req, res) => {
         let empNos = req.body.empNos;
 
         manager.delete(empNos).then((data) => {
@@ -89,7 +89,7 @@ module.exports = function (app) {
         });
     });
     
-    app.post("/employee/changePassword", (req, res) => {
+    app.post("/admin/employee/changePassword", (req, res) => {
         let empNo = req.body.empNo;
         let password = req.body.password;
 

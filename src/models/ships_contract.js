@@ -12,6 +12,8 @@ class ShipsContract extends Common {
         this.applyFinishDate = null;
         this.cancelYn = null;
         this.cancelDate = null;
+        this.planSeq = null;
+        this.planId = null;
     }
 
     getContractNo(){
@@ -41,6 +43,12 @@ class ShipsContract extends Common {
     getCancelDate(){
         return this.cancelDate;
     }
+    getPlanSeq(){
+        return this.planSeq;
+    }
+    getPlanId(){
+        return this.planId;
+    }
 
     setContractNo(contractNo){
         this.contractNo = contractNo;
@@ -68,6 +76,12 @@ class ShipsContract extends Common {
     }
     setCancelDate(cancelDate) {
         this.cancelDate = cancelDate;
+    }
+    setPlanSeq(planSeq){
+        this.planSeq = planSeq;
+    }
+    setPlanId(planId){
+        this.planId = planId;
     }
 }
 

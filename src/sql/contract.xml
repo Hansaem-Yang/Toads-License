@@ -10,6 +10,14 @@
             on a.company_no = b.company_no
          where a.company_no = #{companyNo};
     </select>
+    <select id="plan_status">
+        select plan_id
+             , plan_kname
+             , plan_ename
+             , flat_div
+          from ts_plan
+         where odm_div = 'N';
+    </select>
     <select id="status">
         select a.company_no
              , b.company_name
@@ -51,22 +59,6 @@
          inner join company as b
             on a.company_no = b.company_no
          where a.contract_no = #{contractNo};
-    </select>
-    <select id="license_status">
-        select company_no
-             , contract_no
-             , license_no
-             , license_type
-             , license_div
-             , license_count
-             , start_date
-             , end_date
-             , unit_price
-             , amount
-             , discounted_amount
-             , actual_amount
-          from license
-         where contract_no = #{contractNo};
     </select>
     <select id="max_contract_no">
         select max(contract_no) max_contract_no
@@ -112,7 +104,7 @@
                   , #{exchangeRate}
                   , #{contractManager}
                   , #{remark}
-                  , convert(varchar(20), getdate(), 20)
+                  , left(convert(varchar(20), getdate(), 121), 10)
                   , #{registUser}
         );
     </insert>
@@ -130,7 +122,7 @@
              , exchange_rate = #{exchangeRate}
              , remark = #{remark}
              , contract_manager = #{contractManager}
-             , modify_date = convert(varchar(20), getdate(), 20)
+             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
              , modify_user = #{modifyUser}
          where contract_no = #{contractNo};
     </update>
@@ -138,11 +130,24 @@
         delete from contract
          where contract_no = #{contractNo};
     </delete>
-    
+    <select id="license_status">
+        select contract_no
+             , license_no
+             , license_type
+             , license_div
+             , license_count
+             , start_date
+             , end_date
+             , unit_price
+             , amount
+             , discounted_amount
+             , actual_amount
+          from license
+         where contract_no = #{contractNo};
+    </select>
     <insert id="license_insert">
         insert into license (
-                    company_no
-                  , contract_no
+                    contract_no
                   , license_no
                   , license_type
                   , license_div
@@ -153,13 +158,11 @@
                   , amount
                   , discounted_amount
                   , actual_amount
-                  , regist_datetime
-                  , regist_company
+                  , regist_date
                   , regist_user
         )
         values (
-                    #{companyNo}
-                  , #{contractNo}
+                    #{contractNo}
                   , (select #{licenseType} + #{contractService} + '-' + convert(varchar(4), convert(datetime, #{contractDate}), 112) + '-' + right(convert(varchar(8), convert(datetime, #{contractDate}), 112), 4) + '-' + #{licenseDiv} + format(isnull(right(max(license_no), 3), 0) + 1, '000')
                        from license
                       where contract_no = #{contractNo}
@@ -173,8 +176,7 @@
                   , #{amount}
                   , #{discountedAmount}
                   , #{actualAmount}
-                  , convert(varchar(20), getdate(), 20)
-                  , #{registCompany}
+                  , left(convert(varchar(20), getdate(), 121), 10)
                   , #{registUser}
         );
     </insert>
@@ -187,94 +189,188 @@
              , amount = #{amount}
              , discounted_amount = #{discountedAmount}
              , actual_amount = #{actualAmount}
-             , modify_datetime = convert(varchar(20), getdate(), 20)
-             , modify_company = #{modifyCompany}
+             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
              , modify_user = #{modifyUser}
-         where company_no = #{companyNo}
-           and contract_no = #{contractNo}
+         where contract_no = #{contractNo}
            and license_no = #{licenseNo};
     </update>
     <delete id="license_delete">
         delete from license
-         where company_no = #{companyNo}
-           and contract_no = #{contractNo}
+         where contract_no = #{contractNo}
            and license_no = #{licenseNo};
     </delete>
-    <select id="termination_status">
-        select a.company_no
-             , b.company_name
-             , a.contract_no
-             , a.contract_name
-             , a.contract_date
-             , a.contractor
-             , a.contract_period
-             , a.start_date
-             , a.end_date
-             , a.monetary_unit
-             , a.exchange_rate
-             , a.amount
-             , a.discounted_amount
-             , a.actual_amount
-             , a.remark
-          from contract as a
-         inner join company as b
-            on a.company_no = b.company_no
-         where a.company_no = #{companyNo};
+    <select id="odm_contract_status">
+        select contract_no
+             , odm_seq
+             , odm_cont_div
+             , pay_currency
+             , pay_unit
+             , pay_term_mo
+             , unit_price
+             , apply_date
+          from odm_contract
+         where contract_no = #{contractNo};
     </select>
-    <insert id="insert_termination">
-        insert into termination (
-                    company_no
-                  , contract_no
-                  , termination_no
-                  , termination_date
-                  , termination_type
-                  , termination_reasons
-                  , cancellation_charge
-                  , cancellation_refund
-                  , termination_status
-                  , regist_datetime
-                  , regist_company
+    <insert id="odm_contract_insert">
+        insert into odm_contract (
+                    contract_no
+                  , odm_seq
+                  , odm_cont_div
+                  , pay_currency
+                  , pay_unit
+                  , pay_term_mo
+                  , unit_price
+                  , apply_date
+                  , regist_date
                   , regist_user
         )
         values (
-                    #{companyNo}
-                  , #{contractNo}
-                  , (select #{contractNo} + format(isnull(substring(max(termination_no), 10, 2), 0) + 1, '00')
-                       from termination
-                      where company_no = #{companyNo}
-                        and contract_no = #{contractNo})
-                  , #{terminationDate}
-                  , #{terminationType}
-                  , #{terminationReasons}
-                  , 0
-                  , 0
-                  , '1'
-                  , convert(varchar(20), getdate(), 20)
-                  , #{registCompany}
+                    #{contractNo}
+                  , (select isnull(max(odm_seq), 0) + 1
+                       from odm_contract
+                      where contract_no = #{contractNo})
+                  , #{odmContDiv}
+                  , #{payCurrency}
+                  , #{payUnit}
+                  , #{payTermMo}
+                  , #{unitPrice}
+                  , #{applyDate}
+                  , left(convert(varchar(20), getdate(), 121), 10)
                   , #{registUser}
         );
     </insert>
-    <update id="update_termination">
-        update contract
-           set cancellation_charge = ${cancellationCharge}
-             , cancellation_refund = ${cancellationRefund}
-             , termination_status = ${terminationStatus}
-             , modify_datetime = convert(varchar(20), getdate(), 20)
-             , modify_company = #{modifyCompany}
+    <update id="odm_contract_update">
+        update odm_contract
+           set odm_cont_div = #{odmContDiv}
+             , pay_currency = #{payCurrency}
+             , pay_unit = #{payUnit}
+             , pay_term_mo = #{payTermMo}
+             , unit_price = #{unitPrice}
+             , apply_date = #{applyDate}
+             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
              , modify_user = #{modifyUser}
-         where company_no = #{companyNo}
-           and contract_no = #{contractNo}
-           and termination_no = #{terminationNo};
+         where contract_no = #{contractNo}
+           and odm_seq = #{odmSeq};
     </update>
-    <update id="cancel_termination">
-        update contract
-           set termination_status = 'C'
-             , cancellation_date = convert(varchar(20), getdate(), 20)
-             , modify_datetime = convert(varchar(20), getdate(), 20)
-             , modify_company = #{modifyCompany}
+    <delete id="odm_contract_delete">
+        delete from odm_contract
+         where contract_no = #{contractNo}
+           and odm_seq = #{odmSeq};
+    </delete>
+    <select id="ships_contract_status">
+        select a.contract_no
+             , a.ship_seq
+             , a.ship_name
+             , a.imo_no
+             , a.equip_lent
+             , a.apply_start_date
+             , a.apply_finish_date
+             , a.cancel_yn
+             , a.cancel_date
+			       , b.plan_seq
+			       , b.plan_id
+          from ships_contract as a
+		     inner join (select c.contract_no, c.ship_seq, c.plan_seq, c.plan_id 
+		                   from apply_plan as c
+					            where c.contract_no = #{contractNo}
+                        and c.plan_seq = (select max(d.plan_seq)
+					                                  from apply_plan as d
+					           					             where d.contract_no = c.contract_no
+					           					               and d.ship_seq = c.ship_seq)) as b
+		        on a.contract_no = b.contract_no
+		       and a.ship_seq = b.ship_seq
+         where a.contract_no = #{contractNo};
+    </select>
+    <select id="max_ship_seq">
+        select max(ship_seq) max_ship_seq
+          from ships_contract
+         where contract_no = #{contractNo};
+    </select>
+    <insert id="ships_contract_insert">
+        insert into ships_contract (
+                    contract_no
+                  , ship_seq
+                  , ship_name
+                  , imo_no
+                  , equip_lent
+                  , apply_start_date
+                  , apply_finish_date
+                  , cancel_yn
+                  , regist_date
+                  , regist_user
+        )
+        values (
+                    #{contractNo}
+                  , (select isnull(max(ship_seq), 0) + 1
+                       from ships_contract
+                      where contract_no = #{contractNo})
+                  , #{shipName}
+                  , #{imoNo}
+                  , #{equipLent}
+                  , #{applyStartDate}
+                  , #{applyFinishDate}
+                  , 'N'
+                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , #{registUser}
+        );
+    </insert>
+    <update id="ships_contract_update">
+        update ships_contract
+           set ship_name = #{shipName}
+             , imo_no = #{imoNo}
+             , equip_lent = #{equipLent}
+             , apply_start_date = #{applyStartDate}
+             , apply_finish_date = #{applyFinishDate}
+             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
              , modify_user = #{modifyUser}
-         where company_no = #{companyNo}
-           and contract_no = #{contractNo}
-           and termination_no = #{terminationNo};
+         where contract_no = #{contractNo}
+           and ship_seq = #{shipSeq};
     </update>
+    <delete id="ships_contract_delete">
+        delete from ships_contract
+         where contract_no = #{contractNo}
+           and ship_seq = #{shipSeq};
+    </delete>
+    <insert id="apply_plan_insert">
+        insert into apply_plan (
+                    contract_no
+                  , ship_seq
+                  , plan_seq
+                  , plan_id
+                  , apply_start_date
+                  , apply_finish_date
+                  , regist_date
+                  , regist_user
+        )
+        values (
+                    #{contractNo}
+                  , #{shipSeq}
+                  , (select isnull(max(ship_seq), 0) + 1
+                       from apply_plan
+                      where contract_no = #{contractNo}
+                        and ship_seq = #{shipSeq})
+                  , #{planId}
+                  , #{applyStartDate}
+                  , #{applyFinishDate}
+                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , #{registUser}
+        );
+    </insert>
+    <insert id="apply_plan_update">
+        update apply_plan 
+           set plan_id = #{planId}
+             , apply_start_date = #{applyStartDate}
+             , apply_finish_date = #{applyFinishDate}
+             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_user = #{modifyUser}
+         where contract_no = #{contractNo}
+           and ship_seq = #{shipSeq}
+           and plan_seq = #{planSeq};
+    </insert>
+    <insert id="apply_plan_delete">
+        delete from apply_plan 
+         where contract_no = #{contractNo}
+           and ship_seq = #{shipSeq}
+           and plan_seq = #{planSeq};
+    </insert>
 </mapper>

@@ -22,7 +22,7 @@
 
                     // 행 데이터 출력
                     $.ajax({
-                        url: "../../contract/detail",
+                        url: "../admin/contract/detail",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
@@ -86,7 +86,7 @@
 
                     // 행 데이터 출력
                     $.ajax({
-                        url: "../../contract/detail",
+                        url: "../admin/contract/detail",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
@@ -155,7 +155,7 @@
                         });
                         // 행 데이터 출력
                         $.ajax({
-                            url: "../../contract/delete",
+                            url: "../admin/contract/delete",
                             method: "POST",
                             data: {
                                 contractNos: contractNos,
@@ -409,36 +409,43 @@
                     {
                         if ($('.contract_name').val() === '') {
                             alert('계약명을 입력하세요.');
+                            $('.contract_name').focus();
                             return;
                         }
 
                         if ($('.contract_date').val() === '') {
                             alert('계약일자를 입력하세요.');
+                            $('.contract_date').focus();
                             return;
                         }
 
                         if ($('.contractor').val() === '') {
                             alert('담당자를 입력하세요.');
+                            $('.contractor').focus();
                             return;
                         }
                         
                         if ($('.contract_period').val() === '') {
                             alert('계약기간을 선택하세요.');
+                            $('.contract_period').focus();
                             return;
                         }
                         
                         if ($('.start_date').val() === '' || $('.end_date').val() === '') {
                             alert('계약기간을 입력하세요.');
+                            $('.start_date').focus();
                             return;
                         }
                         
                         if ($('.monetary_unit').val() === '') {
                             alert('화폐단위를 선택하세요.');
+                            $('.monetary_unit').focus();
                             return;
                         }
                         
                         if ($('.exchange_rate').val() === '') {
                             alert('기준환율을 입력하세요.');
+                            $('.exchange_rate').focus();
                             return;
                         }
 
@@ -483,7 +490,7 @@
                         });
 
                         $.ajax({
-                            url: "../../contract/update",
+                            url: "../admin/contract/update",
                             method: "POST",
                             data: {
                                 companyNo: companyNo,

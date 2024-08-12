@@ -16,9 +16,10 @@
             $(document).ready(function() {
                 var companys = [];
                 var employees = [];
+                var plans = [];
 
                 $.ajax({
-                    url: "../company/codes",
+                    url: "../admin/company/codes",
                     method: "POST",
                     success: function (data) {
                         if (data === 'NO SESSION') {
@@ -43,10 +44,37 @@
                         alert('서버 요청에 실패하였습니다.');
                     },
                 });
+
+                $.ajax({
+                    url: "../admin/contract/planStatus",
+                    method: "POST",
+                    success: function (data) {
+                        if (data === 'NO SESSION') {
+                            alert("세션이 만료되었습니다.");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            alert("조회된 데이터가 없습니다.");
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    plans.push({
+                                        code:post.planId, 
+                                        name:post.planKname, 
+                                    });
+                                });
+
+                                createSelection($('.plan_id'), plans);
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('서버 요청에 실패하였습니다.');
+                    },
+                });
                 
 
                 $.ajax({
-                    url: "../employee/status",
+                    url: "../admin/employee/status",
                     method: "POST",
                     success: function (data) {
                         if (data === 'NO SESSION') {
@@ -83,7 +111,7 @@
                     }
 
                     $.ajax({
-                        url: "../contract/status",
+                        url: "../admin/contract/status",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
@@ -164,7 +192,7 @@
 
                         // 행 데이터 출력
                         $.ajax({
-                            url: "../contract/detail",
+                            url: "../admin/contract/detail",
                             method: "POST",
                             data: {
                                 companyNo: companyNo,
@@ -183,6 +211,8 @@
                                     $('.contract_name').val(data.contractName);
                                     $('.contract_date').val(data.contractDate);
                                     $('.contractor').val(data.contractor);
+                                    $('.contract_service').val(data.contractService);
+                                    $('.contract_div').val(data.contractDiv);
                                     $('.contract_period').val(data.contractPeriod);
                                     $('.start_date').val(data.startDate);
                                     $('.end_date').val(data.endDate);
@@ -192,24 +222,70 @@
                                     $('.discounted_amount').val(formatCurrency(data.discountedAmount));
                                     $('.actual_amount').val(formatCurrency(data.actualAmount));
                                     $('.remark').val(data.remark);
-                                    
-                                    data.licenses.forEach(function(license, index){
-                                        var newRow = $('.license tbody tr').first().clone().removeClass('hidden');
+                                    $('.contract_manager').val(data.contractManager);
+                                    switch(data.contractDiv)
+                                    {
+                                        case "L":
+                                            ExpandedChildren($('#license_content'));
 
-                                        $(newRow).find('.mode').val('U');
-                                        $(newRow).find('.license_no').val(license.licenseNo);
-                                        $(newRow).find('.license_type').val(license.licenseType);
-                                        $(newRow).find('.app_name').val(license.appName);
-                                        $(newRow).find('.license_start_date').val(license.startDate);
-                                        $(newRow).find('.license_end_date').val(license.endDate);
-                                        $(newRow).find('.license_count').val(license.licenseCount);
-                                        $(newRow).find('.unit_price').val(formatCurrency(license.unitPrice));
-                                        $(newRow).find('.license_amount').val(formatCurrency(license.amount));
-                                        $(newRow).find('.license_discounted_amount').val(formatCurrency(license.discountedAmount));
-                                        $(newRow).find('.license_actual_amount').val(formatCurrency(license.actualAmount));
+                                            data.licenses.forEach(function(license, index){
+                                                var newRow = $('.license tbody tr').first().clone().removeClass('hidden');
 
-                                        $('.license tbody').append(newRow);
-                                    });
+                                                $(newRow).find('.mode').val('U');
+                                                $(newRow).find('.license_no').val(license.licenseNo);
+                                                $(newRow).find('.license_type').val(license.licenseType);
+                                                $(newRow).find('.app_name').val(license.appName);
+                                                $(newRow).find('.license_start_date').val(license.startDate);
+                                                $(newRow).find('.license_end_date').val(license.endDate);
+                                                $(newRow).find('.license_count').val(license.licenseCount);
+                                                $(newRow).find('.unit_price').val(formatCurrency(license.unitPrice));
+                                                $(newRow).find('.license_amount').val(formatCurrency(license.amount));
+                                                $(newRow).find('.license_discounted_amount').val(formatCurrency(license.discountedAmount));
+                                                $(newRow).find('.license_actual_amount').val(formatCurrency(license.actualAmount));
+
+                                                $('.license tbody').append(newRow);
+                                            });
+                                            break;
+                                        case "D":
+                                            ExpandedChildren($('#odm_content'));
+                                            
+                                            data.odmContracts.forEach(function(odmContract, index){
+                                                var newRow = $('.odm_contract tbody tr').first().clone().removeClass('hidden');
+
+                                                $(newRow).find('.mode').val('U');
+                                                $(newRow).find('.odm_seq').val(odmContract.odmSeq);
+                                                $(newRow).find('.odm_cont_div').val(odmContract.odmContDiv);
+                                                $(newRow).find('.pay_currency').val(odmContract.payCurrency);
+                                                $(newRow).find('.pay_unit').val(odmContract.payUnit);
+                                                $(newRow).find('.pay_term_mo').val(odmContract.payTermMo);
+                                                $(newRow).find('.unit_price').val(odmContract.unitPrice);
+                                                $(newRow).find('.apply_date').val(odmContract.applyDate);
+
+                                                $('.odm_contract tbody').append(newRow);
+                                            });
+                                            break;
+                                        case "A":
+                                            break;
+                                        case "S":
+                                            ExpandedChildren($('#ships_content'));
+                                            
+                                            data.shipsContracts.forEach(function(shipsContract, index){
+                                                var newRow = $('.ships_contract tbody tr').first().clone().removeClass('hidden');
+
+                                                $(newRow).find('.mode').val('U');
+                                                $(newRow).find('.ship_seq').val(shipsContract.shipSeq);
+                                                $(newRow).find('.ship_name').val(shipsContract.shipName);
+                                                $(newRow).find('.imo_no').val(shipsContract.imoNo);
+                                                $(newRow).find('.equip_lent').val(shipsContract.equipLent);
+                                                $(newRow).find('.apply_start_date').val(shipsContract.applyStartDate);
+                                                $(newRow).find('.apply_finish_date').val(shipsContract.applyFinishDate);
+                                                $(newRow).find('.plan_seq').val(shipsContract.planSeq);
+                                                $(newRow).find('.plan_id').val(shipsContract.planId);
+
+                                                $('.ships_contract tbody').append(newRow);
+                                            });
+                                            break;
+                                    }
                                     $('.modal').show();
                                 }
                             },
@@ -252,8 +328,9 @@
                             ExpandedChildren($('#license_content'));
                             break;
                         case 'D':
-                        case 'A':
                             ExpandedChildren($('#odm_content'));
+                            break;
+                        case 'A':
                             break;
                         case 'S':
                             ExpandedChildren($('#ships_content'));
@@ -588,51 +665,106 @@
                             return;
                         }
 
-                        if ($('.license tbody tr').length === 1) {
-                            alert('라이센스를 입력하세요.');
-                            return;
-                        }
-
                         var companyNo = $('.company_no').val();
                         var contractNo = $('.contract_no').val();
                         var contractName = $('.contract_name').val();
                         var contractDate = $('.contract_date').val();
                         var contractor = $('.contractor').val();
+                        var contractService = $('.contract_service').val();
+                        var contractDiv = $('.contract_div').val();
                         var contractPeriod = $('.contract_period').val();
                         var startDate = $('.start_date').val();
                         var endDate = $('.end_date').val();
                         var monetaryUnit = $('.monetary_unit').val();
                         var exchangeRate = $('.exchange_rate').val();
-                        var amount = parseCurrency($('.amount').val());
-                        var discountedAmount = parseCurrency($('.discounted_amount').val());
-                        var actualAmount = parseCurrency($('.actual_amount').val());
+                        var contractManager = $('.contract_manager').val();
                         var remark = $('.remark').val();
 
                         var licenses = [];
-                        $('.license tbody tr').each(function(index, row) {
-                            if (index === 0)
-                                return;
+                        var odmContracts = [];
+                        var shipsContracts = [];
 
-                            licenses.push({
-                                mode: $(row).find('.mode').val(),
-                                licenseNo: $(row).find('.license_no').val(),
-                                licenseType: $(row).find('.license_type').val(),
-                                appName: $(row).find('.app_name').val(),
-                                startDate: $(row).find('.license_start_date').val(),
-                                endDate: $(row).find('.license_end_date').val(),
-                                licenseCount: $(row).find('.license_count').val(),
-                                unitPrice: parseCurrency($(row).find('.unit_price').val()),
-                                amount: parseCurrency($(row).find('.license_amount').val()),
-                                discountedAmount: parseCurrency($(row).find('.license_discounted_amount').val()),
-                                actualAmount: parseCurrency($(row).find('.license_actual_amount').val()),
-                            });
-                        });
+                        switch (contractDiv)
+                        {
+                            case "L":
+                                if ($('.license tbody tr').length === 1) {
+                                    alert('라이센스를 입력하세요.');
+                                    return;
+                                }
 
-                        var url = "../contract/insert";
+                                $('.license tbody tr').each(function(index, row) {
+                                    if (index === 0)
+                                        return;
+
+                                    licenses.push({
+                                        mode: $(row).find('.mode').val(),
+                                        licenseNo: $(row).find('.license_no').val(),
+                                        licenseType: $(row).find('.license_type').val(),
+                                        licenseDiv: $(row).find('.license_div').val(),
+                                        startDate: $(row).find('.license_start_date').val(),
+                                        endDate: $(row).find('.license_end_date').val(),
+                                        licenseCount: $(row).find('.license_count').val(),
+                                        unitPrice: parseCurrency($(row).find('.unit_price').val()),
+                                        amount: parseCurrency($(row).find('.license_amount').val()),
+                                        discountedAmount: parseCurrency($(row).find('.license_discounted_amount').val()),
+                                        actualAmount: parseCurrency($(row).find('.license_actual_amount').val()),
+                                    });
+                                });
+                                break;
+                            case "D":
+                                if ($('.odm_contract tbody tr').length === 1) {
+                                    alert('ODM 계약을 입력하세요.');
+                                    return;
+                                }
+
+                                $('.odm_contract tbody tr').each(function(index, row) {
+                                    if (index === 0)
+                                        return;
+
+                                    odmContracts.push({
+                                        mode: $(row).find('.mode').val(),
+                                        odmSeq: $(row).find('.odm_seq').val(),
+                                        odmContDiv: $(row).find('.odm_cont_div').val(),
+                                        payCurrency: $(row).find('.pay_currency').val(),
+                                        payUnit: $(row).find('.pay_unit').val(),
+                                        payTermMo: $(row).find('.pay_term_mo').val(),
+                                        unitPrice: parseCurrency($(row).find('.unit_price').val()),
+                                        applyDate: $(row).find('.apply_date').val(),
+                                    });
+                                });
+                                break;
+                            case "A":
+                                break;
+                            case "S":
+                                if ($('.ships_contract tbody tr').length === 1) {
+                                    alert('선박별 계약을 입력하세요.');
+                                    return;
+                                }
+
+                                $('.ships_contract tbody tr').each(function(index, row) {
+                                    if (index === 0)
+                                        return;
+
+                                    shipsContracts.push({
+                                        mode: $(row).find('.mode').val(),
+                                        shipSeq: $(row).find('.ship_seq').val(),
+                                        shipName: $(row).find('.ship_name').val(),
+                                        imoNo: $(row).find('.imo_no').val(),
+                                        equipLent: $(row).find('.equip_lent').val(),
+                                        applyStartDate: $(row).find('.apply_start_date').val(),
+                                        applyFinishDate: $(row).find('.apply_finish_date').val(),
+                                        planSeq: $(row).find('.plan_seq').val(),
+                                        planId: $(row).find('.plan_id').val(),
+                                    });
+                                });
+                                break;
+                        }
+
+                        var url = "../admin/contract/insert";
                         if (contractNo === ''){
-                            url = "../contract/insert";
+                            url = "../admin/contract/insert";
                         } else {
-                            url = "../contract/update";
+                            url = "../admin/contract/update";
                         }
 
                         $.ajax({
@@ -644,16 +776,18 @@
                                 contractName: contractName,
                                 contractDate: contractDate,
                                 contractor: contractor,
+                                contractService: contractService,
+                                contractDiv: contractDiv,
                                 contractPeriod: contractPeriod,
                                 startDate: startDate,
                                 endDate: endDate,
                                 monetaryUnit: monetaryUnit,
                                 exchangeRate: exchangeRate,
-                                amount: amount,
-                                discountedAmount: discountedAmount,
-                                actualAmount: actualAmount,
                                 remark: remark,
+                                contractManager: contractManager,
                                 licenses: licenses,
+                                odmContracts: odmContracts,
+                                shipsContracts: shipsContracts,
                             },
                             success: function (data) {
                                 switch (data) {
@@ -739,15 +873,13 @@
                         <table class="contract">
                             <thead>
                                 <tr>
-                                    <th width="100px">계약번호</th>
-                                    <th width="220px">계약명</th>
+                                    <th width="180px">계약번호</th>
+                                    <th width="260px">계약명</th>
                                     <th width="120px">계약일자</th>
-                                    <th width="120px">담당자</th>
+                                    <th width="140px">담당자</th>
                                     <th width="200px">계약기간</th>
-                                    <th width="80px">계약상태</th>
-                                    <th width="80px">화폐단위</th>
-                                    <th width="80px">기준환율</th>
-                                    <th width="100px">실계약금액</th>
+                                    <th width="100px">화폐단위</th>
+                                    <th width="100px">기준환율</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -763,10 +895,8 @@
                                             <p class="cell_end_date"></p>
                                         </div></td>
                                     </td>
-                                    <td class="cell_contract_status" style="text-align: center;"></td>
                                     <td class="cell_monetary_unit" style="text-align: center;"></td>
                                     <td class="cell_exchange_rate" style="text-align: right;"></td>
-                                    <td class="cell_actual_amount" style="text-align: right;"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="9">데이터를 조회하세요.</td>
@@ -994,6 +1124,7 @@
                                             </div>
                                         </td>
                                         <td>
+                                            <input type="hidden" class="plan_seq"/>
                                             <select class="plan_id" style="width:170px"></select>
                                         </td>
                                     </tr>

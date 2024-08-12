@@ -4,6 +4,7 @@ const Contract = require("../models/contract.js");
 const License = require("../models/license.js");
 const OdmContract = require("../models/odm_contract.js");
 const ShipsContract = require("../models/ships_contract.js");
+const TsPlan = require("../models/ts_plan.js");
 const logger = require("../logger/logger.js");
 
 mybatisMapper.createMapper(["./src/sql/contract.xml"]);
@@ -32,6 +33,32 @@ module.exports = {
             return list;
         } catch (err) {
             logger.error(`contract.codes error : ${err}`);
+            return null;
+        }
+    },
+    planStatus: async function () {
+        try {
+            let pool = await poolPromise;
+            let param = { };
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("contract", "plan_status", param, format);
+
+            let result = await pool.request().query(query);
+            let list = [];
+
+            result.recordset.forEach((record) => {
+                let item = new TsPlan();
+
+                item.setPlanId(record.plan_id);
+                item.setPlanKname(record.plan_kname);
+                item.setPlanEname(record.plan_ename);
+                
+                list.push(item);
+            });
+
+            return list;
+        } catch (err) {
+            logger.error(`contract.planStatus error : ${err}`);
             return null;
         }
     },
@@ -85,6 +112,7 @@ module.exports = {
 
             let result = await pool.request().query(query);
             let item = null;
+
             if (result.recordset.length > 0) {
                 let record = result.recordset[0];
                 
@@ -110,7 +138,7 @@ module.exports = {
                     case 'L':
                         query = mybatisMapper.getStatement("contract", "license_status", param, format);
                         let licenseResult = await pool.request().query(query);
-                        let licenseList = [];
+                        let licenses = [];
         
                         licenseResult.recordset.forEach((childRecord) => {
                             let childItem = new License();
@@ -127,15 +155,15 @@ module.exports = {
                             childItem.setDiscountedAmount(childRecord.discounted_amount);
                             childItem.setActualAmount(childRecord.actual_amount);
             
-                            licenseList.push(childItem);
+                            licenses.push(childItem);
                         });
         
-                        item.setLicenses(licenseList);
+                        item.setLicenses(licenses);
                         break;
                     case 'D':
                         query = mybatisMapper.getStatement("contract", "odm_contract_status", param, format);
                         let odmContractResult = await pool.request().query(query);
-                        let odmContractList = [];
+                        let odmContracts = [];
         
                         odmContractResult.recordset.forEach((childRecord) => {
                             let childItem = new OdmContract();
@@ -149,17 +177,17 @@ module.exports = {
                             childItem.setUnitPrice(childRecord.unit_price);
                             childItem.setApplyDate(childRecord.apply_date);
             
-                            odmContractList.push(childItem);
+                            odmContracts.push(childItem);
                         });
         
-                        item.setOdmContracts(odmContractList);
+                        item.setOdmContracts(odmContracts);
                         break;
                     case 'A':
                         break;
                     case 'S':
-                        query = mybatisMapper.getStatement("contract", "odm_contract_status", param, format);
+                        query = mybatisMapper.getStatement("contract", "ships_contract_status", param, format);
                         let shipsContractResult = await pool.request().query(query);
-                        let shipsContractList = [];
+                        let shipsContracts = [];
         
                         shipsContractResult.recordset.forEach((childRecord) => {
                             let childItem = new ShipsContract();
@@ -173,11 +201,13 @@ module.exports = {
                             childItem.setApplyFinishDate(childRecord.apply_finish_date);
                             childItem.setCancelYn(childRecord.cancel_yn);
                             childItem.setCancelDate(childRecord.cancel_date);
+                            childItem.setPlanSeq(childRecord.plan_seq);
+                            childItem.setPlanId(childRecord.plan_id);
 
-                            shipsContractList.push(childItem);
+                            shipsContracts.push(childItem);
                         });
         
-                        item.setShipsContracts(shipsContractList);
+                        item.setShipsContracts(shipsContracts);
                         break;
                 }
             }
@@ -188,9 +218,8 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (companyNo, contractName, contractDate, contractor, contractService, contractDiv, 
-        contractPeriod, startDate, endDate, monetaryUnit, exchangeRate, contractManager, remark, 
-        licenses, odmContracts, shipsContracts, registUser) {
+    insert: async function (companyNo, contractName, contractDate, contractor, contractService, contractDiv, contractPeriod, startDate, endDate, 
+        monetaryUnit, exchangeRate, remark, contractManager, licenses, odmContracts, shipsContracts, registUser) {
         try {
             let pool = await poolPromise;
             let transaction = new sql.Transaction(pool);
@@ -198,6 +227,7 @@ module.exports = {
 
             await transaction.begin();
             try {
+                // 계약 정보
                 let param = {
                     companyNo: companyNo, 
                     contractName: contractName, 
@@ -234,13 +264,16 @@ module.exports = {
 
                 if (result.recordset.length > 0) {
                     let record = result.recordset[0];
-                    let max_contract_no = record.max_contract_no;
+                    let maxContractNo = record.max_contract_no;
 
                     switch (contractDiv){
                         case 'L':
+                            // 라이센스 정보
                             for (let i = 0; i < licenses.length; i++) {
                                 param = {
-                                    contractNo: max_contract_no,
+                                    contractNo: maxContractNo,
+                                    contractService: contractService,
+                                    contractDate: contractDate,
                                     licenseType: licenses[i].licenseType,
                                     licenseDiv: licenses[i].licenseDiv,
                                     licenseCount: licenses[i].licenseCount,
@@ -262,9 +295,10 @@ module.exports = {
                             }
                             break;
                         case 'D':
+                            // ODM 정보
                             for (let i = 0; i < odmContracts.length; i++) {
                                 param = {
-                                    contractNo: max_contract_no,
+                                    contractNo: maxContractNo,
                                     odmContDiv: odmContracts[i].odmContDiv,
                                     payCurrency: odmContracts[i].payCurrency,
                                     payUnit: odmContracts[i].payUnit,
@@ -285,9 +319,10 @@ module.exports = {
                         case 'A':
                             break;
                         case 'S':
+                            // 선박 정보
                             for (let i = 0; i < shipsContracts.length; i++) {
                                 param = {
-                                    contractNo: max_contract_no,
+                                    contractNo: maxContractNo,
                                     shipName: shipsContracts[i].shipName,
                                     imoNo: shipsContracts[i].imoNo,
                                     equipLent: shipsContracts[i].equipLent,
@@ -302,6 +337,38 @@ module.exports = {
                                 result = await request.query(query);
         
                                 count += result.rowsAffected[0];
+                                
+                                param = {
+                                    contractNo: maxContractNo
+                                };
+                                format = { language: "sql", indent: " " };
+                                query = mybatisMapper.getStatement("contract", "max_ship_seq", param, format);
+
+                                console.log(query);
+                                request = new sql.Request(transaction);
+                                result = await request.query(query);
+
+                                if (result.recordset.length > 0) {
+                                    // 선박 요금제 정보
+                                    let maxRecord = result.recordset[0];
+                                    let maxShipSeq = maxRecord.max_ship_seq;
+
+                                    param = {
+                                        contractNo: maxContractNo,
+                                        shipSeq: maxShipSeq,
+                                        planId: shipsContracts[i].planId,
+                                        applyStartDate: shipsContracts[i].applyStartDate,
+                                        applyFinishDate: shipsContracts[i].applyFinishDate,
+                                        registUser: registUser
+                                    };
+                                    format = { language: "sql", indent: " " };
+                                    query = mybatisMapper.getStatement("contract", "apply_plan_insert", param, format);
+                                    
+                                    request = new sql.Request(transaction);
+                                    result = await request.query(query);
+            
+                                    count += result.rowsAffected[0];
+                                }
                             }
                             break;
                     }
@@ -320,9 +387,8 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (companyNo, contractNo, contractName, contractDate, contractor, contractService, contractDiv, 
-        contractPeriod, startDate, endDate, monetaryUnit, exchangeRate, contractManager, remark, 
-        licenses, odmContracts, shipsContracts, registUser) {
+    update: async function (companyNo, contractNo, contractName, contractDate, contractor, contractService, contractDiv, contractPeriod, startDate, endDate, 
+        monetaryUnit, exchangeRate, remark, contractManager, licenses, odmContracts, shipsContracts, modifyUser) {
         try {
             let pool = await poolPromise;
             let transaction = new sql.Transaction(pool);
@@ -330,7 +396,7 @@ module.exports = {
 
             await transaction.begin();
             try {
-
+                // 계약 정보
                 let param = {
                     companyNo: companyNo, 
                     contractNo: contractNo,
@@ -348,6 +414,7 @@ module.exports = {
                     remark: remark, 
                     modifyUser: modifyUser
                 };
+
                 let format = { language: "sql", indent: " " };
                 let query = mybatisMapper.getStatement("contract", "update", param, format);
 
@@ -355,13 +422,14 @@ module.exports = {
                 let result = await request.query(query);
 
                 count += result.rowsAffected[0];
-
-                var sql = "";
+                var sqlName = '';
                 switch (contractDiv){
                     case 'L':
+                        // 라이센스 정보
                         for (let i = 0; i < licenses.length; i++) {
                             param = {
                                 contractNo: contractNo,
+                                licenseNo: licenses[i].licenseNo,
                                 licenseType: licenses[i].licenseType,
                                 licenseDiv: licenses[i].licenseDiv,
                                 licenseCount: licenses[i].licenseCount,
@@ -371,24 +439,25 @@ module.exports = {
                                 amount: licenses[i].amount,
                                 discountedAmount: licenses[i].discountedAmount,
                                 actualAmount: licenses[i].actualAmount,
-                                registUser: registUser
+                                registUser: modifyUser,
+                                modifyUser: modifyUser
                             };
 
                             switch(licenses[i].mode)
                             {
                                 case 'I':
-                                    sql = 'license_insert';
+                                    sqlName = 'license_insert';
                                     break;
                                 case 'U':
-                                    sql = 'license_update';
+                                    sqlName = 'license_update';
                                     break;
                                 case 'D':
-                                    sql = 'license_delete';
+                                    sqlName = 'license_delete';
                                     break;
                             }
                             
                             format = { language: "sql", indent: " " };
-                            query = mybatisMapper.getStatement("contract", sql, param, format);
+                            query = mybatisMapper.getStatement("contract", sqlName, param, format);
                             
                             request = new sql.Request(transaction);
                             result = await request.query(query);
@@ -397,33 +466,36 @@ module.exports = {
                         }
                         break;
                     case 'D':
+                        // ODM 정보
                         for (let i = 0; i < odmContracts.length; i++) {
                             param = {
                                 contractNo: contractNo,
+                                odmSeq: odmContracts[i].odmSeq,
                                 odmContDiv: odmContracts[i].odmContDiv,
                                 payCurrency: odmContracts[i].payCurrency,
                                 payUnit: odmContracts[i].payUnit,
                                 payTermMo: odmContracts[i].payTermMo,
                                 unitPrice: odmContracts[i].unitPrice,
                                 applyDate: odmContracts[i].applyDate,
-                                registUser: registUser
+                                registUser: modifyUser,
+                                modifyUser: modifyUser
                             };
 
                             switch(odmContracts[i].mode)
                             {
                                 case 'I':
-                                    sql = 'odm_contract_insert';
+                                    sqlName = 'odm_contract_insert';
                                     break;
                                 case 'U':
-                                    sql = 'odm_contract_update';
+                                    sqlName = 'odm_contract_update';
                                     break;
                                 case 'D':
-                                    sql = 'odm_contract_delete';
+                                    sqlName = 'odm_contract_delete';
                                     break;
                             }
                             
                             format = { language: "sql", indent: " " };
-                            query = mybatisMapper.getStatement("contract", sql, param, format);
+                            query = mybatisMapper.getStatement("contract", sqlName, param, format);
 
                             request = new sql.Request(transaction);
                             result = await request.query(query);
@@ -434,32 +506,59 @@ module.exports = {
                     case 'A':
                         break;
                     case 'S':
+                        // 선박 정보
+                        var planSqlName = '';
+
                         for (let i = 0; i < shipsContracts.length; i++) {
                             param = {
                                 contractNo: contractNo,
+                                shipSeq: shipsContracts[i].shipSeq,
                                 shipName: shipsContracts[i].shipName,
                                 imoNo: shipsContracts[i].imoNo,
                                 equipLent: shipsContracts[i].equipLent,
                                 applyStartDate: shipsContracts[i].applyStartDate,
                                 applyFinishDate: shipsContracts[i].applyFinishDate,
-                                registUser: registUser
+                                registUser: modifyUser,
+                                modifyUser: modifyUser
                             };
                             
                             switch(shipsContracts[i].mode)
                             {
                                 case 'I':
-                                    sql = 'ships_contract_insert';
+                                    sqlName = 'ships_contract_insert';
+                                    planSqlName = 'apply_plan_insert';
                                     break;
                                 case 'U':
-                                    sql = 'ships_contract_update';
+                                    sqlName = 'ships_contract_update';
+                                    planSqlName = 'apply_plan_update';
                                     break;
                                 case 'D':
-                                    sql = 'ships_contract_delete';
+                                    sqlName = 'ships_contract_delete';
+                                    planSqlName = 'apply_plan_delete';
                                     break;
                             }
                             
                             format = { language: "sql", indent: " " };
-                            query = mybatisMapper.getStatement("contract", sql, param, format);
+                            query = mybatisMapper.getStatement("contract", sqlName, param, format);
+                            
+                            request = new sql.Request(transaction);
+                            result = await request.query(query);
+    
+                            count += result.rowsAffected[0];
+                            
+                            // 선박 요금제 정보
+                            param = {
+                                contractNo: contractNo,
+                                shipSeq: shipsContracts[i].shipSeq,
+                                planSeq: shipsContracts[i].planSeq,
+                                planId: shipsContracts[i].planId,
+                                applyStartDate: shipsContracts[i].applyStartDate,
+                                applyFinishDate: shipsContracts[i].applyFinishDate,
+                                registUser: modifyUser,
+                                modifyUser: modifyUser
+                            };
+                            format = { language: "sql", indent: " " };
+                            query = mybatisMapper.getStatement("contract", planSqlName, param, format);
                             
                             request = new sql.Request(transaction);
                             result = await request.query(query);

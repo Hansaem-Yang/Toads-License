@@ -56,7 +56,7 @@
                     var companyName = $('.s_company_name').val();
 
                     $.ajax({
-                        url: "../company/status",
+                        url: "../admin/company/status",
                         method: "POST",
                         data: {
                             companyName: companyName,
@@ -108,7 +108,7 @@
 
                         // 행 데이터 출력
                         $.ajax({
-                            url: "../company/detail",
+                            url: "../admin/company/detail",
                             method: "POST",
                             data: {
                                 companyNo: companyNo,
@@ -200,26 +200,31 @@
                     {
                         if ($('.company_name').val() === '') {
                             alert('법인명을 입력하세요.');
+                            $('.company_name').focus();
                             return;
                         }
 
                         if ($('.owner_name').val() === '') {
                             alert('대표자명을 입력하세요.');
+                            $('.owner_name').focus();
                             return;
                         }
 
                         if ($('.company_div').val() === '') {
                             alert('회사구분을 선택하세요.');
+                            $('.company_div').focus();
                             return;
                         }
                         
                         if ($('.nation').val() === '') {
                             alert('국가를 선택하세요.');
+                            $('.nation').focus();
                             return;
                         }
                         
                         if ($('.telephone').val() === '') {
                             alert('연락처를 입력하세요.');
+                            $('.telephone').focus();
                             return;
                         }
                         
@@ -234,11 +239,11 @@
                         var telephone     = $('.telephone').val();
                         var businessPlace = $('.business_place').val();
 
-                        var url = "../company/insert";
+                        var url = "../admin/company/insert";
                         if (companyNo === ''){
-                            url = "../company/insert";
+                            url = "../admin/company/insert";
                         } else {
-                            url = "../company/update";
+                            url = "../admin/company/update";
                         }
 
 
