@@ -122,6 +122,13 @@ module.exports = function (app) {
         req.session.menuId = 'contract';
         res.locals.session = req.session;
 
+        if (req.query.companyNo) {
+            res.locals.companyNo = req.query.companyNo;
+        }
+        else{
+            res.locals.companyNo = '';
+        }
+
         if (req.session.user.companyDiv === 'T') {
             res.render("admin/contract/status");
         }
@@ -141,77 +148,31 @@ module.exports = function (app) {
             res.render("user/contract/detail");
         }
     });
-
-    app.get("/view/termination", (req, res) => {
-        if (req.session.user.companyDiv === 'T') {
-            res.render("admin/termination/status");
-        }
-        else {
-            res.render("user/termination/status");
-        }
-    });
     
-    // 사용자 관리 페이지
-    app.get("/view/member", (req, res) => {
-        req.session.menuId = 'member';
+    // 계약 관리자 페이지
+    app.get("/view/contract_manager", (req, res) => {
+        req.session.menuId = 'contract_manager';
         res.locals.session = req.session;
 
-        if (req.session.user.companyDiv === 'T') {
-            res.render("admin/member/status");
+        if (req.query.companyNo) {
+            res.locals.companyNo = req.query.companyNo;
         }
-        else {
-            res.render("user/member/status");
+        else{
+            res.locals.companyNo = '';
         }
-    });
-    
-    // 사용자 상세정보 페이지
-    app.get("/view/member/detail", (req, res) => {
-        res.locals.companyNo = req.query.companyNo;
-        res.locals.accountNo = req.query.accountNo;
+
+        if (req.query.contractNo) {
+            res.locals.contractNo = req.query.contractNo;
+        }
+        else{
+            res.locals.contractNo = '';
+        }
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/member/detail");
+            res.render("admin/contract_manager/status");
         }
         else {
-            res.render("user/member/detail");
-        }
-    });
-    
-    // 라이센스 유저 관리 페이지
-    app.get("/view/license", (req, res) => {
-        req.session.menuId = 'contract';
-        res.locals.session = req.session;
-
-        if (req.session.user.companyDiv === 'T') {
-            res.render("admin/license/status");
-        }
-        else {
-            res.render("user/license/status");
-        }
-    });
-
-    app.get("/view/license/detail", (req, res) => {
-        res.locals.companyNo = req.query.companyNo;
-        res.locals.contractNo = req.query.contractNo;
-        res.locals.licenseNo = req.query.licenseNo;
-
-        if (req.session.user.companyDiv === 'T') {
-            res.render("admin/license/detail");
-        }
-        else {
-            res.render("user/license/detail");
-        }
-    });
-    
-    // 선박 관리 페이지
-    app.get("/view/ship", (req, res) => {
-        req.session.menuId = 'ship';
-        res.locals.session = req.session;
-        if (req.session.user.companyDiv === 'T') {
-            res.render("admin/ship/status");
-        }
-        else {
-            res.render("user/ship/status");
+            res.render("user/contract_manager/status");
         }
     });
 };

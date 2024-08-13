@@ -103,10 +103,9 @@ module.exports = function (app) {
         });
     });
     app.post("/admin/contract/delete", (req, res) => {
-        let companyNo = req.body.companyNo;
-        let contractNo = req.body.contractNo;
+        let contractNos = req.body.contractNos;
 
-        manager.delete(companyNo, contractNo).then((data) => {
+        manager.delete(contractNos).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {

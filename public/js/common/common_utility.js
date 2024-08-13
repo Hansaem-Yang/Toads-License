@@ -133,3 +133,27 @@ function isCurrency(input) {
     // 숫자와 소수점, 쉼표로 이루어진 형식
     return /^\d{1,3}(,\d{3})*(\.\d+)?$/.test(input);
 }
+
+function hiddenChildren() {
+    $('.expanded').addClass('hidden');
+    $('.expanded').removeClass('expanded');
+}
+
+function expandedChildren(element) {
+    hiddenChildren();
+
+    $(element).removeClass("hidden");
+    $(element).addClass("expanded");
+}
+
+function viewHiddenChildren() {
+    $('.view_expanded').addClass('hidden');
+    $('.view_expanded').removeClass('view_expanded');
+}
+
+function viewExpandedChildren(element) {
+    viewHiddenChildren();
+
+    $(element).removeClass("hidden");
+    $(element).addClass("view_expanded");
+}

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/public/css/content-styles.css">
+        <!--
+        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
+        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
+        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
+        -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="/public/js/common/common_utility.js"></script>
+        <script src="/public/js/common/common_variables.js"></script>
+        <script>
+            $(document).ready(function() {
+                var companys = [];
+                var contracts = [];
+
+                $.ajax({
+                    url: "../admin/company/codes",
+                    method: "POST",
+                    success: function (data) {
+                        if (data === 'NO SESSION') {
+                            alert("세션이 만료되었습니다.");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            alert("조회된 데이터가 없습니다.");
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    companys.push({
+                                        code:post.companyNo, 
+                                        name:post.companyName, 
+                                    });
+                                });
+
+                                createSelection($('.s_company_no'), companys);
+                            }
+
+                            var companyNo = '<%=companyNo%>';
+                            if (companyNo != '') {
+                                $('.s_company_no').val(companyNo);
+
+                                search();
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('서버 요청에 실패하였습니다.');
+                    },
+                });
+                
+                var search = function() {
+                    clearContractManager();
+
+                    var contractNo = $('.s_contract_no option:selected').val();
+                    if (contractNo === '')
+                    {
+                        alert("계약번호를 선택하세요.");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "../admin/contract/manager/status",
+                        method: "POST",
+                        data: {
+                            contractNo: contractNo,
+                        },
+                        success: function (data) {
+
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                var newRow = '<tr><td colspan="5" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                                $('.contract_manager tbody').append(newRow);
+                            } else {
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        var newRow = $('.contract_manager tbody tr').first().clone().removeClass('hidden');
+
+                                        $(newRow).find('.cell_seq').text(post.seq);
+                                        $(newRow).find('.cell_name').text(post.name);
+                                        $(newRow).find('.cell_email').text(post.email);
+                                        $(newRow).find('.cell_user_auth').text(managerAuths[post.userAuth]);
+                                        $(newRow).find('.cell_use_yn').text(useYn[post.useYn]);
+
+                                        $('.contract_manager tbody').append(newRow);
+                                    });
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var newRow = '<tr><td colspan="9" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
+                            $('.contract_manager tbody').append(newRow);
+                        },
+                    });
+                };
+
+                $('.add').click(function() {
+                    clearModal();
+
+                    var contractNo = $('.s_contract_no option:selected').val();
+                    if (contractNo === '')
+                    {
+                        alert("계약번호를 선택하세요.");
+                        return;
+                    }
+
+                    $('.contract_no').val(contractNo);
+                    $('.email').removeAttr('readonly');
+                    $('.pwd').removeAttr('readonly');
+                    $('.check_pwd').removeAttr('readonly');
+                    $('.change_password').hide();
+                    $('.modal').show();
+                });
+
+                $('.modify').click(function() {
+                    clearModal();
+
+                    var contractNo = $('.s_contract_no').val();
+                    if (contractNo === '')
+                    {
+                        alert("고객사를 선택하세요.");
+                        return;
+                    }
+
+                    var selectedRow = $(".contract_manager tr.selected");
+                    if (selectedRow.length > 0) {
+                        var seq = selectedRow.find('.cell_seq').text();
+
+                        // 행 데이터 출력
+                        $.ajax({
+                            url: "../admin/contract/manager/detail",
+                            method: "POST",
+                            data: {
+                                contractNo: contractNo,
+                                seq: seq,
+                            },
+                            success: function (data) {
+                                if (data === 'NO SESSION') {
+                                    alert("세션이 만료되었습니다.");
+                                    window.parent.location.href = "./login";
+                                } else if (data === 'NO DATA') {
+                                    alert("조회된 데이터가 없습니다.");
+                                } else {
+                                    $('.contract_no').val(data.contractNo);
+                                    $('.seq').val(data.seq);
+                                    $('.email').val(data.email);
+                                    $('.email').attr('readonly', true);
+                                    $('.pwd').val(data.pwd);
+                                    $('.pwd').attr('readonly', true);
+                                    $('.check_pwd').val(data.pwd);
+                                    $('.check_pwd').attr('readonly', true);
+                                    $('.name').val(data.name);
+                                    $('.user_auth').val(data.userAuth);
+                                    $('.use_yn').val(data.useYn);
+                                    $('.change_password').show();
+
+                                    $('.modal').show();
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                               alert('서버 요청에 실패하였습니다.');
+                            },
+                        });
+                    } else {
+                        alert("목록에서 행을 선택하세요.");
+                    }
+                });
+
+                $('.delete').click(function() {
+                    clearModal();
+
+                    var contractNo = $('.s_contract_no').val();
+                    if (contractNo === '')
+                    {
+                        alert("고객사를 선택하세요.");
+                        return;
+                    }
+
+                    var selectedRow = $(".contract_manager tr.selected");
+                    if (selectedRow.length > 0) {
+                        if (confirm('데이터를 삭제 하시겠습니까?') == true)
+                        {
+                            var seqs = [];
+
+                            seqs.push({
+                                contractNo: contractNo,
+                                seq: selectedRow.find('.cell_seq').text()
+                            });
+
+                            // 행 데이터 출력
+                            $.ajax({
+                                url: "../admin/contract/manager/delete",
+                                method: "POST",
+                                data: {
+                                    seqs: seqs,
+                                },
+                                success: function (data) {
+                                    if (data === 'NO SESSION') {
+                                        alert("세션이 만료되었습니다.");
+                                        window.parent.location.href = "./login";
+                                    } else if (data === 'FAIL') {
+                                        alert("삭제에 실패하였습니다.");
+                                    } else {
+                                        alert("삭제가 완료되었습니다.");
+
+                                        search();
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                alert('서버 요청에 실패하였습니다.');
+                                },
+                            });
+                        }
+                    } else {
+                        alert("목록에서 행을 선택하세요.");
+                    }
+                });
+
+                $('.contract_manager tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+
+                var clearContractManager = function() {
+                    const rows = document.querySelectorAll(".contract_manager tbody tr:not(:first-child)");
+                    rows.forEach(row => {
+                        row.remove();
+                    });
+                }
+
+                // Modal Event And Function
+                var clearModal = function() {
+                    $('.contract_no').val('');
+                    $('.seq').val('');
+                    $('.email').val('');
+                    $('.pwd').val('');
+                    $('.check_pwd').val('');
+                    $('.name').val('');
+                    $('.user_auth').val('');
+                    $('.use_yn').val('');
+                };
+
+                var clearPasswordModal = function() {
+                    $('.new_pwd').val('');
+                    $('.check_pwd').val('');
+                }
+
+                var clearContract = function() {
+                    $('.s_contract_no').empty();
+                
+                    // Add default option
+                    $('.s_contract_no').append($('<option>', {
+                        value: '',
+                        text: '선택하세요'
+                    }));
+                }
+
+                var validationCheck = function() {
+                    if ($('.email').val() === '') {
+                        alert('이메일을 입력하세요.');
+                        return false;
+                    }
+
+                    if ($('.pwd').val() === '') {
+                        alert('비밀번호를 입력하세요.');
+                        return false;
+                    }
+
+                    if ($('.check_pwd').val() === '') {
+                        alert('비밀번호 확인을 입력하세요.');
+                        return false;
+                    }
+
+                    if ($('.pwd').val() !== $('.check_pwd').val()) {
+                        alert('비밀번호와 비밀번호 확인이 다릅니다.');
+                        return false;
+                    }
+
+                    if ($('.name').val() === '') {
+                        alert('관리자명을 입력하세요.');
+                        return false;
+                    }
+
+                    if ($('.user_auth').val() === '') {
+                        alert('사용권한을 입력하세요.');
+                        return false;
+                    }
+
+                    if ($('.use_yn').val() === '') {
+                        alert('사용여부를 입력하세요.');
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                $('.s_company_no').change(function() {
+                    clearContract();
+
+                    var companyNo = $('.s_company_no option:selected').val();
+                    if (companyNo === '') {
+                        alert('고객사를 선택하세요.');
+                        return false;
+                    }
+
+                    $.ajax({
+                        url: "../admin/contract/codes",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                            } else {
+                                contracts = [];
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        contracts.push({
+                                            code:post.contractNo, 
+                                            name:post.contractName, 
+                                        });
+                                    });
+
+                                    createSelection($('.s_contract_no'), contracts);
+                                }
+
+                                var contractNo = '<%=contractNo%>';
+                                if (contractNo != '') {
+                                    $('.s_contract_no').val(contractNo);
+
+                                    search();
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert('서버 요청에 실패하였습니다.');
+                        },
+                    });
+                });
+
+                $('.s_contract_no').change(function() {
+                    search();
+                });
+
+                $('.close').click(function() {
+                    $('.modal').hide();
+                    clearModal();
+                });
+
+                $('.save').click(function() {
+                    if (confirm('데이터를 저장 하시겠습니까?')) {
+                        if (!validationCheck()) {
+                            return;
+                        }
+
+                        var contractNo = $('.contract_no').val();
+                        var seq = $('.seq').val();
+                        var email = $('.email').val();
+                        var pwd = $('.pwd').val();
+                        var chkPwd = $('.check_pwd').val();
+                        var name = $('.name').val();
+                        var userAuth = $('.user_auth').val();
+                        var useYn = $('.use_yn').val();
+
+                        var url = "../admin/contract/manager/insert";
+                        if (seq === ''){
+                            url = "../admin/contract/manager/insert";
+                        } else {
+                            url = "../admin/contract/manager/update";
+                        }
+
+                        $.ajax({
+                            url: url,
+                            method: "POST",
+                            data: {
+                                contractNo: contractNo,
+                                seq: seq,
+                                email: email,
+                                pwd: pwd,
+                                name: name,
+                                userAuth: userAuth,
+                                useYn: useYn,
+                            },
+                            success: function (data) {
+                                switch (data) {
+                                    case "NO SESSION":
+                                        alert("세션이 만료되었습니다.");
+                                        window.parent.location.href = "./login";
+                                        return;
+                                    case "EMAIL DUPLICATE":
+                                        alert('이메일이 중복되었습니다.');
+                                        return;
+                                    case "FAIL":
+                                        alert('데이터 저장에 실패 하였습니다.');
+                                        return;
+                                    case "SUCCESS":
+                                        alert('데이터 저장을 완료 하였습니다.');
+                                        break;
+                                }
+
+                                $('.modal').hide();
+                                search();
+                                
+                                clearModal();
+                            },
+                            error: function (xhr, status, error) {
+                                alert('서버 요청에 실패하였습니다.');
+                            },
+                        });
+                    }
+                });
+
+                $('.cancel').click(function() {
+                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    {
+                        $('.modal').hide();
+                        clearModal();
+                    }
+                });
+
+                $('.change_password').click(function() {
+                    $('.password_modal').show();
+                });
+
+                $('.password_close').click(function() {
+                    clearPasswordModal();
+
+                    $('.password_modal').hide();
+                });
+
+                $('.password_save').click(function() {
+                    if (confirm('데이터를 저장 하시겠습니까?')) {
+                        var contractNo = $('.contract_no').val();
+                        var seq = $('.seq').val();
+                        var oldPwd = $('.pwd').val();
+                        var newPwd = $('.new_pwd').val();
+                        var checkPwd = $('.check_new_pwd').val();
+
+                        if (newPwd === '') {
+                            alert('신규 비밀번호를 입력하세요.');
+                            return;
+                        }
+                        
+                        if (checkPwd === '') {
+                            alert('비밀번호 확인을 입력하세요.');
+                            return;
+                        }
+                        
+                        if (newPwd !== checkPwd) {
+                            alert('비밀번호와 비밀번호 확인이 다릅니다.');
+                            return;
+                        }
+                        
+                        if (newPwd === oldPwd) {
+                            alert('기존 비밀번호와 동일한 비밀번호 입니다.');
+                            return;
+                        }
+
+                        $.ajax({
+                            url: "../admin/contract/manager/changePassword",
+                            method: "POST",
+                            data: {
+                                contractNo: contractNo,
+                                seq: seq,
+                                pwd: newPwd,
+                            },
+                            success: function (data) {
+                                switch (data) {
+                                    case "NO SESSION":
+                                        alert("세션이 만료되었습니다.");
+                                        window.parent.location.href = "./login";
+                                        return;
+                                    case "FAIL":
+                                        alert('데이터 저장에 실패 하였습니다.');
+                                        return;
+                                    case "SUCCESS":
+                                        alert('데이터 저장을 완료 하였습니다.');
+                                        break;
+                                }
+
+                                $('.password_modal').hide();
+                                
+                                clearPasswordModal();
+                            },
+                            error: function (xhr, status, error) {
+                                alert('서버 요청에 실패하였습니다.');
+                            },
+                        });
+                    }
+                });
+
+                $('.password_cancel').click(function() {
+                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    {
+                        $('.password_modal').hide();
+                        
+                        clearPasswordModal();
+                    }
+                });
+                
+                createVariablesSelection($('.user_auth'), managerAuths);
+                createVariablesSelection($('.use_yn'), useYn);
+            });
+        </script>
+    </head>
+    <body>
+        <form class="contract-customer-status-form">
+            <div class="content">
+                <div>
+                    <div class="title">조회 조건</div>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th width="120px" class="right-align">고객사</th>
+                                    <td class="left-align">
+                                        <select class="s_company_no" style="width:240px;">
+                                            <option value="">선택하세요.</option>
+                                        </select>
+                                    </td>
+                                    <th width="120px" class="right-align">계약번호</th>
+                                    <td class="left-align">
+                                        <select class="s_contract_no" style="width:320px;">
+                                            <option value="">선택하세요.</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div></br></br>
+                <div class="contents-container">
+                    <div class="title">계약 관리자 목록</div>
+                    <div class="top-right-button">
+                        <div class="align-container">
+                            <p><input type="button" class="add" value="등록"/></p>
+                            <p><input type="button" class="modify" value="수정"/></p>
+                            <p><input type="button" class="delete" value="삭제"/></p>
+                        </div>
+                    </div>
+                    <div>
+                        <table class="contract_manager">
+                            <thead>
+                                <tr>
+                                    <th width="100px">순번</th>
+                                    <th width="260px">관리자명</th>
+                                    <th width="260px">이메일</th>
+                                    <th width="120px">권한</th>
+                                    <th width="120px">사용여부</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hidden">
+                                    <td class="cell_seq" style="text-align: center;"></td>
+                                    <td class="cell_name" style="text-align: left;"></td>
+                                    <td class="cell_email" style="text-align: left;"></td>
+                                    <td class="cell_user_auth" style="text-align: center;"></td>
+                                    <td class="cell_use_yn" style="text-align: center;"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">데이터를 조회하세요.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal">
+            <div class="modal-content" style="width:540px">
+                <div class="contents-container">
+                    <span class="close">&times;</span>
+                    <div class="title">계약 관리자 관리</div>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="right-align" style="width: 120px;">*계약번호</th>
+                                    <td class="left-align" style="width: 420px;">
+                                        <input type="text" class="contract_no" style="width: 200px;" readonly/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*순번</th>
+                                    <td class="left-align">
+                                        <input type="text" class="seq" style="width: 120px;" readonly/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*관리자명</th>
+                                    <td class="left-align">
+                                        <input type="text" class="name" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*이메일</th>
+                                    <td class="left-align">
+                                        <input type="text" class="email" style="width: 260px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*비밀번호</th>
+                                    <td class="left-align">
+                                        <input type="password" class="pwd" style="width: 160px;"/>
+                                        <input type="button" class="change_password" value="비밀번호 변경"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*비밀번호 확인</th>
+                                    <td class="left-align">
+                                        <input type="password" class="check_pwd" style="width: 160px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*사용권한</th>
+                                    <td class="left-align">
+                                        <select class="user_auth"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*사용여부</th>
+                                    <td class="left-align">
+                                        <select class="use_yn"></select>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table></br>
+                    </div></br>
+                    <div class="bottom-button">
+                        <div class="align-container">
+                            <p><input type="button" class="save" value="저장"/></p>
+                            <input type="button" class="cancel" value="취소"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="password_modal">
+            <div class="modal-content" style="width:320px">
+                <div class="contents-container">
+                    <span class="password_close">&times;</span>
+                    <div class="title">비밀번호 변경</div>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="right-align" style="width: 120px;">*비밀번호</th>
+                                    <td class="left-align">
+                                        <input type="password" class="new_pwd" style="width: 180px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*비밀번호 확인</th>
+                                    <td class="left-align">
+                                        <input type="password" class="check_new_pwd" style="width: 180px;"/>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table></br>
+                    </div></br>
+                    <div class="bottom-button">
+                        <div class="align-container">
+                            <p><input type="button" class="password_save" value="저장"/></p>
+                            <input type="button" class="password_cancel" value="취소"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

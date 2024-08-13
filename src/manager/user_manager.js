@@ -1,7 +1,7 @@
-const { poolPromise, sql } = require("../db/sql_manager.js");
+const { poolPromise, sql } = require("../db/sql_manager");
 const mybatisMapper = require("mybatis-mapper");
-const User = require("../models/user.js");
-const logger = require("../logger/logger.js");
+const User = require("../models/user");
+const logger = require("../logger/logger");
 
 mybatisMapper.createMapper(["./src/sql/user.xml"]);
 

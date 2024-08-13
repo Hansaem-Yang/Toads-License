@@ -109,7 +109,7 @@ const terminationStatus = {
     C: '해지 취소'
 }
 
-const contractManagerAuth = {
+const managerAuths = {
     C1:'ODM 등록 권한',
     R1:'ODM 조회 권한',
     S1:'Super 권한'

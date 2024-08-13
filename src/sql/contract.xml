@@ -199,6 +199,10 @@
          where contract_no = #{contractNo}
            and license_no = #{licenseNo};
     </delete>
+    <delete id="license_delete_all">
+        delete from license
+         where contract_no = #{contractNo};
+    </delete>
     <select id="odm_contract_status">
         select contract_no
              , odm_seq
@@ -257,6 +261,10 @@
          where contract_no = #{contractNo}
            and odm_seq = #{odmSeq};
     </delete>
+    <delete id="odm_contract_delete_all">
+        delete from odm_contract
+         where contract_no = #{contractNo};
+    </delete>
     <select id="ships_contract_status">
         select a.contract_no
              , a.ship_seq
@@ -270,7 +278,7 @@
 			       , b.plan_seq
 			       , b.plan_id
           from ships_contract as a
-		     inner join (select c.contract_no, c.ship_seq, c.plan_seq, c.plan_id 
+		     inner join (select c.contract_no, c.ship_seq, c.plan_seq, c.plan_id
 		                   from apply_plan as c
 					            where c.contract_no = #{contractNo}
                         and c.plan_seq = (select max(d.plan_seq)
@@ -331,6 +339,10 @@
          where contract_no = #{contractNo}
            and ship_seq = #{shipSeq};
     </delete>
+    <delete id="ships_contract_delete_all">
+        delete from ships_contract
+         where contract_no = #{contractNo};
+    </delete>
     <insert id="apply_plan_insert">
         insert into apply_plan (
                     contract_no
@@ -372,5 +384,9 @@
          where contract_no = #{contractNo}
            and ship_seq = #{shipSeq}
            and plan_seq = #{planSeq};
+    </insert>
+    <insert id="apply_plan_delete_all">
+        delete from apply_plan 
+         where contract_no = #{contractNo};
     </insert>
 </mapper>

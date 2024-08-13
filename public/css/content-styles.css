@@ -185,7 +185,7 @@ select {
     vertical-align: middle;
 }
 
-.modal, .password-modal {
+.modal, .password_modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 99; /* Sit on top */
@@ -208,7 +208,7 @@ select {
 }
 
 /* The Close Button */
-.close, .password-close {
+.close, .password_close {
     color: #aaa;
     position: absolute;
     top: 0;
@@ -249,5 +249,9 @@ select {
 }
 
 .expanded {
+    display: block;
+}
+
+.view_expanded {
     display: block;
 }

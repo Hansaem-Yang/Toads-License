@@ -66,11 +66,10 @@ require("./src/routes/login_route")(app);
 require("./src/routes/mypage_route")(app);
 require("./src/routes/dashboard_route")(app);
 require("./src/routes/employee_route")(app);
-require("./src/routes/member_route")(app);
 require("./src/routes/nations_route")(app);
 require("./src/routes/company_route")(app);
 require("./src/routes/contract_route")(app);
-require("./src/routes/license_route")(app);
+require("./src/routes/contract_manager_route")(app);
 
 app.listen(config.web.port, function () {
     logger.info(`Express server has started on port (${config.web.port})`);

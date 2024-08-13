@@ -11,7 +11,6 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
         <script src="/public/js/common/common_variables.js"></script>
-        <script src="/public/js/models/license.js"></script>
         <script>
             $(document).ready(function() {
                 var companys = [];
@@ -37,6 +36,13 @@
                                 });
 
                                 createSelection($('.s_company_no'), companys);
+                            }
+
+                            var companyNo = '<%=companyNo%>';
+                            if (companyNo != '') {
+                                $('.s_company_no').val(companyNo);
+
+                                search();
                             }
                         }
                     },
@@ -100,8 +106,8 @@
                     },
                 });
                 
-                var Search = function() {
-                    ClearContract();
+                var search = function() {
+                    clearContract();
 
                     var companyNo = $('.s_company_no option:selected').val();
                     if (companyNo === '')
@@ -153,11 +159,11 @@
                 };
                 
                 $('.s_company_no').change(function() {
-                    Search();
+                    search();
                 });
 
                 $('.add').click(function() {
-                    ClearModal();
+                    clearModal();
 
                     var companyNo = $('.s_company_no option:selected').val();
                     var companyName = $('.s_company_no option:selected').text();
@@ -177,7 +183,7 @@
                 });
 
                 $('.modify').click(function() {
-                    ClearModal();
+                    clearModal();
 
                     var companyNo = $('.s_company_no').val();
                     if (companyNo === '')
@@ -223,10 +229,11 @@
                                     $('.actual_amount').val(formatCurrency(data.actualAmount));
                                     $('.remark').val(data.remark);
                                     $('.contract_manager').val(data.contractManager);
+
                                     switch(data.contractDiv)
                                     {
                                         case "L":
-                                            ExpandedChildren($('#license_content'));
+                                            expandedChildren($('#license_content'));
 
                                             data.licenses.forEach(function(license, index){
                                                 var newRow = $('.license tbody tr').first().clone().removeClass('hidden');
@@ -234,7 +241,7 @@
                                                 $(newRow).find('.mode').val('U');
                                                 $(newRow).find('.license_no').val(license.licenseNo);
                                                 $(newRow).find('.license_type').val(license.licenseType);
-                                                $(newRow).find('.app_name').val(license.appName);
+                                                $(newRow).find('.license_div').val(license.licenseDiv);
                                                 $(newRow).find('.license_start_date').val(license.startDate);
                                                 $(newRow).find('.license_end_date').val(license.endDate);
                                                 $(newRow).find('.license_count').val(license.licenseCount);
@@ -247,7 +254,7 @@
                                             });
                                             break;
                                         case "D":
-                                            ExpandedChildren($('#odm_content'));
+                                            expandedChildren($('#odm_content'));
                                             
                                             data.odmContracts.forEach(function(odmContract, index){
                                                 var newRow = $('.odm_contract tbody tr').first().clone().removeClass('hidden');
@@ -267,7 +274,7 @@
                                         case "A":
                                             break;
                                         case "S":
-                                            ExpandedChildren($('#ships_content'));
+                                            expandedChildren($('#ships_content'));
                                             
                                             data.shipsContracts.forEach(function(shipsContract, index){
                                                 var newRow = $('.ships_contract tbody tr').first().clone().removeClass('hidden');
@@ -325,32 +332,20 @@
 
                     switch (contractDiv) {
                         case 'L':
-                            ExpandedChildren($('#license_content'));
+                            expandedChildren($('#license_content'));
                             break;
                         case 'D':
-                            ExpandedChildren($('#odm_content'));
+                            expandedChildren($('#odm_content'));
                             break;
                         case 'A':
                             break;
                         case 'S':
-                            ExpandedChildren($('#ships_content'));
+                            expandedChildren($('#ships_content'));
                             break;
                     }
                 });
 
-                var HiddenChildren = function() {
-                    $('.expanded').addClass('hidden');
-                    $('.expanded').removeClass('expanded');
-                }
-
-                var ExpandedChildren = function(element) {
-                    HiddenChildren();
-
-                    $(element).removeClass("hidden");
-                    $(element).addClass("expanded");
-                }
-
-                var ClearContract = function() {
+                var clearContract = function() {
                     const rows = document.querySelectorAll(".contract tbody tr:not(:first-child)");
                     rows.forEach(row => {
                         row.remove();
@@ -358,7 +353,7 @@
                 }
 
                 // Modal Event And Function
-                var ClearModal = function() {
+                var clearModal = function() {
                     $('.company_no').val('');
                     $('.company_name').val('');
                     $('.contract_no').val('');
@@ -391,7 +386,7 @@
                     });
                 };
 
-                var ValidationCheck = function() {
+                var validationCheck = function() {
                     if ($('.contract_name').val() === '') {
                         alert('계약명을 입력하세요.');
                         return false;
@@ -447,7 +442,7 @@
 
                 /* 라이센스 관리 시작 */
                 $('.license_add').click(function() {
-                    if (!ValidationCheck()) {
+                    if (!validationCheck()) {
                         return;
                     }
                     
@@ -580,7 +575,7 @@
 
                 /* ODM 계약관리 시작 */
                  $('.odm_contract_add').click(function() {
-                    if (!ValidationCheck()) {
+                    if (!validationCheck()) {
                         return;
                     }
                     
@@ -628,7 +623,7 @@
 
                 /* 선박별 계약관리 시작 */
                 $('.ships_contract_add').click(function() {
-                    if (!ValidationCheck()) {
+                    if (!validationCheck()) {
                         return;
                     }
                     
@@ -661,7 +656,7 @@
 
                 $('.save').click(function() {
                     if (confirm('데이터를 저장 하시겠습니까?')) {
-                        if (!ValidationCheck()) {
+                        if (!validationCheck()) {
                             return;
                         }
 
@@ -804,9 +799,9 @@
                                 }
 
                                 $('.modal').hide();
-                                Search();
+                                search();
                                 
-                                ClearModal();
+                                clearModal();
                             },
                             error: function (xhr, status, error) {
                                 alert('서버 요청에 실패하였습니다.');
@@ -820,7 +815,7 @@
                     {
                         $('.modal').hide();
                         
-                        ClearModal();
+                        clearModal();
                     }
                 });
                 
@@ -841,7 +836,7 @@
         </script>
     </head>
     <body>
-        <form class="company-detail-form">
+        <form class="contract-status-form">
             <div class="content">
                 <div>
                     <div class="title">조회 조건</div>
@@ -1001,15 +996,15 @@
                             <table class="license">
                                 <thead>
                                     <tr>
-                                        <th width="100px">번호</th>
+                                        <th width="160px">번호</th>
                                         <th width="140px">타입</th>
                                         <th width="140px">구분</th>
-                                        <th width="240px">기간</th>
+                                        <th width="220px">기간</th>
                                         <th width="60px">수량</th>
-                                        <th width="90px">단가</th>
-                                        <th width="110px">금액</th>
-                                        <th width="110px">할인금액</th>
-                                        <th width="110px">실금액</th>
+                                        <th width="80px">단가</th>
+                                        <th width="100px">금액</th>
+                                        <th width="100px">할인금액</th>
+                                        <th width="100px">실금액</th>
                                     </tr>
                                 </thead>
                                 <tbody>
