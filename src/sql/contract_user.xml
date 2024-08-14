@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contract_user">
+    <select id="checkEmail">
+        select count(1) as cnt
+          from vw_ts_app_user
+         where user_id = #{email};
+    </select>
+    <select id="status">
+        select a.contract_no
+             , b.contract_div
+             , a.user_no
+             , a.user_id
+             , a.user_name
+             , convert(varchar(max), a.user_pwd) as user_pwd
+             , a.apply_start_date
+             , a.apply_finish_date
+             , a.license_no
+             , a.ship_seq
+             , a.use_yn
+          from contract_user as a
+         inner join contract as b
+            on a.contract_no = b.contract_no
+         where a.contract_no = #{contractNo};
+    </select>
+    <select id="detail">
+        select a.contract_no
+             , b.contract_div
+             , a.user_no
+             , a.user_id
+             , a.user_name
+             , convert(varchar(max), a.user_pwd) as user_pwd
+             , a.apply_start_date
+             , a.apply_finish_date
+             , a.license_no
+             , a.ship_seq
+             , a.use_yn
+          from contract_user as a
+         inner join contract as b
+            on a.contract_no = b.contract_no
+         where a.contract_no = #{contractNo}
+           and a.seq = #{seq};
+    </select>
+    <insert id="insert">
+        insert into contract_user (
+                    contract_no
+                  , user_no
+                  , user_id
+                  , user_name
+                  , user_pwd
+                  , apply_start_date
+                  , apply_finish_date
+                  , license_no
+                  , ship_seq
+                  , use_yn
+                  , regist_date
+        )
+        values (
+                    #{contractNo}
+                  , (select isnull(max(user_no), 0) + 1
+                       from contract_user
+                      where contract_no = #{contractNo})
+                  , #{userId}
+                  , #{userName}
+                  , convert(varbinary(MAX), #{userPwd})
+                  , #{applyStartDate}
+                  , #{applyFinishDate}
+                  , #{licenseNo}
+                  , #{shipSeq}
+                  , #{useYn}
+                  , left(convert(varchar(20), getdate(), 121), 10)
+        );
+    </insert>
+    <update id="update">
+        update contract_user
+           set user_id = #{userId}
+             , user_name = #{userName}
+             , apply_start_date = #{applyStartDate}
+             , apply_finish_date = #{applyFinishDate}
+             , license_no = #{licenseNo}
+             , ship_seq = #{shipSeq}
+             , use_yn = #{useYn}
+             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+         where contract_no = #{contractNo}
+           and user_no = #{userNo};
+    </update>
+    <delete id="delete">
+        delete from contract_user
+         where contract_no = #{contractNo}
+           and user_no = #{userNo};
+    </delete>
+    <update id="changePassword">
+        update contract_user
+           set user_pwd = convert(varbinary(MAX), #{userPwd})
+             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+         where contract_no = #{contractNo}
+           and user_no = #{userNo};
+    </update>
+</mapper>

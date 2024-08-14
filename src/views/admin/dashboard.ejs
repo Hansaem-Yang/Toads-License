@@ -33,8 +33,8 @@
 
                                     $(newRow).find('.cell_total_companys').text(post.totalCompanys);
                                     $(newRow).find('.cell_total_users').text(post.totalUsers);
-                                    $(newRow).find('.cell_daliy_usage').text(post.daliyUsage);
-                                    $(newRow).find('.cell_monthly_usage').text(post.monthlyUsage);
+                                    $(newRow).find('.cell_daliy_usage').text(formatCurrency(post.daliyUsage));
+                                    $(newRow).find('.cell_monthly_usage').text(formatCurrency(post.monthlyUsage));
 
                                     $('.satellite-usage tbody').append(newRow);
                                 });
@@ -111,8 +111,8 @@
                                 <tr>
                                     <th width="200px">전체 고객사 수</th>
                                     <th width="200px">전체 사용자 수</th>
-                                    <th width="200px">일 사용량</th>
-                                    <th width="200px">월 사용량</th>
+                                    <th width="200px">일 사용량(분)</th>
+                                    <th width="200px">월 사용량(분)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -137,7 +137,6 @@
                                     <th width="220px">대표자명</th>
                                     <th width="120px">회사구분</th>
                                     <th width="160px">연락처</th>
-                                    <th width="120px">라이센스 수</th>
                                     <th width="120px">사용자 수</th>
                                 </tr>
                             </thead>
@@ -148,7 +147,6 @@
                                     <td class="cell_owner_name"></td>
                                     <td class="cell_company_div" style="text-align: center;"></td>
                                     <td class="cell_telephone" style="text-align: center;"></td>
-                                    <td class="cell_total_licenses" style="text-align: right;"></td>
                                     <td class="cell_total_users" style="text-align: right;"></td>
                                 </tr>
                             </tbody>

@@ -22,6 +22,39 @@ module.exports = function (app) {
             }
         });
     });
+    app.post("/admin/contract/licenseCodes", (req, res) => {
+        let contractNo = req.body.contractNo;
+        
+        manager.licenseCodes(contractNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/admin/contract/odmCodes", (req, res) => {
+        let contractNo = req.body.contractNo;
+        
+        manager.odmCodes(contractNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/admin/contract/shipsCodes", (req, res) => {
+        let contractNo = req.body.contractNo;
+        
+        manager.shipsCodes(contractNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
     app.post("/admin/contract/status", (req, res) => {
         let companyNo = req.body.companyNo;
 

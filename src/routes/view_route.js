@@ -154,25 +154,24 @@ module.exports = function (app) {
         req.session.menuId = 'contract_manager';
         res.locals.session = req.session;
 
-        if (req.query.companyNo) {
-            res.locals.companyNo = req.query.companyNo;
-        }
-        else{
-            res.locals.companyNo = '';
-        }
-
-        if (req.query.contractNo) {
-            res.locals.contractNo = req.query.contractNo;
-        }
-        else{
-            res.locals.contractNo = '';
-        }
-
         if (req.session.user.companyDiv === 'T') {
             res.render("admin/contract_manager/status");
         }
         else {
             res.render("user/contract_manager/status");
+        }
+    });
+    
+    // 계약 관리자 페이지
+    app.get("/view/contract_user", (req, res) => {
+        req.session.menuId = 'contract_user';
+        res.locals.session = req.session;
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/contract_user/status");
+        }
+        else {
+            res.render("user/contract_user/status");
         }
     });
 };

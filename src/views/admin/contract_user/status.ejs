@@ -15,6 +15,8 @@
             $(document).ready(function() {
                 var companys = [];
                 var contracts = [];
+                var licenses = [];
+                var shipsContents = [];
 
                 $.ajax({
                     url: "../admin/company/codes",
@@ -44,7 +46,7 @@
                 });
                 
                 var search = function() {
-                    clearContractManager();
+                    clearContractUser();
 
                     var contractNo = $('.s_contract_no option:selected').val();
                     if (contractNo === '')
@@ -54,7 +56,7 @@
                     }
 
                     $.ajax({
-                        url: "../admin/contract/manager/status",
+                        url: "../admin/contract/user/status",
                         method: "POST",
                         data: {
                             contractNo: contractNo,
@@ -66,26 +68,30 @@
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
                                 var newRow = '<tr><td colspan="5" class="left-align">조회된 데이터가 없습니다.</td></tr>';
-                                $('.contract_manager tbody').append(newRow);
+                                $('.contract_user tbody').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
-                                        var newRow = $('.contract_manager tbody tr').first().clone().removeClass('hidden');
+                                        var newRow = $('.contract_user tbody tr').first().clone().removeClass('hidden');
 
-                                        $(newRow).find('.cell_seq').text(post.seq);
-                                        $(newRow).find('.cell_name').text(post.name);
-                                        $(newRow).find('.cell_email').text(post.email);
-                                        $(newRow).find('.cell_user_auth').text(managerAuths[post.userAuth]);
+                                        $(newRow).find('.cell_user_no').text(post.userNo);
+                                        $(newRow).find('.cell_user_id').text(post.userId);
+                                        $(newRow).find('.cell_user_name').text(post.userName);
+                                        $(newRow).find('.cell_user_pwd').text(post.userPwd);
+                                        $(newRow).find('.cell_apply_start_date').text(post.applyStartDate);
+                                        $(newRow).find('.cell_apply_finish_date').text(post.applyFinishDate);
+                                        $(newRow).find('.cell_license_no').text(post.licenseNo);
+                                        $(newRow).find('.cell_ship_seq').text(post.shipSeq);
                                         $(newRow).find('.cell_use_yn').text(useYn[post.useYn]);
 
-                                        $('.contract_manager tbody').append(newRow);
+                                        $('.contract_user tbody').append(newRow);
                                     });
                                 }
                             }
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="9" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
-                            $('.contract_manager tbody').append(newRow);
+                            $('.contract_user tbody').append(newRow);
                         },
                     });
                 };
@@ -100,11 +106,33 @@
                         return;
                     }
 
+                    var today = new Date();
+                    var yyyy = today.getFullYear();
+                    var mm = ('0' + (today.getMonth() + 1)).slice(-2);
+                    var dd = ('0' + today.getDate()).slice(-2);
+                    var formattedDate = yyyy + '-' + mm + '-' + dd;
+
+                    var foundContract = contracts.find(function(contract) {
+                        return contract.code === contractNo;
+                    });
+
                     $('.contract_no').val(contractNo);
-                    $('.email').removeAttr('readonly');
-                    $('.pwd').removeAttr('readonly');
-                    $('.check_pwd').removeAttr('readonly');
+                    $('.contract_div').val(foundContract.contractDiv);
+                    $('.apply_start_date').val(formattedDate);
+                    $('.apply_finish_date').val(formattedDate);
+                    $('.user_id').removeAttr('readonly');
+                    $('.user_pwd').removeAttr('readonly');
+                    $('.check_user_pwd').removeAttr('readonly');
                     $('.change_password').hide();
+
+                    if ($('.contract_div').val() === 'L') {
+                        $('.license').show();
+                        $('.ships').hide();
+                    } else {
+                        $('.license').hide();
+                        $('.ships').show();
+                    }
+
                     $('.modal').show();
                 });
 
@@ -118,17 +146,17 @@
                         return;
                     }
 
-                    var selectedRow = $(".contract_manager tr.selected");
+                    var selectedRow = $(".contract_user tr.selected");
                     if (selectedRow.length > 0) {
-                        var seq = selectedRow.find('.cell_seq').text();
+                        var userNo = selectedRow.find('.cell_user_no').text();
 
                         // 행 데이터 출력
                         $.ajax({
-                            url: "../admin/contract/manager/detail",
+                            url: "../admin/contract/user/detail",
                             method: "POST",
                             data: {
                                 contractNo: contractNo,
-                                seq: seq,
+                                userNo: userNo,
                             },
                             success: function (data) {
                                 if (data === 'NO SESSION') {
@@ -137,18 +165,32 @@
                                 } else if (data === 'NO DATA') {
                                     alert("조회된 데이터가 없습니다.");
                                 } else {
+
                                     $('.contract_no').val(data.contractNo);
-                                    $('.seq').val(data.seq);
-                                    $('.email').val(data.email);
-                                    $('.email').attr('readonly', true);
-                                    $('.pwd').val(data.pwd);
-                                    $('.pwd').attr('readonly', true);
-                                    $('.check_pwd').val(data.pwd);
-                                    $('.check_pwd').attr('readonly', true);
-                                    $('.name').val(data.name);
-                                    $('.user_auth').val(data.userAuth);
+                                    $('.contract_div').val(data.contractDiv);
+                                    $('.user_no').val(data.userNo);
+                                    $('.user_id').val(data.userId);
+                                    $('.user_id').attr('readonly', true);
+                                    $('.user_name').val(data.userPwd);
+                                    $('.user_pwd').val(data.userName);
+                                    $('.user_pwd').attr('readonly', true);
+                                    $('.check_user_pwd').val(data.userPwd);
+                                    $('.check_user_pwd').attr('readonly', true);
+                                    $('.apply_start_date').val(data.applyStartDate);
+                                    $('.apply_finish_date').val(data.applyFinishDate);
+                                    $('.license_no').val(data.licenseNo);
+                                    $('.ship_seq').val(data.shipSeq);
                                     $('.use_yn').val(data.useYn);
+
                                     $('.change_password').show();
+
+                                    if ($('.contract_div').val() === 'L') {
+                                        $('.license').show();
+                                        $('.ships').hide();
+                                    } else {
+                                        $('.license').hide();
+                                        $('.ships').show();
+                                    }
 
                                     $('.modal').show();
                                 }
@@ -172,23 +214,23 @@
                         return;
                     }
 
-                    var selectedRow = $(".contract_manager tr.selected");
+                    var selectedRow = $(".contract_user tr.selected");
                     if (selectedRow.length > 0) {
                         if (confirm('데이터를 삭제 하시겠습니까?') == true)
                         {
-                            var seqs = [];
+                            var userNos = [];
 
-                            seqs.push({
+                            userNos.push({
                                 contractNo: contractNo,
-                                seq: selectedRow.find('.cell_seq').text()
+                                userNo: selectedRow.find('.cell_user_no').text()
                             });
 
                             // 행 데이터 출력
                             $.ajax({
-                                url: "../admin/contract/manager/delete",
+                                url: "../admin/contract/user/delete",
                                 method: "POST",
                                 data: {
-                                    seqs: seqs,
+                                    userNos: userNos,
                                 },
                                 success: function (data) {
                                     if (data === 'NO SESSION') {
@@ -212,12 +254,12 @@
                     }
                 });
 
-                $('.contract_manager tbody').on('click', 'tr', function() {
+                $('.contract_user tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
-                var clearContractManager = function() {
-                    const rows = document.querySelectorAll(".contract_manager tbody tr:not(:first-child)");
+                var clearContractUser = function() {
+                    const rows = document.querySelectorAll(".contract_user tbody tr:not(:first-child)");
                     rows.forEach(row => {
                         row.remove();
                     });
@@ -226,18 +268,22 @@
                 // Modal Event And Function
                 var clearModal = function() {
                     $('.contract_no').val('');
-                    $('.seq').val('');
-                    $('.email').val('');
-                    $('.pwd').val('');
-                    $('.check_pwd').val('');
-                    $('.name').val('');
-                    $('.user_auth').val('');
+                    $('.contract_div').val('');
+                    $('.user_no').val('');
+                    $('.user_id').val('');
+                    $('.user_name').val('');
+                    $('.user_pwd').val('');
+                    $('.apply_start_date').val('');
+                    $('.apply_finish_date').val('');
+                    $('.license_no').val('');
+                    $('.ship_seq').val('');
                     $('.use_yn').val('');
+
                 };
 
                 var clearPasswordModal = function() {
-                    $('.new_pwd').val('');
-                    $('.check_pwd').val('');
+                    $('.new_user_pwd').val('');
+                    $('.check_user_pwd').val('');
                 }
 
                 var clearContract = function() {
@@ -251,34 +297,51 @@
                 }
 
                 var validationCheck = function() {
-                    if ($('.email').val() === '') {
-                        alert('이메일을 입력하세요.');
+                    if ($('.user_id').val() === '') {
+                        alert('사용자ID(이메일)을 입력하세요.');
                         return false;
                     }
 
-                    if ($('.pwd').val() === '') {
+                    if ($('.user_pwd').val() === '') {
                         alert('비밀번호를 입력하세요.');
                         return false;
                     }
 
-                    if ($('.check_pwd').val() === '') {
+                    if ($('.check_user_pwd').val() === '') {
                         alert('비밀번호 확인을 입력하세요.');
                         return false;
                     }
 
-                    if ($('.pwd').val() !== $('.check_pwd').val()) {
+                    if ($('.user_pwd').val() !== $('.check_user_pwd').val()) {
                         alert('비밀번호와 비밀번호 확인이 다릅니다.');
                         return false;
                     }
 
-                    if ($('.name').val() === '') {
-                        alert('관리자명을 입력하세요.');
+                    if ($('.user_name').val() === '') {
+                        alert('사용자명을 입력하세요.');
                         return false;
                     }
 
-                    if ($('.user_auth').val() === '') {
-                        alert('사용권한을 입력하세요.');
+                    if ($('.apply_start_date').val() === '') {
+                        alert('적용시작일자를 입력하세요.');
                         return false;
+                    }
+
+                    if ($('.apply_finish_date').val() === '') {
+                        alert('적용완료일자를 입력하세요.');
+                        return false;
+                    }
+
+                    if ($('.contract_div').val() === 'L') {
+                        if ($('.license_no').val() === '') {
+                            alert('라이센스를 선택하세요.');
+                            return false;
+                        }
+                    } else {
+                        if ($('.ship_seq').val() === '') {
+                            alert('선박을 선택하세요.');
+                            return false;
+                        }
                     }
 
                     if ($('.use_yn').val() === '') {
@@ -295,7 +358,7 @@
                     var companyNo = $('.s_company_no option:selected').val();
                     if (companyNo === '') {
                         alert('고객사를 선택하세요.');
-                        return false;
+                        return;
                     }
 
                     $.ajax({
@@ -314,6 +377,9 @@
                                 contracts = [];
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
+                                        if (post.contractDiv === 'D' || post.contractDiv === 'A')
+                                            return;
+
                                         contracts.push({
                                             code:post.contractNo, 
                                             name:post.contractName, 
@@ -331,6 +397,68 @@
                 });
 
                 $('.s_contract_no').change(function() {
+                    var contractNo = $('.s_contract_no option:selected').val();
+                    if (contractNo === '') {
+                        alert('계약번호를 선택하세요.');
+                        return;
+                    }
+                    
+                    var foundContract = contracts.find(function(contract) {
+                        return contract.code === contractNo;
+                    });
+
+                    var url = "../admin/contract/licenseCodes";
+                    if (foundContract.contractDiv === 'L') {
+                        url = "../admin/contract/licenseCodes";
+                    } else {
+                        url = "../admin/contract/shipsCodes";
+                    }
+
+                    $.ajax({
+                        url: url,
+                        method: "POST",
+                        data: {
+                            contractNo: contractNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                            } else {
+                                if (foundContract.contractDiv === 'L') {
+                                    licenses = [];
+                                    if (Array.isArray(data)) {
+                                        $.each(data, function(index, post) {
+                                            licenses.push({
+                                                code:post.licenseNo, 
+                                                name:post.licenseNo, 
+                                            });
+                                        });
+
+                                        createSelection($('.license_no'), licenses);
+                                    }
+                                } else {
+                                    shipsContents = [];
+                                    if (Array.isArray(data)) {
+                                        $.each(data, function(index, post) {
+                                            shipsContents.push({
+                                                code:post.shipSeq, 
+                                                name:post.shipName, 
+                                            });
+                                        });
+
+                                        createSelection($('.ship_seq'), shipsContents);
+                                    }
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert('서버 요청에 실패하였습니다.');
+                        },
+                    });
+
                     search();
                 });
 
@@ -346,19 +474,21 @@
                         }
 
                         var contractNo = $('.contract_no').val();
-                        var seq = $('.seq').val();
-                        var email = $('.email').val();
-                        var pwd = $('.pwd').val();
-                        var chkPwd = $('.check_pwd').val();
-                        var name = $('.name').val();
-                        var userAuth = $('.user_auth').val();
+                        var userNo = $('.user_no').val();
+                        var userId = $('.user_id').val();
+                        var userName = $('.user_name').val();
+                        var userPwd = $('.user_pwd').val();
+                        var applyStartDate = $('.apply_start_date').val();
+                        var applyFinishDate = $('.apply_finish_date').val();
+                        var licenseNo = $('.license_no').val();
+                        var shipSeq = $('.ship_seq').val();
                         var useYn = $('.use_yn').val();
 
-                        var url = "../admin/contract/manager/insert";
-                        if (seq === ''){
-                            url = "../admin/contract/manager/insert";
+                        var url = "../admin/contract/user/insert";
+                        if (userNo === ''){
+                            url = "../admin/contract/user/insert";
                         } else {
-                            url = "../admin/contract/manager/update";
+                            url = "../admin/contract/user/update";
                         }
 
                         $.ajax({
@@ -366,11 +496,14 @@
                             method: "POST",
                             data: {
                                 contractNo: contractNo,
-                                seq: seq,
-                                email: email,
-                                pwd: pwd,
-                                name: name,
-                                userAuth: userAuth,
+                                userNo: userNo,
+                                userId: userId,
+                                userPwd: userPwd,
+                                userName: userName,
+                                applyStartDate: applyStartDate,
+                                applyFinishDate: applyFinishDate,
+                                licenseNo: licenseNo,
+                                shipSeq: shipSeq,
                                 useYn: useYn,
                             },
                             success: function (data) {
@@ -380,7 +513,7 @@
                                         window.parent.location.href = "./login";
                                         return;
                                     case "EMAIL DUPLICATE":
-                                        alert('이메일이 중복되었습니다.');
+                                        alert('사용자ID(이메일)이 중복되었습니다.');
                                         return;
                                     case "FAIL":
                                         alert('데이터 저장에 실패 하였습니다.');
@@ -423,38 +556,38 @@
                 $('.password_save').click(function() {
                     if (confirm('데이터를 저장 하시겠습니까?')) {
                         var contractNo = $('.contract_no').val();
-                        var seq = $('.seq').val();
-                        var oldPwd = $('.pwd').val();
-                        var newPwd = $('.new_pwd').val();
-                        var checkPwd = $('.check_new_pwd').val();
+                        var userNo = $('.user_no').val();
+                        var oldUserPwd = $('.user_pwd').val();
+                        var newUserPwd = $('.new_user_pwd').val();
+                        var checkUserPwd = $('.check_new_user_pwd').val();
 
-                        if (newPwd === '') {
+                        if (newUserPwd === '') {
                             alert('신규 비밀번호를 입력하세요.');
                             return;
                         }
                         
-                        if (checkPwd === '') {
+                        if (checkUserPwd === '') {
                             alert('비밀번호 확인을 입력하세요.');
                             return;
                         }
                         
-                        if (newPwd !== checkPwd) {
+                        if (newUserPwd !== checkUserPwd) {
                             alert('비밀번호와 비밀번호 확인이 다릅니다.');
                             return;
                         }
                         
-                        if (newPwd === oldPwd) {
+                        if (nnewUserPwdwPwd === oldUserPwd) {
                             alert('기존 비밀번호와 동일한 비밀번호 입니다.');
                             return;
                         }
 
                         $.ajax({
-                            url: "../admin/contract/manager/changePassword",
+                            url: "../admin/contract/user/changePassword",
                             method: "POST",
                             data: {
                                 contractNo: contractNo,
-                                seq: seq,
-                                pwd: newPwd,
+                                userNo: userNo,
+                                userPwd: newUserPwd,
                             },
                             success: function (data) {
                                 switch (data) {
@@ -522,7 +655,7 @@
                     </div>
                 </div></br></br>
                 <div class="contents-container">
-                    <div class="title">계약 관리자 목록</div>
+                    <div class="title">계약 사용자 목록</div>
                     <div class="top-right-button">
                         <div class="align-container">
                             <p><input type="button" class="add" value="등록"/></p>
@@ -531,22 +664,28 @@
                         </div>
                     </div>
                     <div>
-                        <table class="contract_manager">
+                        <table class="contract_user">
                             <thead>
                                 <tr>
                                     <th width="100px">순번</th>
-                                    <th width="260px">관리자명</th>
-                                    <th width="260px">이메일</th>
-                                    <th width="120px">권한</th>
+                                    <th width="160px">사용자명</th>
+                                    <th width="260px">사용자ID</th>
+                                    <th width="240px">적용일자</th>
                                     <th width="120px">사용여부</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr class="hidden">
-                                    <td class="cell_seq" style="text-align: center;"></td>
-                                    <td class="cell_name" style="text-align: left;"></td>
-                                    <td class="cell_email" style="text-align: left;"></td>
-                                    <td class="cell_user_auth" style="text-align: center;"></td>
+                                    <td class="cell_user_no" style="text-align: center;"></td>
+                                    <td class="cell_user_name" style="text-align: left;"></td>
+                                    <td class="cell_user_id" style="text-align: left;"></td>
+                                    <td>
+                                        <div class="align-container-center">
+                                            <p class="cell_apply_start_date"></p>
+                                            <p class="">~</p>
+                                            <p class="cell_apply_finish_date"></p>
+                                        </div>
+                                    </td>
                                     <td class="cell_use_yn" style="text-align: center;"></td>
                                 </tr>
                                 <tr>
@@ -559,54 +698,71 @@
             </div>
         </form>
         <div class="modal">
-            <div class="modal-content" style="width:540px">
+            <div class="modal-content" style="width:570px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">계약 관리자 관리</div>
+                    <div class="title">계약 사용자 관리</div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="right-align" style="width: 120px;">*계약번호</th>
+                                    <th class="right-align" style="width: 150px;">*계약번호</th>
                                     <td class="left-align" style="width: 420px;">
                                         <input type="text" class="contract_no" style="width: 200px;" readonly/>
+                                        <input type="hidden" class="contract_div" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*순번</th>
+                                    <th class="right-align">*사용자번호</th>
                                     <td class="left-align">
-                                        <input type="text" class="seq" style="width: 120px;" readonly/>
+                                        <input type="text" class="user_no" style="width: 120px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*관리자명</th>
+                                    <th class="right-align">*사용자명</th>
                                     <td class="left-align">
-                                        <input type="text" class="name" style="width: 160px;"/>
+                                        <input type="text" class="user_name" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*이메일</th>
+                                    <th class="right-align">*사용자ID(이메일)</th>
                                     <td class="left-align">
-                                        <input type="text" class="email" style="width: 260px;"/>
+                                        <input type="text" class="user_id" style="width: 260px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*비밀번호</th>
                                     <td class="left-align">
-                                        <input type="password" class="pwd" style="width: 160px;"/>
+                                        <input type="password" class="user_pwd" style="width: 160px;"/>
                                         <input type="button" class="change_password" value="비밀번호 변경"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*비밀번호 확인</th>
                                     <td class="left-align">
-                                        <input type="password" class="check_pwd" style="width: 160px;"/>
+                                        <input type="password" class="check_user_pwd" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*사용권한</th>
+                                    <th class="right-align">*유효기간</th>
                                     <td class="left-align">
-                                        <select class="user_auth"></select>
+                                        <div class="align-container">
+                                            <p><input type="date" class="apply_start_date" style="width: 120px;"/></p>
+                                            <p class="">~</p>
+                                            <p><input type="date" class="apply_finish_date" style="width: 120px;"/></p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="license">
+                                    <th class="right-align">*라이센스</th>
+                                    <td class="left-align">
+                                        <select class="license_no"></select>
+                                    </td>
+                                </tr>
+                                <tr class="ship">
+                                    <th class="right-align">*선박</th>
+                                    <td class="left-align">
+                                        <select class="ship_seq"></select>
                                     </td>
                                 </tr>
                                 <tr>
@@ -638,13 +794,13 @@
                                 <tr>
                                     <th class="right-align" style="width: 120px;">*비밀번호</th>
                                     <td class="left-align">
-                                        <input type="password" class="new_pwd" style="width: 180px;"/>
+                                        <input type="password" class="new_user_pwd" style="width: 180px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*비밀번호 확인</th>
                                     <td class="left-align">
-                                        <input type="password" class="check_new_pwd" style="width: 180px;"/>
+                                        <input type="password" class="check_new_user_pwd" style="width: 180px;"/>
                                     </td>
                                 </tr>
                             </thead>

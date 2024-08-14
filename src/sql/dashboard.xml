@@ -2,28 +2,65 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dashboard">  
     <select id="satellite_usage">
-        select count(1) as total_companys
-             , sum(users) as total_users
-             , 0 as daliy_usage
-             , 0 as monthly_usage
-          from (select a.company_no
-                     , count(1) as users
-                  from company as a
-                  left join member as b
-                    on a.company_no = b.company_no
-                 group by a.company_no) as a
+    <![CDATA[
+        select sum(a.total_companys) as total_companys
+             , sum(a.total_users) as total_users
+             , sum(a.daliy_usage) as daliy_usage
+             , sum(a.monthly_usage) as monthly_usage
+          from (select count(1) as total_companys, 0 as total_users, 0 as daliy_usage, 0 as monthly_usage
+                  from company
+                union all
+                select 0, count(1), 0, 0
+                  from vw_ts_app_user
+                where use_yn = 'Y'
+                  and apply_start_date <= convert(varchar(10), getdate(), 121)
+                  and apply_finish_date >= convert(varchar(10), getdate(), 121)
+                union all
+                select 0, 0
+                     , case convert(varchar(8), getdate(), 112) when a.connect_date then a.usage else 0 end
+                     , sum(a.usage)
+                  from (select convert(varchar(8), a.connect_date, 112) as connect_date
+                             , datediff(minute, a.connect_date, a.disconnect_date) usage
+                          from contract_connect_history as a
+                         inner join vw_ts_app_user as b
+                            on a.contract_no = b.contract_no
+                           and a.user_no = b.user_no
+                         where b.use_yn = 'Y'
+                           and convert(varchar(6), a.connect_date, 112) = convert(varchar(6), getdate(), 112)) as a
+                group by case convert(varchar(8), getdate(), 112) when a.connect_date then a.usage else 0 end) as a
+    ]]>
     </select>
     <select id="user_satellite_usage">
-        select (select count(1) 
-                  from contract
-                 where company_no = a.company_no) as total_contracts
-             , (select count(1) 
-                  from member
-                 where company_no = a.company_no) as total_users
-             , 0 as daliy_usage
-             , 0 as monthly_usage
-          from company as a
-         where company_no = #{companyNo}
+    <![CDATA[
+        select sum(a.total_companys) as total_companys
+             , sum(a.total_users) as total_users
+             , sum(a.daliy_usage) as daliy_usage
+             , sum(a.monthly_usage) as monthly_usage
+          from (select count(1) as total_companys, 0 as total_users, 0 as daliy_usage, 0 as monthly_usage
+                  from company
+                 where company_no = #{companyNo}
+                union all
+                select 0, count(1) as total_user, 0, 0
+                  from vw_ts_app_user
+                 where company_no = #{companyNo}
+                   and use_yn = 'Y'
+                   and apply_start_date <= convert(varchar(10), getdate(), 121)
+                   and apply_finish_date >= convert(varchar(10), getdate(), 121)
+                union all
+                select 0, 0
+                     , case convert(varchar(8), getdate(), 112) when a.connect_date then a.usage else 0 end
+                     , sum(a.usage)
+                  from (select convert(varchar(8), a.connect_date, 112) as connect_date
+                            , datediff(minute, a.connect_date, a.disconnect_date) usage
+                          from contract_connect_history as a
+                         inner join vw_ts_app_user as b
+                            on a.contract_no = b.contract_no
+                           and a.user_no = b.user_no
+                         where b.company_no = #{companyNo}
+                           and b.use_yn = 'Y'
+                           and convert(varchar(6), a.connect_date, 112) = convert(varchar(6), getdate(), 112)) as a
+                group by case convert(varchar(8), getdate(), 112) when a.connect_date then a.usage else 0 end) as a
+    ]]>
     </select>
     <select id="company_all">
     <![CDATA[
@@ -38,9 +75,11 @@
                  where company_no = a.company_no
                    and start_date >= convert(varchar(10), getdate(), 20)
                    and end_date <= convert(varchar(10), getdate(), 20)) as total_licenses
-             , (select count(1) from member
+             , (select count(1) from vw_ts_app_user
                  where company_no = a.company_no
-                   and use_status = 'Y') as total_users
+                   and use_yn = 'Y'
+                   and apply_start_date <= convert(varchar(10), getdate(), 121)
+                   and apply_finish_date >= convert(varchar(10), getdate(), 121)) as total_users
              , 0 as total_satellite_usage
           from company as a
           left outer join nations as b
@@ -60,9 +99,11 @@
                  where company_no = a.company_no
                    and start_date >= convert(varchar(10), getdate(), 20)
                    and end_date <= convert(varchar(10), getdate(), 20)) as total_licenses
-             , (select count(1) from member
+             , (select count(1) from vw_ts_app_user
                  where company_no = a.company_no
-                   and use_status = 'Y') as total_users
+                   and use_yn = 'Y'
+                   and apply_start_date <= convert(varchar(10), getdate(), 121)
+                   and apply_finish_date >= convert(varchar(10), getdate(), 121)) as total_users
              , 0 as total_satellite_usage
           from company as a
           left outer join nations as b

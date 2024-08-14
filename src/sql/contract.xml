@@ -5,6 +5,7 @@
         select a.company_no
              , a.contract_no
              , a.contract_name
+             , a.contract_div
           from contract as a
          inner join company as b
             on a.company_no = b.company_no
@@ -17,6 +18,31 @@
              , flat_div
           from ts_plan
          where odm_div = 'N';
+    </select>
+    <select id="license_codes">
+        select a.contract_no
+             , a.license_no
+          from license as a
+         inner join contract as b
+            on a.contract_no = b.contract_no
+         where a.contract_no = #{contractNo};
+    </select>
+    <select id="odm_codes">
+        select a.contract_no
+             , a.odm_seq
+          from odm_contract as a
+         inner join contract as b
+            on a.contract_no = b.contract_no
+         where a.contract_no = #{contractNo};
+    </select>
+    <select id="ships_codes">
+        select a.contract_no
+             , a.ship_seq
+             , a.ship_name
+          from ships_contract as a
+         inner join contract as b
+            on a.contract_no = b.contract_no
+         where a.contract_no = #{contractNo};
     </select>
     <select id="status">
         select a.company_no

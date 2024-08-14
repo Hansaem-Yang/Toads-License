@@ -4,6 +4,7 @@ class ContractUser extends Common {
     constructor() {
         super();
         this.contractNo = null;
+        this.contractDiv = null;
         this.userNo = null;
         this.userId = null;
         this.userPwd = null;
@@ -17,6 +18,9 @@ class ContractUser extends Common {
 
     getContractNo(){
         return this.contractNo;
+    }
+    getContractDiv(){
+        return this.contractDiv;
     }
     getUserNo(){
         return this.userNo;
@@ -48,6 +52,9 @@ class ContractUser extends Common {
 
     setContractNo(contractNo){
         this.contractNo = contractNo;
+    }
+    setContractDiv(contractDiv){
+        this.contractDiv = contractDiv;
     }
     setUserNo(userNo){
         this.userNo = userNo;

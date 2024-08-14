@@ -26,6 +26,7 @@ module.exports = {
                 item.setCompanyNo(record.company_no);
                 item.setContractNo(record.contract_no);
                 item.setContractName(record.contract_name);
+                item.setContractDiv(record.contract_div);
                 
                 list.push(item);
             });
@@ -59,6 +60,82 @@ module.exports = {
             return list;
         } catch (err) {
             logger.error(`contract.planStatus error : ${err}`);
+            return null;
+        }
+    },
+    licenseCodes: async function (contractNo) {
+        try {
+            let pool = await poolPromise;
+            let param = { contractNo: contractNo };
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("contract", "license_codes", param, format);
+
+            let result = await pool.request().query(query);
+            let list = [];
+
+            result.recordset.forEach((record) => {
+                let item = new License();
+
+                item.setContractNo(record.contract_no);
+                item.setLicenseNo(record.license_no);
+                
+                list.push(item);
+            });
+
+            return list;
+        } catch (err) {
+            logger.error(`contract.licenseCodes error : ${err}`);
+            return null;
+        }
+    },
+    odmCodes: async function (contractNo) {
+        try {
+            let pool = await poolPromise;
+            let param = { contractNo: contractNo };
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("contract", "odm_codes", param, format);
+
+            let result = await pool.request().query(query);
+            let list = [];
+
+            result.recordset.forEach((record) => {
+                let item = new OdmContract();
+
+                item.setContractNo(record.contract_no);
+                item.setOdmSeq(record.odm_seq);
+                
+                list.push(item);
+            });
+
+            return list;
+        } catch (err) {
+            logger.error(`contract.odmCodes error : ${err}`);
+            return null;
+        }
+    },
+    shipsCodes: async function (contractNo) {
+        try {
+            let pool = await poolPromise;
+            let param = { contractNo: contractNo };
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("contract", "ships_codes", param, format);
+
+            let result = await pool.request().query(query);
+            let list = [];
+
+            result.recordset.forEach((record) => {
+                let item = new ShipsContract();
+
+                item.setContractNo(record.contract_no);
+                item.setShipSeq(record.ship_seq);
+                item.setShipName(record.ship_name);
+                
+                list.push(item);
+            });
+
+            return list;
+        } catch (err) {
+            logger.error(`contract.shipsCodes error : ${err}`);
             return null;
         }
     },
