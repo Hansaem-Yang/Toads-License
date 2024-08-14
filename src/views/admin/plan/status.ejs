@@ -104,7 +104,7 @@
                                         $(newRow).find('.plan_seq').val(planAmount.planSeq);
                                         $(newRow).find('.amount').val(formatCurrency(planAmount.amount));
                                         $(newRow).find('.bill_base_1').val(planAmount.billBase1);
-                                        $(newRow).find('.surcharge').val(planAmount.surcharge);
+                                        $(newRow).find('.surcharge').val(formatCurrency(planAmount.surcharge));
                                         $(newRow).find('.bill_base_2').val(planAmount.billBase2);
                                         $(newRow).find('.apply_date').val(planAmount.applyDate);
                                         $(newRow).find('.finish_date').val(planAmount.finishDate);
@@ -214,12 +214,12 @@
                         return false;
                     }
 
-                    if ($(row).find('.plan_amount_apply_date').val() === '') {
+                    if ($(row).find('.apply_date').val() === '') {
                         alert('적용일자를 입력하세요.');
                         return false;
                     }
 
-                    if ($(row).find('.plan_amount_finish_date').val() === '') {
+                    if ($(row).find('.finish_date').val() === '') {
                         alert('종료일자를 입력하세요.');
                         return false;
                     }
@@ -242,8 +242,8 @@
 
                     $(newRow).find('.amount').val('0');
                     $(newRow).find('.surcharge').val('0');
-                    $(newRow).find('.plan_amount_apply_date').val($('.apply_date').val());
-                    $(newRow).find('.plan_amount_finish_date').val($('.finish_date').val());
+                    $(newRow).find('.apply_date').val($('.apply_date').val());
+                    $(newRow).find('.finish_date').val($('.finish_date').val());
 
                     $('.plan_amount tbody').append(newRow);
                 });
@@ -336,8 +336,8 @@
                                 billBase1: $(row).find('.bill_base_1').val(),
                                 surcharge: parseCurrency($(row).find('.surcharge').val()),
                                 billBase2: $(row).find('.bill_base_2').val(),
-                                applyDate: $(row).find('.plan_amount_apply_date').val(),
-                                finishDate: $(row).find('.plan_amount_finish_date').val(),
+                                applyDate: $(row).find('.apply_date').val(),
+                                finishDate: $(row).find('.finish_date').val(),
                                 activeYn: $(row).find('.active_yn').val(),
                             });
                         });
@@ -517,7 +517,7 @@
                     <div class="table-container" style="height:200px">
                         <!-- 요금제 가격 시작 -->
                         <div id="plan_amount_content">
-                            <div class="title">라이센스</div>
+                            <div class="title">요금제 가격</div>
                             <div class="top-right-button">
                                 <div class="align-container">
                                     <p><input type="button" class="plan_amount_add" value="추가"/></p>
@@ -556,10 +556,10 @@
                                             <select class="bill_base_2" style="width:156px"></select>
                                         </td>
                                         <td>
-                                            <input type="date" class="plan_amount_apply_date" style="width:106px;">
+                                            <input type="date" class="apply_date" style="width:106px;">
                                         </td>
                                         <td>
-                                            <input type="date" class="plan_amount_finish_date" style="width:106px;">
+                                            <input type="date" class="finish_date" style="width:106px;">
                                         </td>
                                         <td>
                                             <select class="active_yn" style="width:106px"></select>

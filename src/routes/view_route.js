@@ -187,4 +187,16 @@ module.exports = function (app) {
             res.render("user/plan/status");
         }
     });
+    
+    // 요금제 관리 페이지
+    app.get("/view/plan/detail", (req, res) => {        
+        res.locals.planId = req.query.planId;
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/plan/detail");
+        }
+        else {
+            res.render("user/plan/detail");
+        }
+    });
 };
