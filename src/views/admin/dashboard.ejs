@@ -13,76 +13,120 @@
         <script src="/public/js/common/common_utility.js"></script>
         <script>
             $(document).ready(function() {
-                $.ajax({
-                    url: "../dashboard/satelliteUsage",
-                    method: "POST",
-                    dataType: 'json',
-                    success: function (data) {
-                        ClearUsage();
+                var nations = [];
 
+                $.ajax({
+                    url: "../nations/status",
+                    method: "POST",
+                    success: function (data) {
                         if (data === 'NO SESSION') {
                             alert("세션이 만료되었습니다.");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
-                            var newRow = '<tr><td colspan="4">조회된 데이터가 없습니다.</td></tr>';
+                            nations = [
+                                { code:'CN', ename:'China', kname:'중국', country:'86' },
+                                { code:'KR', ename:'Republic of Korea', kname:'대한민국', country:'82' },
+                                { code:'JP', ename:'Japan', kname:'일본', country:'81' },
+                                { code:'US', ename:'United States of America', kname:'미국', country:'1' },
+                            ];
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    nations.push({
+                                        code:post.nationIso2, 
+                                        ename:post.nationEname, 
+                                        kname:post.nationKname, 
+                                        country:post.nationCode
+                                    });
+                                });
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("서버 요청에 실패하였습니다.");
+                    },
+                });
+
+                var search = function(){
+
+                    $.ajax({
+                        url: "../dashboard/satelliteUsage",
+                        method: "POST",
+                        dataType: 'json',
+                        success: function (data) {
+                            ClearUsage();
+
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                var newRow = '<tr><td colspan="4">조회된 데이터가 없습니다.</td></tr>';
+                                $('.satellite-usage').append(newRow);
+                            } else {
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        var newRow = $('.satellite-usage tbody tr').first().clone().removeClass('hidden');
+
+                                        $(newRow).find('.cell_total_companys').text(post.totalCompanys);
+                                        $(newRow).find('.cell_total_users').text(post.totalUsers);
+                                        $(newRow).find('.cell_daliy_usage').text(formatCurrency(post.daliyUsage));
+                                        $(newRow).find('.cell_monthly_usage').text(formatCurrency(post.monthlyUsage));
+
+                                        $('.satellite-usage tbody').append(newRow);
+                                    });
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var newRow = '<tr><td colspan="4">서버 요청에 실패하였습니다.</td></tr>';
                             $('.satellite-usage').append(newRow);
-                        } else {
-                            if (Array.isArray(data)) {
-                                $.each(data, function(index, post) {
-                                    var newRow = $('.satellite-usage tbody tr').first().clone().removeClass('hidden');
+                        },
+                    });
+                    
+                    $.ajax({
+                        url: "../dashboard/companyAll",
+                        method: "POST",
+                        dataType: 'json',
+                        success: function (data) {
+                            ClearCompany();
 
-                                    $(newRow).find('.cell_total_companys').text(post.totalCompanys);
-                                    $(newRow).find('.cell_total_users').text(post.totalUsers);
-                                    $(newRow).find('.cell_daliy_usage').text(formatCurrency(post.daliyUsage));
-                                    $(newRow).find('.cell_monthly_usage').text(formatCurrency(post.monthlyUsage));
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                var newRow = '<tr><td colspan="7" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                                $('.company').append(newRow);
+                            } else {
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        var newRow = $('.company tbody tr').first().clone().removeClass('hidden');
 
-                                    $('.satellite-usage tbody').append(newRow);
-                                });
+                                        $(newRow).find('.cell_company_no').text(post.companyNo);
+                                        $(newRow).find('.cell_company_name').text(post.companyName);
+                                        $(newRow).find('.cell_owner_name').text(post.ownerName);
+                                        $(newRow).find('.cell_company_div').text(companyDivs[post.companyDiv]);
+
+                                        var foundNation = nations.find(function(nation) {
+                                            return nation.code === post.nation;
+                                        });
+                                        $(newRow).find('.cell_nation').text(foundNation.kname);
+                                        $(newRow).find('.cell_telephone').text(getTelephone(post.nationCode, post.telephone));
+                                        $(newRow).find('.cell_total_licenses').text(post.totalLicenses);
+                                        $(newRow).find('.cell_total_users').text(post.totalUsers);
+
+                                        $('.company tbody').append(newRow);
+                                    });
+                                }
                             }
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        var newRow = '<tr><td colspan="4">서버 요청에 실패하였습니다.</td></tr>';
-                        $('.satellite-usage').append(newRow);
-                    },
-                });
-                
-                $.ajax({
-                    url: "../dashboard/companyAll",
-                    method: "POST",
-                    dataType: 'json',
-                    success: function (data) {
-                        ClearCompany();
-
-                        if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
-                            window.parent.location.href = "./login";
-                        } else if (data === 'NO DATA') {
-                            var newRow = '<tr><td colspan="7" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                        },
+                        error: function (xhr, status, error) {
+                            var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
                             $('.company').append(newRow);
-                        } else {
-                            if (Array.isArray(data)) {
-                                $.each(data, function(index, post) {
-                                    var newRow = $('.company tbody tr').first().clone().removeClass('hidden');
+                        },
+                    });
+                }
 
-                                    $(newRow).find('.cell_company_no').text(post.companyNo);
-                                    $(newRow).find('.cell_company_name').text(post.companyName);
-                                    $(newRow).find('.cell_owner_name').text(post.ownerName);
-                                    $(newRow).find('.cell_company_div').text(companyDivs[post.companyDiv]);
-                                    $(newRow).find('.cell_telephone').text(getTelephone(post.nationCode, post.telephone));
-                                    $(newRow).find('.cell_total_licenses').text(post.totalLicenses);
-                                    $(newRow).find('.cell_total_users').text(post.totalUsers);
-
-                                    $('.company tbody').append(newRow);
-                                });
-                            }
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
-                        $('.company').append(newRow);
-                    },
-                });
+                search();
             });
             
             var ClearUsage= function() {
@@ -136,6 +180,7 @@
                                     <th width="240px">법인명</th>
                                     <th width="220px">대표자명</th>
                                     <th width="120px">회사구분</th>
+                                    <th width="160px">국가</th>
                                     <th width="160px">연락처</th>
                                     <th width="120px">사용자 수</th>
                                 </tr>
@@ -144,8 +189,9 @@
                                 <tr class="hidden">
                                     <td class="cell_company_no"></td>
                                     <td class="cell_company_name"></td>
-                                    <td class="cell_owner_name"></td>
+                                    <td class="cell_owner_name" style="text-align: center;"></td>
                                     <td class="cell_company_div" style="text-align: center;"></td>
+                                    <td class="cell_nation" style="text-align: center;"></td>
                                     <td class="cell_telephone" style="text-align: center;"></td>
                                     <td class="cell_total_users" style="text-align: right;"></td>
                                 </tr>

@@ -75,11 +75,18 @@
                  where company_no = a.company_no
                    and start_date >= convert(varchar(10), getdate(), 20)
                    and end_date <= convert(varchar(10), getdate(), 20)) as total_licenses
-             , (select count(1) from vw_ts_app_user
-                 where company_no = a.company_no
-                   and use_yn = 'Y'
-                   and apply_start_date <= convert(varchar(10), getdate(), 121)
-                   and apply_finish_date >= convert(varchar(10), getdate(), 121)) as total_users
+             , (select sum(cnt)
+                  from (select count(1) as cnt 
+                          from manager as aa
+                         inner join employee as bb
+                            on aa.emp_no = bb.emp_no
+                         where bb.company_no = a.company_no
+                        union all
+                        select count(1) from vw_ts_app_user
+                         where company_no = a.company_no
+                           and use_yn = 'Y'
+                           and apply_start_date <= convert(varchar(10), getdate(), 121)
+                           and apply_finish_date >= convert(varchar(10), getdate(), 121)) as a) as total_users
              , 0 as total_satellite_usage
           from company as a
           left outer join nations as b

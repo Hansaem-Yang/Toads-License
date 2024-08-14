@@ -13,7 +13,7 @@
         <script src="/public/js/common/common_variables.js"></script>
         <script>
             $(document).ready(function() {
-                var nation_options = [];
+                var nations = [];
 
                 $.ajax({
                     url: "../nations/status",
@@ -23,18 +23,18 @@
                             alert("세션이 만료되었습니다.");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
-                            nation_options = [
+                            nations = [
                                 { code:'CN', ename:'China', kname:'중국', country:'86' },
                                 { code:'KR', ename:'Republic of Korea', kname:'대한민국', country:'82' },
                                 { code:'JP', ename:'Japan', kname:'일본', country:'81' },
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
                             
-                            createNationsSelection($('.nation'), nation_options, $('.language').val());
+                            createNationsSelection($('.nation'), nations, $('.language').val());
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
-                                    nation_options.push({
+                                    nations.push({
                                         code:post.nationIso2, 
                                         ename:post.nationEname, 
                                         kname:post.nationKname, 
@@ -42,7 +42,7 @@
                                     });
                                 });
 
-                                createNationsSelection($('.nation'), nation_options, $('.language').val());
+                                createNationsSelection($('.nation'), nations, $('.language').val());
                             }
                         }
                     },
@@ -77,6 +77,10 @@
                                         $(newRow).find('.cell_company_name').text(post.companyName);
                                         $(newRow).find('.cell_owner_name').text(post.ownerName);
                                         $(newRow).find('.cell_company_div').text(companyDivs[post.companyDiv]);
+                                        var foundNation = nations.find(function(nation) {
+                                            return nation.code === post.nation;
+                                        });
+                                        $(newRow).find('.cell_nation').text(foundNation.kname);
                                         $(newRow).find('.cell_telephone').text(getTelephone(post.nationCode, post.telephone));
                                         $(newRow).find('.cell_total_licenses').text(post.totalLicenses);
                                         $(newRow).find('.cell_total_users').text(post.totalUsers);
@@ -187,7 +191,7 @@
                     if (value === '')
                         return;
 
-                    var option = nation_options.find(option => option.code === value);
+                    var option = nations.find(option => option.code === value);
                     $('.nation_code').val(option.country);
                 });
 
@@ -340,8 +344,8 @@
                                     <th width="240px">법인명</th>
                                     <th width="220px">대표자명</th>
                                     <th width="120px">회사구분</th>
+                                    <th width="160px">국가</th>
                                     <th width="160px">연락처</th>
-                                    <th width="120px">라이센스 수</th>
                                     <th width="120px">사용자 수</th>
                                 </tr>
                             </thead>
@@ -351,8 +355,8 @@
                                     <td class="cell_company_name" style="text-align: left;"></td>
                                     <td class="cell_owner_name" style="text-align: left;"></td>
                                     <td class="cell_company_div" style="text-align: center;"></td>
+                                    <td class="cell_nation" style="text-align: center;"></td>
                                     <td class="cell_telephone" style="text-align: center;"></td>
-                                    <td class="cell_total_licenses" style="text-align: right;"></td>
                                     <td class="cell_total_users" style="text-align: right;"></td>
                                 </tr>
                                 <tr>

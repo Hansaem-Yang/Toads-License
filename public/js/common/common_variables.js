@@ -119,3 +119,25 @@ const useYn = {
     Y:'Yes',
     N:'No'
 }
+
+const flatDivs = {
+    F:'정액제',
+    P:'종량제'
+}
+
+const odmDivs = {
+    D:'ODM',
+    N:'Normal Service'
+}
+
+const activeYn = {
+    Y:'활성화',
+    N:'비활성화'
+}
+
+const billBases = {
+    T:'시간별 과금(분당)',
+    D:'일별 과금',
+    M:'월별 과금',
+    Y:'연간 과금'
+}

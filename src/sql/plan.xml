@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="plan">  
+    <select id="codes">
+        select a.company_no
+             , a.contract_no
+             , a.contract_name
+             , a.contract_div
+          from contract as a
+         inner join company as b
+            on a.company_no = b.company_no
+         where a.company_no = #{companyNo};
+    </select>
+    <select id="status">
+        select plan_id
+             , plan_kname
+             , plan_ename
+             , flat_div
+             , odm_div
+             , apply_date
+             , finish_date
+             , active_yn
+             , remark
+          from ts_plan;
+    </select>
+    <select id="detail">
+        select plan_id
+             , plan_kname
+             , plan_ename
+             , flat_div
+             , odm_div
+             , apply_date
+             , finish_date
+             , active_yn
+             , remark
+          from ts_plan
+         where plan_id = #{planId};
+    </select>
+    <select id="max_plan_id">
+        select max(plan_id) as max_plan_id
+          from ts_plan;
+    </select>
+    <insert id="insert">
+        insert into ts_plan (
+                    plan_id
+                  , plan_kname
+                  , plan_ename
+                  , flat_div
+                  , odm_div
+                  , apply_date
+                  , finish_date
+                  , active_yn
+                  , remark
+                  , regist_date
+                  , regist_user
+        )
+        values (
+                    (select isnull(max(plan_id), 0) + 1 from ts_plan)
+                  , #{planKname}
+                  , #{planEname}
+                  , #{flatDiv}
+                  , #{odmDiv}
+                  , #{applyDate}
+                  , #{finishDate}
+                  , #{activeYn}
+                  , #{remark}
+                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , #{registUser}
+        );
+    </insert>
+    <update id="update">
+        update ts_plan
+           set plan_kname = #{planKname}
+             , plan_ename = #{planEname}
+             , flat_div = #{flatDiv}
+             , odm_div = #{odmDiv}
+             , apply_date = #{applyDate}
+             , finish_date = #{finishDate}
+             , active_yn = #{activeYn}
+             , remark = #{remark}
+             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_user = #{modifyUser}
+         where plan_id = #{planId};
+    </update>
+    <delete id="delete">
+        delete from ts_plan
+         where plan_id = #{planId};
+    </delete>
+    <select id="plan_amounts">
+        select plan_id
+             , plan_seq
+             , amount
+             , bill_base_1
+             , surcharge
+             , bill_base_2
+             , apply_date
+             , finish_date
+             , active_yn
+          from ts_plan_amount
+         where plan_id = #{planId};
+    </select>
+    <insert id="plan_amount_insert">
+        insert into ts_plan_amount (
+                    plan_id
+                  , plan_seq
+                  , amount
+                  , bill_base_1
+                  , surcharge
+                  , bill_base_2
+                  , apply_date
+                  , finish_date
+                  , active_yn
+                  , regist_date
+                  , regist_user
+        )
+        values (
+                    #{planId}
+                  , (select isnull(max(plan_seq), 0) + 1 
+                       from ts_plan_amount
+                      where plan_id = #{planId})
+                  , #{amount}
+                  , #{billBase1}
+                  , #{surcharge}
+                  , #{billBase2}
+                  , #{applyDate}
+                  , #{finishDate}
+                  , #{activeYn}
+                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , #{registUser}
+        );
+    </insert>
+    <update id="plan_amount_update">
+        update ts_plan_amount
+           set amount = #{amount}
+             , bill_base_1 = #{billBase1}
+             , surcharge = #{surcharge}
+             , bill_base_2 = #{billBase2}
+             , apply_date = #{applyDate}
+             , finish_date = #{finishDate}
+             , active_yn = #{activeYn}
+             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_user = #{modifyUser}
+         where plan_id = #{planId}
+           and plan_seq = #{planSeq}
+    </update>
+    <delete id="plan_amount_delete">
+        delete from ts_plan_amount
+         where plan_id = #{planId}
+           and plan_seq = #{planSeq};
+    </delete>
+    <delete id="plan_amount_delete_all">
+        delete from ts_plan_amount
+         where plan_id = #{planId};
+    </delete>
+</mapper>
