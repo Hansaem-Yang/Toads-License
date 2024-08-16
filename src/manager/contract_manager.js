@@ -324,6 +324,7 @@ module.exports = {
                 let format = { language: "sql", indent: " " };
                 let query = mybatisMapper.getStatement("contract", "insert", param, format);
 
+                console.log(query);
                 let request = new sql.Request(transaction);
                 let result = await request.query(query);
 
@@ -627,8 +628,8 @@ module.exports = {
                             param = {
                                 contractNo: contractNo,
                                 shipSeq: shipsContracts[i].shipSeq,
-                                planSeq: shipsContracts[i].planSeq,
                                 planId: shipsContracts[i].planId,
+                                planSeq: shipsContracts[i].planSeq,
                                 applyStartDate: shipsContracts[i].applyStartDate,
                                 applyFinishDate: shipsContracts[i].applyFinishDate,
                                 registUser: modifyUser,

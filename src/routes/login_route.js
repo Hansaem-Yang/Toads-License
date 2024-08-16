@@ -36,9 +36,9 @@ module.exports = function (app) {
     });
     app.post("/logout", (req, res) => {
         console.log("Logout");
-        let email = req.body.email;
+        let userId = req.body.userId;
 
-        manager.logout(email).then((data) => {
+        manager.logout(userId).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {

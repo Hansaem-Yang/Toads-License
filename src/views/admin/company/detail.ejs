@@ -51,12 +51,12 @@
                     },
                 });
 
-                var Search = function() {
+                var search = function() {
                     var companyNo = $('.company_no').val();
 
                     // 행 데이터 출력
                     $.ajax({
-                        url: "../admin/company/detail",
+                        url: "../../admin/company/detail",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
@@ -98,7 +98,7 @@
 
                     // 행 데이터 출력
                     $.ajax({
-                        url: "../admin/company/detail",
+                        url: "../../admin/company/detail",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
@@ -139,7 +139,7 @@
                         companyNos.push($('.company_no').val());
                         // 행 데이터 출력
                         $.ajax({
-                            url: "../admin/company/delete",
+                            url: "../../admin/company/delete",
                             method: "POST",
                             data: {
                                 companyNos: companyNos,
@@ -240,7 +240,7 @@
                         }
 
                         $.ajax({
-                            url: "../admin/company/update",
+                            url: "../../admin/company/update",
                             method: "POST",
                             data: {
                                 companyNo: companyNo,
@@ -268,7 +268,7 @@
                                 }
 
                                 $('.modal').hide();
-                                Search();
+                                search();
 
                                 ClearModal();
                             },
@@ -289,7 +289,7 @@
                 });
 
                 createVariablesSelection($('.company_div'), companyDivs);
-                Search();
+                search();
             });
         </script>
     </head>

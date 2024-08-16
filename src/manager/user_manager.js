@@ -35,10 +35,10 @@ module.exports = {
             return null; 
         }
     },
-    logout: async function (email) {
+    logout: async function (userId) {
         try {
             let pool = await poolPromise;
-            let param = { email: email };
+            let param = { userId: userId };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("user", "dashboard_user", param, format);
 

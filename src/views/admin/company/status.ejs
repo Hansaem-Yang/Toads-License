@@ -77,12 +77,10 @@
                                         $(newRow).find('.cell_company_name').text(post.companyName);
                                         $(newRow).find('.cell_owner_name').text(post.ownerName);
                                         $(newRow).find('.cell_company_div').text(companyDivs[post.companyDiv]);
-                                        var foundNation = nations.find(function(nation) {
-                                            return nation.code === post.nation;
-                                        });
+
+                                        var foundNation = nations.find(option => option.code === post.nation);
                                         $(newRow).find('.cell_nation').text(foundNation.kname);
                                         $(newRow).find('.cell_telephone').text(getTelephone(post.nationCode, post.telephone));
-                                        $(newRow).find('.cell_total_licenses').text(post.totalLicenses);
                                         $(newRow).find('.cell_total_users').text(post.totalUsers);
 
                                         $('.company tbody').append(newRow);
@@ -150,13 +148,9 @@
                 $('.detail').click(function() {
                     var selectedRow = $(".company tr.selected");
                     if (selectedRow.length > 0) {
-                        // 선택된 행의 데이터를 배열로 저장
-                        var rowData = [];
-                        selectedRow.find("td").each(function() {
-                            rowData.push($(this).text());
-                        });
+                        var companyNo = selectedRow.find('.cell_company_no').text();
                         
-                        window.location.href = "../view/company/detail?companyNo=" + rowData[0];
+                        window.location.href = "../view/company/detail?companyNo=" + companyNo;
                     } else {
                         alert("목록에서 행을 선택하세요.");
                     }
