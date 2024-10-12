@@ -40,13 +40,13 @@
                 $(".logout").click(function(event) {
                     event.preventDefault();
 
-                    var email = "<%= session.user.email %>";
+                    var userId = "<%= session.user.email %>";
                     // Ajax를 이용한 데이터 전송
                     $.ajax({
                         url: "../logout",
                         method: "POST", 
                         data: {
-                            email: email,
+                            userId: userId,
                         },
                         success: function (res) {
                             switch (res) {

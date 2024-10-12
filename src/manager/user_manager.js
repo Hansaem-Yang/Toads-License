@@ -14,9 +14,10 @@ module.exports = {
             let query = mybatisMapper.getStatement("user", "dashboard_user", param, format);
 
             let result = await pool.request().query(query);
-            let item = new User();
+            let item = null;
 
             result.recordset.forEach((record) => {
+                item = new User();
                 item.setContractNo(record.contract_no);
                 item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);
@@ -43,9 +44,10 @@ module.exports = {
             let query = mybatisMapper.getStatement("user", "dashboard_user", param, format);
 
             let result = await pool.request().query(query);
-            let item = new User();
+            let item = null;
 
             result.recordset.forEach((record) => {
+                item = new User();
                 item.setContractNo(record.contract_no);
                 item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);

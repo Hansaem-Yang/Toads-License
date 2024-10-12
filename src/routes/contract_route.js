@@ -2,6 +2,7 @@ const manager = require("../manager/contract_manager");
 const constants = require("../common/constants");
 
 module.exports = function (app) {
+    /// 관리자
     app.post("/admin/contract/codes", (req, res) => {
         let companyNo = req.body.companyNo;
         
@@ -143,6 +144,84 @@ module.exports = function (app) {
                 res.send(constants.FAIL);
             } else {
                 res.send(constants.SUCCESS);
+            }
+        });
+    });
+
+    /// 사용자
+    app.post("/user/contract/codes", (req, res) => {
+        let companyNo = req.body.companyNo;
+        
+        manager.codes(companyNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/user/contract/planStatus", (req, res) => {        
+        manager.planStatus().then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/user/contract/licenseCodes", (req, res) => {
+        let contractNo = req.body.contractNo;
+        
+        manager.licenseCodes(contractNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/user/contract/odmCodes", (req, res) => {
+        let contractNo = req.body.contractNo;
+        
+        manager.odmCodes(contractNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/user/contract/shipsCodes", (req, res) => {
+        let contractNo = req.body.contractNo;
+        
+        manager.shipsCodes(contractNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/user/contract/status", (req, res) => {
+        let companyNo = req.body.companyNo;
+
+        manager.status(companyNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/user/contract/detail", (req, res) => {
+        let companyNo = req.body.companyNo;
+        let contractNo = req.body.contractNo;
+
+        manager.detail(companyNo, contractNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
             }
         });
     });

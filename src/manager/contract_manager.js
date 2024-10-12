@@ -27,6 +27,8 @@ module.exports = {
                 item.setContractNo(record.contract_no);
                 item.setContractName(record.contract_name);
                 item.setContractDiv(record.contract_div);
+                item.setStartDate(record.start_date);
+                item.setEndDate(record.end_date);
                 
                 list.push(item);
             });

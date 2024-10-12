@@ -13,35 +13,50 @@
         <script src="/public/js/common/common_variables.js"></script>
         <script>
             $(document).ready(function() {
-                var companys = [];
                 var contracts = [];
 
-                $.ajax({
-                    url: "../admin/company/codes",
-                    method: "POST",
-                    success: function (data) {
-                        if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
-                            window.parent.location.href = "./login";
-                        } else if (data === 'NO DATA') {
-                            alert("조회된 데이터가 없습니다.");
-                        } else {
-                            if (Array.isArray(data)) {
-                                $.each(data, function(index, post) {
-                                    companys.push({
-                                        code:post.companyNo, 
-                                        name:post.companyName, 
-                                    });
-                                });
+                var searchContract = function() {
+                    clearContract();
 
-                                createSelection($('.s_company_no'), companys);
+                    var companyNo = $('.s_company_no').val();
+                    if (companyNo === '') {
+                        alert('고객사를 선택하세요.');
+                        return false;
+                    }
+
+                    $.ajax({
+                        url: "../user/contract/codes",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                            } else {
+                                contracts = [];
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        contracts.push({
+                                            code:post.contractNo, 
+                                            name:post.contractName, 
+                                            startDate:post.startDate,
+                                            endDate:post.endDate
+                                        });
+                                    });
+
+                                    createSelection($('.s_contract_no'), contracts);
+                                }
                             }
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        alert('서버 요청에 실패하였습니다.');
-                    },
-                });
+                        },
+                        error: function (xhr, status, error) {
+                            alert('서버 요청에 실패하였습니다.');
+                        },
+                    });
+                }
                 
                 var search = function() {
                     clearContractManager();
@@ -54,7 +69,7 @@
                     }
 
                     $.ajax({
-                        url: "../admin/contract/manager/status",
+                        url: "../user/contract/manager/status",
                         method: "POST",
                         data: {
                             contractNo: contractNo,
@@ -90,24 +105,6 @@
                     });
                 };
 
-                $('.add').click(function() {
-                    clearModal();
-
-                    var contractNo = $('.s_contract_no option:selected').val();
-                    if (contractNo === '')
-                    {
-                        alert("계약번호를 선택하세요.");
-                        return;
-                    }
-
-                    $('.contract_no').val(contractNo);
-                    $('.email').removeAttr('readonly');
-                    $('.pwd').removeAttr('readonly');
-                    $('.check_pwd').removeAttr('readonly');
-                    $('.change_password').hide();
-                    $('.modal').show();
-                });
-
                 $('.modify').click(function() {
                     clearModal();
 
@@ -124,7 +121,7 @@
 
                         // 행 데이터 출력
                         $.ajax({
-                            url: "../admin/contract/manager/detail",
+                            url: "../user/contract/manager/detail",
                             method: "POST",
                             data: {
                                 contractNo: contractNo,
@@ -140,7 +137,6 @@
                                     $('.contract_no').val(data.contractNo);
                                     $('.seq').val(data.seq);
                                     $('.email').val(data.email);
-                                    $('.email').attr('readonly', true);
                                     $('.pwd').val(data.pwd);
                                     $('.pwd').attr('readonly', true);
                                     $('.check_pwd').val(data.pwd);
@@ -157,56 +153,6 @@
                                alert('서버 요청에 실패하였습니다.');
                             },
                         });
-                    } else {
-                        alert("목록에서 행을 선택하세요.");
-                    }
-                });
-
-                $('.delete').click(function() {
-                    clearModal();
-
-                    var contractNo = $('.s_contract_no').val();
-                    if (contractNo === '')
-                    {
-                        alert("고객사를 선택하세요.");
-                        return;
-                    }
-
-                    var selectedRow = $(".contract_manager tr.selected");
-                    if (selectedRow.length > 0) {
-                        if (confirm('데이터를 삭제 하시겠습니까?') == true)
-                        {
-                            var seqs = [];
-
-                            seqs.push({
-                                contractNo: contractNo,
-                                seq: selectedRow.find('.cell_seq').text()
-                            });
-
-                            // 행 데이터 출력
-                            $.ajax({
-                                url: "../admin/contract/manager/delete",
-                                method: "POST",
-                                data: {
-                                    seqs: seqs,
-                                },
-                                success: function (data) {
-                                    if (data === 'NO SESSION') {
-                                        alert("세션이 만료되었습니다.");
-                                        window.parent.location.href = "./login";
-                                    } else if (data === 'FAIL') {
-                                        alert("삭제에 실패하였습니다.");
-                                    } else {
-                                        alert("삭제가 완료되었습니다.");
-
-                                        search();
-                                    }
-                                },
-                                error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
-                                },
-                            });
-                        }
                     } else {
                         alert("목록에서 행을 선택하세요.");
                     }
@@ -289,49 +235,6 @@
                     return true;
                 }
 
-                $('.s_company_no').change(function() {
-                    clearContract();
-
-                    var companyNo = $('.s_company_no option:selected').val();
-                    if (companyNo === '') {
-                        alert('고객사를 선택하세요.');
-                        return false;
-                    }
-
-                    $.ajax({
-                        url: "../admin/contract/codes",
-                        method: "POST",
-                        data: {
-                            companyNo: companyNo,
-                        },
-                        success: function (data) {
-                            if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
-                                window.parent.location.href = "./login";
-                            } else if (data === 'NO DATA') {
-                                alert("조회된 데이터가 없습니다.");
-                            } else {
-                                contracts = [];
-                                if (Array.isArray(data)) {
-                                    $.each(data, function(index, post) {
-                                        contracts.push({
-                                            code:post.contractNo, 
-                                            name:post.contractName, 
-                                            startDate:post.startDate,
-                                            endDate:post.endDate
-                                        });
-                                    });
-
-                                    createSelection($('.s_contract_no'), contracts);
-                                }
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            alert('서버 요청에 실패하였습니다.');
-                        },
-                    });
-                });
-
                 $('.s_contract_no').change(function() {
                     search();
                 });
@@ -356,12 +259,7 @@
                         var userAuth = $('.user_auth').val();
                         var useYn = $('.use_yn').val();
 
-                        var url = "../admin/contract/manager/insert";
-                        if (seq === ''){
-                            url = "../admin/contract/manager/insert";
-                        } else {
-                            url = "../admin/contract/manager/update";
-                        }
+                        var url = "../user/contract/manager/update";
 
                         $.ajax({
                             url: url,
@@ -451,7 +349,7 @@
                         }
 
                         $.ajax({
-                            url: "../admin/contract/manager/changePassword",
+                            url: "../user/contract/manager/changePassword",
                             method: "POST",
                             data: {
                                 contractNo: contractNo,
@@ -494,6 +392,8 @@
                 
                 createVariablesSelection($('.user_auth'), managerAuths);
                 createVariablesSelection($('.use_yn'), useYn);
+
+                searchContract();
             });
         </script>
     </head>
@@ -507,10 +407,9 @@
                             <thead>
                                 <tr>
                                     <th width="120px" class="right-align">고객사</th>
-                                    <td class="left-align">
-                                        <select class="s_company_no" style="width:240px;">
-                                            <option value="">선택하세요.</option>
-                                        </select>
+                                    <td width="240px" class="left-align">
+                                        <input type="hidden" class="s_company_no" value="<%=session.user.companyNo%>"/>
+                                        <%=session.user.companyName%>
                                     </td>
                                     <th width="120px" class="right-align">계약번호</th>
                                     <td class="left-align">
@@ -527,9 +426,7 @@
                     <div class="title">계약 관리자 목록</div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="add" value="등록"/></p>
                             <p><input type="button" class="modify" value="수정"/></p>
-                            <p><input type="button" class="delete" value="삭제"/></p>
                         </div>
                     </div>
                     <div>

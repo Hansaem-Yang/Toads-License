@@ -16,7 +16,7 @@
                 var companyNo = $('.company_no').val();
 
                 $.ajax({
-                    url: "../dashboard/userSatelliteUsage",
+                    url: "../user/dashboard/userSatelliteUsage",
                     method: "POST",
                     dataType: 'json',
                     data: {
@@ -53,7 +53,7 @@
                 });
                 
                 $.ajax({
-                    url: "../dashboard/company",
+                    url: "../user/dashboard/company",
                     method: "POST",
                     dataType: 'json',
                     data: {

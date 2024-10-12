@@ -6,6 +6,8 @@
              , a.contract_no
              , a.contract_name
              , a.contract_div
+             , a.start_date
+             , a.end_date
           from contract as a
          inner join company as b
             on a.company_no = b.company_no

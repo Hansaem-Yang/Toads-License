@@ -9,7 +9,6 @@
         <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
         -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
         <script src="/public/js/common/common_variables.js"></script>
         <script>
@@ -52,12 +51,12 @@
                     },
                 });
 
-                var Search = function() {
+                var search = function() {
                     var companyNo = $('.company_no').val();
 
                     // 행 데이터 출력
                     $.ajax({
-                        url: "../../company/detail",
+                        url: "../../user/company/detail",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
@@ -77,13 +76,12 @@
                                 $('.cell_business_no').text(data.businessNo);
                                 $('.cell_resident_no').text(data.residentNo);
                                 $('.cell_company_div').text(companyDivs[data.companyDiv]);
-                                
-                                var option = nation_options.find(option => option.code === data.nation);
-                                $('.cell_nation').text(option.kname);
-                                $('.cell_nation_code').text(data.nationCode);
-                                $('.cell_telephone').text(data.telephone);
-                                $('.cell_post_code').text(data.postCode);
+                                $('.cell_telephone').text(getTelephone(data.nationCode, data.telephone));
                                 $('.cell_business_place').text(data.businessPlace);
+
+                                var option = nation_options.find(item => item.code === data.nation);
+                                
+                                $('.cell_nation').text(option?option.kname:'');
                             }
                         },
                         error: function (xhr, status, error) {
@@ -100,7 +98,7 @@
 
                     // 행 데이터 출력
                     $.ajax({
-                        url: "../../company/detail",
+                        url: "../../user/company/detail",
                         method: "POST",
                         data: {
                             companyNo: companyNo,
@@ -123,7 +121,6 @@
                                 $('.nation').val(data.nation);
                                 $('.nation_code').val(data.nationCode);
                                 $('.telephone').val(data.telephone);
-                                $('.post_code').val(data.postCode);
                                 $('.business_place').val(data.businessPlace);
 
                                 $('.modal').show();
@@ -145,7 +142,6 @@
                     $('.nation').val('');
                     $('.nation_code').val('');
                     $('.telephone').val('');
-                    $('.post_code').val('');
                     $('.business_place').val('');
                 };
 
@@ -174,36 +170,40 @@
                         var nation = $('.nation').val();
                         var nationCode = $('.nation_code').val();
                         var telephone = $('.telephone').val();
-                        var postCode = $('.post_code').val();
                         var businessPlace = $('.business_place').val();
 
-                        if (companyName === '') {
+                        if ($('.company_name').val() === '') {
                             alert('법인명을 입력하세요.');
+                            $('.company_name').focus();
                             return;
                         }
 
                         if ($('.owner_name').val() === '') {
                             alert('대표자명을 입력하세요.');
+                            $('.owner_name').focus();
                             return;
                         }
 
                         if ($('.company_div').val() === '') {
                             alert('회사구분을 선택하세요.');
+                            $('.company_div').focus();
                             return;
                         }
                         
                         if ($('.nation').val() === '') {
                             alert('국가를 선택하세요.');
+                            $('.nation').focus();
                             return;
                         }
                         
                         if ($('.telephone').val() === '') {
                             alert('연락처를 입력하세요.');
+                            $('.telephone').focus();
                             return;
                         }
 
                         $.ajax({
-                            url: "../../company/update",
+                            url: "../../user/company/update",
                             method: "POST",
                             data: {
                                 companyNo: companyNo,
@@ -214,7 +214,6 @@
                                 companyDiv: companyDiv,
                                 nation: nation,
                                 telephone: telephone,
-                                postCode: postCode,
                                 businessPlace: businessPlace,
                             },
                             success: function (data) {
@@ -232,7 +231,7 @@
                                 }
 
                                 $('.modal').hide();
-                                Search();
+                                search();
 
                                 ClearModal();
                             },
@@ -253,12 +252,12 @@
                 });
 
                 createVariablesSelection($('.company_div'), companyDivs);
-                Search();
+                search();
             });
         </script>
     </head>
     <body>
-        <form class="company-status-form">
+        <form class="company-detail-form">
             <input type="hidden" class="language" value="<%=session.language%>"/>
             
             <div class="content">
@@ -266,7 +265,7 @@
                     <div class="title">고객사 정보</div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <input type="button" class="modify" value="수정"/>
+                            <p><input type="button" class="modify" value="수정"/></p>
                         </div>
                     </div>
                     <div>
@@ -282,12 +281,7 @@
                                     <th class="right-align">대표자명</th>
                                     <td class="cell_owner_name"></td>
                                     <th class="right-align">연락처</th>
-                                    <td>
-                                        <div class="align-container">
-                                            <p class="cell_nation_code"></p>-
-                                            <p class="cell_telephone"></p>
-                                        </div>
-                                    </td>
+                                    <td class="cell_telephone"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">사업자등록번호</th>
@@ -303,10 +297,7 @@
                                 </tr>
                                 <tr>
                                     <th class="right-align">사업장소재지</th>
-                                    <td height="60px" colspan="3">
-                                        <div class="cell_post_code"></div>
-                                        <div class="cell_business_place"></div>
-                                    </td>
+                                    <td height="60px" colspan="3" class="cell_business_place"></td>
                                 </tr>
                             </thead>
                         </table>
@@ -329,7 +320,7 @@
             <div class="modal-content" style="width:640px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">회사 관리</div>
+                    <div class="title">고객사 관리</div>
                     <div>
                         <table>
                             <thead>
@@ -382,10 +373,6 @@
                                 <tr>
                                     <th class="right-align">사업장소재지</th>
                                     <td class="left-align">
-                                        <div class="align-container">
-                                            <p><input type="text" class="post_code" style="width:80px"/></p>
-                                            <input type="button" class="search_address" value="주소검색"/>
-                                        </div>
                                         <input type="text" class="business_place" style="width:490px"/>
                                     </td>
                                 </tr>

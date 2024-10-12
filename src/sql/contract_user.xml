@@ -39,7 +39,7 @@
          inner join contract as b
             on a.contract_no = b.contract_no
          where a.contract_no = #{contractNo}
-           and a.seq = #{seq};
+           and a.user_no = #{userNo};
     </select>
     <insert id="insert">
         insert into contract_user (
