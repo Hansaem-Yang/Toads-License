@@ -175,6 +175,19 @@ module.exports = function (app) {
         }
     });
     
+    // 계약 취소
+    app.get("/view/contract_cancel", (req, res) => {
+        req.session.menuId = 'contract_cancel';
+        res.locals.session = req.session;
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/contract_cancel/status");
+        }
+        else {
+            res.render("user/contract_cancel/status");
+        }
+    });
+    
     // 요금제 관리 페이지
     app.get("/view/plan", (req, res) => {
         req.session.menuId = 'plan';

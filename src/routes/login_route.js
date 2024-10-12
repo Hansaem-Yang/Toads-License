@@ -35,7 +35,6 @@ module.exports = function (app) {
         });
     });
     app.post("/logout", (req, res) => {
-        console.log("Logout");
         let userId = req.body.userId;
 
         manager.logout(userId).then((data) => {

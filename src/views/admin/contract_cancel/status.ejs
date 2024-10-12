@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/public/css/content-styles.css">
+        <!--
+        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
+        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
+        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
+        -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="/public/js/common/common_utility.js"></script>
+        <script src="/public/js/common/common_variables.js"></script>
+        <script>
+            $(document).ready(function() {
+                var companys = [];
+                var contracts = [];
+                
+                $.ajax({
+                    url: "../admin/company/codes",
+                    method: "POST",
+                    success: function (data) {
+                        if (data === 'NO SESSION') {
+                            alert("세션이 만료되었습니다.");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            alert("조회된 데이터가 없습니다.");
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    companys.push({
+                                        code:post.companyNo, 
+                                        name:post.companyName, 
+                                    });
+                                });
+
+                                createSelection($('.s_company_no'), companys);
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('서버 요청에 실패하였습니다.');
+                    },
+                });
+
+                var search = function() {
+                    clearContractCancel();
+
+                    var contractNo = $('.s_contract_no option:selected').val();
+                    if (contractNo === '')
+                    {
+                        alert("계약번호를 선택하세요.");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "../admin/contract/cancel/status",
+                        method: "POST",
+                        data: {
+                            contractNo: contractNo,
+                        },
+                        success: function (data) {
+
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                var newRow = '<tr><td colspan="6" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                                $('.contract_cancel tbody').append(newRow);
+                            } else {
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        var newRow = $('.contract_cancel tbody tr').first().clone().removeClass('hidden');
+
+                                        $(newRow).find('.cell_seq').text(post.seq);
+                                        $(newRow).find('.cell_reason').text(contractCancelReason[post.reason]);
+                                        $(newRow).find('.cell_request_date').text(post.requestDate);
+                                        $(newRow).find('.cell_approval_date').text(post.approvalDate);
+                                        $(newRow).find('.cell_cancel_date').text(post.cancelDate);
+                                        $(newRow).find('.cell_status').text(contractCancelStatus[post.status]);
+
+                                        $('.contract_cancel tbody').append(newRow);
+                                    });
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            var newRow = '<tr><td colspan="6" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
+                            $('.contract_cancel tbody').append(newRow);
+                        },
+                    });
+                };
+
+                $('.s_company_no').change(function() {
+                    clearContract();
+
+                    var companyNo = $('.s_company_no').val();
+                    if (companyNo === '') {
+                        alert('고객사를 선택하세요.');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "../admin/contract/codes",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("세션이 만료되었습니다.");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                alert("조회된 데이터가 없습니다.");
+                            } else {
+                                contracts = [];
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        if (post.contractDiv === 'D' || post.contractDiv === 'A')
+                                            return;
+
+                                        contracts.push({
+                                            code:post.contractNo, 
+                                            name:post.contractName, 
+                                            startDate:post.startDate,
+                                            endDate:post.endDate
+                                        });
+                                    });
+
+                                    createSelection($('.s_contract_no'), contracts);
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert('서버 요청에 실패하였습니다.');
+                        },
+                    });
+                });
+
+                $('.received').click(function() {
+                    clearModal();
+
+                    var contractNo = $('.s_contract_no').val();
+                    if (contractNo === '')
+                    {
+                        alert("고객사를 선택하세요.");
+                        return;
+                    }
+
+                    var selectedRow = $(".contract_cancel tr.selected");
+                    if (selectedRow.length > 0) {
+                        var seq = selectedRow.find('.cell_seq').text();
+                        // 행 데이터 출력
+                        $.ajax({
+                            url: "../admin/contract/cancel/received",
+                            method: "POST",
+                            data: {
+                                contractNo: contractNo,
+                                seq: seq,
+                                status: 2,
+                            },
+                            success: function (data) {
+                                if (data === 'NO SESSION') {
+                                    alert("세션이 만료되었습니다.");
+                                    window.parent.location.href = "./login";
+                                } else if (data === 'NO DATA') {
+                                    alert("조회된 데이터가 없습니다.");
+                                } else {
+                                    // 행 데이터 출력
+                                    $.ajax({
+                                        url: "../admin/contract/cancel/detail",
+                                        method: "POST",
+                                        data: {
+                                            contractNo: contractNo,
+                                            seq: seq,
+                                        },
+                                        success: function (data) {
+                                            if (data === 'NO SESSION') {
+                                                alert("세션이 만료되었습니다.");
+                                                window.parent.location.href = "./login";
+                                            } else if (data === 'NO DATA') {
+                                                alert("조회된 데이터가 없습니다.");
+                                            } else {
+                                                $('.contract_no').val(data.contractNo);
+                                                $('.seq').val(data.seq);
+                                                $('.reason').val(data.reason);
+                                                $('.contents').val(data.contents);
+                                                $('.request_date').val(data.request_date);
+                                                $('.status').val(data.status);
+
+                                                if (data.status === 'C') {
+                                                    $('.cancelReason').removeAttr('readonly');
+                                                }
+                                                
+
+                                                $('.modal').show();
+                                            }
+                                        },
+                                        error: function (xhr, status, error) {
+                                            alert('서버 요청에 실패하였습니다.');
+                                        },
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                               alert('서버 요청에 실패하였습니다.');
+                            },
+                        });
+                    } else {
+                        alert("목록에서 행을 선택하세요.");
+                    }
+                });
+
+                $('.contract_cancel tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+
+                var clearContractCancel = function() {
+                    const rows = document.querySelectorAll(".contract_cancel tbody tr:not(:first-child)");
+                    rows.forEach(row => {
+                        row.remove();
+                    });
+                }
+
+                // Modal Event And Function
+                var clearModal = function() {
+                    $('.contract_no').val('');
+                    $('.seq').val('');
+                    $('.cancelReason').val('');
+                    $('.status').val('');
+                };
+
+                var clearContract = function() {
+                    $('.s_contract_no').empty();
+                
+                    // Add default option
+                    $('.s_contract_no').append($('<option>', {
+                        value: '',
+                        text: '선택하세요'
+                    }));
+                }
+
+                var validationCheck = function() {
+                    if ($('.status option:selected').val() === 'C') {
+                        if ($('.cancelReason').val() === '') {
+                            alert('해지 취소 사유를 입력하세요.');
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+                $('.s_contract_no').change(function() {
+                    var contractNo = $('.s_contract_no option:selected').val();
+                    if (contractNo === '') {
+                        alert('계약번호를 선택하세요.');
+                        return;
+                    }
+
+                    search();
+                });
+
+                $('.close').click(function() {
+                    $('.modal').hide();
+                    clearModal();
+                });
+                
+
+                $('.status').change(function() {
+                    var status = $('.status option:selected').val();
+                    alert(status);
+                    if (status === 'A') {
+                        $('.cancelReason').attr("readonly", true);
+                    } else if (status === 'C') {
+                        $('.cancelReason').removeAttr('readonly');
+                    }
+                });
+
+                $('.save').click(function() {
+                    if (confirm('데이터를 저장 하시겠습니까?')) {
+                        if (!validationCheck()) {
+                            return;
+                        }
+
+                        var contractNo = $('.contract_no').val();
+                        var seq = $('.seq').val();
+                        var cancelReason = $('.cancelReason').val();
+                        var status = $('.status option:selected').val();
+
+                        var url = "../admin/contract/cancel/approval";
+                        if (status === 'A') {
+                            url = "../admin/contract/cancel/approval";
+                        } else if (status === 'C') {
+                            url = "../admin/contract/cancel/cancel";
+                        }
+
+                        $.ajax({
+                            url: url,
+                            method: "POST",
+                            data: {
+                                contractNo: contractNo,
+                                seq: seq,
+                                cancelReason: cancelReason,
+                                status: status,
+                            },
+                            success: function (data) {
+                                switch (data) {
+                                    case "NO SESSION":
+                                        alert("세션이 만료되었습니다.");
+                                        window.parent.location.href = "./login";
+                                        return;
+                                    case "FAIL":
+                                        alert('데이터 저장에 실패 하였습니다.');
+                                        return;
+                                    case "SUCCESS":
+                                        alert('데이터 저장을 완료 하였습니다.');
+                                        break;
+                                }
+
+                                $('.modal').hide();
+                                search();
+                                
+                                clearModal();
+                            },
+                            error: function (xhr, status, error) {
+                                alert('서버 요청에 실패하였습니다.');
+                            },
+                        });
+                    }
+                });
+
+                $('.cancel').click(function() {
+                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    {
+                        $('.modal').hide();
+                        clearModal();
+                    }
+                });
+
+                createVariablesSelection($('.reason'), contractCancelReason);
+                createVariablesSelection($('.status'), contractCancelStatus);
+
+                searchContract();
+            });
+        </script>
+    </head>
+    <body>
+        <form class="contract-customer-status-form">
+            <div class="content">
+                <div>
+                    <div class="title">조회 조건</div>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th width="120px" class="right-align">고객사</th>
+                                    <td class="left-align">
+                                        <select class="s_company_no" style="width:240px;">
+                                            <option value="">선택하세요.</option>
+                                        </select>
+                                    </td>
+                                    <th width="120px" class="right-align">계약번호</th>
+                                    <td class="left-align">
+                                        <select class="s_contract_no" style="width:320px;">
+                                            <option value="">선택하세요.</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div></br></br>
+                <div class="contents-container">
+                    <div class="title">계약 해지 신청 목록</div>
+                    <div class="top-right-button">
+                        <div class="align-container">
+                            <p><input type="button" class="received" value="접수"/></p>
+                            <p><input type="button" class="cancel" value="취소"/></p>
+                        </div>
+                    </div>
+                    <div>
+                        <table class="contract_cancel">
+                            <thead>
+                                <tr>
+                                    <th width="100px">순번</th>
+                                    <th width="260px">해지사유</th>
+                                    <th width="160px">신청일자</th>
+                                    <th width="160px">승인일자</th>
+                                    <th width="160px">취소일자</th>
+                                    <th width="120px">진행상태</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hidden">
+                                    <td class="cell_seq" style="text-align: center;"></td>
+                                    <td class="cell_reason" style="text-align: left;"></td>
+                                    <td class="cell_request_date" style="text-align: center;"></td>
+                                    <td class="cell_approval_date" style="text-align: center;"></td>
+                                    <td class="cell_cancel_date" style="text-align: center;"></td>
+                                    <td class="cell_status" style="text-align: center;"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">데이터를 조회하세요.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal">
+            <div class="modal-content" style="width:570px">
+                <div class="contents-container">
+                    <span class="close">&times;</span>
+                    <div class="title">계약 해지 접수</div>
+                    <div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="right-align" style="width: 150px;">*계약번호</th>
+                                    <td class="left-align" style="width: 420px;">
+                                        <input type="text" class="contract_no" style="width: 200px;" readonly/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*순번</th>
+                                    <td class="left-align">
+                                        <input type="text" class="seq" style="width: 120px;" readonly/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*해지사유</th>
+                                    <td class="left-align">
+                                        <select class="reason"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*해지내용</th>
+                                    <td class="left-align">
+                                        <textarea class="contents" style="width: 420px; height:160px;" readonly></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*요청일자</th>
+                                    <td class="left-align">
+                                        <input type="date" class="request_date" style="width: 120px;" readonly/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*진행상태</th>
+                                    <td class="left-align">
+                                        <select class="status"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*취소사유</th>
+                                    <td class="left-align">
+                                        <textarea class="cancelReason" style="width: 420px; height:160px;" readonly></textarea>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table></br>
+                    </div></br>
+                    <div class="bottom-button">
+                        <div class="align-container">
+                            <p><input type="button" class="save" value="저장"/></p>
+                            <input type="button" class="cancel" value="취소"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

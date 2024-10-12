@@ -141,3 +141,15 @@ const billBases = {
     M:'월별 과금',
     Y:'연간 과금'
 }
+
+const contractCancelReason = {
+    C1: "사용자 변심",
+    C9: "기타"
+}
+
+const contractCancelStatus = {
+    1: "해지신청",
+    2: "해지접수",
+    A: "해지승인",
+    C: "해지취소"
+}

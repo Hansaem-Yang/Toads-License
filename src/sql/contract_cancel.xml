@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="contract_cancel">
+    <select id="status">
+        select a.contract_no
+             , b.contract_name
+             , a.seq
+             , a.reason
+             , a.contents
+             , a.request_date
+             , a.approval_date
+             , a.cancel_date
+             , a.status
+          from contract_cancel as a
+         inner join contract as b
+            on a.contract_no = b.contract_no
+         where a.contract_no = #{contractNo};
+    </select>
+    <select id="detail">
+        select a.contract_no
+             , b.contract_name
+             , a.seq
+             , a.reason
+             , a.contents
+             , a.request_date
+             , a.approval_date
+             , a.cancel_date
+             , a.status
+          from contract_cancel as a
+         inner join contract as b
+            on a.contract_no = b.contract_no
+         where a.contract_no = #{contractNo}
+           and a.seq = #{seq};
+    </select>
+    <insert id="insert">
+        insert into contract_cancel (
+                    contract_no
+                  , seq
+                  , reason
+                  , contents
+                  , request_date
+                  , status
+        )
+        values (
+                    #{contractNo}
+                  , (select isnull(max(seq), 0) + 1
+                       from contract_cancel
+                      where contract_no = #{contractNo})
+                  , #{reason}
+                  , #{contents}
+                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , #{status}
+        );
+    </insert>
+    <update id="update">
+        update contract_cancel
+           set reason = #{reason}
+             , contents = #{contents}
+         where contract_no = #{contractNo}
+           and seq = #{seq};
+    </update>
+    <update id="received">
+        update contract_cancel
+           set received_date = left(convert(varchar(20), getdate(), 121), 10)
+             , approval_date = ''
+             , cancel_date = ''
+             , status = #{status}
+         where contract_no = #{contractNo}
+           and seq = #{seq};
+    </update>
+    <update id="approval">
+        update contract_cancel
+           set approval_date = left(convert(varchar(20), getdate(), 121), 10)
+             , cancel_date = ''
+             , status = #{status}
+         where contract_no = #{contractNo}
+           and seq = #{seq};
+    </update>
+    <update id="cancel">
+        update contract_cancel
+           set approval_date = ''
+             , cancel_date = left(convert(varchar(20), getdate(), 121), 10)
+             , status = #{status}
+         where contract_no = #{contractNo}
+           and seq = #{seq};
+    </update>
+</mapper>

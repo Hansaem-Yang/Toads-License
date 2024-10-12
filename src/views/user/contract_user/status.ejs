@@ -85,7 +85,7 @@
                                 alert("세션이 만료되었습니다.");
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
-                                var newRow = '<tr><td colspan="5" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                                var newRow = '<tr><td colspan="9" class="left-align">조회된 데이터가 없습니다.</td></tr>';
                                 $('.contract_user tbody').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
