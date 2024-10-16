@@ -20,7 +20,7 @@
                     method: "POST",
                     success: function (data) {
                         if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
+                            alert("<%=t('message(session expires)')%>");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
                             nation_options = [
@@ -47,7 +47,7 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert('서버 요청에 실패하였습니다.');
+                        alert("<%=t('message(request failed)')%>");
                     },
                 });
 
@@ -63,11 +63,11 @@
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
+                                alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                                 return;
                             } else if (data === 'NO DATA') {
-                                alert("조회된 데이터가 없습니다.");
+                                alert("<%=t('message(no data)')%>");
                                 return;
                             } else {
                                 $('.cell_company_no').text(data.companyNo);
@@ -87,7 +87,7 @@
                         error: function (xhr, status, error) {
                             $('.company tbody').empty();
 
-                            alert('서버 요청에 실패하였습니다.');
+                            alert("<%=t('message(request failed)')%>");
                             window.history.back();
                         },
                     });
@@ -105,11 +105,11 @@
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
+                                alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                                 return;
                             } else if (data === 'NO DATA') {
-                                alert("조회된 데이터가 없습니다.");
+                                alert("<%=t('message(no data)')%>");
                                 return;
                             } else {
                                 $('.company_no').val(data.companyNo);
@@ -127,13 +127,13 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('서버 요청에 실패하였습니다.');
+                            alert("<%=t('message(request failed)')%>");
                         },
                     });
                 });
 
                 $('.delete').click(function() {
-                    if (confirm('데이터를 삭제 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(delete data)')%>") == true)
                     {
                         var companyNos = [];
                         companyNos.push($('.company_no').val());
@@ -147,19 +147,19 @@
                             success: function (data) {
                                 switch (data) {
                                     case "NO SESSION":
-                                        alert("세션이 만료되었습니다.");
+                                        alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                     case "FAIL":
-                                        alert('데이터 삭제에 실패 하였습니다.');
+                                        alert("<%=t('message(delete failed)')%>");
                                         return;
                                     case "SUCCESS":
-                                        alert('데이터 삭제를 완료 하였습니다.');
+                                        alert("<%=t('message(delete success)')%>");
                                         window.location.href = "../../view/company";
                                         return;
                                 }
                             },
                             error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
+                                alert("<%=t('message(request failed)')%>");
                             },
                         });
                     }
@@ -196,7 +196,7 @@
                 });
 
                 $('.save').click(function() {
-                    if (confirm('데이터를 저장 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(save data)')%>") == true)
                     {
                         var companyNo = $('.company_no').val();
                         var companyName = $('.company_name').val();
@@ -210,31 +210,31 @@
                         var businessPlace = $('.business_place').val();
 
                         if ($('.company_name').val() === '') {
-                            alert('법인명을 입력하세요.');
+                            alert("<%=t('message(enter corporation)')%>");
                             $('.company_name').focus();
                             return;
                         }
 
                         if ($('.owner_name').val() === '') {
-                            alert('대표자명을 입력하세요.');
+                            alert("<%=t('message(enter representative)')%>");
                             $('.owner_name').focus();
                             return;
                         }
 
                         if ($('.company_div').val() === '') {
-                            alert('회사구분을 선택하세요.');
+                            alert("<%=t('message(select company classification)')%>");
                             $('.company_div').focus();
                             return;
                         }
                         
                         if ($('.nation').val() === '') {
-                            alert('국가를 선택하세요.');
+                            alert("<%=t('message(select country)')%>");
                             $('.nation').focus();
                             return;
                         }
                         
                         if ($('.telephone').val() === '') {
-                            alert('연락처를 입력하세요.');
+                            alert("<%=t('message(enter phone number)')%>");
                             $('.telephone').focus();
                             return;
                         }
@@ -256,14 +256,14 @@
                             success: function (data) {
                                 switch (data) {
                                     case "NO SESSION":
-                                        alert("세션이 만료되었습니다.");
+                                        alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                         return;
                                     case "FAIL":
-                                        alert('데이터 저장에 실패 하였습니다.');
+                                        alert("<%=t('message(save failed)')%>");
                                         return;
                                     case "SUCCESS":
-                                        alert('데이터 저장을 완료 하였습니다.');
+                                        alert("<%=t('message(save success)')%>");
                                         break;
                                 }
 
@@ -273,14 +273,14 @@
                                 ClearModal();
                             },
                             error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
+                                alert("<%=t('message(request failed)')%>");
                             },
                         });
                     }
                 });
 
                 $('.cancel').click(function() {
-                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.modal').hide();
                         
@@ -299,43 +299,43 @@
             
             <div class="content">
                 <div  class="contents-container">
-                    <div class="title">고객사 정보</div>
+                    <div class="title"><%=t('customer information')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="modify" value="수정"/></p>
-                            <p><input type="button" class="delete" value="삭제"/></p>
-                            <input type="button" class="back" value="뒤로"/>
+                            <p><input type="button" class="modify" value="<%=t('modify')%>"/></p>
+                            <p><input type="button" class="delete" value="<%=t('delete')%>"/></p>
+                            <input type="button" class="back" value="<%=t('back')%>"/>
                         </div>
                     </div>
                     <div>
                         <table class="company">
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align">고객사번호</th>
+                                    <th width="120px" class="right-align"><%=t('customer number')%></th>
                                     <td width="300px" class="cell_company_no"></td>
-                                    <th width="120px" class="right-align">법인명</th>
+                                    <th width="120px" class="right-align"><%=t('corporation name')%></th>
                                     <td width="300px" class="cell_company_name"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">대표자명</th>
+                                    <th class="right-align"><%=t('representative name')%></th>
                                     <td class="cell_owner_name"></td>
-                                    <th class="right-align">연락처</th>
+                                    <th class="right-align"><%=t('phone number')%></th>
                                     <td class="cell_telephone"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">사업자등록번호</th>
+                                    <th class="right-align"><%=t('business registration number')%></th>
                                     <td class="cell_business_no"></td>
-                                    <th class="right-align">법인등록번호</th>
+                                    <th class="right-align"><%=t('corporate registration number')%></th>
                                     <td class="cell_resident_no"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">회사구분</th>
+                                    <th class="right-align"><%=t('company classification')%></th>
                                     <td class="cell_company_div"></td>
-                                    <th class="right-align">국가</th>
+                                    <th class="right-align"><%=t('country')%></th>
                                     <td class="cell_nation"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">사업장소재지</th>
+                                    <th class="right-align"><%=t('business place')%></th>
                                     <td height="60px" colspan="3" class="cell_business_place"></td>
                                 </tr>
                             </thead>
@@ -343,7 +343,7 @@
                     </div>
                 </div></br></br></br>
                 <div>
-                    <div class="title">위성통신 사용량</div>
+                    <div class="title"><%=t('slink usage')%></div>
                     <div class="satellite-usage-container">
                         <div class="daliy-usage">
                             <canvas class="daliy-usage-chart"></canvas>
@@ -359,49 +359,49 @@
             <div class="modal-content" style="width:640px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">고객사 관리</div>
+                    <div class="title"><%=t('customer management')%></div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align">*법인명</th>
+                                    <th width="120px" class="right-align">*<%=t('corporation name')%></th>
                                     <td width="500px" class="left-align">
                                         <input type="hidden" class="company_no" value="<%=companyNo%>"/>
                                         <input type="text" class="company_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*대표자명</th>
+                                    <th class="right-align">*<%=t('representative name')%></th>
                                     <td class="left-align">
                                         <input type="text" class="owner_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">사업자등록번호</th>
+                                    <th class="right-align"><%=t('business registration number')%></th>
                                     <td class="left-align">
                                         <input type="text" class="business_no" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">법인등록번호</th>
+                                    <th class="right-align"><%=t('corporate registration number')%></th>
                                     <td class="left-align">
                                         <input type="text" class="resident_no" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*회사구분</th>
+                                    <th class="right-align">*<%=t('company classification')%></th>
                                     <td class="left-align">
                                         <select class="company_div"></select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*국가</th>
+                                    <th class="right-align">*<%=t('country')%></th>
                                     <td class="left-align">
                                         <select class="nation"></select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*연락처</th>
+                                    <th class="right-align">*<%=t('phone number')%></th>
                                     <td class="left-align">
                                         <div class="align-container">
                                             <p>+<input type="text" class="nation_code" style="width:30px" readonly/></p>
@@ -410,7 +410,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">사업장소재지</th>
+                                    <th class="right-align"><%=t('business place')%></th>
                                     <td class="left-align">
                                         <input type="text" class="business_place" style="width:490px"/>
                                     </td>
@@ -420,8 +420,8 @@
                     </div>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="save" value="저장"/></p>
-                            <input type="button" class="cancel" value="취소"/>
+                            <p><input type="button" class="save" value="<%=t('save')%>"/></p>
+                            <input type="button" class="cancel" value="<%=t('cancel')%>"/>
                         </div>
                     </div>
                 </div>

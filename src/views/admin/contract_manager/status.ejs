@@ -21,10 +21,10 @@
                     method: "POST",
                     success: function (data) {
                         if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
+                            alert("<%=t('message(session expires)')%>");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
-                            alert("조회된 데이터가 없습니다.");
+                            alert("<%=t('message(no data)')%>");
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -39,7 +39,7 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert('서버 요청에 실패하였습니다.');
+                        alert("<%=t('message(request failed)')%>");
                     },
                 });
                 
@@ -49,7 +49,7 @@
                     var contractNo = $('.s_contract_no option:selected').val();
                     if (contractNo === '')
                     {
-                        alert("계약번호를 선택하세요.");
+                        alert("<%=t('message(select contract number)')%>");
                         return;
                     }
 
@@ -62,10 +62,10 @@
                         success: function (data) {
 
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
+                                alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
-                                var newRow = '<tr><td colspan="5" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                                var newRow = '<tr><td colspan="5" class="left-align"><%=t("message(no data)")%></td></tr>';
                                 $('.contract_manager tbody').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
@@ -84,7 +84,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            var newRow = '<tr><td colspan="9" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
+                            var newRow = '<tr><td colspan="9" class="left-align"><%=t("message(request failed)")%></td></tr>';
                             $('.contract_manager tbody').append(newRow);
                         },
                     });
@@ -96,7 +96,7 @@
                     var contractNo = $('.s_contract_no option:selected').val();
                     if (contractNo === '')
                     {
-                        alert("계약번호를 선택하세요.");
+                        alert("<%=t('message(select contract number)')%>");
                         return;
                     }
 
@@ -114,7 +114,7 @@
                     var contractNo = $('.s_contract_no').val();
                     if (contractNo === '')
                     {
-                        alert("고객사를 선택하세요.");
+                        alert("<%=t('message(select client company)')%>");
                         return;
                     }
 
@@ -132,10 +132,10 @@
                             },
                             success: function (data) {
                                 if (data === 'NO SESSION') {
-                                    alert("세션이 만료되었습니다.");
+                                    alert("<%=t('message(session expires)')%>");
                                     window.parent.location.href = "./login";
                                 } else if (data === 'NO DATA') {
-                                    alert("조회된 데이터가 없습니다.");
+                                    alert("<%=t('message(no data)')%>");
                                 } else {
                                     $('.contract_no').val(data.contractNo);
                                     $('.seq').val(data.seq);
@@ -154,11 +154,11 @@
                                 }
                             },
                             error: function (xhr, status, error) {
-                               alert('서버 요청에 실패하였습니다.');
+                               alert("<%=t('message(request failed)')%>");
                             },
                         });
                     } else {
-                        alert("목록에서 행을 선택하세요.");
+                        alert("<%=t('message(select row)')%>");
                     }
                 });
 
@@ -168,13 +168,13 @@
                     var contractNo = $('.s_contract_no').val();
                     if (contractNo === '')
                     {
-                        alert("고객사를 선택하세요.");
+                        alert("<%=t('message(select client company)')%>");
                         return;
                     }
 
                     var selectedRow = $(".contract_manager tr.selected");
                     if (selectedRow.length > 0) {
-                        if (confirm('데이터를 삭제 하시겠습니까?') == true)
+                        if (confirm("<%=t('message(delete data)')%>") == true)
                         {
                             var seqs = [];
 
@@ -192,7 +192,7 @@
                                 },
                                 success: function (data) {
                                     if (data === 'NO SESSION') {
-                                        alert("세션이 만료되었습니다.");
+                                        alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                     } else if (data === 'FAIL') {
                                         alert("삭제에 실패하였습니다.");
@@ -203,12 +203,12 @@
                                     }
                                 },
                                 error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
+                                alert("<%=t('message(request failed)')%>");
                                 },
                             });
                         }
                     } else {
-                        alert("목록에서 행을 선택하세요.");
+                        alert("<%=t('message(select row)')%>");
                     }
                 });
 
@@ -246,7 +246,7 @@
                     // Add default option
                     $('.s_contract_no').append($('<option>', {
                         value: '',
-                        text: '선택하세요'
+                        text: '<%=t("choose")%>'
                     }));
                 }
 
@@ -294,7 +294,7 @@
 
                     var companyNo = $('.s_company_no option:selected').val();
                     if (companyNo === '') {
-                        alert('고객사를 선택하세요.');
+                        alert("<%=t('message(select client company)')%>");
                         return false;
                     }
 
@@ -306,10 +306,10 @@
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
+                                alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
-                                alert("조회된 데이터가 없습니다.");
+                                alert("<%=t('message(no data)')%>");
                             } else {
                                 contracts = [];
                                 if (Array.isArray(data)) {
@@ -327,7 +327,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('서버 요청에 실패하였습니다.');
+                            alert("<%=t('message(request failed)')%>");
                         },
                     });
                 });
@@ -342,7 +342,7 @@
                 });
 
                 $('.save').click(function() {
-                    if (confirm('데이터를 저장 하시겠습니까?')) {
+                    if (confirm("<%=t('message(save data)')%>")) {
                         if (!validationCheck()) {
                             return;
                         }
@@ -378,17 +378,17 @@
                             success: function (data) {
                                 switch (data) {
                                     case "NO SESSION":
-                                        alert("세션이 만료되었습니다.");
+                                        alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                         return;
                                     case "EMAIL DUPLICATE":
                                         alert('이메일이 중복되었습니다.');
                                         return;
                                     case "FAIL":
-                                        alert('데이터 저장에 실패 하였습니다.');
+                                        alert("<%=t('message(save failed)')%>");
                                         return;
                                     case "SUCCESS":
-                                        alert('데이터 저장을 완료 하였습니다.');
+                                        alert("<%=t('message(save success)')%>");
                                         break;
                                 }
 
@@ -398,14 +398,14 @@
                                 clearModal();
                             },
                             error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
+                                alert("<%=t('message(request failed)')%>");
                             },
                         });
                     }
                 });
 
                 $('.cancel').click(function() {
-                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.modal').hide();
                         clearModal();
@@ -423,7 +423,7 @@
                 });
 
                 $('.password_save').click(function() {
-                    if (confirm('데이터를 저장 하시겠습니까?')) {
+                    if (confirm("<%=t('message(save data)')%>")) {
                         var contractNo = $('.contract_no').val();
                         var seq = $('.seq').val();
                         var oldPwd = $('.pwd').val();
@@ -461,14 +461,14 @@
                             success: function (data) {
                                 switch (data) {
                                     case "NO SESSION":
-                                        alert("세션이 만료되었습니다.");
+                                        alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                         return;
                                     case "FAIL":
-                                        alert('데이터 저장에 실패 하였습니다.');
+                                        alert("<%=t('message(save failed)')%>");
                                         return;
                                     case "SUCCESS":
-                                        alert('데이터 저장을 완료 하였습니다.');
+                                        alert("<%=t('message(save success)')%>");
                                         break;
                                 }
 
@@ -477,14 +477,14 @@
                                 clearPasswordModal();
                             },
                             error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
+                                alert("<%=t('message(request failed)')%>");
                             },
                         });
                     }
                 });
 
                 $('.password_cancel').click(function() {
-                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.password_modal').hide();
                         
@@ -501,21 +501,21 @@
         <form class="contract-customer-status-form">
             <div class="content">
                 <div>
-                    <div class="title">조회 조건</div>
+                    <div class="title"><%=t('search conditions')%></div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align">고객사</th>
+                                    <th width="120px" class="right-align"><%=t('client company')%></th>
                                     <td class="left-align">
                                         <select class="s_company_no" style="width:240px;">
-                                            <option value="">선택하세요.</option>
+                                            <option value=""><%=t('choose')%></option>
                                         </select>
                                     </td>
-                                    <th width="120px" class="right-align">계약번호</th>
+                                    <th width="120px" class="right-align"><%=t('contract number')%></th>
                                     <td class="left-align">
                                         <select class="s_contract_no" style="width:320px;">
-                                            <option value="">선택하세요.</option>
+                                            <option value=""><%=t('choose')%></option>
                                         </select>
                                     </td>
                                 </tr>
@@ -527,16 +527,16 @@
                     <div class="title">계약 관리자 목록</div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="add" value="등록"/></p>
-                            <p><input type="button" class="modify" value="수정"/></p>
-                            <p><input type="button" class="delete" value="삭제"/></p>
+                            <p><input type="button" class="add" value="<%=t('regist')%>"/></p>
+                            <p><input type="button" class="modify" value="<%=t('modify')%>"/></p>
+                            <p><input type="button" class="delete" value="<%=t('delete')%>"/></p>
                         </div>
                     </div>
                     <div>
                         <table class="contract_manager">
                             <thead>
                                 <tr>
-                                    <th width="100px">순번</th>
+                                    <th width="100px"><%=t('sequential number')%></th>
                                     <th width="260px">관리자명</th>
                                     <th width="260px">이메일</th>
                                     <th width="120px">권한</th>
@@ -552,7 +552,7 @@
                                     <td class="cell_use_yn" style="text-align: center;"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="5">데이터를 조회하세요.</td>
+                                    <td colspan="5"><%=t('message(search data)')%></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -569,13 +569,13 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="right-align" style="width: 120px;">*계약번호</th>
+                                    <th class="right-align" style="width: 120px;">*<%=t('contract number')%></th>
                                     <td class="left-align" style="width: 420px;">
                                         <input type="text" class="contract_no" style="width: 200px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*순번</th>
+                                    <th class="right-align">*<%=t('sequential number')%></th>
                                     <td class="left-align">
                                         <input type="text" class="seq" style="width: 120px;" readonly/>
                                     </td>
@@ -622,8 +622,8 @@
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="save" value="저장"/></p>
-                            <input type="button" class="cancel" value="취소"/>
+                            <p><input type="button" class="save" value="<%=t('save')%>"/></p>
+                            <input type="button" class="cancel" value="<%=t('cancel')%>"/>
                         </div>
                     </div>
                 </div>
@@ -654,8 +654,8 @@
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="password_save" value="저장"/></p>
-                            <input type="button" class="password_cancel" value="취소"/>
+                            <p><input type="button" class="password_save" value="<%=t('save')%>"/></p>
+                            <input type="button" class="password_cancel" value="<%=t('cancel')%>"/>
                         </div>
                     </div>
                 </div>

@@ -22,10 +22,10 @@
                     method: "POST",
                     success: function (data) {
                         if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
+                            alert("<%=t('message(session expires)')%>");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
-                            alert("조회된 데이터가 없습니다.");
+                            alert("<%=t('message(no data)')%>");
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -47,7 +47,7 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert('서버 요청에 실패하였습니다.');
+                        alert("<%=t('message(request failed)')%>");
                     },
                 });
 
@@ -56,10 +56,10 @@
                     method: "POST",
                     success: function (data) {
                         if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
+                            alert("<%=t('message(session expires)')%>");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
-                            alert("조회된 데이터가 없습니다.");
+                            alert("<%=t('message(no data)')%>");
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -74,7 +74,7 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert('서버 요청에 실패하였습니다.');
+                        alert("<%=t('message(request failed)')%>");
                     },
                 });
                 
@@ -84,10 +84,10 @@
                     method: "POST",
                     success: function (data) {
                         if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
+                            alert("<%=t('message(session expires)')%>");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
-                            alert("조회된 데이터가 없습니다.");
+                            alert("<%=t('message(no data)')%>");
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -102,7 +102,7 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert('서버 요청에 실패하였습니다.');
+                        alert("<%=t('message(request failed)')%>");
                     },
                 });
                 
@@ -112,7 +112,7 @@
                     var companyNo = $('.s_company_no option:selected').val();
                     if (companyNo === '')
                     {
-                        alert("고객사를 선택하세요.");
+                        alert("<%=t('message(select client company)')%>");
                         return;
                     }
 
@@ -125,10 +125,10 @@
                         success: function (data) {
 
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
+                                alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
-                                var newRow = '<tr><td colspan="9" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                                var newRow = '<tr><td colspan="9" class="left-align"><%=t("message(no data)")%></td></tr>';
                                 $('.contract tbody').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
@@ -152,7 +152,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            var newRow = '<tr><td colspan="9" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
+                            var newRow = '<tr><td colspan="9" class="left-align"><%=t("message(request failed)")%></td></tr>';
                             $('.contract tbody').append(newRow);
                         },
                     });
@@ -170,7 +170,7 @@
 
                     if (companyNo === '')
                     {
-                        alert("고객사를 선택하세요.");
+                        alert("<%=t('message(select client company)')%>");
                         return;
                     }
 
@@ -188,7 +188,7 @@
                     var companyNo = $('.s_company_no').val();
                     if (companyNo === '')
                     {
-                        alert("고객사를 선택하세요.");
+                        alert("<%=t('message(select client company)')%>");
                         return;
                     }
 
@@ -206,10 +206,10 @@
                             },
                             success: function (data) {
                                 if (data === 'NO SESSION') {
-                                    alert("세션이 만료되었습니다.");
+                                    alert("<%=t('message(session expires)')%>");
                                     window.parent.location.href = "./login";
                                 } else if (data === 'NO DATA') {
-                                    alert("조회된 데이터가 없습니다.");
+                                    alert("<%=t('message(no data)')%>");
                                 } else {
                                     $('.company_no').val(data.companyNo);
                                     $('.company_name').val(data.companyName);
@@ -297,11 +297,11 @@
                                 }
                             },
                             error: function (xhr, status, error) {
-                               alert('서버 요청에 실패하였습니다.');
+                               alert("<%=t('message(request failed)')%>");
                             },
                         });
                     } else {
-                        alert("목록에서 행을 선택하세요.");
+                        alert("<%=t('message(select row)')%>");
                     }
                 });
 
@@ -309,7 +309,7 @@
                     var companyNo = $('.s_company_no').val();
                     if (companyNo === '')
                     {
-                        alert("고객사를 선택하세요.");
+                        alert("<%=t('message(select client company)')%>");
                         return;
                     }
 
@@ -319,7 +319,7 @@
                         
                         window.location.href = "../view/contract/detail?companyNo=" + companyNo + "&contractNo=" + contractNo;
                     } else {
-                        alert("목록에서 행을 선택하세요.");
+                        alert("<%=t('message(select row)')%>");
                     }
                 });
 
@@ -388,52 +388,52 @@
 
                 var validationCheck = function() {
                     if ($('.contract_name').val() === '') {
-                        alert('계약명을 입력하세요.');
+                        alert("<%=t('message(enter contract name)')%>");
                         return false;
                     }
 
                     if ($('.contract_date').val() === '') {
-                        alert('계약일자를 입력하세요.');
+                        alert("<%=t('message(enter contract date)')%>");
                         return false;
                     }
 
                     if ($('.contractor').val() === '') {
-                        alert('계약자를 입력하세요.');
+                        alert("<%=t('message(enter contractor)')%>");
                         return false;
                     }
 
                     if ($('.contract_service').val() === '') {
-                        alert('계약서비스를 입력하세요.');
+                        alert("<%=t('message(enter contract service)')%>");
                         return false;
                     }
 
                     if ($('.contract_div').val() === '') {
-                        alert('계약구분을 입력하세요.');
+                        alert("<%=t('message(enter contract classification)')%>");
                         return false;
                     }
                     
                     if ($('.contract_period').val() === '') {
-                        alert('계약기간을 선택하세요.');
+                        alert("<%=t('message(select contract period)')%>");
                         return false;
                     }
                     
                     if ($('.start_date').val() === '' || $('.end_date').val() === '') {
-                        alert('계약기간을 입력하세요.');
+                        alert("<%=t('message(enter contract period)')%>");
                         return false;
                     }
                     
                     if ($('.monetary_unit').val() === '') {
-                        alert('화폐단위를 선택하세요.');
+                        alert("<%=t('message(select monetray unit)')%>");
                         return false;
                     }
                     
                     if ($('.exchange_rate').val() === '') {
-                        alert('기준환율을 입력하세요.');
+                        alert("<%=t('message(enter exchange rate)')%>");
                         return false;
                     }
                     
                     if ($('.contract_manager').val() === '') {
-                        alert('계약담당자를 입력하세요.');
+                        alert("<%=t('message(enter person in charge of a contract)')%>");
                         return false;
                     }
 
@@ -655,7 +655,7 @@
                 });
 
                 $('.save').click(function() {
-                    if (confirm('데이터를 저장 하시겠습니까?')) {
+                    if (confirm("<%=t('message(save data)')%>")) {
                         if (!validationCheck()) {
                             return;
                         }
@@ -683,7 +683,7 @@
                         {
                             case "L":
                                 if ($('.license tbody tr').length === 1) {
-                                    alert('라이센스를 입력하세요.');
+                                    alert("<%=t('message(enter license)')%>");
                                     return;
                                 }
 
@@ -708,7 +708,7 @@
                                 break;
                             case "D":
                                 if ($('.odm_contract tbody tr').length === 1) {
-                                    alert('ODM 계약을 입력하세요.');
+                                    alert("<%=t('message(enter odm contract)')%>");
                                     return;
                                 }
 
@@ -732,7 +732,7 @@
                                 break;
                             case "S":
                                 if ($('.ships_contract tbody tr').length === 1) {
-                                    alert('선박별 계약을 입력하세요.');
+                                    alert("<%=t('message(enter vessel contract)')%>");
                                     return;
                                 }
 
@@ -787,14 +787,14 @@
                             success: function (data) {
                                 switch (data) {
                                     case "NO SESSION":
-                                        alert("세션이 만료되었습니다.");
+                                        alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                         return;
                                     case "FAIL":
-                                        alert('데이터 저장에 실패 하였습니다.');
+                                        alert("<%=t('message(save failed)')%>");
                                         return;
                                     case "SUCCESS":
-                                        alert('데이터 저장을 완료 하였습니다.');
+                                        alert("<%=t('message(save success)')%>");
                                         break;
                                 }
 
@@ -804,14 +804,14 @@
                                 clearModal();
                             },
                             error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
+                                alert("<%=t('message(request failed)')%>");
                             },
                         });
                     }
                 });
 
                 $('.cancel').click(function() {
-                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.modal').hide();
                         
@@ -839,15 +839,15 @@
         <form class="contract-status-form">
             <div class="content">
                 <div>
-                    <div class="title">조회 조건</div>
+                    <div class="title"><%=t('search conditions')%></div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align">고객사</th>
+                                    <th width="120px" class="right-align"><%=t('client company')%></th>
                                     <td class="left-align">
                                         <select class="s_company_no" style="width:240px;">
-                                            <option value="">선택하세요.</option>
+                                            <option value=""><%=t('choose')%></option>
                                         </select>
                                     </td>
                                 </tr>
@@ -856,25 +856,25 @@
                     </div>
                 </div></br></br>
                 <div class="contents-container">
-                    <div class="title">계약 목록</div>
+                    <div class="title"><%=t('contract list')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="add" value="등록"/></p>
-                            <p><input type="button" class="modify" value="수정"/></p>
-                            <input type="button" class="detail" value="상세보기"/>
+                            <p><input type="button" class="add" value="<%=t('regist')%>"/></p>
+                            <p><input type="button" class="modify" value="<%=t('modify')%>"/></p>
+                            <input type="button" class="detail" value="<%=t('details')%>"/>
                         </div>
                     </div>
                     <div>
                         <table class="contract">
                             <thead>
                                 <tr>
-                                    <th width="180px">계약번호</th>
-                                    <th width="260px">계약명</th>
-                                    <th width="120px">계약일자</th>
-                                    <th width="140px">담당자</th>
-                                    <th width="200px">계약기간</th>
-                                    <th width="100px">화폐단위</th>
-                                    <th width="100px">기준환율</th>
+                                    <th width="180px"><%=t('contract number')%></th>
+                                    <th width="260px"><%=t('contract name')%></th>
+                                    <th width="120px"><%=t('contract date')%></th>
+                                    <th width="140px"><%=t('person in charge')%></th>
+                                    <th width="200px"><%=t('contract period')%></th>
+                                    <th width="100px"><%=t('monetray unit')%></th>
+                                    <th width="100px"><%=t('exchange rate')%></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -894,7 +894,7 @@
                                     <td class="cell_exchange_rate" style="text-align: right;"></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="9">데이터를 조회하세요.</td>
+                                    <td colspan="9"><%=t('message(search data)')%></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -906,49 +906,49 @@
             <div class="modal-content" style="width:1100px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">계약 관리</div>
+                    <div class="title"><%=t('contract management')%></div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align">*고객사</th>
+                                    <th width="120px" class="right-align">*<%=t('client company')%></th>
                                     <td width="980px" class="left-align" colspan="3">
                                         <input type="hidden" class="company_no"/>
                                         <input type="text" class="company_name" style="width: 240px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align">*계약번호</th>
+                                    <th width="120px" class="right-align">*<%=t('contract number')%></th>
                                     <td width="380px" class="left-align">
                                         <input type="text" class="contract_no" style="width: 240px;" readonly/>
                                     </td>
-                                    <th width="120px" class="right-align">*계약명</th>
+                                    <th width="120px" class="right-align">*<%=t('contract name')%></th>
                                     <td width="380px" class="left-align" colspan="3">
                                         <input type="text" class="contract_name" style="width: 380px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*계약일자</th>
+                                    <th class="right-align">*<%=t('contract date')%></th>
                                     <td class="left-align">
                                         <input type="date" class="contract_date" style="width: 120px;"/>
                                     </td>
-                                    <th class="right-align">*계약자</th>
+                                    <th class="right-align">*<%=t('contractor')%></th>
                                     <td class="left-align">
                                         <input type="text" class="contractor" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*계약서비스</th>
+                                    <th class="right-align">*<%=t('contract service')%></th>
                                     <td class="left-align">
                                         <select class="contract_service"></select>
                                     </td>
-                                    <th class="right-align">*계약구분</th>
+                                    <th class="right-align">*<%=t('contract classification')%></th>
                                     <td class="left-align">
                                         <select class="contract_div"></select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*계약기간</th>
+                                    <th class="right-align">*<%=t('contract period')%></th>
                                     <td class="left-align" colspan="3">
                                         <div class="align-container">
                                             <p><select class="contract_period"></select></p>
@@ -959,23 +959,23 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*화폐단위</th>
+                                    <th class="right-align">*<%=t('monetray unit')%></th>
                                     <td class="left-align">
                                         <select class="monetary_unit"></select>
                                     </td>
-                                    <th class="right-align">*기준환율</th>
+                                    <th class="right-align">*<%=t('exchange rate')%></th>
                                     <td class="left-align">
                                         <input type="text" class="exchange_rate" style="width:100px; text-align: right;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*계약담당자</th>
+                                    <th class="right-align">*<%=t('person in charge of a contract')%></th>
                                     <td class="left-align" colspan="3">
                                         <select class="contract_manager"></select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">비고</th>
+                                    <th class="right-align"><%=t('remark')%></th>
                                     <td class="left-align" colspan="3">
                                         <textarea class="remark" style="width:940px; height:60px;"></textarea>
                                     </td>
@@ -986,25 +986,25 @@
                     <div class="table-container" style="height:200px">
                         <!-- 라이센스 시작 -->
                         <div id="license_content" class="hidden">
-                            <div class="title">라이센스</div>
+                            <div class="title"><%=t('license')%></div>
                             <div class="top-right-button">
                                 <div class="align-container">
-                                    <p><input type="button" class="license_add" value="추가"/></p>
-                                    <input type="button" class="license_delete" value="삭제"/>
+                                    <p><input type="button" class="license_add" value="<%=t('regist')%>"/></p>
+                                    <input type="button" class="license_delete" value="<%=t('delete')%>"/>
                                 </div>
                             </div>
                             <table class="license">
                                 <thead>
                                     <tr>
-                                        <th width="160px">번호</th>
-                                        <th width="140px">타입</th>
-                                        <th width="140px">구분</th>
-                                        <th width="220px">기간</th>
-                                        <th width="60px">수량</th>
-                                        <th width="80px">단가</th>
-                                        <th width="100px">금액</th>
-                                        <th width="100px">할인금액</th>
-                                        <th width="100px">실금액</th>
+                                        <th width="160px"><%=t('number')%></th>
+                                        <th width="140px"><%=t('type')%></th>
+                                        <th width="140px"><%=t('division')%></th>
+                                        <th width="220px"><%=t('period')%></th>
+                                        <th width="60px"><%=t('quantity')%></th>
+                                        <th width="80px"><%=t('unit price')%></th>
+                                        <th width="100px"><%=t('amount')%></th>
+                                        <th width="100px"><%=t('discount amount')%></th>
+                                        <th width="100px"><%=t('actual amount')%></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1038,23 +1038,23 @@
                         <!-- 라이센스 끝 -->
                         <!-- ODM 계약 시작 -->
                         <div id="odm_content" class="hidden">
-                            <div class="title">ODM 계약</div>
+                            <div class="title"><%=t('odm contract')%></div>
                             <div class="top-right-button">
                                 <div class="align-container">
-                                    <p><input type="button" class="odm_contract_add" value="추가"/></p>
-                                    <input type="button" class="odm_contract_delete" value="삭제"/>
+                                    <p><input type="button" class="odm_contract_add" value="<%=t('regist')%>"/></p>
+                                    <input type="button" class="odm_contract_delete" value="<%=t('delete')%>"/>
                                 </div>
                             </div>
                             <table class="odm_contract">
                                 <thead>
                                     <tr>
-                                        <th width="60px">순번</th>
-                                        <th width="160px">계약구분</th>
-                                        <th width="140px">결제화폐</th>
-                                        <th width="260px">결제단위</th>
-                                        <th width="160px">결제주기(월)</th>
-                                        <th width="160px">결제단가</th>
-                                        <th width="160px">적용일</th>
+                                        <th width="60px"><%=t('sequential number')%></th>
+                                        <th width="160px"><%=t('contract classification')%></th>
+                                        <th width="140px"><%=t('settlement currency')%></th>
+                                        <th width="260px"><%=t('payment unit')%></th>
+                                        <th width="160px"><%=t('payment cycle')%></th>
+                                        <th width="160px"><%=t('payment unity price')%></th>
+                                        <th width="160px"><%=t('date of application')%></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1082,22 +1082,22 @@
                         <!-- ODM 계약 끝 -->
                         <!-- 선박별 계약 시작 -->
                         <div id="ships_content" class="hidden">
-                            <div class="title">선박별 구독계약</div>
+                            <div class="title"><%=t('ship contract')%></div>
                             <div class="top-right-button">
                                 <div class="align-container">
-                                    <p><input type="button" class="ships_contract_add" value="추가"/></p>
-                                    <input type="button" class="ships_contract_delete" value="삭제"/>
+                                    <p><input type="button" class="ships_contract_add" value="<%=t('regist')%>"/></p>
+                                    <input type="button" class="ships_contract_delete" value="<%=t('delete')%>"/>
                                 </div>
                             </div>
                             <table class="ships_contract">
                                 <thead>
                                     <tr>
-                                        <th width="60px">순번</th>
-                                        <th width="200px">선명</th>
-                                        <th width="160px">IMO번호</th>
-                                        <th width="200px">장비렌탈구분</th>
-                                        <th width="300px">기간</th>
-                                        <th width="180px">요금제</th>
+                                        <th width="60px"><%=t('sequential number')%></th>
+                                        <th width="200px"><%=t('ship name')%></th>
+                                        <th width="160px"><%=t('imo number')%></th>
+                                        <th width="200px"><%=t('equipment rental')%></th>
+                                        <th width="300px"><%=t('period')%></th>
+                                        <th width="180px"><%=t('payment system')%></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1130,8 +1130,8 @@
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="save" value="저장"/></p>
-                            <input type="button" class="cancel" value="취소"/>
+                            <p><input type="button" class="save" value="<%=t('save')%>"/></p>
+                            <input type="button" class="cancel" value="<%=t('cancel')%>"/>
                         </div>
                     </div>
                 </div>

@@ -21,7 +21,7 @@
                     method: "POST",
                     success: function (data) {
                         if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
+                            alert("<%=t('message(session expires)')%>");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
                             nation_options = [
@@ -48,7 +48,7 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        alert('서버 요청에 실패하였습니다.');
+                        alert("<%=t('message(request failed)')%>");
                     },
                 });
 
@@ -68,11 +68,11 @@
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
+                                alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                                 return;
                             } else if (data === 'NO DATA') {
-                                alert("조회된 데이터가 없습니다.");
+                                alert("<%=t('message(no data)')%>");
                                 return;
                             } else {
                                 $('.cell_company_no').text(data.companyNo);
@@ -97,7 +97,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('서버 요청에 실패하였습니다.');
+                            alert("<%=t('message(request failed)')%>");
                             window.history.back();
                         },
                     });
@@ -120,10 +120,10 @@
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
+                                alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
-                                alert("조회된 데이터가 없습니다.");
+                                alert("<%=t('message(no data)')%>");
                             } else {
                                 $('.company_no').val(data.companyNo);
                                 $('.company_name').val(data.companyName);
@@ -144,7 +144,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('서버 요청에 실패하였습니다.');
+                            alert("<%=t('message(request failed)')%>");
                         },
                     });
                 });
@@ -166,7 +166,7 @@
                 });
 
                 $('.save').click(function() {
-                    if (confirm('데이터를 저장 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(save data)')%>") == true)
                     {
                         if ($('.user_name').val() === '') {
                             alert('사용자명을 입력하세요.');
@@ -228,14 +228,14 @@
                             success: function (data) {
                                 switch (data) {
                                     case "NO SESSION":
-                                        alert("세션이 만료되었습니다.");
+                                        alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                         return;
                                     case "FAIL":
-                                        alert('데이터 저장에 실패 하였습니다.');
+                                        alert("<%=t('message(save failed)')%>");
                                         return;
                                     case "SUCCESS":
-                                        alert('데이터 저장을 완료 하였습니다.');
+                                        alert("<%=t('message(save success)')%>");
                                         break;
                                 }
 
@@ -245,14 +245,14 @@
                                 ClearModal();
                             },
                             error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
+                                alert("<%=t('message(request failed)')%>");
                             },
                         });
                     }
                 });
 
                 $('.cancel').click(function() {
-                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.modal').hide();
                         
@@ -282,10 +282,10 @@
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
+                                alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
-                                alert("조회된 데이터가 없습니다.");
+                                alert("<%=t('message(no data)')%>");
                             } else {
                                 $('.company_no').val(data.companyNo);
                                 $('.account_no').val(data.accountNo);
@@ -295,7 +295,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('서버 요청에 실패하였습니다.');
+                            alert("<%=t('message(request failed)')%>");
                         },
                     });
                 });
@@ -305,7 +305,7 @@
                 });
 
                 $('.password-save').click(function() {
-                    if (confirm('데이터를 저장 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(save data)')%>") == true)
                     {
                         if ($('.old_password').val() != $('.password').val()) {
                             alert('기존 비밀번호를 잘못 입력하였습니다.');
@@ -347,14 +347,14 @@
                             success: function (data) {
                                 switch (data) {
                                     case "NO SESSION":
-                                        alert("세션이 만료되었습니다.");
+                                        alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                         return;
                                     case "FAIL":
-                                        alert('데이터 저장에 실패 하였습니다.');
+                                        alert("<%=t('message(save failed)')%>");
                                         return;
                                     case "SUCCESS":
-                                        alert('데이터 저장을 완료 하였습니다.');
+                                        alert("<%=t('message(save success)')%>");
                                         break;
                                 }
 
@@ -364,14 +364,14 @@
                                 ClearPassword();
                             },
                             error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
+                                alert("<%=t('message(request failed)')%>");
                             },
                         });
                     }
                 });
 
                 $('.password-cancel').click(function() {
-                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.password-modal').hide();
                         
@@ -441,7 +441,7 @@
                     <div class="title">사용자 정보</div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <input type="button" class="modify" value="수정"/>
+                            <input type="button" class="modify" value="<%=t('modify')%>"/>
                         </div>
                     </div>
                     <div>
@@ -486,7 +486,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align">*고객사</th>
+                                    <th width="120px" class="right-align">*<%=t('client company')%></th>
                                     <td width="540px" class="left-align">
                                         <input type="text" class="company_name" style="width: 240px;" readonly/>
                                     </td>
@@ -544,8 +544,8 @@
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="save" value="저장"/></p>
-                            <input type="button" class="cancel" value="취소"/>
+                            <p><input type="button" class="save" value="<%=t('save')%>"/></p>
+                            <input type="button" class="cancel" value="<%=t('cancel')%>"/>
                         </div>
                     </div>
                 </div>
@@ -583,7 +583,7 @@
                     <div class="bottom-button">
                         <div class="align-container">
                             <p><input type="button" class="password-save" value="변경"/></p>
-                            <input type="button" class="password-cancel" value="취소"/>
+                            <input type="button" class="password-cancel" value="<%=t('cancel')%>"/>
                         </div>
                     </div>
                 </div>

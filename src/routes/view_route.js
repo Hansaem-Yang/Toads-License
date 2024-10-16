@@ -16,16 +16,16 @@ module.exports = function (app) {
     app.get("/view/login", (req, res) => {
         logger.info(`Login view`);
 
-        res.sendFile(path.join(config.root, "/src/views/login.html"));
+        res.render("login", {t: req.t});
     });
 
     // 메인 페이지
     app.get("/view/main", (req, res) => {        
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/main");
+            res.render("admin/main", {t: req.t});
         }
         else {
-            res.render("user/main");
+            res.render("user/main", {t: req.t});
         }
     });
     
@@ -35,37 +35,37 @@ module.exports = function (app) {
         res.locals.session = req.session;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/mypage");
+            res.render("admin/mypage", {t: req.t});
         }
         else {
-            res.render("user/mypage");
+            res.render("user/mypage", {t: req.t});
         }
     });
 
     app.get("/view/topmenu", (req, res) => {
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/menu/topmenu");
+            res.render("admin/menu/topmenu", {t: req.t});
         }
         else {
-            res.render("user/menu/topmenu");
+            res.render("user/menu/topmenu", {t: req.t});
         }
     });
     
     app.get("/view/sidebar", (req, res) => {
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/menu/sidebar");
+            res.render("admin/menu/sidebar", {t: req.t});
         }
         else {
-            res.render("user/menu/sidebar");
+            res.render("user/menu/sidebar", {t: req.t});
         }
     });
     
     app.get("/view/mypage-sidebar", (req, res) => {
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/menu/mypage-sidebar");
+            res.render("admin/menu/mypage-sidebar", {t: req.t});
         }
         else {
-            res.render("user/menu/mypage-sidebar");
+            res.render("user/menu/mypage-sidebar", {t: req.t});
         }
     });
     
@@ -74,10 +74,10 @@ module.exports = function (app) {
         res.locals.session = req.session;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/mypage/myinfo");
+            res.render("admin/mypage/myinfo", {t: req.t});
         }
         else {
-            res.render("user/mypage/myinfo");
+            res.render("user/mypage/myinfo", {t: req.t});
         }
     });
     
@@ -86,10 +86,10 @@ module.exports = function (app) {
         res.locals.session = req.session;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/dashboard");
+            res.render("admin/dashboard", {t: req.t});
         }
         else {
-            res.render("user/dashboard");
+            res.render("user/dashboard", {t: req.t});
         }
     });
 
@@ -99,10 +99,10 @@ module.exports = function (app) {
         res.locals.session = req.session;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/company/status");
+            res.render("admin/company/status", {t: req.t});
         }
         else {
-            res.render("user/company/status");
+            res.render("user/company/status", {t: req.t});
         }
     });
 
@@ -110,10 +110,10 @@ module.exports = function (app) {
         res.locals.companyNo = req.query.companyNo;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/company/detail");
+            res.render("admin/company/detail", {t: req.t});
         }
         else {
-            res.render("user/company/detail");
+            res.render("user/company/detail", {t: req.t});
         }
     });
     
@@ -130,10 +130,10 @@ module.exports = function (app) {
         }
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/contract/status");
+            res.render("admin/contract/status", {t: req.t});
         }
         else {
-            res.render("user/contract/status");
+            res.render("user/contract/status", {t: req.t});
         }
     });
 
@@ -142,10 +142,10 @@ module.exports = function (app) {
         res.locals.contractNo = req.query.contractNo;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/contract/detail");
+            res.render("admin/contract/detail", {t: req.t});
         }
         else {
-            res.render("user/contract/detail");
+            res.render("user/contract/detail", {t: req.t});
         }
     });
     
@@ -155,10 +155,10 @@ module.exports = function (app) {
         res.locals.session = req.session;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/contract_manager/status");
+            res.render("admin/contract_manager/status", {t: req.t});
         }
         else {
-            res.render("user/contract_manager/status");
+            res.render("user/contract_manager/status", {t: req.t});
         }
     });
     
@@ -168,10 +168,10 @@ module.exports = function (app) {
         res.locals.session = req.session;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/contract_user/status");
+            res.render("admin/contract_user/status", {t: req.t});
         }
         else {
-            res.render("user/contract_user/status");
+            res.render("user/contract_user/status", {t: req.t});
         }
     });
     
@@ -181,10 +181,10 @@ module.exports = function (app) {
         res.locals.session = req.session;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/contract_cancel/status");
+            res.render("admin/contract_cancel/status", {t: req.t});
         }
         else {
-            res.render("user/contract_cancel/status");
+            res.render("user/contract_cancel/status", {t: req.t});
         }
     });
     
@@ -194,10 +194,10 @@ module.exports = function (app) {
         res.locals.session = req.session;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/plan/status");
+            res.render("admin/plan/status", {t: req.t});
         }
         else {
-            res.render("user/plan/status");
+            res.render("user/plan/status", {t: req.t});
         }
     });
     
@@ -206,10 +206,10 @@ module.exports = function (app) {
         res.locals.planId = req.query.planId;
 
         if (req.session.user.companyDiv === 'T') {
-            res.render("admin/plan/detail");
+            res.render("admin/plan/detail", {t: req.t});
         }
         else {
-            res.render("user/plan/detail");
+            res.render("user/plan/detail", {t: req.t});
         }
     });
 };

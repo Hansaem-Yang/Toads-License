@@ -44,14 +44,14 @@
         <form id="sidebar-form">
             <input type="hidden" id="menu_id" value="<%=session.menuId%>"/>
             <div class="menu">
-                <div id="dashboard" class="menu-item">홈</div>
-                <div id="company" class="menu-item">고객사관리</div>
-                <div id="contract_parent" class="menu-item">계약관리</div>
+                <div id="dashboard" class="menu-item"><%=t('home')%></div>
+                <div id="company" class="menu-item"><%=t('company management')%></div>
+                <div id="contract_parent" class="menu-item"><%=t('contract management')%></div>
                 <div class="submenu">
-                    <div id="contract" class="submenu-item">- 계약관리</div>
-                    <div id="contract_manager" class="submenu-item">- 계약관리자</div>
-                    <div id="contract_user" class="submenu-item">- 계약사용자</div>
-                    <div id="contract_cancel" class="submenu-item">- 계약해지</div>
+                    <div id="contract" class="submenu-item">- <%=t('contract management')%></div>
+                    <div id="contract_manager" class="submenu-item">- <%=t('contract manager')%></div>
+                    <div id="contract_user" class="submenu-item">- <%=t('contract user')%></div>
+                    <div id="contract_cancel" class="submenu-item">- <%=t('contract cancel')%></div>
                 </div>
             </div>
         </form>

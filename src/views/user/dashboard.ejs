@@ -26,10 +26,10 @@
                         ClearUsage();
 
                         if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
+                            alert("<%=t('message(session expires)')%>");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
-                            var newRow = '<tr><td colspan="4">조회된 데이터가 없습니다.</td></tr>';
+                            var newRow = '<tr><td colspan="4"><%=t("message(no data)")%></td></tr>';
                             $('.satellite-usage').append(newRow);
                         } else {
                             if (Array.isArray(data)) {
@@ -47,7 +47,7 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        var newRow = '<tr><td colspan="4">서버 요청에 실패하였습니다.</td></tr>';
+                        var newRow = '<tr><td colspan="4"><%=t("message(request failed)")%></td></tr>';
                         $('.satellite-usage').append(newRow);
                     },
                 });
@@ -63,10 +63,10 @@
                         ClearCompany();
 
                         if (data === 'NO SESSION') {
-                            alert("세션이 만료되었습니다.");
+                            alert("<%=t('message(session expires)')%>");
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
-                            var newRow = '<tr><td colspan="7" class="left-align">조회된 데이터가 없습니다.</td></tr>';
+                            var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(no data)")%></td></tr>';
                             $('.company').append(newRow);
                         } else {
                             if (Array.isArray(data)) {
@@ -87,7 +87,7 @@
                         }
                     },
                     error: function (xhr, status, error) {
-                        var newRow = '<tr><td colspan="7" class="left-align">서버 요청에 실패하였습니다.</td></tr>';
+                        var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(request failed)")%></td></tr>';
                         $('.company').append(newRow);
                     },
                 });
@@ -114,15 +114,15 @@
             <input type="hidden" class="account_no" value="<%= session.user.accountNo %>"/>
             <div class="content">
                 <div>
-                    <div class="title">위성통신 전체 사용량</div>
+                    <div class="title"><%=t('total slink usage')%></div>
                     <div>
                         <table class="satellite-usage">
                             <thead>
                                 <tr>
-                                    <th width="200px">전체 계약 수</th>
-                                    <th width="200px">전체 사용자 수</th>
-                                    <th width="200px">일 사용량(분)</th>
-                                    <th width="200px">월 사용량(분)</th>
+                                    <th width="200px"><%=t('total contracts')%></th>
+                                    <th width="200px"><%=t('total users')%></th>
+                                    <th width="200px"><%=t('daily usage')%></th>
+                                    <th width="200px"><%=t('monthly usage')%></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -137,18 +137,18 @@
                     </div>
                 </div></br></br></br>
                 <div>
-                    <div class="title">회사 정보</div>
+                    <div class="title"><%=t('company information')%></div>
                     <div>
                         <table class="company">
                             <thead>
                                 <tr>
-                                    <th width="100px">회사 번호</th>
-                                    <th width="240px">법인명</th>
-                                    <th width="220px">대표자명</th>
-                                    <th width="120px">회사구분</th>
-                                    <th width="160px">연락처</th>
-                                    <th width="120px">라이센스 수</th>
-                                    <th width="120px">사용자 수</th>
+                                    <th width="100px"><%=t('company number')%></th>
+                                    <th width="240px"><%=t('corporation name')%></th>
+                                    <th width="220px"><%=t('representative name')%></th>
+                                    <th width="120px"><%=t('company classification')%></th>
+                                    <th width="160px"><%=t('country')%></th>
+                                    <th width="160px"><%=t('license count')%></th>
+                                    <th width="120px"><%=t('user count')%></th>
                                 </tr>
                             </thead>
                             <tbody>

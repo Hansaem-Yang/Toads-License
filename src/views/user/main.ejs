@@ -22,13 +22,13 @@
                                     $('.content-frame').attr('src', menuId);
                                     break;
                                 case "NO SESSION":
-                                    alert("세션이 만료되었습니다.");
+                                    alert("<%=t('message(session expires)')%>");
                                     window.parent.location.href = "./login";
                                     break;
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert("서버 요청에 실패했습니다.");
+                            alert("<%=t('message(request failed)')%>");
                             window.location.href = "./login";
                         },
                     });

@@ -27,10 +27,10 @@
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
+                                alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
-                                alert("조회된 데이터가 없습니다.");
+                                alert("<%=t('message(no data)')%>");
                             } else {
                                 $('.cell_plan_id').text(data.planId);
                                 $('.cell_plan_kname').text(data.planKname);
@@ -60,7 +60,7 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('서버 요청에 실패하였습니다.');
+                            alert("<%=t('message(request failed)')%>");
                         },
                     });
                 };
@@ -81,10 +81,10 @@
                         },
                         success: function (data) {
                             if (data === 'NO SESSION') {
-                                alert("세션이 만료되었습니다.");
+                                alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
-                                alert("조회된 데이터가 없습니다.");
+                                alert("<%=t('message(no data)')%>");
                             } else {
                                 $('.plan_id').val(data.planId);
                                 $('.plan_kname').val(data.planKname);
@@ -117,13 +117,13 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            alert('서버 요청에 실패하였습니다.');
+                            alert("<%=t('message(request failed)')%>");
                         },
                     });
                 });
 
                 $('.delete').click(function() {
-                    if (confirm('데이터를 삭제 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(delete data)')%>") == true)
                     {
                         var planIds = [];
 
@@ -140,19 +140,19 @@
                             success: function (data) {
                                 switch (data) {
                                     case "NO SESSION":
-                                        alert("세션이 만료되었습니다.");
+                                        alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                     case "FAIL":
-                                        alert('데이터 삭제에 실패 하였습니다.');
+                                        alert("<%=t('message(delete failed)')%>");
                                         return;
                                     case "SUCCESS":
-                                        alert('데이터 삭제를 완료 하였습니다.');
+                                        alert("<%=t('message(delete success)')%>");
                                         window.location.href = "../../view/plan";
                                         return;
                                 }
                             },
                             error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
+                                alert("<%=t('message(request failed)')%>");
                             },
                         });
                     }
@@ -329,7 +329,7 @@
                 });
 
                 $('.save').click(function() {
-                    if (confirm('데이터를 저장 하시겠습니까?')) {
+                    if (confirm("<%=t('message(save data)')%>")) {
                         if (!validationCheck()) {
                             return;
                         }
@@ -398,14 +398,14 @@
                             success: function (data) {
                                 switch (data) {
                                     case "NO SESSION":
-                                        alert("세션이 만료되었습니다.");
+                                        alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                         return;
                                     case "FAIL":
-                                        alert('데이터 저장에 실패 하였습니다.');
+                                        alert("<%=t('message(save failed)')%>");
                                         return;
                                     case "SUCCESS":
-                                        alert('데이터 저장을 완료 하였습니다.');
+                                        alert("<%=t('message(save success)')%>");
                                         break;
                                 }
 
@@ -415,14 +415,14 @@
                                 clearModal();
                             },
                             error: function (xhr, status, error) {
-                                alert('서버 요청에 실패하였습니다.');
+                                alert("<%=t('message(request failed)')%>");
                             },
                         });
                     }
                 });
 
                 $('.cancel').click(function() {
-                    if (confirm('입력을 취소 하시겠습니까?') == true)
+                    if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.modal').hide();
                         
@@ -449,9 +449,9 @@
                     <div class="title">계약 정보</div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="modify" value="수정"/></p>
-                            <p><input type="button" class="delete" value="삭제"/></p>
-                            <input type="button" class="back" value="뒤로"/>
+                            <p><input type="button" class="modify" value="<%=t('modify')%>"/></p>
+                            <p><input type="button" class="delete" value="<%=t('delete')%>"/></p>
+                            <input type="button" class="back" value="<%=t('back')%>"/>
                         </div>
                     </div>
                     <div>
@@ -484,7 +484,7 @@
                                     <td class="cell_active_yn" colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">비고</th>
+                                    <th class="right-align"><%=t('remark')%></th>
                                     <td class="cell_remark" style="height:100px" colspan="3"></td>
                                 </tr>
                             </thead>
@@ -497,7 +497,7 @@
                             <table class="view_plan_amount">
                                 <thead>
                                     <tr>
-                                        <th width="100px">순번</th>
+                                        <th width="100px"><%=t('sequential number')%></th>
                                         <th width="140px">서비스가격</th>
                                         <th width="180px">과금기준</th>
                                         <th width="140px">초과요금</th>
@@ -577,7 +577,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">비고</th>
+                                    <th class="right-align"><%=t('remark')%></th>
                                     <td class="left-align" colspan="3">
                                         <textarea class="remark" style="width:900px; height:60px;"></textarea>
                                     </td>
@@ -591,14 +591,14 @@
                             <div class="title">요금제 가격</div>
                             <div class="top-right-button">
                                 <div class="align-container">
-                                    <p><input type="button" class="plan_amount_add" value="추가"/></p>
-                                    <input type="button" class="plan_amount_delete" value="삭제"/>
+                                    <p><input type="button" class="plan_amount_add" value="<%=t('regist')%>"/></p>
+                                    <input type="button" class="plan_amount_delete" value="<%=t('delete')%>"/>
                                 </div>
                             </div>
                             <table class="plan_amount">
                                 <thead>
                                     <tr>
-                                        <th width="100px">순번</th>
+                                        <th width="100px"><%=t('sequential number')%></th>
                                         <th width="140px">서비스가격</th>
                                         <th width="170px">과금기준</th>
                                         <th width="140px">초과요금</th>
@@ -643,8 +643,8 @@
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="save" value="저장"/></p>
-                            <input type="button" class="cancel" value="취소"/>
+                            <p><input type="button" class="save" value="<%=t('save')%>"/></p>
+                            <input type="button" class="cancel" value="<%=t('cancel')%>"/>
                         </div>
                     </div>
                 </div>
