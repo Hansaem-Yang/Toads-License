@@ -86,6 +86,18 @@
                         },
                     });
                 });
+                
+                $(".ko").click(function(event) {
+                    window.parent.location.href = "./main?lng=ko";
+                });
+                
+                $(".en").click(function(event) {
+                    window.parent.location.href = "./main?lng=en";
+                });
+                
+                $(".cn").click(function(event) {
+                    window.parent.location.href = "./main?lng=cn";
+                });
             });
         </script>
     </head>
@@ -94,6 +106,9 @@
             <div class="topmenu">
                 <div class="shortcuts">
                     <nav>
+                        <a href="#" class="ko"><%=t('ko')%></a>
+                        <a href="#" class="en"><%=t('en')%></a>
+                        <a href="#" class="cn"><%=t('ch')%></a>&nbsp;
                         <%= session.user.companyName %>&nbsp;<%= session.user.userName %>&nbsp;
                         <a href="#" class="mypage"><%=t('mypage')%></a>
                         <a href="#" class="logout"><%=t('logout')%></a>
