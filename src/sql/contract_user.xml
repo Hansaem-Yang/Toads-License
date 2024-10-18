@@ -53,6 +53,7 @@
                   , license_no
                   , ship_seq
                   , use_yn
+                  , account_no
                   , regist_date
         )
         values (
@@ -68,6 +69,7 @@
                   , #{licenseNo}
                   , #{shipSeq}
                   , #{useYn}
+                  , select isnull(max(account_no), 3000000) + 1 from contract_user 
                   , left(convert(varchar(20), getdate(), 121), 10)
         );
     </insert>

@@ -43,6 +43,7 @@
                   , nation
                   , id_no
                   , quit_date
+                  , account_no
         )
         values (
                     #{companyNo}
@@ -54,6 +55,7 @@
                   , #{nation}
                   , #{idNo}
                   , #{quitDate}
+                  , select isnull(max(account_no), 1000000) + 1 from employee 
         );
     </insert>
     <update id="update">
