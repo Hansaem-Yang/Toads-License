@@ -104,13 +104,17 @@
     <body>
         <form id="topmenu-form">
             <div class="topmenu">
-                <div class="shortcuts">
+                <div class="shortcuts-top">
                     <nav>
+                        <%=t('language')%>&nbsp;
                         <a href="#" class="ko"><%=t('ko')%></a>
                         <a href="#" class="en"><%=t('en')%></a>
-                        <a href="#" class="cn"><%=t('ch')%></a>&nbsp;
-                        <%= session.user.companyName %>&nbsp;<%= session.user.userName %>&nbsp;
-                        <a href="#" class="mypage"><%=t('mypage')%></a>
+                        <a href="#" class="cn"><%=t('cn')%></a>
+                    <nav>
+                </div>
+                <div class="shortcuts">
+                    <nav>
+                        <a href="#" class="mypage"><%= session.user.userName %></a>
                         <a href="#" class="logout"><%=t('logout')%></a>
                     <nav>
                 </div>
