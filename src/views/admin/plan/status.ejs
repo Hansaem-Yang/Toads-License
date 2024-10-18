@@ -10,7 +10,7 @@
         -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
-        <script src="/public/js/common/common_variables.js"></script>
+        <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
         <script>
             $(document).ready(function() {                
                 var search = function() {
@@ -409,11 +409,11 @@
                     }
                 });
                 
-                createVariablesSelection($('.flat_div'), flatDivs);
-                createVariablesSelection($('.odm_div'), odmDivs);
-                createVariablesSelection($('.active_yn'), activeYn);
-                createVariablesSelection($('.bill_base_1'), billBases);
-                createVariablesSelection($('.bill_base_2'), billBases);
+                createVariablesSelection($('.flat_div'), flatDivs, "<%=t('select')%>");
+                createVariablesSelection($('.odm_div'), odmDivs, "<%=t('select')%>");
+                createVariablesSelection($('.active_yn'), activeYn, "<%=t('select')%>");
+                createVariablesSelection($('.bill_base_1'), billBases, "<%=t('select')%>");
+                createVariablesSelection($('.bill_base_2'), billBases, "<%=t('select')%>");
 
                 search();
             });

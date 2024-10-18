@@ -10,7 +10,7 @@
         -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
-        <script src="/public/js/common/common_variables.js"></script>
+        <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
         <script>
             $(document).ready(function() {
                 var contracts = [];
@@ -51,7 +51,7 @@
                                         });
                                     });
 
-                                    createSelection($('.s_contract_no'), contracts);
+                                    createSelection($('.s_contract_no'), contracts, "<%=t('select')%>");
                                 }
                             }
                         },
@@ -256,7 +256,7 @@
                     // Add default option
                     $('.s_contract_no').append($('<option>', {
                         value: '',
-                        text: '<%=t("choose")%>'
+                        text: "<%=t('select')%>"
                     }));
                 }
 
@@ -352,8 +352,8 @@
                     }
                 });
                 
-                createVariablesSelection($('.reason'), contractCancelReason);
-                createVariablesSelection($('.status'), contractCancelStatus);
+                createVariablesSelection($('.reason'), contractCancelReason, "<%=t('select')%>");
+                createVariablesSelection($('.status'), contractCancelStatus, "<%=t('select')%>");
 
                 searchContract();
             });

@@ -10,7 +10,7 @@
         -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
-        <script src="/public/js/common/common_variables.js"></script>
+        <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
         <script>
             $(document).ready(function() {
                 var employees = [];
@@ -34,7 +34,7 @@
                                     });
                                 });
 
-                                createSelection($('.plan_id'), plans);
+                                createSelection($('.plan_id'), plans, "<%=t('select')%>");
                             }
                         }
                     },
@@ -62,7 +62,7 @@
                                     });
                                 });
 
-                                createSelection($('.contract_manager'), employees);
+                                createSelection($('.contract_manager'), employees, "<%=t('select')%>");
                             }
                         }
                     },
@@ -223,7 +223,6 @@
     </head>
     <body>
         <form class="contract-detail-form">
-            <input type="hidden" class="language" value="<%=session.language%>"/>
             <input type="hidden" class="company_no" value="<%=companyNo%>"/>
             <input type="hidden" class="contract_no" value="<%=contractNo%>"/>
             

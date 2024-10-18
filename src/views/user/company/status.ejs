@@ -10,7 +10,7 @@
         -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
-        <script src="/public/js/common/common_variables.js"></script>
+        <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
         <script>
             $(document).ready(function() {
                 var nation_options = [];
@@ -30,7 +30,7 @@
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
                             
-                            createNationsSelection($('.nation'), nation_options, $('.language').val());
+                            createNationsSelection($('.nation'), nation_options, "<%=t('select')%>");
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -42,7 +42,7 @@
                                     });
                                 });
                                 
-                                createNationsSelection($('.nation'), nation_options, $('.language').val());
+                                createNationsSelection($('.nation'), nation_options, "<%=t('select')%>");
                             }
                         }
                     },
@@ -249,15 +249,13 @@
                     }
                 });
 
-                createVariablesSelection($('.company_div'), companyDivs);
+                createVariablesSelection($('.company_div'), companyDivs, "<%=t('select')%>");
                 search();
             });
         </script>
     </head>
     <body>
         <form class="company-detail-form">
-            <input type="hidden" class="language" value="<%=session.language%>"/>
-            
             <div class="content">
                 <div  class="contents-container">
                     <div class="title"><%=t('company information')%></div>

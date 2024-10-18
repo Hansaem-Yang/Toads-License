@@ -10,7 +10,7 @@
         -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
-        <script src="/public/js/common/common_variables.js"></script>
+        <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
         <script>
             $(document).ready(function() {
                 var companys = [];
@@ -35,7 +35,7 @@
                                     });
                                 });
 
-                                createSelection($('.s_company_no'), companys);
+                                createSelection($('.s_company_no'), companys, "<%=t('select')%>");
                             }
 
                             var companyNo = '<%=companyNo%>';
@@ -69,7 +69,7 @@
                                     });
                                 });
 
-                                createSelection($('.plan_id'), plans);
+                                createSelection($('.plan_id'), plans, "<%=t('select')%>");
                             }
                         }
                     },
@@ -97,7 +97,7 @@
                                     });
                                 });
 
-                                createSelection($('.contract_manager'), employees);
+                                createSelection($('.contract_manager'), employees, "<%=t('select')%>");
                             }
                         }
                     },
@@ -829,19 +829,19 @@
                     }
                 });
                 
-                createVariablesSelection($('.contract_service'), contractServices);
-                createVariablesSelection($('.contract_div'), contractDivs);
+                createVariablesSelection($('.contract_service'), contractServices, "<%=t('select')%>");
+                createVariablesSelection($('.contract_div'), contractDivs, "<%=t('select')%>");
 
-                createVariablesSelection($('.monetary_unit'), monetaryUnits);
-                createVariablesSelection($('.contract_period'), contractPeriods);
-                createVariablesSelection($('.license_type'), licenseTypes);
-                createVariablesSelection($('.license_div'), licenseDivs);
+                createVariablesSelection($('.monetary_unit'), monetaryUnits, "<%=t('select')%>");
+                createVariablesSelection($('.contract_period'), contractPeriods, "<%=t('select')%>");
+                createVariablesSelection($('.license_type'), licenseTypes, "<%=t('select')%>");
+                createVariablesSelection($('.license_div'), licenseDivs, "<%=t('select')%>");
                 
-                createVariablesSelection($('.odm_cont_div'), odmContractDivs);
-                createVariablesSelection($('.pay_currency'), monetaryUnits);
-                createVariablesSelection($('.pay_unit'), payUnits);
+                createVariablesSelection($('.odm_cont_div'), odmContractDivs, "<%=t('select')%>");
+                createVariablesSelection($('.pay_currency'), monetaryUnits, "<%=t('select')%>");
+                createVariablesSelection($('.pay_unit'), payUnits, "<%=t('select')%>");
                 
-                createVariablesSelection($('.equip_lent'), useYn);
+                createVariablesSelection($('.equip_lent'), useYn, "<%=t('select')%>");
             });
         </script>
     </head>

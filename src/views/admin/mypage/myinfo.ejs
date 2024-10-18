@@ -11,7 +11,7 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
-        <script src="/public/js/common/common_variables.js"></script>
+        <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
         <script>
             $(document).ready(function() {
                 var nation_options = [];
@@ -31,7 +31,7 @@
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
 
-                            createNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
+                            createNationsCodeSelection($('.nation_code'), nation_options, "<%=t('select')%>");
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -44,7 +44,7 @@
                                 });
                             }
 
-                            createNationsCodeSelection($('.nation_code'), nation_options, $('.language').val());
+                            createNationsCodeSelection($('.nation_code'), nation_options, "<%=t('select')%>");
                         }
                     },
                     error: function (xhr, status, error) {
@@ -379,15 +379,14 @@
                     }
                 });
 
-                createVariablesSelection($('.user_type'), userTypes);
-                createVariablesSelection($('.use_status'), useStatus);
+                createVariablesSelection($('.user_type'), userTypes, "<%=t('select')%>");
+                createVariablesSelection($('.use_status'), useStatus, "<%=t('select')%>");
                 Search();
             });
         </script>
     </head>
     <body>
         <form class="company-status-form">
-            <input type="hidden" class="language" value="<%=session.language%>"/>
             <input type="hidden" class="company_no" value="<%=session.user.companyNo%>"/>
             <input type="hidden" class="account_no" value="<%=session.user.accountNo%>"/>
             

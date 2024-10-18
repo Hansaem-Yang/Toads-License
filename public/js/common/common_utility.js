@@ -1,8 +1,8 @@
-function createNationsSelection(object, data, language) {
+function createNationsSelection(object, data, selectText) {
     object.empty();
     object.append($('<option>', { 
         value:'', 
-        text:'선택하세요.'
+        text: selectText
     }));
 
     $.each(data, function(index, option)
@@ -14,11 +14,11 @@ function createNationsSelection(object, data, language) {
     });
 }
 
-function createNationsCodeSelection(object, data, language) {
+function createNationsCodeSelection(object, data, selectText) {
     object.empty();
     object.append($('<option>', { 
         value:'', 
-        text:'선택하세요.'
+        text:selectText
     }));
 
     $.each(data, function(index, option)
@@ -33,11 +33,11 @@ function createNationsCodeSelection(object, data, language) {
     });
 }
 
-function createSelection(object, data) {
+function createSelection(object, data, selectText) {
     object.empty();
     object.append($('<option>', { 
         value:'', 
-        text:'선택하세요.'
+        text:selectText
     }));
 
     $.each(data, function(index, option)
@@ -49,11 +49,11 @@ function createSelection(object, data) {
     });
 }
 
-function createVariablesSelection(object, data) {
+function createVariablesSelection(object, data, selectText) {
     object.empty();
     object.append($('<option>', { 
         value:'', 
-        text:'선택하세요.'
+        text:selectText
     }));
     
     Object.keys(data).forEach(key => {
@@ -64,11 +64,11 @@ function createVariablesSelection(object, data) {
     });
 }
 
-function clearSelection(object) {
+function clearSelection(object, selectText) {
     object.empty();
     object.append($('<option>', { 
         value:'', 
-        text:'선택하세요.'
+        text:selectText
     }));
 }
 
