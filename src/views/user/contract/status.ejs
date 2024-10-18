@@ -65,11 +65,21 @@
                     });
                 };
 
+                $('.detail').click(function() {
+                    details();
+                });
+
                 $('.contract tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
-                $('.detail').click(function() {
+                $('.contract tbody').on('dblclick', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+
+                    details();
+                });
+
+                var details = function() {
                     var companyNo = $('.s_company_no').val();
                     if (companyNo === '')
                     {
@@ -85,7 +95,7 @@
                     } else {
                         alert("<%=t('message(select row)')%>");
                     }
-                });
+                }
 
                 var clearContract = function() {
                     const rows = document.querySelectorAll(".contract tbody tr:not(:first-child)");

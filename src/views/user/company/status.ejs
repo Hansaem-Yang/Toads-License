@@ -70,12 +70,10 @@
                                 alert("<%=t('message(no data)')%>");
                                 return;
                             } else {
-                                $('.cell_company_no').text(data.companyNo);
                                 $('.cell_company_name').text(data.companyName);
                                 $('.cell_owner_name').text(data.ownerName);
                                 $('.cell_business_no').text(data.businessNo);
                                 $('.cell_resident_no').text(data.residentNo);
-                                $('.cell_company_div').text(companyDivs[data.companyDiv]);
                                 $('.cell_telephone').text(getTelephone(data.nationCode, data.telephone));
                                 $('.cell_business_place').text(data.businessPlace);
 
@@ -262,7 +260,7 @@
             
             <div class="content">
                 <div  class="contents-container">
-                    <div class="title"><%=t('customer information')%></div>
+                    <div class="title"><%=t('company information')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
                             <p><input type="button" class="modify" value="<%=t('modify')%>"/></p>
@@ -272,14 +270,14 @@
                         <table class="company">
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align"><%=t('customer number')%></th>
-                                    <td width="300px" class="cell_company_no"></td>
                                     <th width="120px" class="right-align"><%=t('corporation name')%></th>
                                     <td width="300px" class="cell_company_name"></td>
+                                    <th width="120px" class="right-align"><%=t('representative name')%></th>
+                                    <td width="300px" class="cell_owner_name"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align"><%=t('representative name')%></th>
-                                    <td class="cell_owner_name"></td>
+                                    <th class="right-align"><%=t('country')%></th>
+                                    <td class="cell_nation"></td>
                                     <th class="right-align"><%=t('phone number')%></th>
                                     <td class="cell_telephone"></td>
                                 </tr>
@@ -290,14 +288,8 @@
                                     <td class="cell_resident_no"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align"><%=t('company classification')%></th>
-                                    <td class="cell_company_div"></td>
-                                    <th class="right-align"><%=t('country')%></th>
-                                    <td class="cell_nation"></td>
-                                </tr>
-                                <tr>
                                     <th class="right-align"><%=t('business place')%></th>
-                                    <td height="60px" colspan="3" class="cell_business_place"></td>
+                                    <td height="80px" colspan="3" class="cell_business_place"></td>
                                 </tr>
                             </thead>
                         </table>
@@ -328,6 +320,7 @@
                                     <th width="120px" class="right-align">*<%=t('corporation name')%></th>
                                     <td width="500px" class="left-align">
                                         <input type="hidden" class="company_no" value="<%=session.user.companyNo%>"/>
+                                        <input type="hidden" class="company_div"/>
                                         <input type="text" class="company_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
@@ -347,12 +340,6 @@
                                     <th class="right-align"><%=t('corporate registration number')%></th>
                                     <td class="left-align">
                                         <input type="text" class="resident_no" style="width: 160px;"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align">*<%=t('company classification')%></th>
-                                    <td class="left-align">
-                                        <select class="company_div"></select>
                                     </td>
                                 </tr>
                                 <tr>

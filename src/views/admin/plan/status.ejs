@@ -126,6 +126,20 @@
                 });
 
                 $('.detail').click(function() {
+                    details();
+                });
+
+                $('.plan tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+
+                $('.plan tbody').on('dblclick', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+
+                    details();
+                });
+
+                var details = function() {
                     var selectedRow = $(".plan tr.selected");
                     if (selectedRow.length > 0) {
                         var planId = selectedRow.find('.cell_plan_id').text();
@@ -134,11 +148,7 @@
                     } else {
                         alert("<%=t('message(select row)')%>");
                     }
-                });
-
-                $('.plan tbody').on('click', 'tr', function() {
-                    $(this).addClass('selected').siblings().removeClass('selected');
-                });
+                }
 
                 var clearPlan = function() {
                     const rows = document.querySelectorAll(".plan tbody tr:not(:first-child)");

@@ -146,6 +146,20 @@
                 });
 
                 $('.detail').click(function() {
+                    details();
+                });
+
+                $('.company tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+
+                $('.company tbody').on('dblclick', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+
+                    details();
+                });
+
+                var details = function() {
                     var selectedRow = $(".company tr.selected");
                     if (selectedRow.length > 0) {
                         var companyNo = selectedRow.find('.cell_company_no').text();
@@ -154,11 +168,7 @@
                     } else {
                         alert("<%=t('message(select row)')%>");
                     }
-                });
-
-                $('.company tbody').on('click', 'tr', function() {
-                    $(this).addClass('selected').siblings().removeClass('selected');
-                });
+                }
 
                 var ClearCompany = function() {
                     const rows = document.querySelectorAll(".company tbody tr:not(:first-child)");
