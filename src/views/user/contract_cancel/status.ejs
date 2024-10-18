@@ -213,9 +213,9 @@
                                         alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                     } else if (data === 'FAIL') {
-                                        alert("삭제에 실패하였습니다.");
+                                        alert("<%=t('message(delete failed)')%>");
                                     } else {
-                                        alert("삭제가 완료되었습니다.");
+                                        alert("<%=t('message(delete success)')%>");
 
                                         search();
                                     }
@@ -262,12 +262,12 @@
 
                 var validationCheck = function() {
                     if ($('.reason option:selected').val() === '') {
-                        alert('해지 사유를 선택하세요.');
+                        alert("<%=t('message(select reason for cancellation)')%>");
                         return false;
                     }
 
                     if ($('.contents').val() === '') {
-                        alert('해지 내용을 입력하세요.');
+                        alert("<%=t('message(enter cancellation details)')%>");
                         return false;
                     }
 
@@ -427,7 +427,7 @@
             <div class="modal-content" style="width:570px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">계약 해지 신청</div>
+                    <div class="title"><%=t('termination of a contract')%></div>
                     <div>
                         <table>
                             <thead>

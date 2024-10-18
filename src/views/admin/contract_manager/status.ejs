@@ -195,9 +195,9 @@
                                         alert("<%=t('message(session expires)')%>");
                                         window.parent.location.href = "./login";
                                     } else if (data === 'FAIL') {
-                                        alert("삭제에 실패하였습니다.");
+                                        alert("<%=t('message(delete failed)')%>");
                                     } else {
-                                        alert("삭제가 완료되었습니다.");
+                                        alert("<%=t('message(delete success)')%>");
 
                                         search();
                                     }
@@ -252,37 +252,37 @@
 
                 var validationCheck = function() {
                     if ($('.email').val() === '') {
-                        alert('이메일을 입력하세요.');
+                        alert("<%=t('message(enter email)')%>");
                         return false;
                     }
 
                     if ($('.pwd').val() === '') {
-                        alert('비밀번호를 입력하세요.');
+                        alert("<%=t('message(enter password)')%>");
                         return false;
                     }
 
                     if ($('.check_pwd').val() === '') {
-                        alert('비밀번호 확인을 입력하세요.');
+                        alert("<%=t('message(enter password check)')%>");
                         return false;
                     }
 
                     if ($('.pwd').val() !== $('.check_pwd').val()) {
-                        alert('비밀번호와 비밀번호 확인이 다릅니다.');
+                        alert("<%=t('message(enter password not match)')%>");
                         return false;
                     }
 
                     if ($('.name').val() === '') {
-                        alert('관리자명을 입력하세요.');
+                        alert("<%=t('message(enter administrator name)')%>");
                         return false;
                     }
 
                     if ($('.user_auth').val() === '') {
-                        alert('사용권한을 입력하세요.');
+                        alert("<%=t('message(enter permission)')%>");
                         return false;
                     }
 
                     if ($('.use_yn').val() === '') {
-                        alert('사용여부를 입력하세요.');
+                        alert("<%=t('message(enter use)')%>");
                         return false;
                     }
 
@@ -382,7 +382,7 @@
                                         window.parent.location.href = "./login";
                                         return;
                                     case "EMAIL DUPLICATE":
-                                        alert('이메일이 중복되었습니다.');
+                                        alert("<%=t('message(enter email duplicated)')%>");
                                         return;
                                     case "FAIL":
                                         alert("<%=t('message(save failed)')%>");
@@ -431,22 +431,22 @@
                         var checkPwd = $('.check_new_pwd').val();
 
                         if (newPwd === '') {
-                            alert('신규 비밀번호를 입력하세요.');
+                            alert("<%=t('message(enter new password)')%>");
                             return;
                         }
                         
                         if (checkPwd === '') {
-                            alert('비밀번호 확인을 입력하세요.');
+                            alert("<%=t('message(enter password check)')%>");
                             return;
                         }
                         
                         if (newPwd !== checkPwd) {
-                            alert('비밀번호와 비밀번호 확인이 다릅니다.');
+                            alert("<%=t('message(enter password not match)')%>");
                             return;
                         }
                         
                         if (newPwd === oldPwd) {
-                            alert('기존 비밀번호와 동일한 비밀번호 입니다.');
+                            alert("<%=t('message(enter pervious same password)')%>");
                             return;
                         }
 
@@ -524,7 +524,7 @@
                     </div>
                 </div></br></br>
                 <div class="contents-container">
-                    <div class="title">계약 관리자 목록</div>
+                    <div class="title"><%=t('list of contract managers')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
                             <p><input type="button" class="add" value="<%=t('regist')%>"/></p>
@@ -537,10 +537,10 @@
                             <thead>
                                 <tr>
                                     <th width="100px"><%=t('sequential number')%></th>
-                                    <th width="260px">관리자명</th>
-                                    <th width="260px">이메일</th>
-                                    <th width="120px">권한</th>
-                                    <th width="120px">사용여부</th>
+                                    <th width="260px"><%=t('administrator name')%></th>
+                                    <th width="260px"><%=t('email')%></th>
+                                    <th width="120px"><%=t('permission')%></th>
+                                    <th width="120px"><%=t('use status')%></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -564,7 +564,7 @@
             <div class="modal-content" style="width:540px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">계약 관리자 관리</div>
+                    <div class="title"><%=t('contract manager')%></div>
                     <div>
                         <table>
                             <thead>
@@ -581,38 +581,38 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*관리자명</th>
+                                    <th class="right-align">*<%=t('administrator name')%></th>
                                     <td class="left-align">
                                         <input type="text" class="name" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*이메일</th>
+                                    <th class="right-align">*<%=t('email')%></th>
                                     <td class="left-align">
                                         <input type="text" class="email" style="width: 260px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*비밀번호</th>
+                                    <th class="right-align">*<%=t('password')%></th>
                                     <td class="left-align">
                                         <input type="password" class="pwd" style="width: 160px;"/>
-                                        <input type="button" class="change_password" value="비밀번호 변경"/>
+                                        <input type="button" class="change_password" value="<%=t('change password')%>"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*비밀번호 확인</th>
+                                    <th class="right-align">*<%=t('password check')%></th>
                                     <td class="left-align">
                                         <input type="password" class="check_pwd" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*사용권한</th>
+                                    <th class="right-align">*<%=t('permission')%></th>
                                     <td class="left-align">
                                         <select class="user_auth"></select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*사용여부</th>
+                                    <th class="right-align">*<%=t('use status')%></th>
                                     <td class="left-align">
                                         <select class="use_yn"></select>
                                     </td>
@@ -633,18 +633,18 @@
             <div class="modal-content" style="width:320px">
                 <div class="contents-container">
                     <span class="password_close">&times;</span>
-                    <div class="title">비밀번호 변경</div>
+                    <div class="title"><%=t('change password')%></div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="right-align" style="width: 120px;">*비밀번호</th>
+                                    <th class="right-align" style="width: 120px;">*<%=t('password')%></th>
                                     <td class="left-align">
                                         <input type="password" class="new_pwd" style="width: 180px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*비밀번호 확인</th>
+                                    <th class="right-align">*<%=t('password check')%></th>
                                     <td class="left-align">
                                         <input type="password" class="check_new_pwd" style="width: 180px;"/>
                                     </td>

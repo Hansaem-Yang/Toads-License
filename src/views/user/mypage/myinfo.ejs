@@ -169,17 +169,17 @@
                     if (confirm("<%=t('message(save data)')%>") == true)
                     {
                         if ($('.user_name').val() === '') {
-                            alert('사용자명을 입력하세요.');
+                            alert("<%=t('message(enter username)')%>");;
                             return;
                         }
 
                         if ($('.password').val() === '') {
-                            alert('비밀번호를 입력하세요.');
+                            alert("<%=t('message(enter password)')%>");
                             return;
                         }
 
                         if ($('.password_check').val() === '') {
-                            alert('비밀번호 확인을 입력하세요.');
+                            alert("<%=t('message(enter password check)')%>");
                             return;
                         }
 
@@ -189,7 +189,7 @@
                         }
                         
                         if ($('.email').val() === '') {
-                            alert('이메일을 입력하세요.');
+                            alert("<%=t('message(enter email)')%>");
                             return;
                         }
                         
@@ -313,12 +313,12 @@
                         }
 
                         if ($('.new_password').val() === '') {
-                            alert('비밀번호를 입력하세요.');
+                            alert("<%=t('message(enter password)')%>");
                             return;
                         }
 
                         if ($('.new_password_check').val() === '') {
-                            alert('비밀번호 확인을 입력하세요.');
+                            alert("<%=t('message(enter password check)')%>");
                             return;
                         }
 
@@ -448,16 +448,16 @@
                         <table class="member">
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align" >사용자명</th>
+                                    <th width="120px" class="right-align" ><%=t('username')%></th>
                                     <td width="720px" class="cell_user_name"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">이메일</th>
+                                    <th class="right-align"><%=t('email')%></th>
                                     <td class="cell_email"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*비밀번호</th>
-                                    <td class="left-align"><a href="#" class="change_password">비밀번호 변경</a></td>
+                                    <th class="right-align">*<%=t('password')%></th>
+                                    <td class="left-align"><a href="#" class="change_password"><%=t('change password')%></a></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">회원유형</th>
@@ -468,7 +468,7 @@
                                     <td class="cell_phone_number"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">사용여부</th>
+                                    <th class="right-align"><%=t('use status')%></th>
                                     <td class="cell_use_status"></td>
                                 </tr>
                             </thead>
@@ -492,19 +492,19 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*사용자명</th>
+                                    <th class="right-align">*<%=t('username')%></th>
                                     <td class="left-align">
                                         <input type="text" class="user_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*이메일</th>
+                                    <th class="right-align">*<%=t('email')%></th>
                                     <td class="left-align">
                                         <input type="text" class="email" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*비밀번호</th>
+                                    <th class="right-align">*<%=t('password')%></th>
                                     <td class="left-align">
                                         <input type="password" class="password" style="width: 160px;"/>
                                     </td>
@@ -534,7 +534,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*사용여부</th>
+                                    <th class="right-align">*<%=t('use status')%></th>
                                     <td class="left-align">
                                         <select class="use_status"></select>
                                     </td>
@@ -555,18 +555,18 @@
             <div class="modal-content" style="width:340px">
                 <div class="contents-container">
                     <span class="password-close">&times;</span>
-                    <div class="title">비밀번호 변경</div>
+                    <div class="title"><%=t('change password')%></div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align">*기존 비밀번호</th>
+                                    <th width="120px" class="right-align">*기존 <%=t('password')%></th>
                                     <td width="200px" class="left-align">
                                         <input type="password" class="old_password" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align">*비밀번호</th>
+                                    <th width="120px" class="right-align">*<%=t('password')%></th>
                                     <td width="200px" class="left-align">
                                         <input type="password" class="new_password" style="width: 160px;"/>
                                     </td>
