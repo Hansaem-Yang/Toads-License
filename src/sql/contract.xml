@@ -132,7 +132,7 @@
                   , #{exchangeRate}
                   , #{contractManager}
                   , #{remark}
-                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , convert(varchar(10), getdate(), 121)
                   , #{registUser}
         );
     </insert>
@@ -150,7 +150,7 @@
              , exchange_rate = #{exchangeRate}
              , remark = #{remark}
              , contract_manager = #{contractManager}
-             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_date = convert(varchar(10), getdate(), 121)
              , modify_user = #{modifyUser}
          where contract_no = #{contractNo};
     </update>
@@ -204,7 +204,7 @@
                   , #{amount}
                   , #{discountedAmount}
                   , #{actualAmount}
-                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , convert(varchar(10), getdate(), 121)
                   , #{registUser}
         );
     </insert>
@@ -217,7 +217,7 @@
              , amount = #{amount}
              , discounted_amount = #{discountedAmount}
              , actual_amount = #{actualAmount}
-             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_date = convert(varchar(10), getdate(), 121)
              , modify_user = #{modifyUser}
          where contract_no = #{contractNo}
            and license_no = #{licenseNo};
@@ -267,7 +267,7 @@
                   , #{payTermMo}
                   , #{unitPrice}
                   , #{applyDate}
-                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , convert(varchar(10), getdate(), 121)
                   , #{registUser}
         );
     </insert>
@@ -279,7 +279,7 @@
              , pay_term_mo = #{payTermMo}
              , unit_price = #{unitPrice}
              , apply_date = #{applyDate}
-             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_date = convert(varchar(10), getdate(), 121)
              , modify_user = #{modifyUser}
          where contract_no = #{contractNo}
            and odm_seq = #{odmSeq};
@@ -346,7 +346,7 @@
                   , #{applyStartDate}
                   , #{applyFinishDate}
                   , 'N'
-                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , convert(varchar(10), getdate(), 121)
                   , #{registUser}
         );
     </insert>
@@ -357,7 +357,7 @@
              , equip_lent = #{equipLent}
              , apply_start_date = #{applyStartDate}
              , apply_finish_date = #{applyFinishDate}
-             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_date = convert(varchar(10), getdate(), 121)
              , modify_user = #{modifyUser}
          where contract_no = #{contractNo}
            and ship_seq = #{shipSeq};
@@ -392,7 +392,7 @@
                   , #{planId}
                   , #{applyStartDate}
                   , #{applyFinishDate}
-                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , convert(varchar(10), getdate(), 121)
                   , #{registUser}
         );
     </insert>
@@ -401,7 +401,7 @@
            set plan_id = #{planId}
              , apply_start_date = #{applyStartDate}
              , apply_finish_date = #{applyFinishDate}
-             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_date = convert(varchar(10), getdate(), 121)
              , modify_user = #{modifyUser}
          where contract_no = #{contractNo}
            and ship_seq = #{shipSeq}

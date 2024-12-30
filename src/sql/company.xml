@@ -5,6 +5,7 @@
     <![CDATA[
         select company_no
              , company_name
+             , domain_addr
           from company
          where company_div != 'T';
     ]]>
@@ -18,6 +19,7 @@
              , isnull(a.nation, '') nation
              , isnull(b.nation_code, '') nation_code
              , isnull(a.telephone, '') telephone
+             , isnull(a.domain_addr, '') domain_addr
              , (select isnull(sum(license_count), 0) from license
                  where company_no = a.company_no
                    and start_date >= convert(varchar(10), getdate(), 20)
@@ -43,6 +45,7 @@
              , isnull(a.nation, '') nation
              , isnull(b.nation_code, '') nation_code
              , isnull(a.telephone, '') telephone
+             , isnull(a.domain_addr, '') domain_addr
           from company as a
           left outer join nations as b
             on a.nation = b.nation_iso2
@@ -58,6 +61,7 @@
                   , business_place
                   , nation
                   , telephone
+                  , domain_addr
                   , regist_date
                   , regist_user
         )
@@ -70,6 +74,7 @@
                   , #{businessPlace}
                   , #{nation}
                   , #{telephone}
+                  , #{domainAddr}
                   , convert(varchar(20), getdate(), 20)
                   , #{registUser}
         );
@@ -84,6 +89,7 @@
              , business_place = #{businessPlace}
              , nation = #{nation}
              , telephone = #{telephone}
+             , domain_addr = #{domainAddr}
              , modify_date = convert(varchar(20), getdate(), 20)
              , modify_user = #{modifyUser}
          where company_no = #{companyNo};

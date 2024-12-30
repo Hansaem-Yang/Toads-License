@@ -29,6 +29,7 @@ module.exports = function (app) {
     app.post("/admin/contract/user/insert", (req, res) => {
         let contractNo = req.body.contractNo;
         let userId = req.body.userId;
+        let email = req.body.email;
         let userPwd = req.body.userPwd;
         let userName = req.body.userName;
         let applyStartDate = req.body.applyStartDate;
@@ -42,7 +43,7 @@ module.exports = function (app) {
             if (data) {
                 res.send(constants.EMAIL_DUPLICATE);
             } else {
-                manager.insert(contractNo, userId, userPwd, userName, applyStartDate, applyFinishDate, 
+                manager.insert(contractNo, userId, email, userPwd, userName, applyStartDate, applyFinishDate, 
                     licenseNo, shipSeq, useYn, registUser).then((data) => {
                     if (data == null || data <= 0) {
                         res.send(constants.FAIL);
@@ -57,6 +58,7 @@ module.exports = function (app) {
         let contractNo = req.body.contractNo;
         let userNo = req.body.userNo;
         let userId = req.body.userId;
+        let email = req.body.email;
         let userPwd = req.body.userPwd;
         let userName = req.body.userName;
         let applyStartDate = req.body.applyStartDate;
@@ -66,7 +68,7 @@ module.exports = function (app) {
         let useYn = req.body.useYn;
         let modifyUser = req.session.user.userNo;
 
-        manager.update(contractNo, userNo, userId, userPwd, userName, applyStartDate, applyFinishDate, 
+        manager.update(contractNo, userNo, userId, email, userPwd, userName, applyStartDate, applyFinishDate, 
             licenseNo, shipSeq, useYn, modifyUser).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
@@ -127,6 +129,7 @@ module.exports = function (app) {
     app.post("/user/contract/user/insert", (req, res) => {
         let contractNo = req.body.contractNo;
         let userId = req.body.userId;
+        let email = req.body.email;
         let userPwd = req.body.userPwd;
         let userName = req.body.userName;
         let applyStartDate = req.body.applyStartDate;
@@ -140,7 +143,7 @@ module.exports = function (app) {
             if (data) {
                 res.send(constants.EMAIL_DUPLICATE);
             } else {
-                manager.insert(contractNo, userId, userPwd, userName, applyStartDate, applyFinishDate, 
+                manager.insert(contractNo, userId, email, userPwd, userName, applyStartDate, applyFinishDate, 
                     licenseNo, shipSeq, useYn, registUser).then((data) => {
                     if (data == null || data <= 0) {
                         res.send(constants.FAIL);
@@ -155,6 +158,7 @@ module.exports = function (app) {
         let contractNo = req.body.contractNo;
         let userNo = req.body.userNo;
         let userId = req.body.userId;
+        let email = req.body.email;
         let userPwd = req.body.userPwd;
         let userName = req.body.userName;
         let applyStartDate = req.body.applyStartDate;
@@ -164,7 +168,7 @@ module.exports = function (app) {
         let useYn = req.body.useYn;
         let modifyUser = req.session.user.userNo;
 
-        manager.update(contractNo, userNo, userId, userPwd, userName, applyStartDate, applyFinishDate, 
+        manager.update(contractNo, userNo, userId, email, userPwd, userName, applyStartDate, applyFinishDate, 
             licenseNo, shipSeq, useYn, modifyUser).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);

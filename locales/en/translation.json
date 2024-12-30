@@ -52,6 +52,7 @@
     "country": "Country",
     "phone number": "Phone number",
     "business place": "Place of business",
+    "domain address": "Domain address",
     
     "contract list": "A contract list",
     "contract information": "Contract information",
@@ -141,6 +142,7 @@
     "message(enter phone number)": "Please enter your phone number.",
     "message(select company classification)": "Please select a company classification.",
     "message(select country)": "Please select your country.",
+    "message(enter domain address)": "Please enter domain address.",
 
     "message(enter contract name)": "Please enter the contract name.",
     "message(enter contract date)": "Please enter the contract date.",

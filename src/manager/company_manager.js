@@ -21,6 +21,7 @@ module.exports = {
 
                 item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);
+                item.setDomainAddr(record.domain_addr);
                 
                 list.push(item);
             });
@@ -53,6 +54,7 @@ module.exports = {
                 item.setNation(record.nation);
                 item.setNationCode(record.nation_code);
                 item.setTelephone(record.telephone);
+                item.setDomainAddr(record.domain_addr);
                 item.setTotalLicenses(record.total_licenses);
                 item.setTotalUsers(record.total_users);
                 item.setTotalSatelliteUsage(record.total_satellite_usage);
@@ -89,6 +91,7 @@ module.exports = {
                 item.setNation(record.nation);
                 item.setNationCode(record.nation_code);
                 item.setTelephone(record.telephone);
+                item.setDomainAddr(record.domain_addr);
             }
 
             return item;
@@ -98,7 +101,7 @@ module.exports = {
         }
     },
     insert: async function (companyName, ownerName, businessNo, residentNo, companyDiv,
-        businessPlace, nation, telephone, registUser) {
+        businessPlace, nation, telephone, domainAddr, registUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -110,6 +113,7 @@ module.exports = {
                 businessPlace: businessPlace, 
                 nation: nation,
                 telephone: telephone,
+                domainAddr: domainAddr,
                 registUser: registUser
             };
             let format = { language: "sql", indent: " " };
@@ -124,7 +128,7 @@ module.exports = {
         }
     },
     update: async function (companyNo, companyName, ownerName, businessNo, residentNo, companyDiv,
-        businessPlace, nation, telephone, modifyUser) {
+        businessPlace, nation, telephone, domainAddr, modifyUser) {
         try {
             let pool = await poolPromise;
             let param = {
@@ -137,6 +141,7 @@ module.exports = {
                 businessPlace: businessPlace, 
                 nation: nation,
                 telephone: telephone,
+                domainAddr: domainAddr,
                 modifyUser: modifyUser,
             };
             let format = { language: "sql", indent: " " };

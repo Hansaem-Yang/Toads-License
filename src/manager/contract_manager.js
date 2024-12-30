@@ -326,7 +326,6 @@ module.exports = {
                 let format = { language: "sql", indent: " " };
                 let query = mybatisMapper.getStatement("contract", "insert", param, format);
 
-                console.log(query);
                 let request = new sql.Request(transaction);
                 let result = await request.query(query);
 
@@ -424,7 +423,6 @@ module.exports = {
                                 format = { language: "sql", indent: " " };
                                 query = mybatisMapper.getStatement("contract", "max_ship_seq", param, format);
 
-                                console.log(query);
                                 request = new sql.Request(transaction);
                                 result = await request.query(query);
 

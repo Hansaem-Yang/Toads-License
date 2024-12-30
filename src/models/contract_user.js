@@ -7,6 +7,7 @@ class ContractUser extends Common {
         this.contractDiv = null;
         this.userNo = null;
         this.userId = null;
+        this.email = null;
         this.userPwd = null;
         this.userName = null;
         this.applyStartDate = null;
@@ -27,6 +28,9 @@ class ContractUser extends Common {
     }
     getUserId(){
         return this.userId;
+    }
+    getEmail(){
+        return this.email;
     }
     getUserPwd(){
         return this.userPwd;
@@ -61,6 +65,9 @@ class ContractUser extends Common {
     }
     setUserId(userId){
         this.userId = userId;
+    }
+    setEmail(email){
+        this.email = email;
     }
     setUserPwd(userPwd){
         this.userPwd = userPwd;

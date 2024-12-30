@@ -11,6 +11,7 @@
              , b.contract_div
              , a.user_no
              , a.user_id
+             , a.email
              , a.user_name
              , convert(varchar(max), a.user_pwd) as user_pwd
              , a.apply_start_date
@@ -28,6 +29,7 @@
              , b.contract_div
              , a.user_no
              , a.user_id
+             , a.email
              , a.user_name
              , convert(varchar(max), a.user_pwd) as user_pwd
              , a.apply_start_date
@@ -46,6 +48,7 @@
                     contract_no
                   , user_no
                   , user_id
+                  , email
                   , user_name
                   , user_pwd
                   , apply_start_date
@@ -53,7 +56,6 @@
                   , license_no
                   , ship_seq
                   , use_yn
-                  , account_no
                   , regist_date
         )
         values (
@@ -62,6 +64,7 @@
                        from contract_user
                       where contract_no = #{contractNo})
                   , #{userId}
+                  , #{email}
                   , #{userName}
                   , convert(varbinary(MAX), #{userPwd})
                   , #{applyStartDate}
@@ -69,20 +72,20 @@
                   , #{licenseNo}
                   , #{shipSeq}
                   , #{useYn}
-                  , select isnull(max(account_no), 3000000) + 1 from contract_user 
-                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , convert(varchar(10), getdate(), 121)
         );
     </insert>
     <update id="update">
         update contract_user
            set user_id = #{userId}
+             , email = #{email}
              , user_name = #{userName}
              , apply_start_date = #{applyStartDate}
              , apply_finish_date = #{applyFinishDate}
              , license_no = #{licenseNo}
              , ship_seq = #{shipSeq}
              , use_yn = #{useYn}
-             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_date = convert(varchar(10), getdate(), 121)
          where contract_no = #{contractNo}
            and user_no = #{userNo};
     </update>
@@ -94,7 +97,7 @@
     <update id="changePassword">
         update contract_user
            set user_pwd = convert(varbinary(MAX), #{userPwd})
-             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_date = convert(varchar(10), getdate(), 121)
          where contract_no = #{contractNo}
            and user_no = #{userNo};
     </update>

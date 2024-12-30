@@ -13,6 +13,7 @@ class Company extends Common {
         this.nation = null;
         this.nationCode = null;
         this.telephone = null;
+        this.domainAddr = null;
         this.totalLicenses = -1;
         this.totalUsers = -1;
         this.totalSatelliteUsage = -1;
@@ -47,6 +48,9 @@ class Company extends Common {
     }
     getTelephone(){
         return this.telephone;
+    }
+    getDomainAddr(){
+        return this.domainAddr;
     }
     getTotalLicenses(){
         return this.totalLicenses;
@@ -87,6 +91,9 @@ class Company extends Common {
     }
     setTelephone(telephone){
         this.telephone = telephone;
+    }
+    setDomainAddr(domainAddr){
+        this.domainAddr = domainAddr;
     }
     setTotalLicenses(totalLicenses){
         this.totalLicenses = totalLicenses;

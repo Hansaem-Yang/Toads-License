@@ -52,6 +52,7 @@
     "country": "국가",
     "phone number": "전화번호",
     "business place": "사업장 소재지",
+    "domain address": "도메인 주소",
     
     "contract list": "계약 목록",
     "contract information": "계약 정보",
@@ -141,6 +142,7 @@
     "message(enter phone number)": "전화번호를 입력하세요.",
     "message(select company classification)": "회사구분을 선택하세요.",
     "message(select country)": "국가를 선택하세요.",
+    "message(enter domain address)": "도메인을 입력하세요.",
 
     "message(enter contract name)": "계약명을 입력하세요.",
     "message(enter contract date)": "계약일자를 입력하세요.",

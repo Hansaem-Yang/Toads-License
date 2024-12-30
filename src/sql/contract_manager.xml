@@ -54,7 +54,7 @@
                   , #{name}
                   , #{userAuth}
                   , #{useYn}
-                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , convert(varchar(10), getdate(), 121)
         );
     </insert>
     <update id="update">
@@ -63,7 +63,7 @@
              , name = #{name}
              , user_auth = #{userAuth}
              , use_yn = #{useYn}
-             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_date = convert(varchar(10), getdate(), 121)
          where contract_no = #{contractNo}
            and seq = #{seq};
     </update>
@@ -75,7 +75,7 @@
     <update id="changePassword">
         update contract_manager
            set pwd = convert(varbinary(MAX), #{pwd})
-             , modify_date = left(convert(varchar(20), getdate(), 121), 10)
+             , modify_date = convert(varchar(10), getdate(), 121)
          where contract_no = #{contractNo}
            and seq = #{seq};
     </update>

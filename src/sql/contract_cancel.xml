@@ -48,7 +48,7 @@
                       where contract_no = #{contractNo})
                   , #{reason}
                   , #{contents}
-                  , left(convert(varchar(20), getdate(), 121), 10)
+                  , convert(varchar(10), getdate(), 121)
                   , #{status}
         );
     </insert>
@@ -61,7 +61,7 @@
     </update>
     <update id="received">
         update contract_cancel
-           set received_date = left(convert(varchar(20), getdate(), 121), 10)
+           set received_date = convert(varchar(10), getdate(), 121)
              , approval_date = ''
              , cancel_date = ''
              , status = #{status}
@@ -70,7 +70,7 @@
     </update>
     <update id="approval">
         update contract_cancel
-           set approval_date = left(convert(varchar(20), getdate(), 121), 10)
+           set approval_date = convert(varchar(10), getdate(), 121)
              , cancel_date = ''
              , status = #{status}
          where contract_no = #{contractNo}
@@ -79,7 +79,7 @@
     <update id="cancel">
         update contract_cancel
            set approval_date = ''
-             , cancel_date = left(convert(varchar(20), getdate(), 121), 10)
+             , cancel_date = convert(varchar(10), getdate(), 121)
              , status = #{status}
          where contract_no = #{contractNo}
            and seq = #{seq};

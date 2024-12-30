@@ -51,6 +51,7 @@ module.exports = {
                 item.setContractDiv(record.contract_div);
                 item.setUserNo(record.user_no);
                 item.setUserId(record.user_id);
+                item.setEmail(record.email);
                 item.setUserPwd(record.user_pwd);
                 item.setUserName(record.user_name);
                 item.setApplyStartDate(record.apply_start_date);
@@ -90,6 +91,7 @@ module.exports = {
                 item.setContractDiv(record.contract_div);
                 item.setUserNo(record.user_no);
                 item.setUserId(record.user_id);
+                item.setEmail(record.email);
                 item.setUserPwd(record.user_pwd);
                 item.setUserName(record.user_name);
                 item.setApplyStartDate(record.apply_start_date);
@@ -105,7 +107,7 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (contractNo, userId, userPwd, userName, applyStartDate, applyFinishDate, 
+    insert: async function (contractNo, userId, email, userPwd, userName, applyStartDate, applyFinishDate, 
         licenseNo, shipSeq, useYn, registUser) {
         try {
             let pool = await poolPromise;
@@ -118,6 +120,7 @@ module.exports = {
                 let param = {
                     contractNo: contractNo,
                     userId: userId,
+                    email: email,
                     userPwd: userPwd,
                     userName: userName,
                     applyStartDate: applyStartDate,
@@ -148,7 +151,7 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (contractNo, userNo, userId, userPwd, userName, applyStartDate, applyFinishDate, 
+    update: async function (contractNo, userNo, userId, email, userPwd, userName, applyStartDate, applyFinishDate, 
         licenseNo, shipSeq, useYn, modifyUser) {
         try {
             let pool = await poolPromise;
@@ -162,6 +165,7 @@ module.exports = {
                     contractNo: contractNo,
                     userNo: userNo,
                     userId: userId,
+                    email: email,
                     userPwd: userPwd,
                     userName: userName,
                     applyStartDate: applyStartDate,

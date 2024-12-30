@@ -43,11 +43,12 @@ module.exports = function (app) {
         let businessPlace = req.body.businessPlace;
         let nation = req.body.nation;
         let telephone = req.body.telephone;
+        let domainAddr = req.body.domainAddr;
         let registUser = req.session.user.userNo;
 
 
         manager.insert(companyName, ownerName, businessNo, residentNo, companyDiv,
-            businessPlace, nation, telephone, registUser).then((data) => {
+            businessPlace, nation, telephone, domainAddr, registUser).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {
@@ -65,10 +66,11 @@ module.exports = function (app) {
         let businessPlace = req.body.businessPlace;
         let telephone = req.body.telephone;
         let nation = req.body.nation;
+        let domainAddr = req.body.domainAddr;
         let modifyUser = req.session.user.userNo;
 
         manager.update(companyNo, companyName, ownerName, businessNo, residentNo, companyDiv,
-            businessPlace, nation, telephone, modifyUser).then((data) => {
+            businessPlace, nation, telephone, domainAddr, modifyUser).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {
@@ -121,10 +123,11 @@ module.exports = function (app) {
         let businessPlace = req.body.businessPlace;
         let telephone = req.body.telephone;
         let nation = req.body.nation;
+        let domainAddr = req.body.domainAddr;
         let modifyUser = req.session.user.userNo;
 
         manager.update(companyNo, companyName, ownerName, businessNo, residentNo, companyDiv,
-            businessPlace, nation, telephone, modifyUser).then((data) => {
+            businessPlace, nation, telephone, domainAddr, modifyUser).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {
