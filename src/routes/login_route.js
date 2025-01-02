@@ -3,10 +3,10 @@ const constants = require("../common/constants");
 
 module.exports = function (app) {
     app.post("/login", (req, res) => {
-        let userId = req.body.userId;
+        let email = req.body.email;
         let password = req.body.password;
 
-        manager.login(userId).then((data) => {
+        manager.login(email).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -17,9 +17,11 @@ module.exports = function (app) {
                         companyNo: data.companyNo,
                         companyName: data.companyName,
                         companyDiv: data.companyDiv,
+                        domainAddr: data.domainAddr,
                         userNo: data.userNo,
-                        userName: data.userName,
                         userId: data.userId,
+                        email: data.email,
+                        userName: data.userName,
                         userAuth: data.userAuth
                     };
                     
@@ -35,9 +37,9 @@ module.exports = function (app) {
         });
     });
     app.post("/logout", (req, res) => {
-        let userId = req.body.userId;
+        let email = req.body.email;
 
-        manager.logout(userId).then((data) => {
+        manager.logout(email).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {

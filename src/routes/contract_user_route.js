@@ -2,7 +2,7 @@ const manager = require("../manager/contract_user_manager");
 const constants = require("../common/constants");
 
 module.exports = function (app) {
-    /// 관리자
+    /// 사용자
     app.post("/admin/contract/user/status", (req, res) => {
         let contractNo = req.body.contractNo;
 

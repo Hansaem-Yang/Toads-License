@@ -7,8 +7,10 @@ class User extends Common {
         this.companyNo = -1;
         this.companyName = null;
         this.companyDiv = null;
+        this.domainAddr = null;
         this.userNo = null;
         this.userId = null;
+        this.email = null;
         this.userName = null;
         this.password = null;
         this.userAuth = null;
@@ -27,11 +29,17 @@ class User extends Common {
     getCompanyDiv(){
         return companyDiv;
     }
+    getDomainAddr(){
+        return domainAddr;
+    }
     getUserNo(){
         return userNo;
     }
     getUserId(){
         return userId;
+    }
+    getEmail(){
+        return email;
     }
     getUserName(){
         return userName;
@@ -58,11 +66,17 @@ class User extends Common {
     setCompanyDiv(companyDiv){
         this.companyDiv = companyDiv;
     }
+    setDomainAddr(domainAddr){
+        this.domainAddr = domainAddr;
+    }
     setUserNo(userNo){
         this.userNo = userNo;
     }
     setUserId(userId){
         this.userId = userId;
+    }
+    setEmail(email){
+        this.email = email;
     }
     setUserName(userName){
         this.userName = userName;

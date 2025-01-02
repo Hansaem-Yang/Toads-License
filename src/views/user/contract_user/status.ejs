@@ -93,7 +93,7 @@
                                         var newRow = $('.contract_user tbody tr').first().clone().removeClass('hidden');
 
                                         $(newRow).find('.cell_user_no').text(post.userNo);
-                                        $(newRow).find('.cell_user_id').text(post.userId);
+                                        $(newRow).find('.cell_email').text(post.email);
                                         $(newRow).find('.cell_user_name').text(post.userName);
                                         $(newRow).find('.cell_user_pwd').text(post.userPwd);
                                         $(newRow).find('.cell_apply_start_date').text(post.applyStartDate);
@@ -138,6 +138,7 @@
                     $('.contract_div').val(foundContract.contractDiv);
                     $('.apply_start_date').val(foundContract.startDate);
                     $('.apply_finish_date').val(foundContract.endDate);
+                    $('.domain_addr').val($('.s_domain_addr').val());
                     $('.user_id').removeAttr('readonly');
                     $('.user_pwd').removeAttr('readonly');
                     $('.check_user_pwd').removeAttr('readonly');
@@ -184,11 +185,15 @@
                                     alert("<%=t('message(no data)')%>");
                                 } else {
 
+                                    var emailSplit = data.email.split("@");
+
                                     $('.contract_no').val(data.contractNo);
                                     $('.contract_div').val(data.contractDiv);
                                     $('.user_no').val(data.userNo);
                                     $('.user_id').val(data.userId);
                                     $('.user_id').attr('readonly', true);
+                                    $('.user_id_copy').val(emailSplit[0]);
+                                    $('.domain_addr').val(emailSplit[1]);
                                     $('.user_name').val(data.userName);
                                     $('.user_pwd').val(data.userPwd);
                                     $('.user_pwd').attr('readonly', true);
@@ -289,6 +294,8 @@
                     $('.contract_div').val('');
                     $('.user_no').val('');
                     $('.user_id').val('');
+                    $('.user_id_copy').val('');
+                    $('.domain_addr').val('');
                     $('.user_name').val('');
                     $('.user_pwd').val('');
                     $('.check_user_pwd').val('');
@@ -435,6 +442,10 @@
 
                     search();
                 });
+                
+                $('.user_id').change(function() {
+                    $('.user_id_copy').val($('.user_id').val());
+                });
 
                 $('.close').click(function() {
                     $('.modal').hide();
@@ -450,6 +461,7 @@
                         var contractNo = $('.contract_no').val();
                         var userNo = $('.user_no').val();
                         var userId = $('.user_id').val();
+                        var email = `${$('.user_id_copy').val()}@${$('.domain_addr').val()}`;
                         var userName = $('.user_name').val();
                         var userPwd = $('.user_pwd').val();
                         var applyStartDate = $('.apply_start_date').val();
@@ -472,6 +484,7 @@
                                 contractNo: contractNo,
                                 userNo: userNo,
                                 userId: userId,
+                                email: email,
                                 userPwd: userPwd,
                                 userName: userName,
                                 applyStartDate: applyStartDate,
@@ -616,6 +629,7 @@
                                     <th width="120px" class="right-align"><%=t('client company')%></th>
                                     <td width="240px" class="left-align">
                                         <input type="hidden" class="s_company_no" value="<%=session.user.companyNo%>"/>
+                                        <input type="hidden" class="s_domain_addr" value="<%=session.user.domainAddr%>"/>
                                         <%=session.user.companyName%>
                                     </td>
                                     <th width="120px" class="right-align"><%=t('contract number')%></th>
@@ -644,7 +658,7 @@
                                 <tr>
                                     <th width="100px"><%=t('sequential number')%></th>
                                     <th width="160px"><%=t('username')%></th>
-                                    <th width="260px"><%=t('userid')%></th>
+                                    <th width="260px"><%=t('email')%></th>
                                     <th width="240px"><%=t('date of application')%></th>
                                     <th width="120px"><%=t('use status')%></th>
                                 </tr>
@@ -653,7 +667,7 @@
                                 <tr class="hidden">
                                     <td class="cell_user_no" style="text-align: center;"></td>
                                     <td class="cell_user_name" style="text-align: left;"></td>
-                                    <td class="cell_user_id" style="text-align: left;"></td>
+                                    <td class="cell_email" style="text-align: left;"></td>
                                     <td>
                                         <div class="align-container-center">
                                             <p class="cell_apply_start_date"></p>
@@ -700,9 +714,19 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*<%=t('email')%></th>
+                                    <th class="right-align">*<%=t('userid')%></th>
                                     <td class="left-align">
                                         <input type="text" class="user_id" style="width: 260px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*<%=t('email')%></th>
+                                    <td class="left-align">
+                                        <div class="align-container">
+                                            <p><input type="text" class="user_id_copy" style="width: 120px;" readonly/></p>
+                                            <p class="">@</p>
+                                            <p><input type="text" class="domain_addr" style="width: 160px;" readonly/></p>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -734,7 +758,7 @@
                                         <select class="license_no"></select>
                                     </td>
                                 </tr>
-                                <tr class="ship">
+                                <tr class="ships">
                                     <th class="right-align">*<%=t('ship')%></th>
                                     <td class="left-align">
                                         <select class="ship_seq"></select>

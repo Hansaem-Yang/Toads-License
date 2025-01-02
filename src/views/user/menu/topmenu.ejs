@@ -11,7 +11,7 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script>
             $(document).ready(function() {
-                // 로그아웃
+                // 마이페이지
                 $(".mypage").click(function(event) {
                     event.preventDefault();
 
@@ -40,13 +40,13 @@
                 $(".logout").click(function(event) {
                     event.preventDefault();
 
-                    var userId = "<%= session.user.userId %>";
+                    var email = "<%= session.user.email %>";
                     // Ajax를 이용한 데이터 전송
                     $.ajax({
                         url: "../logout",
                         method: "POST", 
                         data: {
-                            userId: userId,
+                            email: email,
                         },
                         success: function (res) {
                             switch (res) {

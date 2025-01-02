@@ -15,11 +15,11 @@
                 $(".login-form").submit((event) => {
                     event.preventDefault();
 
-                    var userId = $(".id").val();
+                    var email = $(".id").val();
                     var password = $(".password").val();
                     
                     // 아이디와 비번에 대한 Validation 처리
-                    if (userId.trim() === "" || password.trim() === "") {
+                    if (email.trim() === "" || password.trim() === "") {
                         alert("아이디와 비밀번호를 입력해주세요.");
                         return;
                     }
@@ -29,16 +29,16 @@
                         url: "../login",
                         method: "POST",
                         data: {
-                            userId: userId,
+                            email: email,
                             password: password,
                         },
                         success: function (data) {
                             switch (data) {
                                 case "NO DATA":
-                                    alert("<%=t('message(id not exist)')%>");
+                                    alert("<%=t('message(user not exist)')%>");
                                     break;
                                 case "WRONG PASSWORD":
-                                    alert("<%=t('message(password not match)')%>");
+                                    alert("<%=t('message(id or password not match)')%>");
                                     break;
                                 case "SUCCESS":
                                     window.location.href = "./main";

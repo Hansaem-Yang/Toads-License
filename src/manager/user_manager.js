@@ -6,10 +6,10 @@ const logger = require("../logger/logger");
 mybatisMapper.createMapper(["./src/sql/user.xml"]);
 
 module.exports = {
-    login: async function (userId) {
+    login: async function (email) {
         try {
             let pool = await poolPromise;
-            let param = { userId: userId };
+            let param = { email: email };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("user", "dashboard_user", param, format);
 
@@ -22,8 +22,10 @@ module.exports = {
                 item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);
                 item.setCompanyDiv(record.company_div);
+                item.setDomainAddr(record.domain_addr);
                 item.setUserNo(record.user_no);
                 item.setUserId(record.user_id);
+                item.setEmail(record.email);
                 item.setUserName(record.user_name);
                 item.setPassword(record.password);
                 item.setUserAuth(record.user_auth);
@@ -36,10 +38,10 @@ module.exports = {
             return null; 
         }
     },
-    logout: async function (userId) {
+    logout: async function (email) {
         try {
             let pool = await poolPromise;
-            let param = { userId: userId };
+            let param = { email: email };
             let format = { language: "sql", indent: " " };
             let query = mybatisMapper.getStatement("user", "dashboard_user", param, format);
 
@@ -52,8 +54,10 @@ module.exports = {
                 item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);
                 item.setCompanyDiv(record.company_div);
+                item.setDomainAddr(record.domain_addr);
                 item.setUserNo(record.user_no);
                 item.setUserId(record.user_id);
+                item.setEmail(record.email);
                 item.setUserName(record.user_name);
                 item.setPassword(record.password);
                 item.setUserAuth(record.user_auth);
