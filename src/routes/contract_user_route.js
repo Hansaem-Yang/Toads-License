@@ -59,7 +59,6 @@ module.exports = function (app) {
         let userNo = req.body.userNo;
         let userId = req.body.userId;
         let email = req.body.email;
-        let userPwd = req.body.userPwd;
         let userName = req.body.userName;
         let applyStartDate = req.body.applyStartDate;
         let applyFinishDate = req.body.applyFinishDate;
@@ -68,7 +67,7 @@ module.exports = function (app) {
         let useYn = req.body.useYn;
         let modifyUser = req.session.user.userNo;
 
-        manager.update(contractNo, userNo, userId, email, userPwd, userName, applyStartDate, applyFinishDate, 
+        manager.update(contractNo, userNo, userId, email, userName, applyStartDate, applyFinishDate, 
             licenseNo, shipSeq, useYn, modifyUser).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);

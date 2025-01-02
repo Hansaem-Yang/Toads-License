@@ -43,6 +43,7 @@
                                         contracts.push({
                                             code:post.contractNo, 
                                             name:post.contractName, 
+                                            contractDiv:post.contractDiv,
                                             startDate:post.startDate,
                                             endDate:post.endDate
                                         });
@@ -134,9 +135,13 @@
                                 } else if (data === 'NO DATA') {
                                     alert("<%=t('message(no data)')%>");
                                 } else {
+                                    var emailSplit = data.email.split("@");
+
                                     $('.contract_no').val(data.contractNo);
                                     $('.seq').val(data.seq);
-                                    $('.email').val(data.email);
+                                    $('.user_id').val(data.userId);
+                                    $('.user_id_copy').val(emailSplit[0]);
+                                    $('.domain_addr').val(emailSplit[1]);
                                     $('.pwd').val(data.pwd);
                                     $('.pwd').attr('readonly', true);
                                     $('.check_pwd').val(data.pwd);
@@ -173,7 +178,9 @@
                 var clearModal = function() {
                     $('.contract_no').val('');
                     $('.seq').val('');
-                    $('.email').val('');
+                    $('.user_id').val('');
+                    $('.user_id_copy').val('');
+                    $('.domain_addr').val('');
                     $('.pwd').val('');
                     $('.check_pwd').val('');
                     $('.name').val('');
@@ -197,8 +204,8 @@
                 }
 
                 var validationCheck = function() {
-                    if ($('.email').val() === '') {
-                        alert("<%=t('message(enter email)')%>");
+                    if ($('.user_id').val() === '') {
+                        alert("<%=t('message(enter id)')%>");
                         return false;
                     }
 
@@ -238,6 +245,10 @@
                 $('.s_contract_no').change(function() {
                     search();
                 });
+                
+                $('.user_id').change(function() {
+                    $('.user_id_copy').val($('.user_id').val());
+                });
 
                 $('.close').click(function() {
                     $('.modal').hide();
@@ -252,7 +263,8 @@
 
                         var contractNo = $('.contract_no').val();
                         var seq = $('.seq').val();
-                        var email = $('.email').val();
+                        var userId = $('.user_id').val();
+                        var email = `${$('.user_id_copy').val()}@${$('.domain_addr').val()}`;
                         var pwd = $('.pwd').val();
                         var chkPwd = $('.check_pwd').val();
                         var name = $('.name').val();
@@ -267,6 +279,7 @@
                             data: {
                                 contractNo: contractNo,
                                 seq: seq,
+                                userId: userId,
                                 email: email,
                                 pwd: pwd,
                                 name: name,
@@ -406,13 +419,9 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align"><%=t('client company')%></th>
-                                    <td width="240px" class="left-align">
-                                        <input type="hidden" class="s_company_no" value="<%=session.user.companyNo%>"/>
-                                        <%=session.user.companyName%>
-                                    </td>
                                     <th width="120px" class="right-align"><%=t('contract number')%></th>
                                     <td class="left-align">
+                                        <input type="hidden" class="s_company_no" value="<%=session.user.companyNo%>"/>
                                         <select class="s_contract_no" style="width:320px;">
                                             <option value=""><%=t('choose')%></option>
                                         </select>
@@ -484,9 +493,19 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th class="right-align">*<%=t('userid')%></th>
+                                    <td class="left-align">
+                                        <input type="text" class="user_id" style="width: 120px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th class="right-align">*<%=t('email')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="email" style="width: 260px;"/>
+                                        <div class="align-container">
+                                            <p><input type="text" class="user_id_copy" style="width: 120px;" readonly/></p>
+                                            <p class="">@</p>
+                                            <p><input type="text" class="domain_addr" style="width: 160px;" readonly/></p>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>

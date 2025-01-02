@@ -28,6 +28,7 @@ module.exports = function (app) {
     });
     app.post("/admin/contract/manager/insert", (req, res) => {
         let contractNo = req.body.contractNo;
+        let userId = req.body.userId;
         let email = req.body.email;
         let pwd = req.body.pwd;
         let name = req.body.name;
@@ -39,7 +40,7 @@ module.exports = function (app) {
             if (data) {
                 res.send(constants.EMAIL_DUPLICATE);
             } else {
-                manager.insert(contractNo, email, pwd, name, userAuth, useYn, registUser).then((data) => {
+                manager.insert(contractNo, userId, email, pwd, name, userAuth, useYn, registUser).then((data) => {
                     if (data == null || data <= 0) {
                         res.send(constants.FAIL);
                     } else {
@@ -52,14 +53,14 @@ module.exports = function (app) {
     app.post("/admin/contract/manager/update", (req, res) => {
         let contractNo = req.body.contractNo;
         let seq = req.body.seq;
+        let userId = req.body.userId;
         let email = req.body.email;
-        let pwd = req.body.pwd;
         let name = req.body.name;
         let userAuth = req.body.userAuth;
         let useYn = req.body.useYn;
         let modifyUser = req.session.user.userNo;
 
-        manager.update(contractNo, seq, email, pwd, name, userAuth, useYn, modifyUser).then((data) => {
+        manager.update(contractNo, seq, userId, email, name, userAuth, useYn, modifyUser).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {
@@ -119,14 +120,14 @@ module.exports = function (app) {
     app.post("/user/contract/manager/update", (req, res) => {
         let contractNo = req.body.contractNo;
         let seq = req.body.seq;
+        let userId = req.body.userId;
         let email = req.body.email;
-        let pwd = req.body.pwd;
         let name = req.body.name;
         let userAuth = req.body.userAuth;
         let useYn = req.body.useYn;
         let modifyUser = req.session.user.userNo;
 
-        manager.update(contractNo, seq, email, pwd, name, userAuth, useYn, modifyUser).then((data) => {
+        manager.update(contractNo, seq, userId, email, name, userAuth, useYn, modifyUser).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {

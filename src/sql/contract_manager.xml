@@ -9,6 +9,7 @@
     <select id="status">
         select a.contract_no
              , a.seq
+             , a.user_id
              , a.email
              , convert(varchar(max), a.pwd) as pwd
              , a.name
@@ -22,6 +23,7 @@
     <select id="detail">
         select a.contract_no
              , a.seq
+             , a.user_id
              , a.email
              , convert(varchar(max), a.pwd) as pwd
              , a.name
@@ -37,6 +39,7 @@
         insert into contract_manager (
                     contract_no
                   , seq
+                  , user_id
                   , email
                   , pwd
                   , name
@@ -49,6 +52,7 @@
                   , (select isnull(max(seq), 0) + 1
                        from contract_manager
                       where contract_no = #{contractNo})
+                  , #{userId}
                   , #{email}
                   , convert(varbinary(MAX), #{pwd})
                   , #{name}
@@ -59,7 +63,8 @@
     </insert>
     <update id="update">
         update contract_manager
-           set email = #{email}
+           set user_id = #{userId}
+             , email = #{email}
              , name = #{name}
              , user_auth = #{userAuth}
              , use_yn = #{useYn}

@@ -13,6 +13,7 @@
     "ko": "Korean",
     "en": "English",
     "cn": "Chinese",
+    "admin": "Admin",
 
     "mypage": "Mypage",
     "login": "Login",
@@ -164,6 +165,7 @@
     "message(select client company)": "Please select a client company.",
 
     "message(enter email)": "Please enter your email.",
+    "message(enter id)": "Please enter a ID.",
     "message(enter password)": "Please enter a password.",
     "message(enter password check)": "Please enter a password verification.",
     "message(enter password not match)": "Password and password verification do not match.",

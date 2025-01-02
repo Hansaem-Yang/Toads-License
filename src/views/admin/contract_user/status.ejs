@@ -180,7 +180,6 @@
                                     $('.contract_div').val(data.contractDiv);
                                     $('.user_no').val(data.userNo);
                                     $('.user_id').val(data.userId);
-                                    $('.user_id').attr('readonly', true);
                                     $('.user_id_copy').val(emailSplit[0]);
                                     $('.domain_addr').val(emailSplit[1]);
                                     $('.user_name').val(data.userName);
@@ -312,7 +311,7 @@
 
                 var validationCheck = function() {
                     if ($('.user_id').val() === '') {
-                        alert('사용자ID를 입력하세요.');
+                        alert("<%=t('message(enter id)')%>");
                         return false;
                     }
 

@@ -191,7 +191,6 @@
                                     $('.contract_div').val(data.contractDiv);
                                     $('.user_no').val(data.userNo);
                                     $('.user_id').val(data.userId);
-                                    $('.user_id').attr('readonly', true);
                                     $('.user_id_copy').val(emailSplit[0]);
                                     $('.domain_addr').val(emailSplit[1]);
                                     $('.user_name').val(data.userName);
@@ -463,7 +462,6 @@
                         var userId = $('.user_id').val();
                         var email = `${$('.user_id_copy').val()}@${$('.domain_addr').val()}`;
                         var userName = $('.user_name').val();
-                        var userPwd = $('.user_pwd').val();
                         var applyStartDate = $('.apply_start_date').val();
                         var applyFinishDate = $('.apply_finish_date').val();
                         var licenseNo = $('.license_no').val();
@@ -485,7 +483,6 @@
                                 userNo: userNo,
                                 userId: userId,
                                 email: email,
-                                userPwd: userPwd,
                                 userName: userName,
                                 applyStartDate: applyStartDate,
                                 applyFinishDate: applyFinishDate,
@@ -626,14 +623,9 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="120px" class="right-align"><%=t('client company')%></th>
-                                    <td width="240px" class="left-align">
-                                        <input type="hidden" class="s_company_no" value="<%=session.user.companyNo%>"/>
-                                        <input type="hidden" class="s_domain_addr" value="<%=session.user.domainAddr%>"/>
-                                        <%=session.user.companyName%>
-                                    </td>
                                     <th width="120px" class="right-align"><%=t('contract number')%></th>
                                     <td class="left-align">
+                                        <input type="hidden" class="s_company_no" value="<%=session.user.companyNo%>"/>
                                         <select class="s_contract_no" style="width:320px;">
                                             <option value=""><%=t('choose')%></option>
                                         </select>

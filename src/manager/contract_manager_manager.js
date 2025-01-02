@@ -49,6 +49,7 @@ module.exports = {
 
                 item.setContractNo(record.contract_no);
                 item.setSeq(record.seq);
+                item.setUserId(record.user_id);
                 item.setEmail(record.email);
                 item.setPwd(record.pwd);
                 item.setName(record.name);
@@ -84,6 +85,7 @@ module.exports = {
 
                 item.setContractNo(record.contract_no);
                 item.setSeq(record.seq);
+                item.setUserId(record.user_id);
                 item.setEmail(record.email);
                 item.setPwd(record.pwd);
                 item.setName(record.name);
@@ -97,7 +99,7 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (contractNo, email, pwd, name, userAuth, useYn, registUser) {
+    insert: async function (contractNo, userId, email, pwd, name, userAuth, useYn, registUser) {
         try {
             let pool = await poolPromise;
             let transaction = new sql.Transaction(pool);
@@ -108,6 +110,7 @@ module.exports = {
                 // 계약 정보
                 let param = {
                     contractNo: contractNo,
+                    userId: userId,
                     email: email,
                     pwd: pwd,
                     name: name,
@@ -136,7 +139,7 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (contractNo, seq, email, pwd, name, userAuth, useYn, modifyUser) {
+    update: async function (contractNo, seq, userId, email, name, userAuth, useYn, modifyUser) {
         try {
             let pool = await poolPromise;
             let transaction = new sql.Transaction(pool);
@@ -148,8 +151,8 @@ module.exports = {
                 let param = {
                     contractNo: contractNo,
                     seq: seq,
+                    userId: userId,
                     email: email,
-                    pwd: pwd,
                     name: name,
                     userAuth: userAuth,
                     useYn: useYn,

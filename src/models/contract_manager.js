@@ -5,6 +5,7 @@ class ContractManager extends Common {
         super();
         this.contractNo = null;
         this.seq = null;
+        this.userId = null;
         this.email = null;
         this.pwd = null;
         this.name = null;
@@ -17,6 +18,9 @@ class ContractManager extends Common {
     }
     getSeq(){
         return this.seq;
+    }
+    getUserId(){
+        return this.userId;
     }
     getEmail(){
         return this.email;
@@ -39,6 +43,9 @@ class ContractManager extends Common {
     }
     setSeq(seq){
         this.seq = seq;
+    }
+    setUserId(userId){
+        this.userId = userId;
     }
     setEmail(email){
         this.email = email;
