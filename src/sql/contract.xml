@@ -46,6 +46,14 @@
             on a.contract_no = b.contract_no
          where a.contract_no = #{contractNo};
     </select>
+    <select id="company_codes">
+        select a.contract_no
+             , a.seq
+          from company_contract as a
+         inner join contract as b
+            on a.contract_no = b.contract_no
+         where a.contract_no = #{contractNo};
+    </select>
     <select id="status">
         select a.company_no
              , b.company_name
@@ -307,17 +315,17 @@
 			       , b.plan_id
           from ships_contract as a
 		     inner join (select c.contract_no, c.ship_seq, c.plan_seq, c.plan_id
-		                   from apply_plan as c
+		                   from ships_apply_plan as c
 					            where c.contract_no = #{contractNo}
                         and c.plan_seq = (select max(d.plan_seq)
-					                                  from apply_plan as d
+					                                  from ships_apply_plan as d
 					           					             where d.contract_no = c.contract_no
 					           					               and d.ship_seq = c.ship_seq)) as b
 		        on a.contract_no = b.contract_no
 		       and a.ship_seq = b.ship_seq
          where a.contract_no = #{contractNo};
     </select>
-    <select id="max_ship_seq">
+    <select id="max_ships_contract_seq">
         select max(ship_seq) max_ship_seq
           from ships_contract
          where contract_no = #{contractNo};
@@ -371,8 +379,8 @@
         delete from ships_contract
          where contract_no = #{contractNo};
     </delete>
-    <insert id="apply_plan_insert">
-        insert into apply_plan (
+    <insert id="ships_apply_plan_insert">
+        insert into ships_apply_plan (
                     contract_no
                   , ship_seq
                   , plan_seq
@@ -385,8 +393,8 @@
         values (
                     #{contractNo}
                   , #{shipSeq}
-                  , (select isnull(max(ship_seq), 0) + 1
-                       from apply_plan
+                  , (select isnull(max(plan_seq), 0) + 1
+                       from ships_apply_plan
                       where contract_no = #{contractNo}
                         and ship_seq = #{shipSeq})
                   , #{planId}
@@ -396,8 +404,8 @@
                   , #{registUser}
         );
     </insert>
-    <insert id="apply_plan_update">
-        update apply_plan 
+    <insert id="ships_apply_plan_update">
+        update ships_apply_plan 
            set plan_id = #{planId}
              , apply_start_date = #{applyStartDate}
              , apply_finish_date = #{applyFinishDate}
@@ -407,14 +415,134 @@
            and ship_seq = #{shipSeq}
            and plan_seq = #{planSeq};
     </insert>
-    <insert id="apply_plan_delete">
-        delete from apply_plan 
+    <insert id="ships_apply_plan_delete">
+        delete from ships_apply_plan 
          where contract_no = #{contractNo}
            and ship_seq = #{shipSeq}
            and plan_seq = #{planSeq};
     </insert>
-    <insert id="apply_plan_delete_all">
-        delete from apply_plan 
+    <insert id="ships_apply_plan_delete_all">
+        delete from ships_apply_plan 
+         where contract_no = #{contractNo};
+    </insert>
+    <select id="max_company_contract_seq">
+        select max(seq) max_seq
+          from company_contract
+         where contract_no = #{contractNo};
+    </select>
+    <select id="company_contract_status">
+        select a.contract_no
+             , a.seq
+             , a.subscribe_div
+             , a.pay_currency
+             , a.apply_start_date
+             , a.apply_finish_date
+             , a.cancel_yn
+             , a.cancel_date
+			       , b.plan_seq
+			       , b.plan_id
+          from company_contract as a
+		     inner join (select c.contract_no, c.seq, c.plan_seq, c.plan_id
+		                   from company_apply_plan as c
+					            where c.contract_no = #{contractNo}
+                        and c.seq = (select max(d.seq)
+					                             from company_apply_plan as d
+					           					        where d.contract_no = c.contract_no
+					           					          and d.seq = c.seq)) as b
+		        on a.contract_no = b.contract_no
+		       and a.seq = b.seq
+         where a.contract_no = #{contractNo};
+    </select>
+    <insert id="company_contract_insert">
+        insert into company_contract (
+                    contract_no
+                  , seq
+                  , subscribe_div
+                  , pay_currency
+                  , apply_start_date
+                  , apply_finish_date
+                  , cancel_yn
+                  , regist_date
+                  , regist_user
+        )
+        values (
+                    #{contractNo}
+                  , (select isnull(max(seq), 0) + 1
+                       from company_contract
+                      where contract_no = #{contractNo})
+                  , #{subscribeDiv}
+                  , #{payCurrency}
+                  , #{applyStartDate}
+                  , #{applyFinishDate}
+                  , 'N'
+                  , convert(varchar(10), getdate(), 121)
+                  , #{registUser}
+        );
+    </insert>
+    <update id="company_contract_update">
+        update company_contract
+           set subscribe_div = #{subscribeDiv}
+             , pay_currency = #{payCurrency}
+             , apply_start_date = #{applyStartDate}
+             , apply_finish_date = #{applyFinishDate}
+             , modify_date = convert(varchar(10), getdate(), 121)
+             , modify_user = #{modifyUser}
+         where contract_no = #{contractNo}
+           and seq = #{seq};
+    </update>
+    <delete id="company_contract_delete">
+        delete from company_contract
+         where contract_no = #{contractNo}
+           and seq = #{seq};
+    </delete>
+    <delete id="company_contract_delete_all">
+        delete from company_contract
+         where contract_no = #{contractNo};
+    </delete>
+    <insert id="company_apply_plan_insert">
+        insert into company_apply_plan (
+                    contract_no
+                  , seq
+                  , plan_seq
+                  , plan_id
+                  , apply_start_date
+                  , apply_finish_date
+                  , regist_date
+                  , regist_user
+        )
+        values (
+                    #{contractNo}
+                  , #{seq}
+                  , (select isnull(max(plan_seq), 0) + 1
+                       from company_apply_plan
+                      where contract_no = #{contractNo}
+                        and seq = #{seq})
+                  , #{planId}
+                  , #{applyStartDate}
+                  , #{applyFinishDate}
+                  , convert(varchar(10), getdate(), 121)
+                  , #{registUser}
+        );
+    </insert>
+    <insert id="company_apply_plan_update">
+        update company_apply_plan 
+           set plan_id = #{planId}
+             , apply_start_date = #{applyStartDate}
+             , apply_finish_date = #{applyFinishDate}
+             , modify_date = convert(varchar(10), getdate(), 121)
+             , modify_user = #{modifyUser}
+         where contract_no = #{contractNo}
+           and seq = #{seq}
+           and plan_seq = #{planSeq};
+    </insert>
+    <insert id="company_apply_plan_delete">
+        delete from company_apply_plan 
+         where contract_no = #{contractNo}
+           and seq = #{seq}
+           and plan_seq = #{planSeq};
+    </insert>
+    <insert id="company_apply_plan_delete_all">
+        delete from company_apply_plan 
          where contract_no = #{contractNo};
     </insert>
 </mapper>

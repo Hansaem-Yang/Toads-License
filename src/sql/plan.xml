@@ -64,7 +64,7 @@
                   , #{finishDate}
                   , #{activeYn}
                   , #{remark}
-                  , convert(varchar(10), getdate(), 121)
+                  , getdate()
                   , #{registUser}
         );
     </insert>
@@ -78,7 +78,7 @@
              , finish_date = #{finishDate}
              , active_yn = #{activeYn}
              , remark = #{remark}
-             , modify_date = convert(varchar(10), getdate(), 121)
+             , modify_date = getdate()
              , modify_user = #{modifyUser}
          where plan_id = #{planId};
     </update>
@@ -125,7 +125,7 @@
                   , #{applyDate}
                   , #{finishDate}
                   , #{activeYn}
-                  , convert(varchar(10), getdate(), 121)
+                  , getdate()
                   , #{registUser}
         );
     </insert>
@@ -138,7 +138,7 @@
              , apply_date = #{applyDate}
              , finish_date = #{finishDate}
              , active_yn = #{activeYn}
-             , modify_date = convert(varchar(10), getdate(), 121)
+             , modify_date = getdate()
              , modify_user = #{modifyUser}
          where plan_id = #{planId}
            and plan_seq = #{planSeq}

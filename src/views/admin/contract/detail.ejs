@@ -35,6 +35,7 @@
                                 });
 
                                 createSelection($('.plan_id'), plans, "<%=t('select')%>");
+                                createSelection($('.company_plan_id'), plans, "<%=t('select')%>");
                             }
                         }
                     },
@@ -152,7 +153,7 @@
                                     case "A":
                                         break;
                                     case "S":
-                                        viewExpandedChildren($('#view_ships_content'));
+                                        viewExpandedChildren($('#view_ships_subscribe_content'));
                                         
                                         data.shipsContracts.forEach(function(shipsContract, index){
                                             var newRow = $('.view_ships_contract tbody tr').first().clone().removeClass('hidden');
@@ -166,9 +167,28 @@
 
                                             const item = plans.find(element => element.code === shipsContract.planId);
                                             
-                                            $(newRow).find('.cell_plan_name').text(item?item.name:'');
+                                            $(newRow).find('.cell_ship_plan_name').text(item?item.name:'');
 
                                             $('.view_ships_contract tbody').append(newRow);
+                                        });
+                                        break;
+                                    case "C":
+                                        viewExpandedChildren($('#view_company_subscribe_content'));
+                                        
+                                        data.companyContracts.forEach(function(companyContract, index){
+                                            var newRow = $('.view_company_contract tbody tr').first().clone().removeClass('hidden');
+
+                                            $(newRow).find('.cell_seq').text(companyContract.seq);
+                                            $(newRow).find('.cell_company_subscribe_div').text(subscriptionDivs[companyContract.subscribeDiv]);
+                                            $(newRow).find('.cell_company_pay_currency').text(monetaryUnits[companyContract.payCurrency]);
+                                            $(newRow).find('.cell_company_apply_start_date').text(companyContract.applyStartDate);
+                                            $(newRow).find('.cell_company_apply_finish_date').text(companyContract.applyFinishDate);
+
+                                            const item = plans.find(element => element.code === companyContract.planId);
+                                            
+                                            $(newRow).find('.cell_company_plan_name').text(item?item.name:'');
+
+                                            $('.view_company_contract tbody').append(newRow);
                                         });
                                         break;
                                 }
@@ -260,7 +280,7 @@
                                     case "A":
                                         break;
                                     case "S":
-                                        expandedChildren($('#ships_content'));
+                                        expandedChildren($('#ships_subscribe_content'));
                                         
                                         data.shipsContracts.forEach(function(shipsContract, index){
                                             var newRow = $('.ships_contract tbody tr').first().clone().removeClass('hidden');
@@ -276,6 +296,24 @@
                                             $(newRow).find('.plan_id').val(shipsContract.planId);
 
                                             $('.ships_contract tbody').append(newRow);
+                                        });
+                                        break;
+                                    case "C":
+                                        expandedChildren($('#company_subscribe_content'));
+                                        
+                                        data.companyContracts.forEach(function(companyContract, index){
+                                            var newRow = $('.company_contract tbody tr').first().clone().removeClass('hidden');
+
+                                            $(newRow).find('.mode').val('U');
+                                            $(newRow).find('.seq').val(companyContract.seq);
+                                            $(newRow).find('.company_subscribe_div').val(companyContract.subscribeDiv);
+                                            $(newRow).find('.company_pay_currency').val(companyContract.payCurrency);
+                                            $(newRow).find('.company_apply_start_date').val(companyContract.applyStartDate);
+                                            $(newRow).find('.company_apply_finish_date').val(companyContract.applyFinishDate);
+                                            $(newRow).find('.company_plan_seq').val(companyContract.planSeq);
+                                            $(newRow).find('.company_plan_id').val(companyContract.planId);
+
+                                            $('.company_contract tbody').append(newRow);
                                         });
                                         break;
                                 }
@@ -360,6 +398,11 @@
                     shipsContractRows.forEach(row => {
                         row.remove();
                     });
+                    
+                    const companyContractRows = document.querySelectorAll(".view_company_contract tbody tr:not(:first-child)");
+                    companyContractRows.forEach(row => {
+                        row.remove();
+                    });
                 };
 
                 // Modal Event And Function
@@ -390,6 +433,11 @@
                     
                     const shipsContractRows = document.querySelectorAll(".ships_contract tbody tr:not(:first-child)");
                     shipsContractRows.forEach(row => {
+                        row.remove();
+                    });
+                    
+                    const companyContractRows = document.querySelectorAll(".company_contract tbody tr:not(:first-child)");
+                    companyContractRows.forEach(row => {
                         row.remove();
                     });
                 };
@@ -656,7 +704,44 @@
                         }
                     }
                 });
+                
+                $('.ships_contract tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
                 /* 선박별 계약관리 끝 */
+
+                /* 기업별 구독계약관리 시작 */
+                $('.company_contract_add').click(function() {
+                    if (!validationCheck()) {
+                        return;
+                    }
+                    
+                    var newRow = $('.company_contract tbody tr').first().clone().removeClass('hidden');
+
+                    $(newRow).find('.company_pay_currency').val($('.monetary_unit').val());
+                    $('.company_contract tbody').append(newRow);
+                });
+
+                $('.company_contract_delete').click(function() {
+                    var selectedRow = $('.company_contract tr.selected');
+
+                    if ($(selectedRow).length > 0) {
+                        var index = $(selectedRow).index();
+                        var hidMode = $(selectedRow).find('.mode');
+
+                        if (hidMode.val() == 'I') {
+                            $('.company_contract tr.selected').remove();
+                        } else {
+                            hidMode.val('D');
+                            $('.company_contract tr.selected').addClass('hidden');
+                        }
+                    }
+                });
+                
+                $('.company_contract tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+                /* 기업별 구독계약관리 끝 */
 
                 $('.close').click(function() {
                     $('.modal').hide();
@@ -686,6 +771,7 @@
                         var licenses = [];
                         var odmContracts = [];
                         var shipsContracts = [];
+                        var companyContracts = [];
 
                         switch (contractDiv)
                         {
@@ -761,6 +847,28 @@
                                     });
                                 });
                                 break;
+                            case "C":
+                                if ($('.company_contract tbody tr').length === 1) {
+                                    alert("<%=t('message(enter company contract)')%>");
+                                    return;
+                                }
+
+                                $('.company_contract tbody tr').each(function(index, row) {
+                                    if (index === 0)
+                                        return;
+
+                                    companyContracts.push({
+                                        mode: $(row).find('.mode').val(),
+                                        seq: $(row).find('.seq').val(),
+                                        subscribeDiv: $(row).find('.company_subscribe_div').val(),
+                                        payCurrency: $(row).find('.company_pay_currency').val(),
+                                        applyStartDate: $(row).find('.company_apply_start_date').val(),
+                                        applyFinishDate: $(row).find('.company_apply_finish_date').val(),
+                                        planSeq: $(row).find('.company_plan_seq').val(),
+                                        planId: $(row).find('.company_plan_id').val(),
+                                    });
+                                });
+                                break;
                         }
 
                         var url = "../../admin/contract/insert";
@@ -791,6 +899,7 @@
                                 licenses: licenses,
                                 odmContracts: odmContracts,
                                 shipsContracts: shipsContracts,
+                                companyContracts: companyContracts,
                             },
                             success: function (data) {
                                 switch (data) {
@@ -840,6 +949,9 @@
                 createVariablesSelection($('.pay_unit'), payUnits, "<%=t('select')%>");
                 
                 createVariablesSelection($('.equip_lent'), useYn, "<%=t('select')%>");
+                
+                createVariablesSelection($('.company_subscribe_div'), subscriptionDivs, "<%=t('select')%>");
+                createVariablesSelection($('.company_pay_currency'), monetaryUnits, "<%=t('select')%>");
 
                 search();
             });
@@ -979,9 +1091,9 @@
                             </table>
                         </div>
                         <!-- ODM 계약 끝 -->
-                        <!-- 선박별 계약 시작 -->
-                        <div id="view_ships_content" class="hidden">
-                            <div class="title"><%=t('ship contract')%></div>
+                        <!-- 선박별 구독계약 시작 -->
+                        <div id="view_ships_subscribe_content" class="hidden">
+                            <div class="title"><%=t('ship subscribe contract')%></div>
                             <table class="view_ships_contract">
                                 <thead>
                                     <tr>
@@ -1001,16 +1113,48 @@
                                         <td class="cell_equip_lent" style="text-align: center;"></td>
                                         <td>
                                             <div class="align-container-center">
-                                                <p class="cell_ship_apply_start_date"></p>~
+                                                <p class="cell_ship_apply_start_date"></p>
+                                                <p>~</p>
                                                 <p class="cell_ship_apply_finish_date"></p>
                                             </div>
                                         </td>
-                                        <td class="cell_plan_name" style="text-align: left;"></td>
+                                        <td class="cell_ship_plan_name" style="text-align: left;"></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <!-- 선박별 계약 끝 -->
+                        <!-- 선박별 구독계약 끝 -->
+                        <!-- 기업별 구독계약 시작 -->
+                        <div id="view_company_subscribe_content" class="hidden">
+                            <div class="title"><%=t('ship subscribe contract')%></div>
+                            <table class="view_company_contract">
+                                <thead>
+                                    <tr>
+                                        <th width="60px"><%=t('sequential number')%></th>
+                                        <th width="160px"><%=t('subscription classification')%></th>
+                                        <th width="140px"><%=t('settlement currency')%></th>
+                                        <th width="300px"><%=t('period')%></th>
+                                        <th width="180px"><%=t('payment system')%></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hidden">
+                                        <td class="cell_seq" style="text-align: center;"></td>
+                                        <td class="cell_company_subscribe_div" style="text-align: center;"></td>
+                                        <td class="cell_company_pay_currency" style="text-align: center;"></td>
+                                        <td>
+                                            <div class="align-container-center">
+                                                <p class="cell_company_apply_start_date"></p>
+                                                <p>~</p>
+                                                <p class="cell_company_apply_finish_date"></p>
+                                            </div>
+                                        </td>
+                                        <td class="cell_company_plan_name" style="text-align: left;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 기업별 구독계약 끝 -->
                     </div>
                 </div>
             </div>
@@ -1193,9 +1337,9 @@
                             </table>
                         </div>
                         <!-- ODM 계약 끝 -->
-                        <!-- 선박별 계약 시작 -->
-                        <div id="ships_content" class="hidden">
-                            <div class="title"><%=t('ship contract')%></div>
+                        <!-- 선박별 구독계약 시작 -->
+                        <div id="ships_subscribe_content" class="hidden">
+                            <div class="title"><%=t('ship subscribe contract')%></div>
                             <div class="top-right-button">
                                 <div class="align-container">
                                     <p><input type="button" class="ships_contract_add" value="<%=t('regist')%>"/></p>
@@ -1239,7 +1383,54 @@
                                 </tbody>
                             </table>
                         </div>
-                        <!-- 선박별 계약 끝 -->
+                        <!-- 선박별 구독계약 끝 -->
+                        <!-- 기업별 구독계약 시작 -->
+                        <div id="company_subscribe_content" class="hidden">
+                            <div class="title"><%=t('company subscribe contract')%></div>
+                            <div class="top-right-button">
+                                <div class="align-container">
+                                    <p><input type="button" class="company_contract_add" value="<%=t('regist')%>"/></p>
+                                    <input type="button" class="company_contract_delete" value="<%=t('delete')%>"/>
+                                </div>
+                            </div>
+                            <table class="company_contract">
+                                <thead>
+                                    <tr>
+                                        <th width="60px"><%=t('sequential number')%></th>
+                                        <th width="160px"><%=t('subscription classification')%></th>
+                                        <th width="140px"><%=t('settlement currency')%></th>
+                                        <th width="300px"><%=t('period')%></th>
+                                        <th width="180px"><%=t('payment system')%></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hidden">
+                                        <td>
+                                            <input type="hidden" class="mode" value="I">
+                                            <input type="text" class="seq" style="width:50px;" readonly>
+                                        </td>
+                                        <td>
+                                            <select class="company_subscribe_div" style="width:150px;"></select>
+                                        </td>
+                                        <td>
+                                            <select class="company_pay_currency" style="width:130px"></select>
+                                        </td>
+                                        <td>
+                                            <div class="align-container">
+                                                <p><input type="date" class="company_apply_start_date" style="width:125px;"></p>
+                                                <p>~</p>
+                                                <input type="date" class="company_apply_finish_date" style="width:125px;">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="hidden" class="company_plan_seq"/>
+                                            <select class="company_plan_id" style="width:170px"></select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 기업별 구독계약 끝 -->
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">

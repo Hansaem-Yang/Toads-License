@@ -22,6 +22,7 @@ class Contract extends Common {
         this.licenses = [];
         this.odmContracts = [];
         this.shipsContracts = [];
+        this.companyContracts = [];
     }
 
     getCompanyNo(){
@@ -81,6 +82,9 @@ class Contract extends Common {
     getShipsContracts(){
         return this.shipsContracts;
     }
+    getCompanyContracts(){
+        return this.companyContracts;
+    }
     
     setCompanyNo(companyNo){
         this.companyNo = companyNo;
@@ -138,6 +142,9 @@ class Contract extends Common {
     }
     setShipsContracts(shipsContracts){
         this.shipsContracts = shipsContracts;
+    }
+    setCompanyContracts(companyContracts){
+        this.companyContracts = companyContracts;
     }
 }
 

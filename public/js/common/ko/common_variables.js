@@ -35,8 +35,9 @@ const contractServices = {
 const contractDivs = {
     L:'License',
     D:'ODM',
-    //A:'Agency',
-    S:'Subcription'
+    // A:'Agency',
+    S:'Ship Subcription',
+    C:'Company Subcription'
 }
 
 const contractPeriods = {
@@ -132,4 +133,9 @@ const contractCancelStatus = {
     2: "해지접수",
     A: "해지승인",
     C: "해지취소"
+}
+
+const subscriptionDivs = {
+    1:'신규가입',
+    2:'재가입'
 }

@@ -111,22 +111,7 @@
     <body>
         <form class="contract-status-form">
             <div class="content">
-                <div>
-                    <div class="title"><%=t('search conditions')%></div>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th width="120px" class="right-align"><%=t('client company')%></th>
-                                    <td width="240px" class="left-align">
-                                        <input type="hidden" class="s_company_no" value="<%=session.user.companyNo%>"/>
-                                        <%=session.user.companyName%>
-                                    </td>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div></br></br>
+                <input type="hidden" class="s_company_no" value="<%=session.user.companyNo%>"/>
                 <div class="contents-container">
                     <div class="title"><%=t('contract list')%></div>
                     <div class="top-right-button">

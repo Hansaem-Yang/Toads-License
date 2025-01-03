@@ -56,6 +56,17 @@ module.exports = function (app) {
             }
         });
     });
+    app.post("/admin/contract/companyCodes", (req, res) => {
+        let contractNo = req.body.contractNo;
+        
+        manager.companyCodes(contractNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
     app.post("/admin/contract/status", (req, res) => {
         let companyNo = req.body.companyNo;
 
@@ -96,10 +107,11 @@ module.exports = function (app) {
         let licenses = req.body.licenses;
         let odmContracts = req.body.odmContracts;
         let shipsContracts = req.body.shipsContracts;
+        let companyContracts = req.body.companyContracts;
         let registUser = req.session.user.userNo;
 
         manager.insert(companyNo, contractName, contractDate, contractor, contractService, contractDiv, contractPeriod, startDate, endDate, 
-            monetaryUnit, exchangeRate, remark, contractManager, licenses, odmContracts, shipsContracts, registUser).then((data) => {
+            monetaryUnit, exchangeRate, remark, contractManager, licenses, odmContracts, shipsContracts, companyContracts, registUser).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {
@@ -125,10 +137,11 @@ module.exports = function (app) {
         let licenses = req.body.licenses;
         let odmContracts = req.body.odmContracts;
         let shipsContracts = req.body.shipsContracts;
+        let companyContracts = req.body.companyContracts;
         let modifyUser = req.session.user.userNo;
 
         manager.update(companyNo, contractNo, contractName, contractDate, contractor, contractService, contractDiv, contractPeriod, startDate, endDate, 
-            monetaryUnit, exchangeRate, remark, contractManager, licenses, odmContracts, shipsContracts, modifyUser).then((data) => {
+            monetaryUnit, exchangeRate, remark, contractManager, licenses, odmContracts, shipsContracts, companyContracts, modifyUser).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {
@@ -195,6 +208,17 @@ module.exports = function (app) {
         let contractNo = req.body.contractNo;
         
         manager.shipsCodes(contractNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/user/contract/companyCodes", (req, res) => {
+        let contractNo = req.body.contractNo;
+        
+        manager.companyCodes(contractNo).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
