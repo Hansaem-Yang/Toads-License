@@ -9,6 +9,7 @@
         <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
         -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
         <script>
@@ -16,7 +17,7 @@
                 var companyNo = $('.company_no').val();
 
                 $.ajax({
-                    url: "../user/dashboard/userSatelliteUsage",
+                    url: "../user/dashboard/satelliteUsageByUser",
                     method: "POST",
                     dataType: 'json',
                     data: {
@@ -53,7 +54,155 @@
                         $('.satellite-usage').append(newRow);
                     },
                 });
-                
+                    
+                let months = [];
+                let annualUsages = [];
+                let annualBarCtx = document.getElementById('annualBarChart').getContext('2d');
+
+                $.ajax({
+                    url: "../user/dashboard/annualSatelliteUsageByUser",
+                    method: "POST",
+                    dataType: 'json',
+                    data: {
+                        companyNo: companyNo,
+                    },
+                    success: function (data) {
+                        ClearUsage();
+
+                        if (data === 'NO SESSION') {
+                            alert("<%=t('message(session expires)')%>");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            months = [];
+                            annualUsages = [];
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    months.push(post.period);
+                                    annualUsages.push(ConvertMinute(post.usage));
+                                });
+                            }
+                        }
+
+                        new Chart(annualBarCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: months,
+                                datasets: [{
+                                    label: "<%=t('annual usage')%>",
+                                    data: annualUsages,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                }],
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        new Chart(annualBarCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: months,
+                                datasets: [{
+                                    label: "<%=t('annual usage')%>",
+                                    data: annualUsages,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                }],
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
+                });
+                    
+                let days = [];
+                let monthlyUsages = [];
+                let monthlyBarCtx = document.getElementById('monthlyBarChart').getContext('2d');
+
+                $.ajax({
+                    url: "../user/dashboard/monthlySatelliteUsageByUser",
+                    method: "POST",
+                    dataType: 'json',
+                    data: {
+                        companyNo: companyNo,
+                    },
+                    success: function (data) {
+                        ClearUsage();
+
+                        if (data === 'NO SESSION') {
+                            alert("<%=t('message(session expires)')%>");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            days = [];
+                            monthlyUsages = [];
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    days.push(post.period);
+                                    monthlyUsages.push(ConvertMinute(post.usage));
+                                });
+                            }
+                        }
+
+                        new Chart(monthlyBarCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: days,
+                                datasets: [{
+                                    label: "<%=t('monthly usage')%>",
+                                    data: monthlyUsages,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                }],
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        new Chart(monthlyBarCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: months,
+                                datasets: [{
+                                    label: 'Monthly Usage',
+                                    data: annualUsages,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                }],
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
+                });
+
                 // $.ajax({
                 //     url: "../user/dashboard/company",
                 //     method: "POST",
@@ -141,6 +290,22 @@
                             </tbody>
                         </table>
                     </div>
+                </div></br></br></br>
+                <div>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td width="520px" style="text-align: center;">
+                                    <canvas id="annualBarChart" width="400" height="200"></canvas>
+                                </td>
+                                <td width="520px" style="text-align: center;">
+                                    <canvas id="monthlyBarChart" width="400" height="200"></canvas>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    
                 </div>
                 <!--
                 <div>

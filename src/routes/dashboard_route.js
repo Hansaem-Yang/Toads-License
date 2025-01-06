@@ -12,8 +12,8 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/dashboard/companyAll", (req, res) => {
-        manager.companyAll().then((data) => {
+    app.post("/admin/dashboard/monthlySatelliteUsage", (req, res) => {
+        manager.monthlySatelliteUsage().then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -21,10 +21,8 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/dashboard/userSatelliteUsage", (req, res) => {
-        let companyNo = req.body.companyNo;
-
-        manager.userSatelliteUsage(companyNo).then((data) => {
+    app.post("/admin/dashboard/companyAll", (req, res) => {
+        manager.companyAll().then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -54,8 +52,10 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/user/dashboard/companyAll", (req, res) => {
-        manager.companyAll().then((data) => {
+    app.post("/user/dashboard/satelliteUsageByUser", (req, res) => {
+        let companyNo = req.body.companyNo;
+
+        manager.satelliteUsageByUser(companyNo).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -63,10 +63,30 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/user/dashboard/userSatelliteUsage", (req, res) => {
+    app.post("/user/dashboard/annualSatelliteUsageByUser", (req, res) => {
         let companyNo = req.body.companyNo;
 
-        manager.userSatelliteUsage(companyNo).then((data) => {
+        manager.annualSatelliteUsageByUser(companyNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/user/dashboard/monthlySatelliteUsageByUser", (req, res) => {
+        let companyNo = req.body.companyNo;
+
+        manager.monthlySatelliteUsageByUser(companyNo).then((data) => {
+            if (data == null || data.length <= 0) {
+                res.send(constants.NO_DATA);
+            } else {
+                res.send(data);
+            }
+        });
+    });
+    app.post("/user/dashboard/companyAll", (req, res) => {
+        manager.companyAll().then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {

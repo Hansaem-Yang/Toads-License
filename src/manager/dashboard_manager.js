@@ -1,6 +1,7 @@
 const { poolPromise, sql } = require("../db/sql_manager");
 const mybatisMapper = require("mybatis-mapper");
 const SatelliteUsage = require("../models/satellite_usage");
+const SatelliteUsageByPeriod = require("../models/satellite_usage_by_period");
 const Company = require("../models/company");
 const logger = require("../logger/logger");
 
@@ -37,6 +38,33 @@ module.exports = {
             return null;
         }
     },
+    monthlySatelliteUsage: async function () {
+        try {
+            let pool = await poolPromise;
+            let param = {};
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("dashboard", "monthly_satellite_usage", param, format);
+
+            let result = await pool.request().query(query);
+            let list = [];
+            
+            result.recordset.forEach((record) => {
+                let item = new SatelliteUsageByPeriod();
+
+                item.setCompanyNo(record.company_no);
+                item.setCompanyName(record.company_name);
+                item.setPeriod(record.period);
+                item.setUsage(record.usage);
+
+                list.push(item);
+            });
+
+            return list;
+        } catch (err) {
+            logger.error(`dashboard_manager.satelliteUsageByMonthly : ${err}`);
+            return null;
+        }
+    },
     companyAll: async function () {
         try {
             let pool = await poolPromise;
@@ -70,14 +98,14 @@ module.exports = {
             return null;
         }
     },
-    userSatelliteUsage: async function (companyNo) {
+    satelliteUsageByUser: async function (companyNo) {
         try {
             let pool = await poolPromise;
             let param = {
                 companyNo: companyNo,
             };
             let format = { language: "sql", indent: " " };
-            let query = mybatisMapper.getStatement("dashboard", "user_satellite_usage", param, format);
+            let query = mybatisMapper.getStatement("dashboard", "satellite_usage_by_user", param, format);
 
             let result = await pool.request().query(query);
             let list = [];
@@ -98,7 +126,65 @@ module.exports = {
 
             return list;
         } catch (err) {
-            logger.error(`dashboard_manager.satelliteUsage : ${err}`);
+            logger.error(`dashboard_manager.satelliteUsageByUser : ${err}`);
+            return null;
+        }
+    },
+    annualSatelliteUsageByUser: async function (companyNo) {
+        try {
+            let pool = await poolPromise;
+            let param = {
+                companyNo: companyNo,
+            };
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("dashboard", "annual_satellite_usage_by_user", param, format);
+
+            let result = await pool.request().query(query);
+            let list = [];
+            
+            result.recordset.forEach((record) => {
+                let item = new SatelliteUsageByPeriod();
+
+                item.setCompanyNo(record.company_no);
+                item.setCompanyName(record.company_name);
+                item.setPeriod(record.period);
+                item.setUsage(record.usage);
+
+                list.push(item);
+            });
+
+            return list;
+        } catch (err) {
+            logger.error(`dashboard_manager.annual_satellite_usage_by_user : ${err}`);
+            return null;
+        }
+    },
+    monthlySatelliteUsageByUser: async function (companyNo) {
+        try {
+            let pool = await poolPromise;
+            let param = {
+                companyNo: companyNo,
+            };
+            let format = { language: "sql", indent: " " };
+            let query = mybatisMapper.getStatement("dashboard", "monthly_satellite_usage_by_user", param, format);
+
+            let result = await pool.request().query(query);
+            let list = [];
+            
+            result.recordset.forEach((record) => {
+                let item = new SatelliteUsageByPeriod();
+
+                item.setCompanyNo(record.company_no);
+                item.setCompanyName(record.company_name);
+                item.setPeriod(record.period);
+                item.setUsage(record.usage);
+
+                list.push(item);
+            });
+
+            return list;
+        } catch (err) {
+            logger.error(`dashboard_manager.monthlySatelliteUsageByUser : ${err}`);
             return null;
         }
     },

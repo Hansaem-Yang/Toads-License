@@ -26,7 +26,39 @@
           from ToadsLicense.dbo.company as a
     ]]>
     </select>
-    <select id="user_satellite_usage">
+    <select id="annual_satellite_usage">
+    <![CDATA[
+        select a.company_no
+             , a.company_name
+             , month(b.connect_date) period
+             , sum(datediff(second, b.connect_date, b.disconnect_date)) usage
+          from ToadsLicense.dbo.company as a
+         inner join ToadsSLink.dbo.contract_connect_history as b
+            on a.company_no = b.company_id
+         where convert(varchar(4), b.connect_date, 112) = convert(varchar(4), getdate(), 112)
+         group by a.company_no
+                , a.company_name
+                , month(b.connect_date)
+         order by 1, 2, 3
+    ]]>
+    </select>
+    <select id="monthly_satellite_usage">
+    <![CDATA[
+        select a.company_no
+             , a.company_name
+             , month(b.connect_date) period
+             , sum(datediff(second, b.connect_date, b.disconnect_date)) usage
+          from ToadsLicense.dbo.company as a
+         inner join ToadsSLink.dbo.contract_connect_history as b
+            on a.company_no = b.company_id
+         where convert(varchar(6), b.connect_date, 112) = convert(varchar(6), getdate(), 112)
+         group by a.company_no
+                , a.company_name
+                , month(b.connect_date)
+         order by 1, 2, 3
+    ]]>
+    </select>
+    <select id="satellite_usage_by_user">
     <![CDATA[
         select a.company_no
              , a.company_name
@@ -50,6 +82,40 @@
         		     where company_no = a.company_no) as total_users
           from ToadsLicense.dbo.company as a
          where a.company_no = #{companyNo}
+    ]]>
+    </select>
+    <select id="annual_satellite_usage_by_user">
+    <![CDATA[
+        select a.company_no
+             , a.company_name
+             , month(b.connect_date) period
+             , sum(datediff(second, b.connect_date, b.disconnect_date)) usage
+          from ToadsLicense.dbo.company as a
+         inner join ToadsSLink.dbo.contract_connect_history as b
+            on a.company_no = b.company_id
+         where a.company_no = #{companyNo}
+           and convert(varchar(4), b.connect_date, 112) = convert(varchar(4), getdate(), 112)
+         group by a.company_no
+                , a.company_name
+                , month(b.connect_date)
+         order by 1, 2, 3
+    ]]>
+    </select>
+    <select id="monthly_satellite_usage_by_user">
+    <![CDATA[
+        select a.company_no
+             , a.company_name
+             , day(b.connect_date) period
+             , sum(datediff(second, b.connect_date, b.disconnect_date)) usage
+          from ToadsLicense.dbo.company as a
+         inner join ToadsSLink.dbo.contract_connect_history as b
+            on a.company_no = b.company_id
+         where a.company_no = #{companyNo}
+           and convert(varchar(6), b.connect_date, 112) = convert(varchar(6), getdate(), 112)
+         group by a.company_no
+                , a.company_name
+                , day(b.connect_date)
+         order by 1, 2, 3
     ]]>
     </select>
     <select id="company_all">
