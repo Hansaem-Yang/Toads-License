@@ -152,7 +152,7 @@
                                     case "A":
                                         break;
                                     case "S":
-                                        viewExpandedChildren($('#view_ships_content'));
+                                        viewExpandedChildren($('#view_ships_subscribe_content'));
                                         
                                         data.shipsContracts.forEach(function(shipsContract, index){
                                             var newRow = $('.view_ships_contract tbody tr').first().clone().removeClass('hidden');
@@ -169,6 +169,25 @@
                                             $(newRow).find('.cell_plan_name').text(item?item.name:'');
 
                                             $('.view_ships_contract tbody').append(newRow);
+                                        });
+                                        break;
+                                    case "C":
+                                        viewExpandedChildren($('#view_company_subscribe_content'));
+                                        
+                                        data.companyContracts.forEach(function(companyContract, index){
+                                            var newRow = $('.view_company_contract tbody tr').first().clone().removeClass('hidden');
+
+                                            $(newRow).find('.cell_seq').text(companyContract.seq);
+                                            $(newRow).find('.cell_company_subscribe_div').text(subscriptionDivs[companyContract.subscribeDiv]);
+                                            $(newRow).find('.cell_company_pay_currency').text(monetaryUnits[companyContract.payCurrency]);
+                                            $(newRow).find('.cell_company_apply_start_date').text(companyContract.applyStartDate);
+                                            $(newRow).find('.cell_company_apply_finish_date').text(companyContract.applyFinishDate);
+
+                                            const item = plans.find(element => element.code === companyContract.planId);
+                                            
+                                            $(newRow).find('.cell_company_plan_name').text(item?item.name:'');
+
+                                            $('.view_company_contract tbody').append(newRow);
                                         });
                                         break;
                                 }
@@ -355,8 +374,8 @@
                             </table>
                         </div>
                         <!-- ODM 계약 끝 -->
-                        <!-- 선박별 계약 시작 -->
-                        <div id="view_ships_content" class="hidden">
+                        <!-- 선박별 구독계약 시작 -->
+                        <div id="view_ships_subscribe_content" class="hidden">
                             <div class="title"><%=t('ship subscribe contract')%></div>
                             <table class="view_ships_contract">
                                 <thead>
@@ -381,12 +400,43 @@
                                                 <p class="cell_ship_apply_finish_date"></p>
                                             </div>
                                         </td>
-                                        <td class="cell_plan_name" style="text-align: left;"></td>
+                                        <td class="cell_plan_name" style="text-align: center;"></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                        <!-- 선박별 계약 끝 -->
+                        <!-- 선박별 구독계약 끝 -->
+                        <!-- 기업별 구독계약 시작 -->
+                        <div id="view_company_subscribe_content" class="hidden">
+                            <div class="title"><%=t('ship subscribe contract')%></div>
+                            <table class="view_company_contract">
+                                <thead>
+                                    <tr>
+                                        <th width="60px"><%=t('sequential number')%></th>
+                                        <th width="160px"><%=t('subscription classification')%></th>
+                                        <th width="140px"><%=t('settlement currency')%></th>
+                                        <th width="300px"><%=t('period')%></th>
+                                        <th width="180px"><%=t('payment system')%></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="hidden">
+                                        <td class="cell_seq" style="text-align: center;"></td>
+                                        <td class="cell_company_subscribe_div" style="text-align: center;"></td>
+                                        <td class="cell_company_pay_currency" style="text-align: center;"></td>
+                                        <td>
+                                            <div class="align-container-center">
+                                                <p class="cell_company_apply_start_date"></p>
+                                                <p>~</p>
+                                                <p class="cell_company_apply_finish_date"></p>
+                                            </div>
+                                        </td>
+                                        <td class="cell_company_plan_name" style="text-align: center;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- 기업별 구독계약 끝 -->
                     </div>
                 </div>
             </div>

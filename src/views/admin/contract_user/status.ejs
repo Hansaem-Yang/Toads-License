@@ -64,7 +64,6 @@
                             contractNo: contractNo,
                         },
                         success: function (data) {
-
                             if (data === 'NO SESSION') {
                                 alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
@@ -123,6 +122,8 @@
                         return contract.code === contractNo;
                     });
 
+                    showSelect(foundContract.contractDiv);
+
                     $('.contract_no').val(contractNo);
                     $('.contract_div').val(foundContract.contractDiv);
                     $('.apply_start_date').val(foundContract.startDate);
@@ -132,14 +133,6 @@
                     $('.user_pwd').removeAttr('readonly');
                     $('.check_user_pwd').removeAttr('readonly');
                     $('.change_password').hide();
-
-                    if ($('.contract_div').val() === 'L') {
-                        $('.license').show();
-                        $('.ships').hide();
-                    } else {
-                        $('.license').hide();
-                        $('.ships').show();
-                    }
 
                     $('.modal').show();
                 });
@@ -175,6 +168,8 @@
                                 } else {
 
                                     var emailSplit = data.email.split("@");
+                                    
+                                    showSelect(data.contractDiv);
 
                                     $('.contract_no').val(data.contractNo);
                                     $('.contract_div').val(data.contractDiv);
@@ -194,15 +189,6 @@
                                     $('.use_yn').val(data.useYn);
 
                                     $('.change_password').show();
-
-                                    if ($('.contract_div').val() === 'L') {
-                                        $('.license').show();
-                                        $('.ships').hide();
-                                    } else {
-                                        $('.license').hide();
-                                        $('.ships').show();
-                                    }
-
                                     $('.modal').show();
                                 }
                             },
@@ -268,6 +254,19 @@
                 $('.contract_user tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
+
+                var showSelect = function(contractDiv) {
+                    if (contractDiv === 'L') {
+                        $('.license').show();
+                        $('.ships').hide();
+                    } else if (contractDiv === 'S') {
+                        $('.license').hide();
+                        $('.ships').show();
+                    } else {
+                        $('.license').hide();
+                        $('.ships').hide();
+                    }
+                }
 
                 var clearContractUser = function() {
                     const rows = document.querySelectorAll(".contract_user tbody tr:not(:first-child)");
@@ -423,57 +422,59 @@
                         return contract.code === contractNo;
                     });
 
-                    var url = "../admin/contract/licenseCodes";
+                    var url = "";
                     if (foundContract.contractDiv === 'L') {
                         url = "../admin/contract/licenseCodes";
-                    } else {
+                    } else if (foundContract.contractDiv === 'S') {
                         url = "../admin/contract/shipsCodes";
-                    }
+                    } 
 
-                    $.ajax({
-                        url: url,
-                        method: "POST",
-                        data: {
-                            contractNo: contractNo,
-                        },
-                        success: function (data) {
-                            if (data === 'NO SESSION') {
-                                alert("<%=t('message(session expires)')%>");
-                                window.parent.location.href = "./login";
-                            } else if (data === 'NO DATA') {
-                                alert("<%=t('message(no data)')%>");
-                            } else {
-                                if (foundContract.contractDiv === 'L') {
-                                    licenses = [];
-                                    if (Array.isArray(data)) {
-                                        $.each(data, function(index, post) {
-                                            licenses.push({
-                                                code:post.licenseNo, 
-                                                name:post.licenseNo, 
-                                            });
-                                        });
-
-                                        createSelection($('.license_no'), licenses, "<%=t('select')%>");
-                                    }
+                    if (url != "") {
+                        $.ajax({
+                            url: url,
+                            method: "POST",
+                            data: {
+                                contractNo: contractNo,
+                            },
+                            success: function (data) {
+                                if (data === 'NO SESSION') {
+                                    alert("<%=t('message(session expires)')%>");
+                                    window.parent.location.href = "./login";
+                                } else if (data === 'NO DATA') {
+                                    return;
                                 } else {
-                                    shipsContents = [];
-                                    if (Array.isArray(data)) {
-                                        $.each(data, function(index, post) {
-                                            shipsContents.push({
-                                                code:post.shipSeq, 
-                                                name:post.shipName, 
+                                    if (foundContract.contractDiv === 'L') {
+                                        licenses = [];
+                                        if (Array.isArray(data)) {
+                                            $.each(data, function(index, post) {
+                                                licenses.push({
+                                                    code:post.licenseNo, 
+                                                    name:post.licenseNo, 
+                                                });
                                             });
-                                        });
 
-                                        createSelection($('.ship_seq'), shipsContents, "<%=t('select')%>");
-                                    }
+                                            createSelection($('.license_no'), licenses, "<%=t('select')%>");
+                                        }
+                                    } else if (foundContract.contractDiv === 'S') {
+                                        shipsContents = [];
+                                        if (Array.isArray(data)) {
+                                            $.each(data, function(index, post) {
+                                                shipsContents.push({
+                                                    code:post.shipSeq, 
+                                                    name:post.shipName, 
+                                                });
+                                            });
+
+                                            createSelection($('.ship_seq'), shipsContents, "<%=t('select')%>");
+                                        }
+                                    } 
                                 }
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            alert("<%=t('message(request failed)')%>");
-                        },
-                    });
+                            },
+                            error: function (xhr, status, error) {
+                                alert("<%=t('message(request failed)')%>");
+                            },
+                        });
+                    }
 
                     search();
                 });
@@ -677,7 +678,7 @@
                     </div>
                 </div></br></br>
                 <div class="contents-container">
-                    <div class="title"><%=t('list of contract user')%></div>
+                    <div class="title"><%=t('list of user')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
                             <p><input type="button" class="add" value="<%=t('regist')%>"/></p>
@@ -723,7 +724,7 @@
             <div class="modal-content" style="width:570px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title"><%=t('contract user')%></div>
+                    <div class="title"><%=t('user')%></div>
                     <div>
                         <table>
                             <thead>
