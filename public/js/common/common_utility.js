@@ -112,6 +112,10 @@ function adString(str, targetLength) {
     return str.padEnd(targetLength, ' ');
 }
 
+function ConvertMinute(second) {
+    return Math.ceil(second / 60);
+}
+
 function formatCurrency(number) {
     number = number + '';
 

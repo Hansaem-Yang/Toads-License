@@ -61,17 +61,19 @@
                                 alert("<%=t('message(session expires)')%>");
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
-                                var newRow = '<tr><td colspan="4"><%=t("message(no data)")%></td></tr>';
+                                var newRow = '<tr><td colspan="6"><%=t("message(no data)")%></td></tr>';
                                 $('.satellite-usage').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
                                         var newRow = $('.satellite-usage tbody tr').first().clone().removeClass('hidden');
 
-                                        $(newRow).find('.cell_total_companys').text(post.totalCompanys);
+                                        $(newRow).find('.cell_company_name').text(post.companyName);
                                         $(newRow).find('.cell_total_users').text(post.totalUsers);
-                                        $(newRow).find('.cell_daliy_usage').text(formatCurrency(post.daliyUsage));
-                                        $(newRow).find('.cell_monthly_usage').text(formatCurrency(post.monthlyUsage));
+                                        $(newRow).find('.cell_total_usage').text(formatCurrency(ConvertMinute(post.totalUsage)));
+                                        $(newRow).find('.cell_annual_usage').text(formatCurrency(ConvertMinute(post.annualUsage)));
+                                        $(newRow).find('.cell_monthly_usage').text(formatCurrency(ConvertMinute(post.monthlyUsage)));
+                                        $(newRow).find('.cell_daliy_usage').text(formatCurrency(ConvertMinute(post.daliyUsage)));
 
                                         $('.satellite-usage tbody').append(newRow);
                                     });
@@ -79,52 +81,52 @@
                             }
                         },
                         error: function (xhr, status, error) {
-                            var newRow = '<tr><td colspan="4"><%=t("message(request failed)")%></td></tr>';
+                            var newRow = '<tr><td colspan="6"><%=t("message(request failed)")%></td></tr>';
                             $('.satellite-usage').append(newRow);
                         },
                     });
                     
-                    $.ajax({
-                        url: "../admin/dashboard/companyAll",
-                        method: "POST",
-                        dataType: 'json',
-                        success: function (data) {
-                            ClearCompany();
+                    // $.ajax({
+                    //     url: "../admin/dashboard/companyAll",
+                    //     method: "POST",
+                    //     dataType: 'json',
+                    //     success: function (data) {
+                    //         ClearCompany();
 
-                            if (data === 'NO SESSION') {
-                                alert("<%=t('message(session expires)')%>");
-                                window.parent.location.href = "./login";
-                            } else if (data === 'NO DATA') {
-                                var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(no data)")%></td></tr>';
-                                $('.company').append(newRow);
-                            } else {
-                                if (Array.isArray(data)) {
-                                    $.each(data, function(index, post) {
-                                        var newRow = $('.company tbody tr').first().clone().removeClass('hidden');
+                    //         if (data === 'NO SESSION') {
+                    //             alert("<%=t('message(session expires)')%>");
+                    //             window.parent.location.href = "./login";
+                    //         } else if (data === 'NO DATA') {
+                    //             var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(no data)")%></td></tr>';
+                    //             $('.company').append(newRow);
+                    //         } else {
+                    //             if (Array.isArray(data)) {
+                    //                 $.each(data, function(index, post) {
+                    //                     var newRow = $('.company tbody tr').first().clone().removeClass('hidden');
 
-                                        $(newRow).find('.cell_company_no').text(post.companyNo);
-                                        $(newRow).find('.cell_company_name').text(post.companyName);
-                                        $(newRow).find('.cell_owner_name').text(post.ownerName);
-                                        $(newRow).find('.cell_company_div').text(companyDivs[post.companyDiv]);
+                    //                     $(newRow).find('.cell_company_no').text(post.companyNo);
+                    //                     $(newRow).find('.cell_company_name').text(post.companyName);
+                    //                     $(newRow).find('.cell_owner_name').text(post.ownerName);
+                    //                     $(newRow).find('.cell_company_div').text(companyDivs[post.companyDiv]);
 
-                                        var foundNation = nations.find(function(nation) {
-                                            return nation.code === post.nation;
-                                        });
-                                        $(newRow).find('.cell_nation').text(foundNation.kname);
-                                        $(newRow).find('.cell_telephone').text(getTelephone(post.nationCode, post.telephone));
-                                        $(newRow).find('.cell_total_licenses').text(post.totalLicenses);
-                                        $(newRow).find('.cell_total_users').text(post.totalUsers);
+                    //                     var foundNation = nations.find(function(nation) {
+                    //                         return nation.code === post.nation;
+                    //                     });
+                    //                     $(newRow).find('.cell_nation').text(foundNation.kname);
+                    //                     $(newRow).find('.cell_telephone').text(getTelephone(post.nationCode, post.telephone));
+                    //                     $(newRow).find('.cell_total_licenses').text(post.totalLicenses);
+                    //                     $(newRow).find('.cell_total_users').text(post.totalUsers);
 
-                                        $('.company tbody').append(newRow);
-                                    });
-                                }
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(request failed)")%></td></tr>';
-                            $('.company').append(newRow);
-                        },
-                    });
+                    //                     $('.company tbody').append(newRow);
+                    //                 });
+                    //             }
+                    //         }
+                    //     },
+                    //     error: function (xhr, status, error) {
+                    //         var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(request failed)")%></td></tr>';
+                    //         $('.company').append(newRow);
+                    //     },
+                    // });
                 }
 
                 search();
@@ -154,23 +156,29 @@
                         <table class="satellite-usage">
                             <thead>
                                 <tr>
-                                    <th width="200px"><%=t('total customer')%></th>
-                                    <th width="200px"><%=t('total users')%></th>
-                                    <th width="200px"><%=t('daily usage')%></th>
-                                    <th width="200px"><%=t('monthly usage')%></th>
+                                    <th width="240px"><%=t('client company')%></th>
+                                    <th width="160px"><%=t('total users')%></th>
+                                    <th width="160px"><%=t('total usage')%></th>
+                                    <th width="160px"><%=t('annual usage')%></th>
+                                    <th width="160px"><%=t('monthly usage')%></th>
+                                    <th width="160px"><%=t('daily usage')%></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr class="hidden">
-                                    <td class="cell_total_companys" style="text-align: right;"></td>
+                                    <td class="cell_company_name" style="text-align: left;"></td>
                                     <td class="cell_total_users" style="text-align: right;"></td>
-                                    <td class="cell_daliy_usage" style="text-align: right;"></td>
+                                    <td class="cell_total_usage" style="text-align: right;"></td>
+                                    <td class="cell_annual_usage" style="text-align: right;"></td>
                                     <td class="cell_monthly_usage" style="text-align: right;"></td>
+                                    <td class="cell_daliy_usage" style="text-align: right;"></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div></br></br>
+                </div>
+                <!--
+                </br></br>
                 <div>
                     <div class="title"><%=t('customer information')%></div>
                     <div>
@@ -200,6 +208,7 @@
                         </table>
                     </div>
                 </div>
+                -->
             </div>
         </form>
     </body>

@@ -20,10 +20,13 @@ module.exports = {
             result.recordset.forEach((record) => {
                 let item = new SatelliteUsage();
 
-                item.setTotalCompanys(record.total_companys);
-                item.setTotalUsers(record.total_users);
-                item.setDaliyUsage(record.daliy_usage);
+                item.setCompanyNo(record.company_no);
+                item.setCompanyName(record.company_name);
+                item.setTotalUsage(record.total_usage);
+                item.setAnnualUsage(record.annual_usage);
                 item.setMonthlyUsage(record.monthly_usage);
+                item.setDaliyUsage(record.daliy_usage);
+                item.setTotalUsers(record.total_users);
 
                 list.push(item);
             });
@@ -82,10 +85,13 @@ module.exports = {
             result.recordset.forEach((record) => {
                 let item = new SatelliteUsage();
 
-                item.setTotalContracts(record.total_contracts);
-                item.setTotalUsers(record.total_users);
-                item.setDaliyUsage(record.daliy_usage);
+                item.setCompanyNo(record.company_no);
+                item.setCompanyName(record.company_name);
+                item.setTotalUsage(record.total_usage);
+                item.setAnnualUsage(record.annual_usage);
                 item.setMonthlyUsage(record.monthly_usage);
+                item.setDaliyUsage(record.daliy_usage);
+                item.setTotalUsers(record.total_users);
 
                 list.push(item);
             });

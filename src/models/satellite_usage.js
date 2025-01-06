@@ -1,42 +1,56 @@
 class SatelliteUsage {
     constructor() {
-        this.totalCompanys = -1;
-        this.totalContracts = -1;
-        this.totalUsers = -1;
-        this.daliyUsage = -1;
+        this.companyNo = -1;
+        this.companyName = null;
+        this.totalUsage = -1;
+        this.annualUsage = -1;
         this.monthlyUsage = -1;
+        this.daliyUsage = -1;
+        this.totalUsers = -1;
     }
 
-    getTotalCompanys(){
-        return this.totalCompanys;
+    getCompanyNo() {
+        return companyNo;
     }
-    getTotalContracts(){
-        return this.totalContracts;
+    getCompanyName() {
+        return companyName;
     }
-    getTotalUsers(){
-        return this.totalUsers;
+    getTotalUsage() {
+        return totalUsage;
     }
-    getDaliyUsage(){
-        return this.daliyUsage;
+    getAnnualUsage() {
+        return annualUsage;
     }
-    getMonthlyUsage(){
-        return this.monthlyUsage;
+    getMonthUsage() {
+        return monthlyUsage;
     }
-
-    setTotalCompanys(totalCompanys){
-        this.totalCompanys = totalCompanys;
+    getDaliyUsage() {
+        return daliyUsage;
     }
-    setTotalContracts(totalContracts){
-        this.totalContracts = totalContracts;
+    getTotalUsers() {
+        return totalUsers;
     }
-    setTotalUsers(totalUsers){
-        this.totalUsers = totalUsers;
+    
+    setCompanyNo(companyNo) {
+        this.companyNo = companyNo;
     }
-    setDaliyUsage(daliyUsage){
+    setCompanyName(companyName) {
+        this.companyName = companyName;
+    }
+    setTotalUsage(totalUsage) {
+        this.totalUsage = totalUsage;
+    }
+    setAnnualUsage(annualUsage) {
+        this.annualUsage = annualUsage;
+    }
+    setMonthlyUsage(monthlyUsage) {
+        this.monthlyUsage = monthlyUsage;
+    }
+    setDaliyUsage(daliyUsage) {
         this.daliyUsage = daliyUsage;
     }
-    setMonthlyUsage(monthlyUsage){
-        this.monthlyUsage = monthlyUsage;
+    setTotalUsers(totalUsers) {
+        this.totalUsers = totalUsers;
     }
 }
 

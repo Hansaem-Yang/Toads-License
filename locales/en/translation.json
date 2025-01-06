@@ -37,6 +37,8 @@
     "total constomers": "Total number of customers",
     "total contracts": "Total number of contracts",
     "total users": "Total number of users",
+    "total usage": "Total Usage (minutes)",
+    "annual usage": "Annual Usage (minutes)",
     "daily usage": "Daily Usage (minutes)",
     "monthly usage": "Monthly Usage (minutes)",
     "license count": "Number of linceses",
