@@ -130,6 +130,26 @@
     "expiry date": "유효기간",
     "ship": "선박",
 
+    "list of pricing plan": "요금제 목록",
+    "name of plan": "요금제명",
+    "name of plan (kor)": "요금제명 (한글)",
+    "name of plan (eng)": "요금제명 (영문)",
+    "flat-rate class": "정액구분",
+    "odm class": "ODM구분",
+    "end date": "종료일자",
+    "enable": "활성화여부",
+    "exceeded time": "초과시간",
+    
+    "pricing plan management": "요금제 관리",
+    "pricing plan number": "요금제번호",
+    "price of pricing plan": "요금제 가격",
+    "service price": "서비스가격",
+    "service time": "시간",
+    "billing unit": "과금기준",
+    "excess charge": "초과요금",
+    "excess billing standard": "초과요금 과금기준",
+    "list of pricing plan prices": "요금제 가격 목록",
+
     "message(request failed)": "서버 요청에 실패했습니다.",
     "message(session expires)": "세션이 만료되었습니다.",
     "message(no data)": "조회된 데이터가 없습니다.",
@@ -191,5 +211,17 @@
     "message(enter application start date)": "적용시작일자를 입력하세요.",
     "message(enter application completion date)": "적용완료일자를 입력하세요.",
     "message(select license)": "라이센스를 선택하세요.",
-    "message(select ship)": "선박을 선택하세요."
+    "message(select ship)": "선박을 선택하세요.",
+
+    "message(enter price of the pricing plan)": "요금제 가격을 입력하세요.",
+    "message(enter name of plan (kor))": "요금제명(한글)을 입력하세요.",
+    "message(enter name of plan (eng))": "요금제명(영문)을 입력하세요.",
+    "message(select flat-rate class)": "정액구분을 선택하세요.",
+    "message(select odm class)": "ODM구분을 선택하세요.",
+    "message(enter date of application)": "적용일자를 입력하세요.",
+    "message(enter end date)": "종료일자를 입력하세요.",
+    "message(select enable or not)": "활성화 여부를 선택하세요.",
+    "message(enter service price)": "서비스가격을 입력하세요.",
+    "message(enter service time)": "시간을 입력하세요.",
+    "message(select billing unit)": "과금기준을 선택하세요."
 }

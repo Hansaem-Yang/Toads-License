@@ -7,6 +7,9 @@ class SatelliteUsage {
         this.monthlyUsage = -1;
         this.daliyUsage = -1;
         this.totalUsers = -1;
+        this.planKname = null;
+        this.planEname = null;
+        this.time = -1;
     }
 
     getCompanyNo() {
@@ -30,6 +33,15 @@ class SatelliteUsage {
     getTotalUsers() {
         return totalUsers;
     }
+    getPlanKname() {
+        return planKname;
+    }
+    getPlanEname() {
+        return planEname;
+    }
+    getTime() {
+        return time;
+    }
     
     setCompanyNo(companyNo) {
         this.companyNo = companyNo;
@@ -51,6 +63,15 @@ class SatelliteUsage {
     }
     setTotalUsers(totalUsers) {
         this.totalUsers = totalUsers;
+    }
+    setPlanKname(planKname) {
+        this.planKname = planKname;
+    }
+    setPlanEname(planEname) {
+        this.planEname = planEname;
+    }
+    setTime(time) {
+        this.time = time;
     }
 }
 

@@ -2,6 +2,9 @@ class SatelliteUsageByPeriod {
     constructor() {
         this.companyNo = -1;
         this.companyName = null;
+        this.planId = null;
+        this.planEname = null;
+        this.time = -1
         this.period = -1;
         this.usage = -1;
     }
@@ -11,6 +14,15 @@ class SatelliteUsageByPeriod {
     }
     getCompanyName() {
         return companyName;
+    }
+    getPlanId() {
+        return planId;
+    }
+    getPlanEname() {
+        return planEname;
+    }
+    getTime() {
+        return time;
     }
     getPeriod() {
         return period;
@@ -24,6 +36,15 @@ class SatelliteUsageByPeriod {
     }
     setCompanyName(companyName) {
         this.companyName = companyName;
+    }
+    setPlanId(planId) {
+        this.planId = planId;
+    }
+    setPlanEname(planEname) {
+        this.planEname = planEname;
+    }
+    setTime(time) {
+        this.time = time;
     }
     setPeriod(period) {
         this.period = period;

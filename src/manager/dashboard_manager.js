@@ -24,10 +24,11 @@ module.exports = {
                 item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);
                 item.setTotalUsage(record.total_usage);
-                item.setAnnualUsage(record.annual_usage);
                 item.setMonthlyUsage(record.monthly_usage);
-                item.setDaliyUsage(record.daliy_usage);
                 item.setTotalUsers(record.total_users);
+                item.setPlanKname(record.plan_kname);
+                item.setPlanEname(record.plan_ename);
+                item.setTime(record.time);
 
                 list.push(item);
             });
@@ -53,6 +54,9 @@ module.exports = {
 
                 item.setCompanyNo(record.company_no);
                 item.setCompanyName(record.company_name);
+                item.setPlanId(record.plan_id);
+                item.setPlanEname(record.plan_ename);
+                item.setTime(record.time);
                 item.setPeriod(record.period);
                 item.setUsage(record.usage);
 
@@ -120,6 +124,9 @@ module.exports = {
                 item.setMonthlyUsage(record.monthly_usage);
                 item.setDaliyUsage(record.daliy_usage);
                 item.setTotalUsers(record.total_users);
+                item.setPlanKname(record.plan_kname);
+                item.setPlanEname(record.plan_ename);
+                item.setTime(record.time);
 
                 list.push(item);
             });

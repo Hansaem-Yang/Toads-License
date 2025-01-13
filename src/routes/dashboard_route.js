@@ -43,15 +43,6 @@ module.exports = function (app) {
     });
 
     /// 사용자
-    app.post("/user/dashboard/satelliteUsage", (req, res) => {
-        manager.satelliteUsage().then((data) => {
-            if (data == null || data.length <= 0) {
-                res.send(constants.NO_DATA);
-            } else {
-                res.send(data);
-            }
-        });
-    });
     app.post("/user/dashboard/satelliteUsageByUser", (req, res) => {
         let companyNo = req.body.companyNo;
 

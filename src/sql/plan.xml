@@ -90,6 +90,7 @@
         select plan_id
              , plan_seq
              , amount
+             , time
              , bill_base_1
              , surcharge
              , bill_base_2
@@ -104,6 +105,7 @@
                     plan_id
                   , plan_seq
                   , amount
+                  , time
                   , bill_base_1
                   , surcharge
                   , bill_base_2
@@ -119,6 +121,7 @@
                        from ts_plan_amount
                       where plan_id = #{planId})
                   , #{amount}
+                  , #{time}
                   , #{billBase1}
                   , #{surcharge}
                   , #{billBase2}
@@ -132,6 +135,7 @@
     <update id="plan_amount_update">
         update ts_plan_amount
            set amount = #{amount}
+             , time = #{time}
              , bill_base_1 = #{billBase1}
              , surcharge = #{surcharge}
              , bill_base_2 = #{billBase2}

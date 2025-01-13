@@ -6,6 +6,7 @@ class PlanAmount extends Common {
         this.planId = null;
         this.planSeq = null;
         this.amount = null;
+        this.time = null;
         this.billBase1 = null;
         this.surcharge = null;
         this.billBase2 = null;
@@ -22,6 +23,9 @@ class PlanAmount extends Common {
     }
     getAmount() {
         return this.amount;
+    }
+    getTime() {
+        return this.time;
     }
     getBillBase1() {
         return this.billBase1;
@@ -50,6 +54,9 @@ class PlanAmount extends Common {
     }
     setAmount(amount) {
         this.amount = amount;
+    }
+    setTime(time) {
+        this.time = time;
     }
     setBillBase1(billBase1) {
         this.billBase1 = billBase1;

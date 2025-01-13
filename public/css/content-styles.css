@@ -255,3 +255,8 @@ select {
 .view_expanded {
     display: block;
 }
+
+.charts {
+    display: flex;
+    flex-direction: column; /* 수직 정렬 */
+}

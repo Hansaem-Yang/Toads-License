@@ -102,6 +102,7 @@ module.exports = {
                     childItem.setPlanId(childRecord.plan_id);
                     childItem.setPlanSeq(childRecord.plan_seq);
                     childItem.setAmount(childRecord.amount);
+                    childItem.setTime(childRecord.time);
                     childItem.setBillBase1(childRecord.bill_base_1);
                     childItem.setSurcharge(childRecord.surcharge);
                     childItem.setBillBase2(childRecord.bill_base_2);
@@ -166,6 +167,7 @@ module.exports = {
                             planId: maxPlanId,
                             planSeq: planAmounts[i].planSeq,
                             amount: planAmounts[i].amount,
+                            time: planAmounts[i].time,
                             billBase1: planAmounts[i].billBase1,
                             surcharge: planAmounts[i].surcharge,
                             billBase2: planAmounts[i].billBase2,
@@ -246,6 +248,7 @@ module.exports = {
                         planId: planId,
                         planSeq: planAmounts[i].planSeq,
                         amount: planAmounts[i].amount,
+                        time: planAmounts[i].time,
                         billBase1: planAmounts[i].billBase1,
                         surcharge: planAmounts[i].surcharge,
                         billBase2: planAmounts[i].billBase2,

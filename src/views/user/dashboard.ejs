@@ -10,6 +10,7 @@
         -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
         <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
         <script>
@@ -54,197 +55,12 @@
                         $('.satellite-usage').append(newRow);
                     },
                 });
-                    
-                let months = [];
-                let annualUsages = [];
-                let annualBarCtx = document.getElementById('annualBarChart').getContext('2d');
 
-                $.ajax({
-                    url: "../user/dashboard/annualSatelliteUsageByUser",
-                    method: "POST",
-                    dataType: 'json',
-                    data: {
-                        companyNo: companyNo,
-                    },
-                    success: function (data) {
-                        ClearUsage();
-
-                        if (data === 'NO SESSION') {
-                            alert("<%=t('message(session expires)')%>");
-                            window.parent.location.href = "./login";
-                        } else if (data === 'NO DATA') {
-                            months = [];
-                            annualUsages = [];
-                        } else {
-                            if (Array.isArray(data)) {
-                                $.each(data, function(index, post) {
-                                    months.push(post.period);
-                                    annualUsages.push(ConvertMinute(post.usage));
-                                });
-                            }
-                        }
-
-                        new Chart(annualBarCtx, {
-                            type: 'bar',
-                            data: {
-                                labels: months,
-                                datasets: [{
-                                    label: "<%=t('annual usage')%>",
-                                    data: annualUsages,
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1,
-                                }],
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                    },
-                                },
-                            },
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        new Chart(annualBarCtx, {
-                            type: 'bar',
-                            data: {
-                                labels: months,
-                                datasets: [{
-                                    label: "<%=t('annual usage')%>",
-                                    data: annualUsages,
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1,
-                                }],
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                    },
-                                },
-                            },
-                        });
-                    },
-                });
-                    
-                let days = [];
-                let monthlyUsages = [];
-                let monthlyBarCtx = document.getElementById('monthlyBarChart').getContext('2d');
-
-                $.ajax({
-                    url: "../user/dashboard/monthlySatelliteUsageByUser",
-                    method: "POST",
-                    dataType: 'json',
-                    data: {
-                        companyNo: companyNo,
-                    },
-                    success: function (data) {
-                        ClearUsage();
-
-                        if (data === 'NO SESSION') {
-                            alert("<%=t('message(session expires)')%>");
-                            window.parent.location.href = "./login";
-                        } else if (data === 'NO DATA') {
-                            days = [];
-                            monthlyUsages = [];
-                        } else {
-                            if (Array.isArray(data)) {
-                                $.each(data, function(index, post) {
-                                    days.push(post.period);
-                                    monthlyUsages.push(ConvertMinute(post.usage));
-                                });
-                            }
-                        }
-
-                        new Chart(monthlyBarCtx, {
-                            type: 'bar',
-                            data: {
-                                labels: days,
-                                datasets: [{
-                                    label: "<%=t('monthly usage')%>",
-                                    data: monthlyUsages,
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1,
-                                }],
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                    },
-                                },
-                            },
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        new Chart(monthlyBarCtx, {
-                            type: 'bar',
-                            data: {
-                                labels: months,
-                                datasets: [{
-                                    label: 'Monthly Usage',
-                                    data: annualUsages,
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1,
-                                }],
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                    },
-                                },
-                            },
-                        });
-                    },
-                });
-
-                // $.ajax({
-                //     url: "../user/dashboard/company",
-                //     method: "POST",
-                //     dataType: 'json',
-                //     data: {
-                //         companyNo: companyNo,
-                //     },
-                //     success: function (data) {
-                //         ClearCompany();
-
-                //         if (data === 'NO SESSION') {
-                //             alert("<%=t('message(session expires)')%>");
-                //             window.parent.location.href = "./login";
-                //         } else if (data === 'NO DATA') {
-                //             var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(no data)")%></td></tr>';
-                //             $('.company').append(newRow);
-                //         } else {
-                //             if (Array.isArray(data)) {
-                //                 $.each(data, function(index, post) {
-                //                     var newRow = $('.company tbody tr').first().clone().removeClass('hidden');
-
-                //                     $(newRow).find('.cell_company_no').text(post.companyNo);
-                //                     $(newRow).find('.cell_company_name').text(post.companyName);
-                //                     $(newRow).find('.cell_owner_name').text(post.ownerName);
-                //                     $(newRow).find('.cell_company_div').text(companyDivs[post.companyDiv]);
-                //                     $(newRow).find('.cell_telephone').text(getTelephone(post.nationCode, post.telephone));
-                //                     $(newRow).find('.cell_total_licenses').text(post.totalLicenses);
-                //                     $(newRow).find('.cell_total_users').text(post.totalUsers);
-
-                //                     $('.company tbody').append(newRow);
-                //                 });
-                //             }
-                //         }
-                //     },
-                //     error: function (xhr, status, error) {
-                //         var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(request failed)")%></td></tr>';
-                //         $('.company').append(newRow);
-                //     },
-                // });
+                AnnualChart(companyNo);
+                MonthlyChart(companyNo);
             });
             
-            var ClearUsage= function() {
+            var ClearUsage = function() {
                 const rows = document.querySelectorAll(".satellite-usage tbody tr:not(:first-child)");
                 rows.forEach(row => {
                     row.remove();
@@ -255,6 +71,160 @@
                 const rows = document.querySelectorAll(".company tbody tr:not(:first-child)");
                 rows.forEach(row => {
                     row.remove();
+                });
+            }
+
+            var AnnualChart = function (companyNo) {
+                let months = getLast12Months();
+                let usage = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                let chart = document.getElementById('annualBarChart').getContext('2d');
+
+                $.ajax({
+                    url: "../user/dashboard/annualSatelliteUsageByUser",
+                    method: "POST",
+                    dataType: 'json',
+                    data: {
+                        companyNo: companyNo,
+                    },
+                    success: function (data) {
+                        if (data === 'NO SESSION') {
+                            alert("<%=t('message(session expires)')%>");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            months = getLast12Months();
+                            usage = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    for (let i = 0; i < months.length; i++) {
+                                        if (months[i] === post.period) {
+                                            usage[i] = ConvertMinute(post.usage);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
+                        new Chart(chart, {
+                            type: 'bar',
+                            data: {
+                                labels: months,
+                                datasets: [{
+                                    label: "<%=t('annual usage')%>",
+                                    data: usage,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                }],
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        new Chart(chart, {
+                            type: 'bar',
+                            data: {
+                                labels: months,
+                                datasets: [{
+                                    label: "<%=t('annual usage')%>",
+                                    data: usage,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                }],
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
+                });
+            }
+
+            var MonthlyChart = function(companyNo) {
+                let days = getLast15Days();
+                let usage = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                let chart = document.getElementById('monthlyBarChart').getContext('2d');
+
+                $.ajax({
+                    url: "../user/dashboard/monthlySatelliteUsageByUser",
+                    method: "POST",
+                    dataType: 'json',
+                    data: {
+                        companyNo: companyNo,
+                    },
+                    success: function (data) {
+                        if (data === 'NO SESSION') {
+                            alert("<%=t('message(session expires)')%>");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            days = getLast15Days();
+                            usage = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    for (let i = 0; i < days.length; i++) {
+                                        if (days[i] === post.period) {
+                                            usage[i] = ConvertMinute(post.usage);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
+                        new Chart(chart, {
+                            type: 'bar',
+                            data: {
+                                labels: days,
+                                datasets: [{
+                                    label: "<%=t('monthly usage')%>",
+                                    data: usage,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                }],
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        new Chart(chart, {
+                            type: 'bar',
+                            data: {
+                                labels: days,
+                                datasets: [{
+                                    label: "<%=t('monthly usage')%>",
+                                    data: usage,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                }],
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
                 });
             }
         </script>
@@ -304,40 +274,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    
-                    
                 </div>
-                <!--
-                <div>
-                    <div class="title"><%=t('company information')%></div>
-                    <div>
-                        <table class="company">
-                            <thead>
-                                <tr>
-                                    <th width="100px"><%=t('company number')%></th>
-                                    <th width="240px"><%=t('corporation name')%></th>
-                                    <th width="220px"><%=t('representative name')%></th>
-                                    <th width="120px"><%=t('company classification')%></th>
-                                    <th width="160px"><%=t('country')%></th>
-                                    <th width="160px"><%=t('license count')%></th>
-                                    <th width="120px"><%=t('user count')%></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="hidden">
-                                    <td class="cell_company_no" style="text-align: center;"></td>
-                                    <td class="cell_company_name"></td>
-                                    <td class="cell_owner_name" style="text-align: center;"></td>
-                                    <td class="cell_company_div" style="text-align: center;"></td>
-                                    <td class="cell_telephone" style="text-align: center;"></td>
-                                    <td class="cell_total_licenses" style="text-align: right;"></td>
-                                    <td class="cell_total_users" style="text-align: right;"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                -->
             </div>
         </form>
     </body>

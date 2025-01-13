@@ -48,6 +48,7 @@
                                     $(newRow).find('.cell_plan_id').text(planAmount.planId);
                                     $(newRow).find('.cell_plan_seq').text(planAmount.planSeq);
                                     $(newRow).find('.cell_amount').text(formatCurrency(planAmount.amount));
+                                    $(newRow).find('.cell_time').text(formatCurrency(planAmount.time));
                                     $(newRow).find('.cell_bill_base_1').text(billBases[planAmount.billBase1]);
                                     $(newRow).find('.cell_surcharge').text(formatCurrency(planAmount.surcharge));
                                     $(newRow).find('.cell_bill_base_2').text(billBases[planAmount.billBase2]);
@@ -69,8 +70,6 @@
                     clearModal();
 
                     var planId = $('.plan_id').val();
-
-                    alert(planId);
                     
                     // 행 데이터 출력
                     $.ajax({
@@ -103,6 +102,7 @@
                                     $(newRow).find('.plan_id').val(planAmount.planId);
                                     $(newRow).find('.plan_seq').val(planAmount.planSeq);
                                     $(newRow).find('.amount').val(formatCurrency(planAmount.amount));
+                                    $(newRow).find('.time').val(formatCurrency(planAmount.time));
                                     $(newRow).find('.bill_base_1').val(planAmount.billBase1);
                                     $(newRow).find('.surcharge').val(formatCurrency(planAmount.surcharge));
                                     $(newRow).find('.bill_base_2').val(planAmount.billBase2);
@@ -198,36 +198,36 @@
                 
                 var validationCheck = function() {
                     if ($('.plan_kname').val() === '') {
-                        alert('요금제명(한글)을 입력하세요.');
+                        alert("<%=t('message(enter name of plan (kor))')%>");
                         return false;
                     }
 
                     if ($('.plan_ename').val() === '') {
-                        alert('요금제명(영문)을 입력하세요.');
+                        alert("<%=t('message(enter name of plan (eng))')%>");
                         return false;
                     }
 
                     if ($('.flat_div').val() === '') {
-                        alert('정액구분을 선택하세요.');
+                        alert("<%=t('message(select flat-rate class')%>");
                         return false;
                     }
 
                     if ($('.odm_div').val() === '') {
-                        alert('ODM구분을 선택하세요.');
+                        alert("<%=t('message(select odm class')%>");
                         return false;
                     }
                     if ($('.apply_date').val() === '') {
-                        alert('적용일자를 입력하세요.');
+                        alert("<%=t('message(enter date of application')%>");
                         return false;
                     }
 
                     if ($('.finish_date').val() === '') {
-                        alert('종료일자를 입력하세요.');
+                        alert("<%=t('message(enter end date')%>");
                         return false;
                     }
                     
                     if ($('.active_yn').val() === '') {
-                        alert('활성화 여부를 선택하세요.');
+                        alert("<%=t('message(select enable or not')%>");
                         return false;
                     }
 
@@ -236,27 +236,32 @@
                 
                 var childValidationCheck = function(row) {
                     if ($(row).find('.amount').val() === '') {
-                        alert('서비스가격을 입력하세요.');
+                        alert("<%=t('message(enter service price')%>");
+                        return false;
+                    }
+
+                    if ($(row).find('.time').val() === '') {
+                        alert("<%=t('message(enter service time')%>");
                         return false;
                     }
 
                     if ($(row).find('.bill_base_1').val() === '') {
-                        alert('과금기준을 선택하세요.');
+                        alert("<%=t('message(select billing unit')%>");
                         return false;
                     }
 
                     if ($(row).find('.apply_date').val() === '') {
-                        alert('적용일자를 입력하세요.');
+                        alert("<%=t('message(enter date of application')%>");
                         return false;
                     }
 
                     if ($(row).find('.finish_date').val() === '') {
-                        alert('종료일자를 입력하세요.');
+                        alert("<%=t('message(enter end date')%>");
                         return false;
                     }
                     
                     if ($(row).find('.active_yn').val() === '') {
-                        alert('활성화 여부를 선택하세요.');
+                        alert("<%=t('message(select enable or not')%>");
                         return false;
                     }
 
@@ -310,7 +315,7 @@
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
-                $('.plan_amount').on('focus', '.amount, .surcharge', function() {
+                $('.plan_amount').on('focus', '.amount, .time, .surcharge', function() {
                     preventChange = true;
 
                     $(this).val(parseCurrency($(this).val()));
@@ -319,7 +324,7 @@
                     preventChange = false;
                 });
 
-                $('.plan_amount').on('blur', '.amount, .surcharge', function() {
+                $('.plan_amount').on('blur', '.amount, .time, .surcharge', function() {
                     $(this).val(formatCurrency(parseCurrency($(this).val())));
                 });
                 /* 요금제 가격 관리 끝 */
@@ -347,7 +352,7 @@
                         var planAmounts = [];
 
                         if ($('.plan_amount tbody tr').length === 1) {
-                            alert('요금제 가격을 입력하세요.');
+                            alert("<%=t('message(enter price of the pricing plan)')%>");
                             return;
                         }
 
@@ -364,6 +369,7 @@
                                 planId: $(row).find('.plan_id').val(),
                                 planSeq: $(row).find('.plan_seq').val(),
                                 amount: parseCurrency($(row).find('.amount').val()),
+                                time: parseCurrency($(row).find('.time').val()),
                                 billBase1: $(row).find('.bill_base_1').val(),
                                 surcharge: parseCurrency($(row).find('.surcharge').val()),
                                 billBase2: $(row).find('.bill_base_2').val(),
@@ -444,7 +450,7 @@
         <form class="plan-detail-form">            
             <div class="content">
                 <div  class="contents-container">
-                    <div class="title"><%=t('contract information')%></div>
+                    <div class="title"><%=t('list of pricing plan')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
                             <p><input type="button" class="modify" value="<%=t('modify')%>"/></p>
@@ -456,29 +462,29 @@
                         <table class="plan">
                             <thead>
                                 <tr>
-                                    <th width="140px" class="right-align">요금제번호</th>
+                                    <th width="140px" class="right-align"><%=t('pricing plan number')%></th>
                                     <td width="960px" class="cell_plan_id" colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <th width="140px" class="right-align">오금제명(한글)</th>
+                                    <th width="140px" class="right-align"><%=t('name of plan (kor)')%></th>
                                     <td width="410px" class="cell_plan_kname"></td>
-                                    <th width="140px" class="right-align">요금제명(영문)</th>
+                                    <th width="140px" class="right-align"><%=t('name of plan (eng)')%></th>
                                     <td width="410px" class="cell_plan_ename"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">정액구분</th>
+                                    <th class="right-align"><%=t('flat-rate class')%></th>
                                     <td class="cell_flat_div"></td>
-                                    <th class="right-align">ODM구분</th>
+                                    <th class="right-align"><%=t('odm class')%></th>
                                     <td class="cell_odm_div"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('date of application')%></th>
                                     <td class="cell_apply_date"></td>
-                                    <th class="right-align">종료일자</th>
+                                    <th class="right-align"><%=t('end date')%></th>
                                     <td class="cell_finish_date"></td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">활성화여부</th>
+                                    <th class="right-align"><%=t('enable')%></th>
                                     <td class="cell_active_yn" colspan="3"></td>
                                 </tr>
                                 <tr>
@@ -491,24 +497,26 @@
                     <div class="table-container">
                         <!-- plan_amount 시작 -->
                         <div id="view_plan_amount_content">
-                            <div class="title">요금제 가격 목록</div>
+                            <div class="title"><%=t('list of pricing plan prices')%></div>
                             <table class="view_plan_amount">
                                 <thead>
                                     <tr>
                                         <th width="100px"><%=t('sequential number')%></th>
-                                        <th width="140px">서비스가격</th>
-                                        <th width="180px">과금기준</th>
-                                        <th width="140px">초과요금</th>
-                                        <th width="180px">초과요금 과금기준</th>
+                                        <th width="100px"><%=t('service price')%></th>
+                                        <th width="100px"><%=t('service time')%></th>
+                                        <th width="170px"><%=t('billing unit')%></th>
+                                        <th width="100px"><%=t('excess charge')%></th>
+                                        <th width="170px"><%=t('excess billing standard')%></th>
                                         <th width="120px"><%=t('date of application')%></th>
-                                        <th width="120px">종료일자</th>
-                                        <th width="120px">활성화여부</th>
+                                        <th width="120px"><%=t('end date')%></th>
+                                        <th width="120px"><%=t('enable')%></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="hidden">
                                         <td class="cell_plan_seq" style="text-align: center;"></td>
                                         <td class="cell_amount" style="text-align: right;"></td>
+                                        <td class="cell_time" style="text-align: right;"></td>
                                         <td class="cell_bill_base_1" style="text-align: center;"></td>
                                         <td class="cell_surcharge" style="text-align: right;"></td>
                                         <td class="cell_bill_base_2" style="text-align: center;"></td>
@@ -528,32 +536,32 @@
             <div class="modal-content" style="width:1060px">
                 <div class="contents-container">
                     <span class="close">&times;</span>
-                    <div class="title">요금제 관리</div>
+                    <div class="title"><%=t('pricing plan management')%></div>
                     <div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th width="140px" class="right-align">*요금제번호</th>
+                                    <th width="140px" class="right-align">*<%=t('pricing plan number')%></th>
                                     <td width="920px" class="left-align" colspan="3">
                                         <input type="text" class="plan_id" style="width: 120px;" value="<%=planId%>" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="140px" class="right-align">*요금제명(한글)</th>
+                                    <th width="140px" class="right-align">*<%=t('name of plan (kor)')%></th>
                                     <td width="380px" class="left-align">
                                         <input type="text" class="plan_kname" style="width: 350px;"/>
                                     </td>
-                                    <th width="140px" class="right-align">*요금제명(영문)</th>
+                                    <th width="140px" class="right-align">*<%=t('name of plan (eng)')%></th>
                                     <td width="380px" class="left-align">
                                         <input type="text" class="plan_ename" style="width: 350px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*정액구분</th>
+                                    <th class="right-align">*<%=t('flat-rate class')%></th>
                                     <td class="left-align">
                                         <select class="flat_div"></select>
                                     </td>
-                                    <th class="right-align">*ODM구분</th>
+                                    <th class="right-align">*<%=t('odm class')%></th>
                                     <td class="left-align">
                                         <select class="odm_div"></select>
                                     </td>
@@ -563,13 +571,13 @@
                                     <td class="left-align">
                                         <input type="date" class="apply_date" style="width: 120px;"/>
                                     </td>
-                                    <th class="right-align">*종료일자</th>
+                                    <th class="right-align">*<%=t('end date')%></th>
                                     <td class="left-align">
                                         <input type="date" class="finish_date" style="width: 120px;"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th class="right-align">*활성화여부</th>
+                                    <th class="right-align">*<%=t('enable')%></th>
                                     <td class="left-align" colspan="3">
                                         <select class="active_yn"></select>
                                     </td>
@@ -586,7 +594,7 @@
                     <div class="table-container" style="height:200px">
                         <!-- 요금제 가격 시작 -->
                         <div id="plan_amount_content">
-                            <div class="title">요금제 가격</div>
+                            <div class="title"><%=t('price of pricing plan')%></div>
                             <div class="top-right-button">
                                 <div class="align-container">
                                     <p><input type="button" class="plan_amount_add" value="<%=t('regist')%>"/></p>
@@ -597,38 +605,42 @@
                                 <thead>
                                     <tr>
                                         <th width="100px"><%=t('sequential number')%></th>
-                                        <th width="140px">서비스가격</th>
-                                        <th width="170px">과금기준</th>
-                                        <th width="140px">초과요금</th>
-                                        <th width="170px">초과요금 과금기준</th>
+                                        <th width="100px"><%=t('service price')%></th>
+                                        <th width="100px"><%=t('service time')%></th>
+                                        <th width="180px"><%=t('billing unit')%></th>
+                                        <th width="100px"><%=t('excess charge')%></th>
+                                        <th width="180px"><%=t('excess billing standard')%></th>
                                         <th width="120px"><%=t('date of application')%></th>
-                                        <th width="120px">종료일자</th>
-                                        <th width="120px">활성화여부</th>
+                                        <th width="120px"><%=t('end date')%></th>
+                                        <th width="120px"><%=t('enable')%></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="hidden">
                                         <td>
                                             <input type="hidden" class="mode" value="I">
-                                            <input type="text" class="plan_seq" style="width:86px;" readonly>
+                                            <input type="text" class="plan_seq" style="width:82px;" readonly>
                                         </td>
                                         <td>
-                                            <input type="text" class="amount" style="width:126px; text-align:right" value="0">
+                                            <input type="text" class="amount" style="width:82px; text-align:right" value="0">
                                         </td>
                                         <td>
-                                            <select class="bill_base_1" style="width:156px"></select>
+                                            <input type="text" class="time" style="width:82px; text-align:right" value="0">
                                         </td>
                                         <td>
-                                            <input type="text" class="surcharge" style="width:126px; text-align:right" value="0">
+                                            <select class="bill_base_1" style="width:166px"></select>
                                         </td>
                                         <td>
-                                            <select class="bill_base_2" style="width:156px"></select>
+                                            <input type="text" class="surcharge" style="width:82px; text-align:right" value="0">
                                         </td>
                                         <td>
-                                            <input type="date" class="apply_date" style="width:106px;">
+                                            <select class="bill_base_2" style="width:166px"></select>
                                         </td>
                                         <td>
-                                            <input type="date" class="finish_date" style="width:106px;">
+                                            <input type="date" class="apply_date" style="width:104px;">
+                                        </td>
+                                        <td>
+                                            <input type="date" class="finish_date" style="width:104px;">
                                         </td>
                                         <td>
                                             <select class="active_yn" style="width:106px"></select>

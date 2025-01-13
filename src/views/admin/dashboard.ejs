@@ -10,11 +10,15 @@
         -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
         <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
         <script>
+            let copiedElement = null;
             $(document).ready(function() {
                 var nations = [];
+
+                copiedElement = $('.charts').children().clone();
 
                 $.ajax({
                     url: "../nations/status",
@@ -48,88 +52,10 @@
                     },
                 });
 
-                var search = function(){
+                Search();
 
-                    $.ajax({
-                        url: "../admin/dashboard/satelliteUsage",
-                        method: "POST",
-                        dataType: 'json',
-                        success: function (data) {
-                            ClearUsage();
+                MonthlyChart();
 
-                            if (data === 'NO SESSION') {
-                                alert("<%=t('message(session expires)')%>");
-                                window.parent.location.href = "./login";
-                            } else if (data === 'NO DATA') {
-                                var newRow = '<tr><td colspan="6"><%=t("message(no data)")%></td></tr>';
-                                $('.satellite-usage').append(newRow);
-                            } else {
-                                if (Array.isArray(data)) {
-                                    $.each(data, function(index, post) {
-                                        var newRow = $('.satellite-usage tbody tr').first().clone().removeClass('hidden');
-
-                                        $(newRow).find('.cell_company_name').text(post.companyName);
-                                        $(newRow).find('.cell_total_users').text(post.totalUsers);
-                                        $(newRow).find('.cell_total_usage').text(formatCurrency(ConvertMinute(post.totalUsage)));
-                                        $(newRow).find('.cell_annual_usage').text(formatCurrency(ConvertMinute(post.annualUsage)));
-                                        $(newRow).find('.cell_monthly_usage').text(formatCurrency(ConvertMinute(post.monthlyUsage)));
-                                        $(newRow).find('.cell_daliy_usage').text(formatCurrency(ConvertMinute(post.daliyUsage)));
-
-                                        $('.satellite-usage tbody').append(newRow);
-                                    });
-                                }
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            var newRow = '<tr><td colspan="6"><%=t("message(request failed)")%></td></tr>';
-                            $('.satellite-usage').append(newRow);
-                        },
-                    });
-                    
-                    // $.ajax({
-                    //     url: "../admin/dashboard/companyAll",
-                    //     method: "POST",
-                    //     dataType: 'json',
-                    //     success: function (data) {
-                    //         ClearCompany();
-
-                    //         if (data === 'NO SESSION') {
-                    //             alert("<%=t('message(session expires)')%>");
-                    //             window.parent.location.href = "./login";
-                    //         } else if (data === 'NO DATA') {
-                    //             var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(no data)")%></td></tr>';
-                    //             $('.company').append(newRow);
-                    //         } else {
-                    //             if (Array.isArray(data)) {
-                    //                 $.each(data, function(index, post) {
-                    //                     var newRow = $('.company tbody tr').first().clone().removeClass('hidden');
-
-                    //                     $(newRow).find('.cell_company_no').text(post.companyNo);
-                    //                     $(newRow).find('.cell_company_name').text(post.companyName);
-                    //                     $(newRow).find('.cell_owner_name').text(post.ownerName);
-                    //                     $(newRow).find('.cell_company_div').text(companyDivs[post.companyDiv]);
-
-                    //                     var foundNation = nations.find(function(nation) {
-                    //                         return nation.code === post.nation;
-                    //                     });
-                    //                     $(newRow).find('.cell_nation').text(foundNation.kname);
-                    //                     $(newRow).find('.cell_telephone').text(getTelephone(post.nationCode, post.telephone));
-                    //                     $(newRow).find('.cell_total_licenses').text(post.totalLicenses);
-                    //                     $(newRow).find('.cell_total_users').text(post.totalUsers);
-
-                    //                     $('.company tbody').append(newRow);
-                    //                 });
-                    //             }
-                    //         }
-                    //     },
-                    //     error: function (xhr, status, error) {
-                    //         var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(request failed)")%></td></tr>';
-                    //         $('.company').append(newRow);
-                    //     },
-                    // });
-                }
-
-                search();
             });
             
             var ClearUsage= function() {
@@ -145,6 +71,180 @@
                     row.remove();
                 });
             }
+
+            var Search = function(){
+                $.ajax({
+                    url: "../admin/dashboard/satelliteUsage",
+                    method: "POST",
+                    dataType: 'json',
+                    success: function (data) {
+                        ClearUsage();
+
+                        if (data === 'NO SESSION') {
+                            alert("<%=t('message(session expires)')%>");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            var newRow = '<tr><td colspan="6"><%=t("message(no data)")%></td></tr>';
+                            $('.satellite-usage').append(newRow);
+                        } else {
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    var newRow = $('.satellite-usage tbody tr').first().clone().removeClass('hidden');
+
+                                    $(newRow).find('.cell_company_name').text(post.companyName);
+                                    $(newRow).find('.cell_plan_name').text(post.planEname);
+                                    $(newRow).find('.cell_time').text(formatCurrency(post.time));
+                                    $(newRow).find('.cell_total_users').text(post.totalUsers);
+                                    $(newRow).find('.cell_total_usage').text(formatCurrency(ConvertMinute(post.totalUsage)));
+                                    $(newRow).find('.cell_monthly_usage').text(formatCurrency(ConvertMinute(post.monthlyUsage)));
+                                    $(newRow).find('.cell_exceeded_time').text(formatCurrency(ConvertMinute(post.monthlyUsage) - post.time));
+
+                                    $('.satellite-usage tbody').append(newRow);
+                                });
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        var newRow = '<tr><td colspan="6"><%=t("message(request failed)")%></td></tr>';
+                        $('.satellite-usage').append(newRow);
+                    },
+                });
+            }
+
+            var MonthlyChart = function() {
+                let plans = [];
+                let companies = [];
+                let usage = [];
+
+                $.ajax({
+                    url: "../admin/dashboard/monthlySatelliteUsage",
+                    method: "POST",
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data === 'NO SESSION') {
+                            alert("<%=t('message(session expires)')%>");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            companies = [];
+                            usage = [];
+                        } else {
+                            if (Array.isArray(data)) {
+                                let planId = null;
+                                let time = 0;
+                                let planEname = "";
+                                $.each(data, function(index, post) {
+                                    if (planId != post.planId){
+                                        if (companies.length > 0) {
+                                            plans.push({
+                                                threshold: time,
+                                                planEname: planEname,
+                                                companies: companies,
+                                                usage: usage
+                                            });
+                                        }
+
+                                        time = 0;
+                                        planEname = "";
+                                        companies = [];
+                                        usage = [];
+                                        planId = post.planId;
+                                    }
+                                    
+                                    time = post.time;
+                                    planEname = post.planEname;
+                                    companies.push(post.companyName);
+                                    usage.push(ConvertMinute(post.usage));
+                                });
+                                
+                                if (companies.length > 0) {
+                                    plans.push({
+                                        threshold: time,
+                                        planEname: planEname,
+                                        companies: companies,
+                                        usage: usage
+                                    });
+                                }
+                            }
+                        }
+
+                        if (plans.length > 0) {
+                            for(let i = 0; i < plans.length; i++) {
+                                if (i > 0) {
+                                    $('.charts').append(copiedElement.clone());
+                                }
+                            
+                                let elements = document.querySelectorAll('[id="monthlyBarChart"]');
+                                let chart = elements[elements.length - 1].getContext('2d');
+                                new Chart(chart, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: plans[i].companies,
+                                        datasets: [{
+                                            label: plans[i].planEname,
+                                            data: plans[i].usage,
+                                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                            borderColor: 'rgba(75, 192, 192, 1)',
+                                            borderWidth: 1,
+                                        }],
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            legend: {
+                                                position: 'top',
+                                            },
+                                            annotation: {
+                                                annotations: {
+                                                    thresholdLine: {
+                                                        type: 'line',
+                                                        yMin: plans[i].threshold,
+                                                        yMax: plans[i].threshold,
+                                                        borderColor: 'red',
+                                                        borderWidth: 2,
+                                                        label: {
+                                                            enabled: true,
+                                                            content: `Threshold: ${plans[i].threshold}`,
+                                                            position: 'start',
+                                                            color: 'red',
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                            },
+                                        },
+                                    },
+                                });
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        new Chart(chart, {
+                            type: 'bar',
+                            data: {
+                                labels: companies,
+                                datasets: [{
+                                    label: 'Monthly Usage',
+                                    data: usage,
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1,
+                                }],
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true,
+                                    },
+                                },
+                            },
+                        });
+                    },
+                });
+            }
         </script>
     </head>
     <body>
@@ -157,58 +257,31 @@
                             <thead>
                                 <tr>
                                     <th width="240px"><%=t('client company')%></th>
-                                    <th width="160px"><%=t('total users')%></th>
-                                    <th width="160px"><%=t('total usage')%></th>
-                                    <th width="160px"><%=t('annual usage')%></th>
-                                    <th width="160px"><%=t('monthly usage')%></th>
-                                    <th width="160px"><%=t('daily usage')%></th>
+                                    <th width="180px"><%=t('name of plan')%></th>
+                                    <th width="120px"><%=t('service time')%></th>
+                                    <th width="120px"><%=t('total users')%></th>
+                                    <th width="120px"><%=t('total usage')%></th>
+                                    <th width="120px"><%=t('monthly usage')%></th>
+                                    <th width="120px"><%=t('exceeded time')%></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr class="hidden">
                                     <td class="cell_company_name" style="text-align: left;"></td>
+                                    <td class="cell_plan_name" style="text-align: left;"></td>
+                                    <td class="cell_time" style="text-align: right;"></td>
                                     <td class="cell_total_users" style="text-align: right;"></td>
                                     <td class="cell_total_usage" style="text-align: right;"></td>
-                                    <td class="cell_annual_usage" style="text-align: right;"></td>
                                     <td class="cell_monthly_usage" style="text-align: right;"></td>
-                                    <td class="cell_daliy_usage" style="text-align: right;"></td>
+                                    <td class="cell_exceeded_time" style="text-align: right;"></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+                </div></br></br></br>
+                <div class="charts" style="text-align: center;">
+                    <div class="chart_content"><canvas id="monthlyBarChart" width="520" height="200"></canvas></div>
                 </div>
-                <!--
-                </br></br>
-                <div>
-                    <div class="title"><%=t('customer information')%></div>
-                    <div>
-                        <table class="company">
-                            <thead>
-                                <tr>
-                                    <th width="100px"><%=t('customer number')%></th>
-                                    <th width="240px"><%=t('corporation name')%></th>
-                                    <th width="220px"><%=t('representative name')%></th>
-                                    <th width="120px"><%=t('company classification')%></th>
-                                    <th width="160px"><%=t('country')%></th>
-                                    <th width="160px"><%=t('phone number')%></th>
-                                    <th width="120px"><%=t('user count')%></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="hidden">
-                                    <td class="cell_company_no"></td>
-                                    <td class="cell_company_name"></td>
-                                    <td class="cell_owner_name" style="text-align: center;"></td>
-                                    <td class="cell_company_div" style="text-align: center;"></td>
-                                    <td class="cell_nation" style="text-align: center;"></td>
-                                    <td class="cell_telephone" style="text-align: center;"></td>
-                                    <td class="cell_total_users" style="text-align: right;"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                -->
             </div>
         </form>
     </body>
