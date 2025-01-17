@@ -1,0 +1,305 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+.sidebar {
+    position: absolute;
+    top: -5px;
+    left: -6px;
+    width: 400px;
+    height: 100%;
+
+    background: #1D2331;
+    box-shadow: 0.5px 0px 4px rgba(0, 0, 0, 0.25);
+}
+
+.sidebar-contents {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.main-contents {
+    position: absolute;
+    top: 80px;
+    left: 394px;
+    width: calc(100% - 394px);
+    height: calc(100% - 80px);
+    padding: 0px;
+    z-index: 10;
+
+    background: #f3f7fa 0% 0% no-repeat padding-box; 
+}
+
+/* sidebar */
+.logo {
+    position: absolute;
+    top: 41px;
+    left: 25px;
+    width: 166px;
+    height: 55px;
+    background-size: cover;
+    background-image: url('/public/images/logo_white.png');
+    margin: 0;
+
+    cursor: pointer;
+}
+
+.menu-title {
+    position: absolute;
+    top: 154px;
+    left: 43px;
+    width: 90px;
+    height: 53px;
+
+    font: normal normal 500 24px/40px Pretendard;
+    color: #ffffff;
+}
+
+.menu {
+    position: absolute;
+    top: 229px;
+    left: 34px;
+    width: 332px;
+    height: calc(100% - 500px);
+    
+    overflow: hidden;
+}
+
+.menu-item {
+    position: relative;
+    width: 332px;
+    height: 62px;
+    margin-bottom: 10px;
+    
+    font: normal normal 500 20px/32px Pretendard;
+    color: #b8b8b8;
+    cursor: pointer;
+}
+
+.menu-item-icon {
+    position: absolute;
+    top: 14px;
+    left: 50px;
+    width: 28px;
+    height: 30px;
+}
+
+.menu-item-icon-minus {
+    position: absolute;
+    top: 14px;
+    left: 40px;
+    width: 28px;
+    height: 30px;
+}
+
+.menu-item-text {
+    position: absolute;
+    top: 13px;
+    left: 120px;
+    width: 240px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.menu-item:focus, .menu-item:hover {
+    color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #3d4754;
+    background-color: #3d4754;
+    transition: background-color 0.3s;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.menu-selected {
+    color: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #3d4754;
+    background-color: #3d4754;
+    transition: background-color 0.3s;
+}
+
+.submenu {
+    display: none;
+}
+
+.submenu-item {
+    position: relative;
+    width: 332px;
+    height: 62px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    
+    font: normal normal 500 20px/32px Pretendard;
+    color: #b8b8b8;
+    cursor: pointer;
+}
+
+.submenu-item-text {
+    position: absolute;
+    top: 13px;
+    left: 120px;
+    width: 240px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.submenu-item:focus, .submenu-item:hover {
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.submenu-selected {
+    color:  #ffffff;
+    text-decoration: none;
+}
+
+/* Topmenu */
+.topmenu {
+    position: absolute;
+    top: -1.2px;
+    left: 394px;
+    width: calc(100% - 394px);
+    height: 80px;
+    z-index: 1000;
+}
+
+.topmenu-frame {
+    position: fixed;
+    width: calc(100% - 394px);
+    height: 100%;
+    overflow: visible;
+    border: none;
+}
+
+.topmenu-contents {
+    position: absolute;
+    top: -1.2px;
+    left: 0px;
+    width: 100%;
+    height: 80px;
+
+    background: #fcfeff 0% 0% no-repeat padding-box;
+    border-bottom: 1.2px solid #c7c7c7;
+}
+
+.shortcuts {
+    /* Layout Properties */
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 600px;
+    height: 50px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    /* UI Properties */
+    font: normal normal 300 18px/24px Pretendard;
+    color: #555d6b;
+}
+
+.shortcuts-item {
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    
+    display: flex;
+    align-items: center;
+}
+
+.firstname {
+    width:32px;
+    height: 32px;
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+
+    border-radius: 16px;
+    border: 1px solid #c1dbfc;
+    background-color: #c1dbfc;
+    transition: background-color 0.3s;
+}
+
+/* 커스텀 스타일 */
+.custom-select {
+    position: relative;
+    border: 0px;
+}
+
+.custom-select select {
+    display: none; /* 기본 select 숨기기 */
+}
+
+.custom-select .selected {
+    display: flex;
+    align-items: center;
+    border: 0px;
+    cursor: pointer;
+    align-items: center;
+}
+
+.custom-select .dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    width: 140px;
+    border: 1px solid #c1dbfc;
+    background: #fcfeff;
+}
+
+.custom-select .dropdown div {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.custom-select .dropdown div img {
+    height: 20px;
+    margin-right: 10px;
+}
+
+.custom-select .dropdown div:hover {
+    background: #f0f0f0;
+}
+
+#logout {
+    cursor: pointer;
+}
+
+/* form */
+.contents {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+
+    background: #f3f7fa 0% 0% no-repeat padding-box; 
+}
+
+.contents-frame {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    border: none;
+}

@@ -12,6 +12,7 @@ module.exports = function (app) {
             } else {
                 if (data.password == password)
                 {
+                    let firstName = data.userName.substring(0, 1);
                     req.session.language = 'KR';
                     req.session.user = {
                         companyNo: data.companyNo,
@@ -22,7 +23,8 @@ module.exports = function (app) {
                         userId: data.userId,
                         email: data.email,
                         userName: data.userName,
-                        userAuth: data.userAuth
+                        userAuth: data.userAuth,
+                        firstName: firstName
                     };
                     
                     req.session.menuId = 'dashboard';

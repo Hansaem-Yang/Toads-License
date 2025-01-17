@@ -47,8 +47,8 @@
         select a.company_no
              , a.company_name
              , isnull(f.plan_id, '') plan_id
-		       , isnull(f.plan_ename, '') plan_ename
-		       , isnull(g.time, 0) time
+		         , isnull(f.plan_ename, '') plan_ename
+		         , isnull(g.time, 0) time
              , isnull(b.usage, 0) usage
           from ToadsLicense.dbo.company as a
           left outer join (select company_id

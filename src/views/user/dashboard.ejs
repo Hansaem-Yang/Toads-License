@@ -16,6 +16,7 @@
         <script>
             $(document).ready(function() {
                 var companyNo = $('.company_no').val();
+                var threshold = 0;
 
                 $.ajax({
                     url: "../user/dashboard/satelliteUsageByUser",
@@ -38,7 +39,8 @@
                                 $.each(data, function(index, post) {
                                     var newRow = $('.satellite-usage tbody tr').first().clone().removeClass('hidden');
 
-                                    $(newRow).find('.cell_company_name').text(post.companyName);
+                                    $(newRow).find('.cell_plan_name').text(post.planEname);
+                                    $(newRow).find('.cell_time').text(formatCurrency(post.time));
                                     $(newRow).find('.cell_total_users').text(post.totalUsers);
                                     $(newRow).find('.cell_total_usage').text(formatCurrency(ConvertMinute(post.totalUsage)));
                                     $(newRow).find('.cell_annual_usage').text(formatCurrency(ConvertMinute(post.annualUsage)));
@@ -46,7 +48,12 @@
                                     $(newRow).find('.cell_daliy_usage').text(formatCurrency(ConvertMinute(post.daliyUsage)));
 
                                     $('.satellite-usage tbody').append(newRow);
+
+                                    threshold = post.time;
                                 });
+
+                                AnnualChart(companyNo, threshold);
+                                MonthlyChart(companyNo);
                             }
                         }
                     },
@@ -55,9 +62,6 @@
                         $('.satellite-usage').append(newRow);
                     },
                 });
-
-                AnnualChart(companyNo);
-                MonthlyChart(companyNo);
             });
             
             var ClearUsage = function() {
@@ -74,7 +78,7 @@
                 });
             }
 
-            var AnnualChart = function (companyNo) {
+            var AnnualChart = function (companyNo, threshold) {
                 let months = getLast12Months();
                 let usage = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 let chart = document.getElementById('annualBarChart').getContext('2d');
@@ -110,7 +114,7 @@
                             data: {
                                 labels: months,
                                 datasets: [{
-                                    label: "<%=t('annual usage')%>",
+                                    label: "<%=t('last 12 months')%>",
                                     data: usage,
                                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -118,6 +122,29 @@
                                 }],
                             },
                             options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    annotation: {
+                                        annotations: {
+                                            thresholdLine: {
+                                                type: 'line',
+                                                yMin: threshold,
+                                                yMax: threshold,
+                                                borderColor: 'red',
+                                                borderWidth: 1,
+                                                label: {
+                                                    enabled: true,
+                                                    content: `Threshold: ${threshold}`,
+                                                    position: 'start',
+                                                    color: 'red',
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
                                 scales: {
                                     y: {
                                         beginAtZero: true,
@@ -132,7 +159,7 @@
                             data: {
                                 labels: months,
                                 datasets: [{
-                                    label: "<%=t('annual usage')%>",
+                                    label: "<%=t('last 12 months')%>",
                                     data: usage,
                                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -187,7 +214,7 @@
                             data: {
                                 labels: days,
                                 datasets: [{
-                                    label: "<%=t('monthly usage')%>",
+                                    label: "<%=t('last 15 days')%>",
                                     data: usage,
                                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -209,7 +236,7 @@
                             data: {
                                 labels: days,
                                 datasets: [{
-                                    label: "<%=t('monthly usage')%>",
+                                    label: "<%=t('last 15 days')%>",
                                     data: usage,
                                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -240,17 +267,19 @@
                         <table class="satellite-usage">
                             <thead>
                                 <tr>
-                                    <th width="240px"><%=t('client company')%></th>
-                                    <th width="160px"><%=t('total users')%></th>
-                                    <th width="160px"><%=t('total usage')%></th>
-                                    <th width="160px"><%=t('annual usage')%></th>
-                                    <th width="160px"><%=t('monthly usage')%></th>
-                                    <th width="160px"><%=t('daily usage')%></th>
+                                    <th width="180px"><%=t('name of plan')%></th>
+                                    <th width="120px"><%=t('service time')%></th>
+                                    <th width="120px"><%=t('total users')%></th>
+                                    <th width="120px"><%=t('total usage')%></th>
+                                    <th width="120px"><%=t('annual usage')%></th>
+                                    <th width="120px"><%=t('monthly usage')%></th>
+                                    <th width="120px"><%=t('daily usage')%></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr class="hidden">
-                                    <td class="cell_company_name" style="text-align: left;"></td>
+                                    <td class="cell_plan_name" style="text-align: left;"></td>
+                                    <td class="cell_time" style="text-align: right;"></td>
                                     <td class="cell_total_users" style="text-align: right;"></td>
                                     <td class="cell_total_usage" style="text-align: right;"></td>
                                     <td class="cell_annual_usage" style="text-align: right;"></td>
@@ -261,19 +290,9 @@
                         </table>
                     </div>
                 </div></br></br></br>
-                <div>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td width="520px" style="text-align: center;">
-                                    <canvas id="annualBarChart" width="400" height="200"></canvas>
-                                </td>
-                                <td width="520px" style="text-align: center;">
-                                    <canvas id="monthlyBarChart" width="400" height="200"></canvas>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="charts">
+                    <div class="chart_content"><canvas id="annualBarChart" width="520" height="200"></canvas></div>
+                    <div class="chart_content"><canvas id="monthlyBarChart" width="520" height="200"></canvas></div>
                 </div>
             </div>
         </form>

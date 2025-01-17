@@ -41,6 +41,8 @@
     "annual usage": "연간 사용량(분)",
     "monthly usage": "월간 사용량(분)",
     "daily usage": "일 사용량(분)",
+    "last 15 days": "최근 15일 사용량(분)",
+    "last 12 months": "최근 12개월 사용량(분)",
     "license count": "라이센스 수",
     "user count": "사용자 수",
 

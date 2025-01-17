@@ -41,6 +41,8 @@
     "annual usage": "Annual Usage (minutes)",
     "daily usage": "Daily Usage (minutes)",
     "monthly usage": "Monthly Usage (minutes)",
+    "last 15 days": "최근 15일 사용량(분)",
+    "last 12 months": "최근 12개월 사용량(분)",
     "license count": "Number of linceses",
     "user count": "Number of users",
 

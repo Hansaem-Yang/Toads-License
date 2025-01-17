@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/styles.css">
+        <link rel="stylesheet" href="/public/css/styles-figma.css">
         <!--
         <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
         <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
@@ -37,7 +37,7 @@
                 });
 
                 // 로그아웃
-                $(".logout").click(function(event) {
+                $("#logout").click(function(event) {
                     event.preventDefault();
 
                     var email = "<%= session.user.email %>";
@@ -86,39 +86,80 @@
                         },
                     });
                 });
-                
-                $(".ko").click(function(event) {
-                    window.parent.location.href = "./main?lng=ko";
+
+                const $customSelect = $('.custom-select');
+                const $selected = $customSelect.find('.selected');
+                const $dropdown = $customSelect.find('.dropdown');
+                const $realSelect = $customSelect.find('select');
+
+                // 클릭 시 드롭다운 열기/닫기
+                $selected.on('click', function () {
+                    $dropdown.toggle();
                 });
-                
-                $(".en").click(function(event) {
-                    window.parent.location.href = "./main?lng=en";
-                });
-                
-                $(".cn").click(function(event) {
-                    window.parent.location.href = "./main?lng=cn";
+
+                // 옵션 클릭 시 선택
+                $dropdown.find('div').on('click', function () {
+                    const value = $(this).data('value');
+                    const imgSrc = $(this).find('img').attr('src');
+                    const text = $(this).find('span').text();
+
+                    // 선택한 값 업데이트
+                    $selected.find('img').attr('src', imgSrc);
+                    $selected.find('span').text(text);
+
+                    // 실제 select 값 설정
+                    $realSelect.val(value);
+
+                    // 드롭다운 닫기
+                    $dropdown.hide();
+
+                    window.parent.location.href = `./main?lng=${value}`;
                 });
             });
         </script>
     </head>
     <body>
         <form id="topmenu-form">
-            <div class="topmenu">
-                <div class="shortcuts-top">
-                    <nav>
-                        <%=t('language')%>&nbsp;
-                        <a href="#" class="ko"><%=t('ko')%></a>
-                        <a href="#" class="en"><%=t('en')%></a>
-                        <a href="#" class="cn"><%=t('cn')%></a>
-                    <nav>
-                </div>
+            <div class="topmenu-contents">
                 <div class="shortcuts">
-                    <nav>
-                        <a href="#" class="mypage"><%=t('admin')%> [<%=session.user.userName %>]</a>
-                        <a href="#" class="logout"><%=t('logout')%></a>
-                    <nav>
+                    <div class="shortcuts-item" id="logout" style="height: 36px;">
+                        <img src="/public/images/icon/logout.png" alt="<%=t('logout')%>" style="width:28px; height:28px" />&nbsp;&nbsp;
+                        <span><%=t('logout')%></span>
+                    </div>
+                    <img src="/public/images/icon/dividing_line.png" style="width:2px; height:40px"/>
+                    <div class="shortcuts-item" style="height: 36px;">
+                        <div class="firstname"><%=session.user.firstName%></div>&nbsp;
+                        <span><%=session.user.userName %></span>
+                    </div>
+                    <img src="/public/images/icon/dividing_line.png" style="width:2px; height:40px"/>
+                    <div class="shortcuts-item" style="height: 36px;">
+                        <div class="custom-select">
+                            <div class="selected">
+                                <img src="/public/images/icon/ko.png" alt="<%=t('ko')%>" style="width:40px; height:28px" />&nbsp;&nbsp;
+                                <span><%=t('ko')%></span>
+                            </div>
+                            <div class="dropdown">
+                                <div data-value="ko">
+                                    <img src="/public/images/icon/ko.png" alt="<%=t('ko')%>" style="width:40px; height:28px"/>
+                                    <span><%=t('ko')%></span>
+                                </div>
+                                <div data-value="en">
+                                    <img src="/public/images/icon/en.png" alt="<%=t('en')%>" style="width:40px; height:28px"/>
+                                    <span><%=t('en')%></span>
+                                </div>
+                                <div data-value="cn">
+                                    <img src="/public/images/icon/cn.png" alt="<%=t('cn')%>" style="width:40px; height:28px"/>
+                                    <span><%=t('cn')%></span>
+                                </div>
+                            </div>
+                            <select name="options">
+                                <option value="ko"><%=t('ko')%></option>
+                                <option value="en"><%=t('en')%></option>
+                                <option value="cn"><%=t('cn')%></option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="logo"/>
             </div>
         </form>
     </body>
