@@ -17,23 +17,37 @@ html, body {
     overflow-y: auto;
 }
 
-.title {
-    position: absolute;
-    top: 32px;
-    left: 36px;
-    color:#555d6b;
-    font: normal normal 500 28px/42px Pretendard;
-    font-weight: bold;
-}
-
 .contents {
     position: absolute;
-    top: 90px;
+    top: 36px;
     left: 36px;
     box-sizing: border-box;
     background-color: #f3f7fa;
     overflow-x: hidden;
     overflow-y: auto;
+}
+
+.title {
+    color:#555d6b;
+    font: normal normal 500 28px/42px Pretendard;
+    font-weight: bold;
+}
+
+.contents-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-contents {
+    position: relative;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.search-title {
+    color:#555d6b;
+    font: normal normal 500 22px/32px Pretendard;
+    font-weight: bold;
 }
 
 .contents-item {
@@ -48,39 +62,44 @@ html, body {
     overflow: hidden;
 }
 
-table {
+/* 조회 테이블 */
+.status-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 8px;
     font: normal normal 300 16px/22px Pretendard;
 }
 
-thead tr{
+.status-thead tr{
     background-color: #e6eaf0;
     border-radius: 10px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
 }
 
-tbody tr {
+.status-tbody tr {
     background-color: #f9f9f9;
     border-radius: 10px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-tbody tr:hover {
+.status-tbody tr:hover {
     color: #f6f7fb !important;
-    
     background: rgb(119, 156, 207) 0% 0% no-repeat padding-box;
 }
 
-th, td {
+tr.selected {
+    color: #f6f7fb !important;
+    background: #3b7bbf 0% 0% no-repeat padding-box;
+}
+
+.status-thead th, .status-tbody td {
     position: relative;
     padding: 10px;
     text-align: center;
 }
 
-th:not(:last-child)::after {
+.status-thead th:not(:last-child)::after {
     content: "";
     position: absolute;
     top: 50%;
@@ -91,7 +110,7 @@ th:not(:last-child)::after {
     background-color: #b8b8b8;
 }
 
-td:not(:last-child)::after {
+.status-tbody td:not(:last-child)::after {
     content: "";
     position: absolute;
     top: 50%;
@@ -102,25 +121,101 @@ td:not(:last-child)::after {
     background-color: #b8b8b8;
 }
 
-thead tr th:first-child,
-tbody tr td:first-child {
+.status-thead tr th:first-child,
+.status-tbody tr td:first-child {
     border-top-left-radius: 10px; /* 좌측 상단 라운드 */
     border-bottom-left-radius: 10px; /* 좌측 하단 라운드 */
 }
 
-thead tr th:last-child,
-tbody tr td:last-child {
+.status-thead tr th:last-child,
+.status-tbody tr td:last-child {
     border-top-right-radius: 10px; /* 우측 상단 라운드 */
     border-bottom-right-radius: 10px; /* 우측 하단 라운드 */
 }
 
+/* 상세 테이블 */
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1.5 solid #cacaca;
+    border-radius: 10px;
+    font: normal normal 300 16px/22px Pretendard;
+}
+
+.detail-thead th {
+    position: relative;
+    padding: 6px;
+    height: 40px;
+    text-align: right;
+    border: 1px solid #cacaca;
+    background-color: #e6eaf0;
+}
+
+.detail-thead td {
+    position: relative;
+    padding: 6px;
+    height: 40px;
+    text-align: left;
+    border: 1px solid #cacaca;
+    background-color: #fdfeff;
+}
+
+/* 등록 테이블 */
+.modal-title {
+    color:#555d6b;
+    font: normal normal 400 22px/34px Pretendard;
+    font-weight: bold;
+}
+
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1.5 solid #cacaca;
+    border-radius: 10px;
+    font: normal normal 300 16px/22px Pretendard;
+}
+
+.modal-thead th {
+    position: relative;
+    padding: 6px;
+    height: 32px;
+    text-align: right;
+    border: 1px solid #cacaca;
+    background-color: #e6eaf0;
+}
+
+.modal-thead td {
+    position: relative;
+    padding: 6px;
+    height: 32px;
+    text-align: left;
+    border: 1px solid #cacaca;
+    background-color: #fdfeff;
+}
+
+.modal-close {
+    position: absolute;
+    color: #aaa;
+    top: -10px;
+    right: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 input[type='text'], input[type='date'], input[type='password'] {
-    height:26px;
-    border: 1px solid #ccc;
-    border-radius: 2px;
+    height:34px;
+    padding: 0 6px 0 6px;
+    border: 1px solid #acacac;
+    border-radius: 4px;
     box-sizing: border-box;
-    font: normal normal medium 12px/14px Pretendard;
-    font-size: 14px;
+    font: normal normal 300 16px/22px Pretendard;
     letter-spacing: 0px;
     color: #323333;
 }
@@ -128,60 +223,58 @@ input[type='text'], input[type='date'], input[type='password'] {
 input[type='text']:read-only, input[type='date']:read-only, input[type='password']:read-only {
     background-color: #d7d7d7; /* 회색 배경 */
     color: #5f5f5f;           /* 어두운 텍스트 색상 */
-    border: 1px solid #ccc;   /* 테두리 색상 */
+    border: 1px solid #acacac;   /* 테두리 색상 */
+}
+
+
+textarea {
+    color: #323333;
+    border: 1px solid #acacac;
+    font: normal normal 300 16px/22px Pretendard;
 }
 
 textarea[readonly] {
     background-color: #d7d7d7; /* 회색 배경 */
     color: #5f5f5f;           /* 어두운 텍스트 색상 */
-    border: 1px solid #ccc;   /* 테두리 색상 */
+    border: 1px solid #acacac;   /* 테두리 색상 */
+    font: normal normal 300 16px/22px Pretendard;
 }
 
 input[type='button'] {
-    height:26px;
+    height: 40px;
     /* UI Properties */
-    padding: 6, 0, 6, 0;
-    border-radius: 2px;
-    background: #365b92 0% 0% no-repeat padding-box;
-    box-shadow: 0px 4px 5px #1a2b4629;
-    font: normal normal medium 12px/14px Pretendard;
-    font-size: 14px;
+    padding: 0 16px 0 16px;
+    border-radius: 4px;
+    border: 1px solid #4f8bef;
+    background: #2e90fa 0% 0% no-repeat padding-box;
+    font: normal normal 300 16px/22px Pretendard;
     letter-spacing: 0px;
     color: #f6f7fb;
     cursor: pointer;
 }
 
-.save, .cancel, .search {
-    width:80px;
-    height:30px;
+.save, .cancel {
+    height:40px;
     /* UI Properties */
-    padding: 6, 0, 6, 0;
-    border-radius: 2px;
-    background: #365b92 0% 0% no-repeat padding-box;
-    box-shadow: 0px 5px 6px #00000029;
-    font: normal normal medium 12px/14px Pretendard;
-    font-size: 14px;
+    padding: 0 16px 0 16px;
+    border-radius: 4px;
+    border: 1px solid #4f8bef;
+    background: #2e90fa 0% 0% no-repeat padding-box;
+    font: normal normal 300 16px/22px Pretendard;
     letter-spacing: 0px;
     color: #f6f7fb;
-
     cursor: pointer;
 }
 
 select {
-    height:26px;
+    height: 34px;
+    padding: 0 6px 0 6px;
     color: #f6f7fb;
-    border: 1px solid #ccc;
+    border: 1px solid #acacac;
     border-radius: 4px;
-    box-sizing: border-box;
-    font: normal normal medium 12px/16px Pretendard;
-    font-size: 14px;
+    font: normal normal 300 16px/22px Pretendard;
     letter-spacing: 0px;
     color: #323333;
-}
-
-.selected {
-    color: #f6f7fb;
-    background: #3b7bbf 0% 0% no-repeat padding-box;
 }
 
 .bottom-button {
@@ -203,7 +296,7 @@ select {
     align-items: center;
 }
 
-.align-container p {
+.align-container span {
     margin: 0 6px 0 0;
 }
 
@@ -248,14 +341,15 @@ select {
 
 /* Modal Content/Box */
 .modal-contents {
-    background-color: #fefefe;
+    background-color: #ffffff;
     margin: 2% auto; /* 15% from the top and centered */
-    padding: 20px;
+    padding: 25px;
     border: 1px solid #888;
+    border-radius: 10px;
 }
 
 /* The Close Button */
-.close, .password_close {
+.close {
     color: #aaa;
     position: absolute;
     top: 0;

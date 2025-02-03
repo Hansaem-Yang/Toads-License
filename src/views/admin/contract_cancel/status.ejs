@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/content-styles.css">
+        <link rel="stylesheet" href="/public/css/content-styles-figma.css">
         <!--
         <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
         <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
@@ -34,7 +34,7 @@
                                     });
                                 });
 
-                                createSelection($('.s_company_no'), companys, "<%=t('select')%>");
+                                createSelection($('#s_company_no'), companys, "<%=t('select')%>");
                             }
                         }
                     },
@@ -46,7 +46,7 @@
                 var search = function() {
                     clearContractCancel();
 
-                    var contractNo = $('.s_contract_no option:selected').val();
+                    var contractNo = $('#s_contract_no option:selected').val();
                     if (contractNo === '')
                     {
                         alert("<%=t('message(select contract number)')%>");
@@ -66,35 +66,35 @@
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
                                 var newRow = '<tr><td colspan="6" class="left-align"><%=t("message(no data)")%></td></tr>';
-                                $('.contract_cancel tbody').append(newRow);
+                                $('#contract_cancel tbody').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
-                                        var newRow = $('.contract_cancel tbody tr').first().clone().removeClass('hidden');
+                                        var newRow = $('#contract_cancel tbody tr').first().clone().removeClass('hidden');
 
-                                        $(newRow).find('.cell_seq').text(post.seq);
-                                        $(newRow).find('.cell_reason').text(contractCancelReason[post.reason]);
-                                        $(newRow).find('.cell_request_date').text(post.requestDate);
-                                        $(newRow).find('.cell_approval_date').text(post.approvalDate);
-                                        $(newRow).find('.cell_cancel_date').text(post.cancelDate);
-                                        $(newRow).find('.cell_status').text(contractCancelStatus[post.status]);
+                                        $(newRow).find('#cell_seq').text(post.seq);
+                                        $(newRow).find('#cell_reason').text(contractCancelReason[post.reason]);
+                                        $(newRow).find('#cell_request_date').text(post.requestDate);
+                                        $(newRow).find('#cell_approval_date').text(post.approvalDate);
+                                        $(newRow).find('#cell_cancel_date').text(post.cancelDate);
+                                        $(newRow).find('#cell_status').text(contractCancelStatus[post.status]);
 
-                                        $('.contract_cancel tbody').append(newRow);
+                                        $('#contract_cancel tbody').append(newRow);
                                     });
                                 }
                             }
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="6" class="left-align"><%=t("message(request failed)")%></td></tr>';
-                            $('.contract_cancel tbody').append(newRow);
+                            $('#contract_cancel tbody').append(newRow);
                         },
                     });
                 };
 
-                $('.s_company_no').change(function() {
+                $('#s_company_no').change(function() {
                     clearContract();
 
-                    var companyNo = $('.s_company_no').val();
+                    var companyNo = $('#s_company_no').val();
                     if (companyNo === '') {
                         alert("<%=t('message(select client company)')%>");
                         return;
@@ -127,7 +127,7 @@
                                         });
                                     });
 
-                                    createSelection($('.s_contract_no'), contracts, "<%=t('select')%>");
+                                    createSelection($('#s_contract_no'), contracts, "<%=t('select')%>");
                                 }
                             }
                         },
@@ -137,19 +137,19 @@
                     });
                 });
 
-                $('.received').click(function() {
+                $('#received').click(function() {
                     clearModal();
 
-                    var contractNo = $('.s_contract_no').val();
+                    var contractNo = $('#s_contract_no').val();
                     if (contractNo === '')
                     {
                         alert("<%=t('message(select client company)')%>");
                         return;
                     }
 
-                    var selectedRow = $(".contract_cancel tr.selected");
+                    var selectedRow = $('#contract_cancel tr.selected');
                     if (selectedRow.length > 0) {
-                        var seq = selectedRow.find('.cell_seq').text();
+                        var seq = selectedRow.find('#cell_seq').text();
                         // 행 데이터 출력
                         $.ajax({
                             url: "../admin/contract/cancel/received",
@@ -181,18 +181,17 @@
                                             } else if (data === 'NO DATA') {
                                                 alert("<%=t('message(no data)')%>");
                                             } else {
-                                                $('.contract_no').val(data.contractNo);
-                                                $('.seq').val(data.seq);
-                                                $('.reason').val(data.reason);
-                                                $('.contents').val(data.contents);
-                                                $('.request_date').val(data.request_date);
-                                                $('.status').val(data.status);
+                                                $('#contract_no').val(data.contractNo);
+                                                $('#seq').val(data.seq);
+                                                $('#reason').val(data.reason);
+                                                $('#contents').val(data.contents);
+                                                $('#request_date').val(data.request_date);
+                                                $('#status').val(data.status);
 
                                                 if (data.status === 'C') {
-                                                    $('.cancelReason').removeAttr('readonly');
+                                                    $('#cancelReason').removeAttr('readonly');
                                                 }
                                                 
-
                                                 $('.modal').show();
                                             }
                                         },
@@ -211,12 +210,12 @@
                     }
                 });
 
-                $('.contract_cancel tbody').on('click', 'tr', function() {
+                $('#contract_cancel tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
                 var clearContractCancel = function() {
-                    const rows = document.querySelectorAll(".contract_cancel tbody tr:not(:first-child)");
+                    const rows = document.querySelectorAll('#contract_cancel tbody tr:not(:first-child)');
                     rows.forEach(row => {
                         row.remove();
                     });
@@ -224,25 +223,25 @@
 
                 // Modal Event And Function
                 var clearModal = function() {
-                    $('.contract_no').val('');
-                    $('.seq').val('');
-                    $('.cancelReason').val('');
-                    $('.status').val('');
+                    $('#contract_no').val('');
+                    $('#seq').val('');
+                    $('#cancelReason').val('');
+                    $('#status').val('');
                 };
 
                 var clearContract = function() {
-                    $('.s_contract_no').empty();
+                    $('#s_contract_no').empty();
                 
                     // Add default option
-                    $('.s_contract_no').append($('<option>', {
+                    $('#s_contract_no').append($('<option>', {
                         value: '',
                         text: "<%=t('select')%>"
                     }));
                 }
 
                 var validationCheck = function() {
-                    if ($('.status option:selected').val() === 'C') {
-                        if ($('.cancelReason').val() === '') {
+                    if ($('#status option:selected').val() === 'C') {
+                        if ($('#cancelReason').val() === '') {
                             alert("<%=t('message(enter reason for cancellation)')%>");
                             return false;
                         }
@@ -250,9 +249,13 @@
 
                     return true;
                 }
+                
+                $('#reason').on('mousedown', function(e) {
+                    e.preventDefault();
+                });
 
-                $('.s_contract_no').change(function() {
-                    var contractNo = $('.s_contract_no option:selected').val();
+                $('#s_contract_no').change(function() {
+                    var contractNo = $('#s_contract_no option:selected').val();
                     if (contractNo === '') {
                         alert("<%=t('message(select contract number)')%>");
                         return;
@@ -261,32 +264,32 @@
                     search();
                 });
 
-                $('.close').click(function() {
+                $('#close').click(function() {
                     $('.modal').hide();
                     clearModal();
                 });
                 
 
-                $('.status').change(function() {
-                    var status = $('.status option:selected').val();
+                $('#status').change(function() {
+                    var status = $('#status option:selected').val();
                     alert(status);
                     if (status === 'A') {
-                        $('.cancelReason').attr("readonly", true);
+                        $('#cancelReason').attr("readonly", true);
                     } else if (status === 'C') {
-                        $('.cancelReason').removeAttr('readonly');
+                        $('#cancelReason').removeAttr('readonly');
                     }
                 });
 
-                $('.save').click(function() {
+                $('#save').click(function() {
                     if (confirm("<%=t('message(save data)')%>")) {
                         if (!validationCheck()) {
                             return;
                         }
 
-                        var contractNo = $('.contract_no').val();
-                        var seq = $('.seq').val();
-                        var cancelReason = $('.cancelReason').val();
-                        var status = $('.status option:selected').val();
+                        var contractNo = $('#contract_no').val();
+                        var seq = $('#seq').val();
+                        var cancelReason = $('#cancelReason').val();
+                        var status = $('#status option:selected').val();
 
                         var url = "../admin/contract/cancel/approval";
                         if (status === 'A') {
@@ -330,7 +333,7 @@
                     }
                 });
 
-                $('.cancel').click(function() {
+                $('#cancel').click(function() {
                     if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.modal').hide();
@@ -338,8 +341,8 @@
                     }
                 });
 
-                createVariablesSelection($('.reason'), contractCancelReason, "<%=t('select')%>");
-                createVariablesSelection($('.status'), contractCancelStatus, "<%=t('select')%>");
+                createVariablesSelection($('#reason'), contractCancelReason, "<%=t('select')%>");
+                createVariablesSelection($('#status'), contractCancelStatus, "<%=t('select')%>");
 
                 searchContract();
             });
@@ -347,124 +350,132 @@
     </head>
     <body>
         <form class="contract-customer-status-form">
-            <div class="content">
-                <div>
+            <div class="contents">
+                <div class="contents-item">
                     <div class="title"><%=t('search conditions')%></div>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th width="120px" class="right-align"><%=t('client company')%></th>
-                                    <td class="left-align">
-                                        <select class="s_company_no" style="width:240px;">
-                                            <option value=""><%=t('choose')%></option>
-                                        </select>
-                                    </td>
-                                    <th width="120px" class="right-align"><%=t('contract number')%></th>
-                                    <td class="left-align">
-                                        <select class="s_contract_no" style="width:320px;">
-                                            <option value=""><%=t('choose')%></option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </thead>
-                        </table>
+                    <div class="search-contents">
+                        <div class="align-container">
+                            <span>
+                                <div class="search-title">
+                                    <div class="align-container">
+                                        <span><img src="/public/images/icon/title.png"/></span>
+                                        <span><%=t('client company')%></span>
+                                    </div>
+                                </div>
+                                <div class="align-container">
+                                    <select id="s_company_no" style="height:40px; width:240px;">
+                                        <option value=""><%=t('select')%></option>
+                                    </select>
+                                </div>
+                            </span>&nbsp;&nbsp;&nbsp;
+                            <span>
+                                <div class="search-title">
+                                    <div class="align-container">
+                                        <span><img src="/public/images/icon/title.png"/></span>
+                                        <span><%=t('contract number')%></span>
+                                    </div>
+                                </div>
+                                <div class="align-container">
+                                    <select id="s_contract_no" style="height:40px; width:320px;">
+                                        <option value=""><%=t('select')%></option>
+                                    </select>
+                                </div>
+                            </span>
+                        </div>
                     </div>
-                </div></br></br>
-                <div class="contents-container">
+                </div>
+                <div class="contents-item">
                     <div class="title"><%=t('list of contract termination applications')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="received" value="<%=t('receipt')%>"/></p>
+                            <span><input type="button" id="received" value="<%=t('receipt')%>"/></span>
                         </div>
                     </div>
-                    <div>
-                        <table class="contract_cancel">
-                            <thead>
-                                <tr>
-                                    <th width="100px"><%=t('sequential number')%></th>
-                                    <th width="260px"><%=t('reasons termination')%></th>
-                                    <th width="160px"><%=t('request date')%></th>
-                                    <th width="160px"><%=t('approval date')%></th>
-                                    <th width="160px"><%=t('cancellation date')%></th>
-                                    <th width="120px"><%=t('status')%></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="hidden">
-                                    <td class="cell_seq" style="text-align: center;"></td>
-                                    <td class="cell_reason" style="text-align: left;"></td>
-                                    <td class="cell_request_date" style="text-align: center;"></td>
-                                    <td class="cell_approval_date" style="text-align: center;"></td>
-                                    <td class="cell_cancel_date" style="text-align: center;"></td>
-                                    <td class="cell_status" style="text-align: center;"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="6"><%=t('message(search data)')%></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table id="contract_cancel" class="status-table">
+                        <thead class="status-thead">
+                            <tr>
+                                <th width="100px"><%=t('sequential number')%></th>
+                                <th width="260px"><%=t('reasons termination')%></th>
+                                <th width="160px"><%=t('request date')%></th>
+                                <th width="160px"><%=t('approval date')%></th>
+                                <th width="160px"><%=t('cancellation date')%></th>
+                                <th width="120px"><%=t('status')%></th>
+                            </tr>
+                        </thead>
+                        <tbody class="status-tbody">
+                            <tr class="hidden">
+                                <td id="cell_seq" style="text-align: center;"></td>
+                                <td id="cell_reason" style="text-align: left;"></td>
+                                <td id="cell_request_date" style="text-align: center;"></td>
+                                <td id="cell_approval_date" style="text-align: center;"></td>
+                                <td id="cell_cancel_date" style="text-align: center;"></td>
+                                <td id="cell_status" style="text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="6"><%=t('message(search data)')%></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </form>
         <div class="modal">
-            <div class="modal-content" style="width:570px">
+            <div class="modal-contents" style="width:570px">
                 <div class="contents-container">
-                    <span class="close">&times;</span>
-                    <div class="title"><%=t('contract termination reception')%></div>
+                    <span id="close" class="modal-close">&times;</span>
+                    <div class="modal-title"><%=t('contract termination reception')%></div>
                     <div>
-                        <table>
-                            <thead>
+                        <table class="modal-table">
+                            <thead class="modal-thead">
                                 <tr>
                                     <th class="right-align" style="width: 150px;">*<%=t('contract number')%></th>
                                     <td class="left-align" style="width: 420px;">
-                                        <input type="text" class="contract_no" style="width: 200px;" readonly/>
+                                        <input type="text" id="contract_no" style="width: 200px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('sequential number')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="seq" style="width: 120px;" readonly/>
+                                        <input type="text" id="seq" style="width: 120px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('reasons termination')%></th>
                                     <td class="left-align">
-                                        <select class="reason"></select>
+                                        <select id="reason"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('details of termination')%></th>
                                     <td class="left-align">
-                                        <textarea class="contents" style="width: 420px; height:160px;" readonly></textarea>
+                                        <textarea id="contents" style="width: 420px; height:160px;" readonly></textarea>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('request date')%></th>
                                     <td class="left-align">
-                                        <input type="date" class="request_date" style="width: 120px;" readonly/>
+                                        <input type="date" id="request_date" style="width: 120px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('status')%></th>
                                     <td class="left-align">
-                                        <select class="status"></select>
+                                        <select id="status"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('reasons cancellation')%></th>
                                     <td class="left-align">
-                                        <textarea class="cancelReason" style="width: 420px; height:160px;" readonly></textarea>
+                                        <textarea id="cancelReason" style="width: 420px; height:160px;" readonly></textarea>
                                     </td>
                                 </tr>
                             </thead>
-                        </table></br>
+                        </table>
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="save" value="<%=t('save')%>"/></p>
-                            <input type="button" class="cancel" value="<%=t('cancel')%>"/>
+                            <span><input type="button" id="save" value="<%=t('save')%>"/></span>
+                            <span><input type="button" id="cancel" value="<%=t('cancel')%>"/></span>
                         </div>
                     </div>
                 </div>

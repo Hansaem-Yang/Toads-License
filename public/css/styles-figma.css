@@ -28,7 +28,6 @@ html, body {
     height: 100%;
     box-sizing: border-box;
     overflow: hidden;
-    z-index: 1000;
 }
 
 .main-contents {
@@ -38,7 +37,6 @@ html, body {
     width: calc(100% - 394px);
     height: calc(100% - 80px);
     padding: 0px;
-    z-index: 10;
 
     background: #f3f7fa 0% 0% no-repeat padding-box; 
 }
@@ -107,7 +105,7 @@ html, body {
 
 .menu-item-text {
     position: absolute;
-    top: 13px;
+    top: 15px;
     left: 120px;
     width: 240px;
     height: 30px;
@@ -177,16 +175,16 @@ html, body {
     top: -1.2px;
     left: 394px;
     width: calc(100% - 394px);
-    height: 80px;
-    z-index: 1000;
+    height: 84px;
 }
 
-.topmenu-frame {
+.topmenu-object {
     position: fixed;
     width: calc(100% - 394px);
-    height: 100%;
-    overflow: visible;
+    height: 84px;
+    overflow: hidden;
     border: none;
+    z-index:100;
 }
 
 .topmenu-contents {
@@ -206,7 +204,7 @@ html, body {
     top: 0px;
     right: 0px;
     width: 600px;
-    height: 50px;
+    height: 40px;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -290,8 +288,8 @@ html, body {
 /* form */
 .contents {
     position: fixed;
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 394px);
+    height: calc(100% - 80px);
     padding: 0px;
 
     background: #f3f7fa 0% 0% no-repeat padding-box; 
@@ -299,7 +297,7 @@ html, body {
 
 .contents-frame {
     position: fixed;
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 394px);
+    height: calc(100% - 80px);
     border: none;
 }

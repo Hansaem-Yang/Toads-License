@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/content-styles.css">
+        <link rel="stylesheet" href="/public/css/content-styles-figma.css">
         <!--
         <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
         <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
@@ -35,7 +35,7 @@
                                     });
                                 });
 
-                                createSelection($('.s_company_no'), companys, "<%=t('select')%>");
+                                createSelection($('#s_company_no'), companys, "<%=t('select')%>");
                             }
                         }
                     },
@@ -47,7 +47,7 @@
                 var search = function() {
                     clearContractManager();
 
-                    var contractNo = $('.s_contract_no option:selected').val();
+                    var contractNo = $('#s_contract_no option:selected').val();
                     if (contractNo === '')
                     {
                         alert("<%=t('message(select contract number)')%>");
@@ -67,41 +67,41 @@
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
                                 var newRow = '<tr><td colspan="5" class="left-align"><%=t("message(no data)")%></td></tr>';
-                                $('.contract_manager tbody').append(newRow);
+                                $('#contract_manager tbody').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
-                                        var newRow = $('.contract_manager tbody tr').first().clone().removeClass('hidden');
+                                        var newRow = $('#contract_manager tbody tr').first().clone().removeClass('hidden');
 
-                                        $(newRow).find('.cell_seq').text(post.seq);
-                                        $(newRow).find('.cell_name').text(post.name);
-                                        $(newRow).find('.cell_email').text(post.email);
-                                        $(newRow).find('.cell_user_auth').text(managerAuths[post.userAuth]);
-                                        $(newRow).find('.cell_use_yn').text(useYn[post.useYn]);
+                                        $(newRow).find('#cell_seq').text(post.seq);
+                                        $(newRow).find('#cell_name').text(post.name);
+                                        $(newRow).find('#cell_email').text(post.email);
+                                        $(newRow).find('#cell_user_auth').text(managerAuths[post.userAuth]);
+                                        $(newRow).find('#cell_use_yn').text(useYn[post.useYn]);
 
-                                        $('.contract_manager tbody').append(newRow);
+                                        $('#contract_manager tbody').append(newRow);
                                     });
                                 }
                             }
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="9" class="left-align"><%=t("message(request failed)")%></td></tr>';
-                            $('.contract_manager tbody').append(newRow);
+                            $('#contract_manager tbody').append(newRow);
                         },
                     });
                 };
 
-                $('.add').click(function() {
+                $('#add').click(function() {
                     clearModal();
 
-                    var companyNo = $('.s_company_no option:selected').val();
+                    var companyNo = $('#s_company_no option:selected').val();
                     if (companyNo === '')
                     {
                         alert("<%=t('message(select company number)')%>");
                         return;
                     }
 
-                    var contractNo = $('.s_contract_no option:selected').val();
+                    var contractNo = $('#s_contract_no option:selected').val();
                     if (contractNo === '')
                     {
                         alert("<%=t('message(select contract number)')%>");
@@ -112,28 +112,28 @@
                         return company.code == companyNo;
                     });
 
-                    $('.contract_no').val(contractNo);
-                    $('.domain_addr').val(foundCompany.domain);
-                    $('.user_id').removeAttr('readonly');
-                    $('.pwd').removeAttr('readonly');
-                    $('.check_pwd').removeAttr('readonly');
-                    $('.change_password').hide();
+                    $('#contract_no').val(contractNo);
+                    $('#domain_addr').val(foundCompany.domain);
+                    $('#user_id').removeAttr('readonly');
+                    $('#pwd').removeAttr('readonly');
+                    $('#check_pwd').removeAttr('readonly');
+                    $('#change_password').hide();
                     $('.modal').show();
                 });
 
-                $('.modify').click(function() {
+                $('#modify').click(function() {
                     clearModal();
 
-                    var contractNo = $('.s_contract_no').val();
+                    var contractNo = $('#s_contract_no').val();
                     if (contractNo === '')
                     {
                         alert("<%=t('message(select client company)')%>");
                         return;
                     }
 
-                    var selectedRow = $(".contract_manager tr.selected");
+                    var selectedRow = $('#contract_manager tr.selected');
                     if (selectedRow.length > 0) {
-                        var seq = selectedRow.find('.cell_seq').text();
+                        var seq = selectedRow.find('#cell_seq').text();
 
                         // 행 데이터 출력
                         $.ajax({
@@ -152,19 +152,19 @@
                                 } else {
                                     var emailSplit = data.email.split("@");
 
-                                    $('.contract_no').val(data.contractNo);
-                                    $('.seq').val(data.seq);
-                                    $('.user_id').val(data.userId);
-                                    $('.user_id_copy').val(emailSplit[0]);
-                                    $('.domain_addr').val(emailSplit[1]);
-                                    $('.pwd').val(data.pwd);
-                                    $('.pwd').attr('readonly', true);
-                                    $('.check_pwd').val(data.pwd);
-                                    $('.check_pwd').attr('readonly', true);
-                                    $('.name').val(data.name);
-                                    $('.user_auth').val(data.userAuth);
-                                    $('.use_yn').val(data.useYn);
-                                    $('.change_password').show();
+                                    $('#contract_no').val(data.contractNo);
+                                    $('#seq').val(data.seq);
+                                    $('#user_id').val(data.userId);
+                                    $('#user_id_copy').val(emailSplit[0]);
+                                    $('#domain_addr').val(emailSplit[1]);
+                                    $('#pwd').val(data.pwd);
+                                    $('#pwd').attr('readonly', true);
+                                    $('#check_pwd').val(data.pwd);
+                                    $('#check_pwd').attr('readonly', true);
+                                    $('#name').val(data.name);
+                                    $('#user_auth').val(data.userAuth);
+                                    $('#use_yn').val(data.useYn);
+                                    $('#change_password').show();
 
                                     $('.modal').show();
                                 }
@@ -178,17 +178,17 @@
                     }
                 });
 
-                $('.delete').click(function() {
+                $('#delete').click(function() {
                     clearModal();
 
-                    var contractNo = $('.s_contract_no').val();
+                    var contractNo = $('#s_contract_no').val();
                     if (contractNo === '')
                     {
                         alert("<%=t('message(select client company)')%>");
                         return;
                     }
 
-                    var selectedRow = $(".contract_manager tr.selected");
+                    var selectedRow = $('#contract_manager tr.selected');
                     if (selectedRow.length > 0) {
                         if (confirm("<%=t('message(delete data)')%>") == true)
                         {
@@ -196,7 +196,7 @@
 
                             seqs.push({
                                 contractNo: contractNo,
-                                seq: selectedRow.find('.cell_seq').text()
+                                seq: selectedRow.find('#cell_seq').text()
                             });
 
                             // 행 데이터 출력
@@ -228,12 +228,12 @@
                     }
                 });
 
-                $('.contract_manager tbody').on('click', 'tr', function() {
+                $('#contract_manager tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
                 var clearContractManager = function() {
-                    const rows = document.querySelectorAll(".contract_manager tbody tr:not(:first-child)");
+                    const rows = document.querySelectorAll("#contract_manager tbody tr:not(:first-child)");
                     rows.forEach(row => {
                         row.remove();
                     });
@@ -241,65 +241,65 @@
 
                 // Modal Event And Function
                 var clearModal = function() {
-                    $('.contract_no').val('');
-                    $('.seq').val('');
-                    $('.user_id').val('');
-                    $('.user_id_copy').val('');
-                    $('.domain_addr').val('');
-                    $('.pwd').val('');
-                    $('.check_pwd').val('');
-                    $('.name').val('');
-                    $('.user_auth').val('');
-                    $('.use_yn').val('');
+                    $('#contract_no').val('');
+                    $('#seq').val('');
+                    $('#user_id').val('');
+                    $('#user_id_copy').val('');
+                    $('#domain_addr').val('');
+                    $('#pwd').val('');
+                    $('#check_pwd').val('');
+                    $('#name').val('');
+                    $('#user_auth').val('');
+                    $('#use_yn').val('');
                 };
 
                 var clearPasswordModal = function() {
-                    $('.new_pwd').val('');
-                    $('.check_pwd').val('');
+                    $('#new_pwd').val('');
+                    $('#check_new_pwd').val('');
                 }
 
                 var clearContract = function() {
-                    $('.s_contract_no').empty();
+                    $('#s_contract_no').empty();
                 
                     // Add default option
-                    $('.s_contract_no').append($('<option>', {
+                    $('#s_contract_no').append($('<option>', {
                         value: '',
                         text: "<%=t('select')%>"
                     }));
                 }
 
                 var validationCheck = function() {
-                    if ($('.user_id').val() === '') {
+                    if ($('#user_id').val() === '') {
                         alert("<%=t('message(enter id)')%>");
                         return false;
                     }
 
-                    if ($('.pwd').val() === '') {
+                    if ($('#pwd').val() === '') {
                         alert("<%=t('message(enter password)')%>");
                         return false;
                     }
 
-                    if ($('.check_pwd').val() === '') {
+                    if ($('#check_pwd').val() === '') {
                         alert("<%=t('message(enter password check)')%>");
                         return false;
                     }
 
-                    if ($('.pwd').val() !== $('.check_pwd').val()) {
+                    if ($('#pwd').val() !== $('#check_pwd').val()) {
                         alert("<%=t('message(enter password not match)')%>");
                         return false;
                     }
 
-                    if ($('.name').val() === '') {
+                    if ($('#name').val() === '') {
                         alert("<%=t('message(enter administrator name)')%>");
                         return false;
                     }
 
-                    if ($('.user_auth').val() === '') {
+                    if ($('#user_auth').val() === '') {
                         alert("<%=t('message(enter permission)')%>");
                         return false;
                     }
 
-                    if ($('.use_yn').val() === '') {
+                    if ($('#use_yn').val() === '') {
                         alert("<%=t('message(enter use)')%>");
                         return false;
                     }
@@ -307,10 +307,10 @@
                     return true;
                 }
 
-                $('.s_company_no').change(function() {
+                $('#s_company_no').change(function() {
                     clearContract();
 
-                    var companyNo = $('.s_company_no option:selected').val();
+                    var companyNo = $('#s_company_no option:selected').val();
                     if (companyNo === '') {
                         alert("<%=t('message(select client company)')%>");
                         return false;
@@ -341,7 +341,7 @@
                                         });
                                     });
 
-                                    createSelection($('.s_contract_no'), contracts, "<%=t('select')%>");
+                                    createSelection($('#s_contract_no'), contracts, "<%=t('select')%>");
                                 }
                             }
                         },
@@ -351,33 +351,33 @@
                     });
                 });
 
-                $('.s_contract_no').change(function() {
+                $('#s_contract_no').change(function() {
                     search();
                 });
                 
-                $('.user_id').change(function() {
-                    $('.user_id_copy').val($('.user_id').val());
+                $('#user_id').change(function() {
+                    $('#user_id_copy').val($('#user_id').val());
                 });
 
-                $('.close').click(function() {
+                $('#close').click(function() {
                     $('.modal').hide();
                     clearModal();
                 });
 
-                $('.save').click(function() {
+                $('#save').click(function() {
                     if (confirm("<%=t('message(save data)')%>")) {
                         if (!validationCheck()) {
                             return;
                         }
 
-                        var contractNo = $('.contract_no').val();
-                        var seq = $('.seq').val();
-                        var userId = $('.user_id').val();
-                        var email = `${$('.user_id_copy').val()}@${$('.domain_addr').val()}`;
-                        var pwd = $('.pwd').val();
-                        var name = $('.name').val();
-                        var userAuth = $('.user_auth').val();
-                        var useYn = $('.use_yn').val();
+                        var contractNo = $('#contract_no').val();
+                        var seq = $('#seq').val();
+                        var userId = $('#user_id').val();
+                        var email = `${$('#user_id_copy').val()}@${$('#domain_addr').val()}`;
+                        var pwd = $('#pwd').val();
+                        var name = $('#name').val();
+                        var userAuth = $('#user_auth').val();
+                        var useYn = $('#use_yn').val();
 
                         var url = "../admin/contract/manager/insert";
                         if (seq === ''){
@@ -428,7 +428,7 @@
                     }
                 });
 
-                $('.cancel').click(function() {
+                $('#cancel').click(function() {
                     if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.modal').hide();
@@ -436,23 +436,23 @@
                     }
                 });
 
-                $('.change_password').click(function() {
+                $('#change_password').click(function() {
                     $('.password_modal').show();
                 });
 
-                $('.password_close').click(function() {
+                $('#password_close').click(function() {
                     clearPasswordModal();
 
                     $('.password_modal').hide();
                 });
 
-                $('.password_save').click(function() {
+                $('#password_save').click(function() {
                     if (confirm("<%=t('message(save data)')%>")) {
-                        var contractNo = $('.contract_no').val();
-                        var seq = $('.seq').val();
-                        var oldPwd = $('.pwd').val();
-                        var newPwd = $('.new_pwd').val();
-                        var checkPwd = $('.check_new_pwd').val();
+                        var contractNo = $('#contract_no').val();
+                        var seq = $('#seq').val();
+                        var oldPwd = $('#pwd').val();
+                        var newPwd = $('#new_pwd').val();
+                        var checkPwd = $('#check_new_pwd').val();
 
                         if (newPwd === '') {
                             alert("<%=t('message(enter new password)')%>");
@@ -507,7 +507,7 @@
                     }
                 });
 
-                $('.password_cancel').click(function() {
+                $('#password_cancel').click(function() {
                     if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.password_modal').hide();
@@ -516,49 +516,59 @@
                     }
                 });
                 
-                createVariablesSelection($('.user_auth'), managerAuths, "<%=t('select')%>");
-                createVariablesSelection($('.use_yn'), useYn, "<%=t('select')%>");
+                createVariablesSelection($('#user_auth'), managerAuths, "<%=t('select')%>");
+                createVariablesSelection($('#use_yn'), useYn, "<%=t('select')%>");
             });
         </script>
     </head>
     <body>
         <form class="contract-customer-status-form">
-            <div class="content">
-                <div>
+            <div class="contents">
+                <div class="contents-item">
                     <div class="title"><%=t('search conditions')%></div>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th width="120px" class="right-align"><%=t('client company')%></th>
-                                    <td class="left-align">
-                                        <select class="s_company_no" style="width:240px;">
-                                            <option value=""><%=t('select')%></option>
-                                        </select>
-                                    </td>
-                                    <th width="120px" class="right-align"><%=t('contract number')%></th>
-                                    <td class="left-align">
-                                        <select class="s_contract_no" style="width:320px;">
-                                            <option value=""><%=t('select')%></option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </thead>
-                        </table>
+                    <div class="search-contents">
+                        <div class="align-container">
+                            <span>
+                                <div class="search-title">
+                                    <div class="align-container">
+                                        <span><img src="/public/images/icon/title.png"/></span>
+                                        <span><%=t('client company')%></span>
+                                    </div>
+                                </div>
+                                <div class="align-container">
+                                    <select id="s_company_no" style="height:40px; width:240px;">
+                                        <option value=""><%=t('select')%></option>
+                                    </select>
+                                </div>
+                            </span>&nbsp;&nbsp;&nbsp;
+                            <span>
+                                <div class="search-title">
+                                    <div class="align-container">
+                                        <span><img src="/public/images/icon/title.png"/></span>
+                                        <span><%=t('contract number')%></span>
+                                    </div>
+                                </div>
+                                <div class="align-container">
+                                    <select id="s_contract_no" style="height:40px; width:320px;">
+                                        <option value=""><%=t('select')%></option>
+                                    </select>
+                                </div>
+                            </span>
+                        </div>
                     </div>
-                </div></br></br>
-                <div class="contents-container">
+                </div>
+                <div class="contents-item">
                     <div class="title"><%=t('list of administrator')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="add" value="<%=t('regist')%>"/></p>
-                            <p><input type="button" class="modify" value="<%=t('modify')%>"/></p>
-                            <p><input type="button" class="delete" value="<%=t('delete')%>"/></p>
+                            <span><input type="button" id="add" value="<%=t('regist')%>"/></span>
+                            <span><input type="button" id="modify" value="<%=t('modify')%>"/></span>
+                            <span><input type="button" id="delete" value="<%=t('delete')%>"/></span>
                         </div>
                     </div>
                     <div>
-                        <table class="contract_manager">
-                            <thead>
+                        <table id="contract_manager" class="status-table">
+                            <thead class="status-thead">
                                 <tr>
                                     <th width="100px"><%=t('sequential number')%></th>
                                     <th width="260px"><%=t('administrator name')%></th>
@@ -567,13 +577,13 @@
                                     <th width="120px"><%=t('use status')%></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="status-tbody">
                                 <tr class="hidden">
-                                    <td class="cell_seq" style="text-align: center;"></td>
-                                    <td class="cell_name" style="text-align: left;"></td>
-                                    <td class="cell_email" style="text-align: left;"></td>
-                                    <td class="cell_user_auth" style="text-align: center;"></td>
-                                    <td class="cell_use_yn" style="text-align: center;"></td>
+                                    <td id="cell_seq" style="text-align: center;"></td>
+                                    <td id="cell_name" style="text-align: left;"></td>
+                                    <td id="cell_email" style="text-align: left;"></td>
+                                    <td id="cell_user_auth" style="text-align: center;"></td>
+                                    <td id="cell_use_yn" style="text-align: center;"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="5"><%=t('message(search data)')%></td>
@@ -585,70 +595,70 @@
             </div>
         </form>
         <div class="modal">
-            <div class="modal-content" style="width:540px">
+            <div class="modal-contents" style="width:580px">
                 <div class="contents-container">
-                    <span class="close">&times;</span>
-                    <div class="title"><%=t('administrator')%></div>
+                    <span id="close" class="modal-close">&times;</span>
+                    <div class="modal-title"><%=t('administrator')%></div>
                     <div>
-                        <table>
-                            <thead>
+                        <table class="modal-table">
+                            <thead class="modal-thead">
                                 <tr>
-                                    <th class="right-align" style="width: 120px;">*<%=t('contract number')%></th>
+                                    <th class="right-align" style="width: 160px;">*<%=t('contract number')%></th>
                                     <td class="left-align" style="width: 420px;">
-                                        <input type="text" class="contract_no" style="width: 200px;" readonly/>
+                                        <input type="text" id="contract_no" style="width: 200px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('sequential number')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="seq" style="width: 120px;" readonly/>
+                                        <input type="text" id="seq" style="width: 120px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('administrator name')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="name" style="width: 160px;"/>
+                                        <input type="text" id="name" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('userid')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="user_id" style="width: 120px;"/>
+                                        <input type="text" id="user_id" style="width: 120px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('email')%></th>
                                     <td class="left-align">
                                         <div class="align-container">
-                                            <p><input type="text" class="user_id_copy" style="width: 120px;" readonly/></p>
-                                            <p class="">@</p>
-                                            <p><input type="text" class="domain_addr" style="width: 160px;" readonly/></p>
+                                            <span><input type="text" id="user_id_copy" style="width: 120px;" readonly/></span>
+                                            <span class="">@</span>
+                                            <span><input type="text" id="domain_addr" style="width: 160px;" readonly/></span>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('password')%></th>
                                     <td class="left-align">
-                                        <input type="password" class="pwd" style="width: 160px;"/>
-                                        <input type="button" class="change_password" value="<%=t('change password')%>"/>
+                                        <input type="password" id="pwd" style="width: 160px;"/>
+                                        <input type="button" id="change_password" class="change_password" value="<%=t('change password')%>"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('password check')%></th>
                                     <td class="left-align">
-                                        <input type="password" class="check_pwd" style="width: 160px;"/>
+                                        <input type="password" id="check_pwd" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('permission')%></th>
                                     <td class="left-align">
-                                        <select class="user_auth"></select>
+                                        <select id="user_auth"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('use status')%></th>
                                     <td class="left-align">
-                                        <select class="use_yn"></select>
+                                        <select id="use_yn"></select>
                                     </td>
                                 </tr>
                             </thead>
@@ -656,31 +666,31 @@
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="save" value="<%=t('save')%>"/></p>
-                            <input type="button" class="cancel" value="<%=t('cancel')%>"/>
+                            <span><input type="button" id="save" value="<%=t('save')%>"/></span>
+                            <span><input type="button" id="cancel" value="<%=t('cancel')%>"/></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="password_modal">
-            <div class="modal-content" style="width:320px">
+            <div class="modal-contents" style="width:320px">
                 <div class="contents-container">
-                    <span class="password_close">&times;</span>
-                    <div class="title"><%=t('change password')%></div>
+                    <span id="password_close" class="modal-close">&times;</span>
+                    <div class="modal-title"><%=t('change password')%></div>
                     <div>
-                        <table>
-                            <thead>
+                        <table class="modal-table">
+                            <thead class="modal-thead">
                                 <tr>
                                     <th class="right-align" style="width: 120px;">*<%=t('password')%></th>
                                     <td class="left-align">
-                                        <input type="password" class="new_pwd" style="width: 180px;"/>
+                                        <input type="password" id="new_pwd" style="width: 180px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('password check')%></th>
                                     <td class="left-align">
-                                        <input type="password" class="check_new_pwd" style="width: 180px;"/>
+                                        <input type="password" id="check_new_pwd" style="width: 180px;"/>
                                     </td>
                                 </tr>
                             </thead>
@@ -688,8 +698,8 @@
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="password_save" value="<%=t('save')%>"/></p>
-                            <input type="button" class="password_cancel" value="<%=t('cancel')%>"/>
+                            <span><input type="button" id="password_save" value="<%=t('save')%>"/></span>
+                            <span><input type="button" id="password_cancel" value="<%=t('cancel')%>"/></span>
                         </div>
                     </div>
                 </div>

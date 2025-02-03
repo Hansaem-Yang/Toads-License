@@ -93,7 +93,11 @@
                 const $realSelect = $customSelect.find('select');
 
                 // 클릭 시 드롭다운 열기/닫기
+                let isOn = false;
                 $selected.on('click', function () {
+                    isOn = !isOn;
+                    parent.toggleLanguage(isOn);
+
                     $dropdown.toggle();
                 });
 
@@ -112,6 +116,9 @@
 
                     // 드롭다운 닫기
                     $dropdown.hide();
+
+                    isOn = !isOn;
+                    parent.toggleLanguage(isOn);
 
                     window.parent.location.href = `./main?lng=${value}`;
                 });

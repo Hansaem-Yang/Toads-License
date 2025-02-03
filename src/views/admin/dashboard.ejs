@@ -13,7 +13,7 @@
             $(document).ready(function() {
                 var nations = [];
 
-                copiedElement = $('.charts').children().clone();
+                copiedElement = $('#charts').children().clone();
 
                 $.ajax({
                     url: "../nations/status",
@@ -51,7 +51,7 @@
             });
             
             var ClearUsage= function() {
-                const rows = document.querySelectorAll(".satellite-usage tbody tr:not(:first-child)");
+                const rows = document.querySelectorAll(".status-table tbody tr:not(:first-child)");
                 rows.forEach(row => {
                     row.remove();
                 });
@@ -77,21 +77,21 @@
                             window.parent.location.href = "./login";
                         } else if (data === 'NO DATA') {
                             var newRow = '<tr><td colspan="6"><%=t("message(no data)")%></td></tr>';
-                            $('.satellite-usage').append(newRow);
+                            $('#usage_status').append(newRow);
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
-                                    var newRow = $('.satellite-usage tbody tr').first().clone().removeClass('hidden');
+                                    var newRow = $('#usage_status tbody tr').first().clone().removeClass('hidden');
 
-                                    $(newRow).find('.cell_company_name').text(post.companyName);
-                                    $(newRow).find('.cell_plan_name').text(post.planEname);
-                                    $(newRow).find('.cell_time').text(formatCurrency(post.time));
-                                    $(newRow).find('.cell_total_users').text(post.totalUsers);
-                                    $(newRow).find('.cell_total_usage').text(formatCurrency(ConvertMinute(post.totalUsage)));
-                                    $(newRow).find('.cell_monthly_usage').text(formatCurrency(ConvertMinute(post.monthlyUsage)));
-                                    $(newRow).find('.cell_exceeded_time').text(formatCurrency(ConvertMinute(post.monthlyUsage) - post.time));
+                                    $(newRow).find('#cell_company_name').text(post.companyName);
+                                    $(newRow).find('#cell_plan_name').text(post.planEname);
+                                    $(newRow).find('#cell_time').text(formatCurrency(post.time));
+                                    $(newRow).find('#cell_total_users').text(post.totalUsers);
+                                    $(newRow).find('#cell_total_usage').text(formatCurrency(ConvertMinute(post.totalUsage)));
+                                    $(newRow).find('#cell_monthly_usage').text(formatCurrency(ConvertMinute(post.monthlyUsage)));
+                                    $(newRow).find('#cell_exceeded_time').text(formatCurrency(ConvertMinute(post.monthlyUsage) - post.time));
 
-                                    $('.satellite-usage tbody').append(newRow);
+                                    $('#usage_status tbody').append(newRow);
                                 });
                                 
                                 MonthlyChart();
@@ -100,7 +100,7 @@
                     },
                     error: function (xhr, status, error) {
                         var newRow = '<tr><td colspan="6"><%=t("message(request failed)")%></td></tr>';
-                        $('.satellite-usage').append(newRow);
+                        $('#usage_status').append(newRow);
                     },
                 });
             }
@@ -164,7 +164,7 @@
                         if (plans.length > 0) {
                             for(let i = 0; i < plans.length; i++) {
                                 if (i > 0) {
-                                    $('.charts').append(copiedElement.clone());
+                                    $('#charts').append(copiedElement.clone());
                                 }
                             
                                 let elements = document.querySelectorAll('[id="monthlyBarChart"]');
@@ -243,11 +243,11 @@
     </head>
     <body>
         <form class="home-form" class="container">
-            <div class="title"><%=t('total slink usage')%></div>
             <div class="contents">
                 <div class="contents-item">
-                    <table class="satellite-usage">
-                        <thead>
+                    <div class="title"><%=t('total slink usage')%></div>
+                    <table id="usage_status" class="status-table">
+                        <thead class="status-thead">
                             <tr>
                                 <th width="240px"><%=t('client company')%></th>
                                 <th width="180px"><%=t('name of plan')%></th>
@@ -258,21 +258,21 @@
                                 <th width="120px"><%=t('exceeded time')%></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="status-tbody">
                             <tr class="hidden">
-                                <td class="cell_company_name" style="text-align: left;"></td>
-                                <td class="cell_plan_name" style="text-align: left;"></td>
-                                <td class="cell_time" style="text-align: right;"></td>
-                                <td class="cell_total_users" style="text-align: right;"></td>
-                                <td class="cell_total_usage" style="text-align: right;"></td>
-                                <td class="cell_monthly_usage" style="text-align: right;"></td>
-                                <td class="cell_exceeded_time" style="text-align: right;"></td>
+                                <td id="cell_company_name" style="text-align: left;"></td>
+                                <td id="cell_plan_name" style="text-align: left;"></td>
+                                <td id="cell_time" style="text-align: right;"></td>
+                                <td id="cell_total_users" style="text-align: right;"></td>
+                                <td id="cell_total_usage" style="text-align: right;"></td>
+                                <td id="cell_monthly_usage" style="text-align: right;"></td>
+                                <td id="cell_exceeded_time" style="text-align: right;"></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="contents-item">
-                    <div class="charts" style="text-align: center;">
+                    <div id="charts" class="charts" style="text-align: center;">
                         <div class="chart_contents"><canvas id="monthlyBarChart" width="520" height="200"></canvas></div>
                     </div>
                 </div>

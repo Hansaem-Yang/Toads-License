@@ -2,12 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/content-styles.css">
-        <!--
-        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
-        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
-        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
-        -->
+        <link rel="stylesheet" href="/public/css/content-styles-figma.css">
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
         <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
@@ -29,7 +24,7 @@
                                 { code:'US', ename:'United States of America', kname:'미국', country:'1' },
                             ];
                             
-                            createNationsSelection($('.nation'), nations, "<%=t('select')%>");
+                            createNationsSelection($('#nation'), nations, "<%=t('select')%>");
                         } else {
                             if (Array.isArray(data)) {
                                 $.each(data, function(index, post) {
@@ -41,7 +36,7 @@
                                     });
                                 });
 
-                                createNationsSelection($('.nation'), nations, "<%=t('select')%>");
+                                createNationsSelection($('#nation'), nations, "<%=t('select')%>");
                             }
                         }
                     },
@@ -50,9 +45,9 @@
                     },
                 });
 
-                $('.search').click(() => {
+                $('#search').click(() => {
                     ClearCompany();
-                    var companyName = $('.s_company_name').val();
+                    var companyName = $('#s_company_name').val();
 
                     $.ajax({
                         url: "../admin/company/status",
@@ -66,46 +61,46 @@
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
                                 var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(no data)")%></td></tr>';
-                                $('.company tbody').append(newRow);
+                                $('#company_status tbody').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
-                                        var newRow = $('.company tbody tr').first().clone().removeClass('hidden');
+                                        var newRow = $('#company_status tbody tr').first().clone().removeClass('hidden');
 
-                                        $(newRow).find('.cell_company_no').text(post.companyNo);
-                                        $(newRow).find('.cell_company_name').text(post.companyName);
-                                        $(newRow).find('.cell_owner_name').text(post.ownerName);
-                                        $(newRow).find('.cell_company_div').text(companyDivs[post.companyDiv]);
+                                        $(newRow).find('#cell_company_no').text(post.companyNo);
+                                        $(newRow).find('#cell_company_name').text(post.companyName);
+                                        $(newRow).find('#cell_owner_name').text(post.ownerName);
+                                        $(newRow).find('#cell_company_div').text(companyDivs[post.companyDiv]);
 
                                         var foundNation = nations.find(option => option.code === post.nation);
-                                        $(newRow).find('.cell_nation').text(foundNation.kname);
-                                        $(newRow).find('.cell_telephone').text(getTelephone(post.nationCode, post.telephone));
-                                        $(newRow).find('.cell_total_users').text(post.totalUsers);
+                                        $(newRow).find('#cell_nation').text(foundNation.kname);
+                                        $(newRow).find('#cell_telephone').text(getTelephone(post.nationCode, post.telephone));
+                                        $(newRow).find('#cell_total_users').text(post.totalUsers);
 
-                                        $('.company tbody').append(newRow);
+                                        $('#company_status tbody').append(newRow);
                                     });
                                 }
                             }
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(request failed)")%></td></tr>';
-                            $('.company tbody').append(newRow);
+                            $('#company_status tbody').append(newRow);
                         },
                     });
                 });
 
-                $('.add').click(function() {
+                $('#add').click(function() {
                     ClearModal();
 
                     $('.modal').show();
                 });
 
-                $('.modify').click(function() {
+                $('#modify').click(function() {
                     ClearModal();
 
-                    var selectedRow = $(".company tr.selected");
+                    var selectedRow = $("#company_status tr.selected");
                     if (selectedRow.length > 0) {
-                        var companyNo = selectedRow.find('.cell_company_no').text();
+                        var companyNo = selectedRow.find('#cell_company_no').text();
 
                         // 행 데이터 출력
                         $.ajax({
@@ -121,16 +116,16 @@
                                 } else if (data === 'NO DATA') {
                                     alert("<%=t('message(no data)')%>");
                                 } else {
-                                    $('.company_no').val(data.companyNo);
-                                    $('.company_name').val(data.companyName);
-                                    $('.owner_name').val(data.ownerName);
-                                    $('.business_no').val(data.businessNo);
-                                    $('.resident_no').val(data.residentNo);
-                                    $('.company_div').val(data.companyDiv);
-                                    $('.nation').val(data.nation);
-                                    $('.nation_code').val(data.nationCode);
-                                    $('.telephone').val(data.telephone);
-                                    $('.business_place').val(data.businessPlace);
+                                    $('#company_no').val(data.companyNo);
+                                    $('#company_name').val(data.companyName);
+                                    $('#owner_name').val(data.ownerName);
+                                    $('#business_no').val(data.businessNo);
+                                    $('#resident_no').val(data.residentNo);
+                                    $('#company_div').val(data.companyDiv);
+                                    $('#nation').val(data.nation);
+                                    $('#nation_code').val(data.nationCode);
+                                    $('#telephone').val(data.telephone);
+                                    $('#business_place').val(data.businessPlace);
 
                                     $('.modal').show();
                                 }
@@ -144,24 +139,24 @@
                     }
                 });
 
-                $('.detail').click(function() {
+                $('#detail').click(function() {
                     details();
                 });
 
-                $('.company tbody').on('click', 'tr', function() {
+                $('#company_status tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
-                $('.company tbody').on('dblclick', 'tr', function() {
+                $('#company_status tbody').on('dblclick', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
 
                     details();
                 });
 
                 var details = function() {
-                    var selectedRow = $(".company tr.selected");
+                    var selectedRow = $("#company_status tr.selected");
                     if (selectedRow.length > 0) {
-                        var companyNo = selectedRow.find('.cell_company_no').text();
+                        var companyNo = selectedRow.find('#cell_company_no').text();
                         
                         window.location.href = "../view/company/detail?companyNo=" + companyNo;
                     } else {
@@ -170,81 +165,81 @@
                 }
 
                 var ClearCompany = function() {
-                    const rows = document.querySelectorAll(".company tbody tr:not(:first-child)");
+                    const rows = document.querySelectorAll(".status-table tbody tr:not(:first-child)");
                     rows.forEach(row => {
                         row.remove();
                     });
                 }
                 // Modal Event And Function
                 var ClearModal = function() {
-                    $('.company_no').val('');
-                    $('.company_name').val('');
-                    $('.owner_name').val('');
-                    $('.business_no').val('');
-                    $('.resident_no').val('');
-                    $('.company_div').val('');
-                    $('.nation').val('');
-                    $('.nation_code').val('');
-                    $('.telephone').val('');
-                    $('.business_place').val('');
+                    $('#company_no').val('');
+                    $('#company_name').val('');
+                    $('#owner_name').val('');
+                    $('#business_no').val('');
+                    $('#resident_no').val('');
+                    $('#company_div').val('');
+                    $('#nation').val('');
+                    $('#nation_code').val('');
+                    $('#telephone').val('');
+                    $('#business_place').val('');
                 };
 
-                $('.nation').change(function() {
+                $('#nation').change(function() {
                     var value = $(this).val();
                     if (value === '')
                         return;
 
                     var option = nations.find(option => option.code === value);
-                    $('.nation_code').val(option.country);
+                    $('#nation_code').val(option.country);
                 });
 
-                $('.close').click(function() {
+                $('#close').click(function() {
                     $('.modal').hide();
                 });
 
-                $('.save').click(function() {
+                $('#save').click(function() {
                     if (confirm("<%=t('message(save data)')%>") == true)
                     {
-                        if ($('.company_name').val() === '') {
+                        if ($('#company_name').val() === '') {
                             alert("<%=t('message(enter corporation)')%>");
-                            $('.company_name').focus();
+                            $('#company_name').focus();
                             return;
                         }
 
-                        if ($('.owner_name').val() === '') {
+                        if ($('#owner_name').val() === '') {
                             alert("<%=t('message(enter representative)')%>");
-                            $('.owner_name').focus();
+                            $('#owner_name').focus();
                             return;
                         }
 
-                        if ($('.company_div').val() === '') {
+                        if ($('#company_div').val() === '') {
                             alert("<%=t('message(select company classification)')%>");
-                            $('.company_div').focus();
+                            $('#company_div').focus();
                             return;
                         }
                         
-                        if ($('.nation').val() === '') {
+                        if ($('#nation').val() === '') {
                             alert("<%=t('message(select country)')%>");
-                            $('.nation').focus();
+                            $('#nation').focus();
                             return;
                         }
                         
-                        if ($('.telephone').val() === '') {
+                        if ($('#telephone').val() === '') {
                             alert("<%=t('message(enter phone number)')%>");
-                            $('.telephone').focus();
+                            $('#telephone').focus();
                             return;
                         }
                         
-                        var companyNo     = $('.company_no').val();
-                        var companyName   = $('.company_name').val();
-                        var ownerName     = $('.owner_name').val();
-                        var businessNo    = $('.business_no').val();
-                        var residentNo    = $('.resident_no').val();
-                        var companyDiv    = $('.company_div').val();
-                        var nation        = $('.nation').val();
-                        var nationCode    = $('.nation_code').val();
-                        var telephone     = $('.telephone').val();
-                        var businessPlace = $('.business_place').val();
+                        var companyNo     = $('#company_no').val();
+                        var companyName   = $('#company_name').val();
+                        var ownerName     = $('#owner_name').val();
+                        var businessNo    = $('#business_no').val();
+                        var residentNo    = $('#resident_no').val();
+                        var companyDiv    = $('#company_div').val();
+                        var nation        = $('#nation').val();
+                        var nationCode    = $('#nation_code').val();
+                        var telephone     = $('#telephone').val();
+                        var businessPlace = $('#business_place').val();
 
                         var url = "../admin/company/insert";
                         if (companyNo === ''){
@@ -283,7 +278,7 @@
                                 }
 
                                 $('.modal').hide();
-                                $('.search').click();
+                                $('#search').click();
                                 
                                 ClearModal();
                             },
@@ -294,7 +289,7 @@
                     }
                 });
 
-                $('.cancel').click(function() {
+                $('#cancel').click(function() {
                     if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.modal').hide();
@@ -303,140 +298,135 @@
                     }
                 });
 
-                createVariablesSelection($('.company_div'), companyDivs, "<%=t('select')%>");
-                $('.search').click();
+                createVariablesSelection($('#company_div'), companyDivs, "<%=t('select')%>");
+                $('#search').click();
             });
         </script>
     </head>
     <body>
         <form class="company-status-form">
-            <div class="content">
-                <div>
+            <div class="contents">
+                <div class="contents-item">
                     <div class="title"><%=t('search conditions')%></div>
-                    <div>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th width="120px" class="right-align"><%=t('corporation name')%></th>
-                                    <td class="left-align">
-                                        <div class="align-container">
-                                            <p><input type="text" class="s_company_name"/></p>
-                                            <input type="button" class="search" value="<%=t('search')%>"/>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </thead>
-                        </table>
+                    <div class="search-contents">
+                        <div class="search-title">
+                            <div class="align-container">
+                                <span><img src="/public/images/icon/title.png"/></span>
+                                <span><%=t('corporation name')%></span>
+                            </div>
+                        </div>
+                        <div class="align-container">
+                            <span><input type="text" id="s_company_name" style="width:320px; height:40px"/></span>
+                            <span><input type="button" id="search" value="<%=t('search')%>"/></span>
+                        </div>
                     </div>
-                </div></br></br>
-                <div  class="contents-container">
+                </div>
+                <div class="contents-item">
                     <div class="title"><%=t('list of customers')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="add" value="<%=t('regist')%>"/></p>
-                            <p><input type="button" class="modify" value="<%=t('modify')%>"/></p>
-                            <input type="button" class="detail" value="<%=t('details')%>"/>
+                            <span><input type="button" id="add" value="<%=t('regist')%>"/></span>
+                            <span><input type="button" id="modify" value="<%=t('modify')%>"/></span>
+                            <span><input type="button" id="detail" value="<%=t('details')%>"/></span>
                         </div>
                     </div>
-                    <div>
-                        <table class="company">
-                            <thead>
-                                <tr>
-                                    <th width="100px"><%=t('customer number')%></th>
-                                    <th width="240px"><%=t('corporation name')%></th>
-                                    <th width="220px"><%=t('representative name')%></th>
-                                    <th width="120px"><%=t('company classification')%></th>
-                                    <th width="160px"><%=t('country')%></th>
-                                    <th width="160px"><%=t('phone number')%></th>
-                                    <th width="120px"><%=t('user count')%></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="hidden">
-                                    <td class="cell_company_no" style="text-align: center;"></td>
-                                    <td class="cell_company_name" style="text-align: left;"></td>
-                                    <td class="cell_owner_name" style="text-align: left;"></td>
-                                    <td class="cell_company_div" style="text-align: center;"></td>
-                                    <td class="cell_nation" style="text-align: center;"></td>
-                                    <td class="cell_telephone" style="text-align: center;"></td>
-                                    <td class="cell_total_users" style="text-align: right;"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="7"><%=t('message(search data)')%></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table id="company_status" class="status-table">
+                        <thead class="status-thead">
+                            <tr>
+                                <th width="100px"><%=t('customer number')%></th>
+                                <th width="240px"><%=t('corporation name')%></th>
+                                <th width="220px"><%=t('representative name')%></th>
+                                <th width="120px"><%=t('company classification')%></th>
+                                <th width="160px"><%=t('country')%></th>
+                                <th width="160px"><%=t('phone number')%></th>
+                                <th width="120px"><%=t('user count')%></th>
+                            </tr>
+                        </thead>
+                        <tbody class="status-tbody">
+                            <tr class="hidden">
+                                <td id="cell_company_no" style="text-align: center;"></td>
+                                <td id="cell_company_name" style="text-align: left;"></td>
+                                <td id="cell_owner_name" style="text-align: left;"></td>
+                                <td id="cell_company_div" style="text-align: center;"></td>
+                                <td id="cell_nation" style="text-align: center;"></td>
+                                <td id="cell_telephone" style="text-align: center;"></td>
+                                <td id="cell_total_users" style="text-align: right;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="7"><%=t('message(search data)')%></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </form>
         <div class="modal">
-            <div class="modal-content" style="width:640px">
+            <div class="modal-contents" style="width:720px">
                 <div class="contents-container">
-                    <span class="close">&times;</span>
-                    <div class="title"><%=t('customer management')%></div>
+                    <span id="close" class="modal-close">&times;</span>
+                    <div class="modal-title"><%=t('customer management')%></div>
                     <div>
-                        <table>
-                            <thead>
+                        <table class="modal-table">
+                            <thead class="modal-thead">
                                 <tr>
-                                    <th width="120px" class="right-align">*<%=t('corporation name')%></th>
+                                    <th width="160px" class="right-align">*<%=t('corporation name')%></th>
                                     <td width="500px" class="left-align">
-                                        <input type="hidden" class="company_no"/>
-                                        <input type="text" class="company_name" style="width: 240px;"/>
+                                        <input type="hidden" id="company_no"/>
+                                        <input type="text" id="company_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('representative name')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="owner_name" style="width: 240px;"/>
+                                        <input type="text" id="owner_name" style="width: 240px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('business registration number')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="business_no" style="width: 160px;"/>
+                                        <input type="text" id="business_no" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('corporate registration number')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="resident_no" style="width: 160px;"/>
+                                        <input type="text" id="resident_no" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('company classification')%></th>
                                     <td class="left-align">
-                                        <select class="company_div"></select>
+                                        <select id="company_div"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('country')%></th>
                                     <td class="left-align">
-                                        <select class="nation"></select>
+                                        <select id="nation"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('phone number')%></th>
                                     <td class="left-align">
                                         <div class="align-container">
-                                            <p>+<input type="text" class="nation_code" style="width:30px" readonly/></p>
-                                            <input type="text" class="telephone" style="width: 120px;"/>
+                                            <span>+<input type="text" id="nation_code" style="width:30px" readonly/></span>
+                                            <span><input type="text" id="telephone" style="width: 120px;"/></span>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('business place')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="business_place" style="width:490px"/>
+                                        <input type="text" id="business_place" style="width:490px"/>
                                     </td>
                                 </tr>
                             </thead>
-                        </table></br>
-                    </div>
+                        </table>
+                    </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="save" value="<%=t('save')%>"/></p>
-                            <input type="button" class="cancel" value="<%=t('cancel')%>"/>
+                            <span><input type="button" id="save" value="<%=t('save')%>"/></span>
+                            <span><input type="button" id="cancel" value="<%=t('cancel')%>"/></span>
                         </div>
                     </div>
                 </div>

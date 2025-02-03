@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/content-styles.css">
+        <link rel="stylesheet" href="/public/css/content-styles-figma.css">
         <!--
         <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
         <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
@@ -34,8 +34,8 @@
                                     });
                                 });
 
-                                createSelection($('.plan_id'), plans, "<%=t('select')%>");
-                                createSelection($('.company_plan_id'), plans, "<%=t('select')%>");
+                                createSelection($('#plan_id'), plans, "<%=t('select')%>");
+                                createSelection($('#company_plan_id'), plans, "<%=t('select')%>");
                             }
                         }
                     },
@@ -63,7 +63,7 @@
                                     });
                                 });
 
-                                createSelection($('.contract_manager'), employees, "<%=t('select')%>");
+                                createSelection($('#contract_manager'), employees, "<%=t('select')%>");
                             }
                         }
                     },
@@ -75,8 +75,8 @@
                 var search = function() {
                     clear();
 
-                    var companyNo = $('.company_no').val();
-                    var contractNo = $('.contract_no').val();
+                    var companyNo = $('#company_no').val();
+                    var contractNo = $('#contract_no').val();
 
                     // 행 데이터 출력
                     $.ajax({
@@ -94,22 +94,22 @@
                                 alert("<%=t('message(no data)')%>");
                             } else {
 
-                                $('.cell_company_name').text(data.companyName);
-                                $('.cell_contract_no').text(data.contractNo);
-                                $('.cell_contract_name').text(data.contractName);
-                                $('.cell_contract_date').text(data.contractDate);
-                                $('.cell_contractor').text(data.contractor);
-                                $('.cell_contract_service').text(contractServices[data.contractService]);
-                                $('.cell_contract_div').text(contractDivs[data.contractDiv]);
-                                $('.cell_contract_period').text(contractPeriods[data.contractPeriod]);
-                                $('.cell_start_date').text(data.startDate);
-                                $('.cell_end_date').text(data.endDate);
-                                $('.cell_monetary_unit').text(monetaryUnits[data.monetaryUnit]);
-                                $('.cell_exchange_rate').text(data.exchangeRate);
-                                $('.cell_remark').text(data.remark);
+                                $('#cell_company_name').text(data.companyName);
+                                $('#cell_contract_no').text(data.contractNo);
+                                $('#cell_contract_name').text(data.contractName);
+                                $('#cell_contract_date').text(data.contractDate);
+                                $('#cell_contractor').text(data.contractor);
+                                $('#cell_contract_service').text(contractServices[data.contractService]);
+                                $('#cell_contract_div').text(contractDivs[data.contractDiv]);
+                                $('#cell_contract_period').text(contractPeriods[data.contractPeriod]);
+                                $('#cell_start_date').text(data.startDate);
+                                $('#cell_end_date').text(data.endDate);
+                                $('#cell_monetary_unit').text(monetaryUnits[data.monetaryUnit]);
+                                $('#cell_exchange_rate').text(data.exchangeRate);
+                                $('#cell_remark').text(data.remark);
 
                                 const employee = employees.find(element => element.code === data.contractManager);
-                                $('.cell_contract_manager').text(employee?employee.name:'');
+                                $('#cell_contract_manager').text(employee?employee.name:'');
                                 
                                 switch(data.contractDiv)
                                 {
@@ -117,37 +117,37 @@
                                         viewExpandedChildren($('#view_license_content'));
 
                                         data.licenses.forEach(function(license, index){
-                                            var newRow = $('.view_license tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#view_license tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.cell_license_no').text(license.licenseNo);
-                                            $(newRow).find('.cell_license_type').text(licenseTypes[license.licenseType]);
-                                            $(newRow).find('.cell_license_div').text(licenseDivs[license.licenseDiv]);
-                                            $(newRow).find('.cell_license_start_date').text(license.startDate);
-                                            $(newRow).find('.cell_license_end_date').text(license.endDate);
-                                            $(newRow).find('.cell_license_count').text(license.licenseCount);
-                                            $(newRow).find('.cell_unit_price').text(formatCurrency(license.unitPrice));
-                                            $(newRow).find('.cell_license_amount').text(formatCurrency(license.amount));
-                                            $(newRow).find('.cell_license_discounted_amount').text(formatCurrency(license.discountedAmount));
-                                            $(newRow).find('.cell_license_actual_amount').text(formatCurrency(license.actualAmount));
+                                            $(newRow).find('#cell_license_no').text(license.licenseNo);
+                                            $(newRow).find('#cell_license_type').text(licenseTypes[license.licenseType]);
+                                            $(newRow).find('#cell_license_div').text(licenseDivs[license.licenseDiv]);
+                                            $(newRow).find('#cell_license_start_date').text(license.startDate);
+                                            $(newRow).find('#cell_license_end_date').text(license.endDate);
+                                            $(newRow).find('#cell_license_count').text(license.licenseCount);
+                                            $(newRow).find('#cell_unit_price').text(formatCurrency(license.unitPrice));
+                                            $(newRow).find('#cell_license_amount').text(formatCurrency(license.amount));
+                                            $(newRow).find('#cell_license_discounted_amount').text(formatCurrency(license.discountedAmount));
+                                            $(newRow).find('#cell_license_actual_amount').text(formatCurrency(license.actualAmount));
 
-                                            $('.view_license tbody').append(newRow);
+                                            $('#view_license tbody').append(newRow);
                                         });
                                         break;
                                     case "D":
                                         viewExpandedChildren($('#view_odm_content'));
                                         
                                         data.odmContracts.forEach(function(odmContract, index){
-                                            var newRow = $('.view_odm_contract tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#view_odm_contract tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.cell_odm_seq').text(odmContract.odmSeq);
-                                            $(newRow).find('.cell_odm_cont_div').text(odmContractDivs[odmContract.odmContDiv]);
-                                            $(newRow).find('.cell_pay_currency').text(monetaryUnits[odmContract.payCurrency]);
-                                            $(newRow).find('.cell_pay_unit').text(payUnits[odmContract.payUnit]);
-                                            $(newRow).find('.cell_pay_term_mo').text(odmContract.payTermMo);
-                                            $(newRow).find('.cell_unit_price').text(odmContract.unitPrice);
-                                            $(newRow).find('.cell_apply_date').text(odmContract.applyDate);
+                                            $(newRow).find('#cell_odm_seq').text(odmContract.odmSeq);
+                                            $(newRow).find('#cell_odm_cont_div').text(odmContractDivs[odmContract.odmContDiv]);
+                                            $(newRow).find('#cell_pay_currency').text(monetaryUnits[odmContract.payCurrency]);
+                                            $(newRow).find('#cell_pay_unit').text(payUnits[odmContract.payUnit]);
+                                            $(newRow).find('#cell_pay_term_mo').text(odmContract.payTermMo);
+                                            $(newRow).find('#cell_unit_price').text(odmContract.unitPrice);
+                                            $(newRow).find('#cell_apply_date').text(odmContract.applyDate);
 
-                                            $('.view_odm_contract tbody').append(newRow);
+                                            $('#view_odm_contract tbody').append(newRow);
                                         });
                                         break;
                                     case "A":
@@ -156,39 +156,39 @@
                                         viewExpandedChildren($('#view_ships_subscribe_content'));
                                         
                                         data.shipsContracts.forEach(function(shipsContract, index){
-                                            var newRow = $('.view_ships_contract tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#view_ships_contract tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.cell_ship_seq').text(shipsContract.shipSeq);
-                                            $(newRow).find('.cell_ship_name').text(shipsContract.shipName);
-                                            $(newRow).find('.cell_imo_no').text(shipsContract.imoNo);
-                                            $(newRow).find('.cell_equip_lent').text(useYn[shipsContract.equipLent]);
-                                            $(newRow).find('.cell_ship_apply_start_date').text(shipsContract.applyStartDate);
-                                            $(newRow).find('.cell_ship_apply_finish_date').text(shipsContract.applyFinishDate);
+                                            $(newRow).find('#cell_ship_seq').text(shipsContract.shipSeq);
+                                            $(newRow).find('#cell_ship_name').text(shipsContract.shipName);
+                                            $(newRow).find('#cell_imo_no').text(shipsContract.imoNo);
+                                            $(newRow).find('#cell_equip_lent').text(useYn[shipsContract.equipLent]);
+                                            $(newRow).find('#cell_ship_apply_start_date').text(shipsContract.applyStartDate);
+                                            $(newRow).find('#cell_ship_apply_finish_date').text(shipsContract.applyFinishDate);
 
                                             const item = plans.find(element => element.code === shipsContract.planId);
                                             
-                                            $(newRow).find('.cell_ship_plan_name').text(item?item.name:'');
+                                            $(newRow).find('#cell_ship_plan_name').text(item?item.name:'');
 
-                                            $('.view_ships_contract tbody').append(newRow);
+                                            $('#view_ships_contract tbody').append(newRow);
                                         });
                                         break;
                                     case "C":
                                         viewExpandedChildren($('#view_company_subscribe_content'));
                                         
                                         data.companyContracts.forEach(function(companyContract, index){
-                                            var newRow = $('.view_company_contract tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#view_company_contract tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.cell_seq').text(companyContract.seq);
-                                            $(newRow).find('.cell_company_subscribe_div').text(subscriptionDivs[companyContract.subscribeDiv]);
-                                            $(newRow).find('.cell_company_pay_currency').text(monetaryUnits[companyContract.payCurrency]);
-                                            $(newRow).find('.cell_company_apply_start_date').text(companyContract.applyStartDate);
-                                            $(newRow).find('.cell_company_apply_finish_date').text(companyContract.applyFinishDate);
+                                            $(newRow).find('#cell_seq').text(companyContract.seq);
+                                            $(newRow).find('#cell_company_subscribe_div').text(subscriptionDivs[companyContract.subscribeDiv]);
+                                            $(newRow).find('#cell_company_pay_currency').text(monetaryUnits[companyContract.payCurrency]);
+                                            $(newRow).find('#cell_company_apply_start_date').text(companyContract.applyStartDate);
+                                            $(newRow).find('#cell_company_apply_finish_date').text(companyContract.applyFinishDate);
 
                                             const item = plans.find(element => element.code === companyContract.planId);
                                             
-                                            $(newRow).find('.cell_company_plan_name').text(item?item.name:'');
+                                            $(newRow).find('#cell_company_plan_name').text(item?item.name:'');
 
-                                            $('.view_company_contract tbody').append(newRow);
+                                            $('#view_company_contract tbody').append(newRow);
                                         });
                                         break;
                                 }
@@ -200,9 +200,10 @@
                     });
                 };
 
-                $('.modify').click(function() {
-                    var companyNo = $('.company_no').val();
-                    var contractNo = $('.contract_no').val();
+                let mode = '';
+                $('#modify').click(function() {
+                    var companyNo = $('#company_no').val();
+                    var contractNo = $('#contract_no').val();
 
                     // 행 데이터 출력
                     $.ajax({
@@ -219,22 +220,22 @@
                             } else if (data === 'NO DATA') {
                                 alert("<%=t('message(no data)')%>");
                             } else {
-                                $('.company_name').val(data.companyName);
-                                $('.contract_name').val(data.contractName);
-                                $('.contract_date').val(data.contractDate);
-                                $('.contractor').val(data.contractor);
-                                $('.contract_service').val(data.contractService);
-                                $('.contract_div').val(data.contractDiv);
-                                $('.contract_period').val(data.contractPeriod);
-                                $('.start_date').val(data.startDate);
-                                $('.end_date').val(data.endDate);
-                                $('.monetary_unit').val(data.monetaryUnit);
-                                $('.exchange_rate').val(data.exchangeRate);
-                                $('.amount').val(formatCurrency(data.amount));
-                                $('.discounted_amount').val(formatCurrency(data.discountedAmount));
-                                $('.actual_amount').val(formatCurrency(data.actualAmount));
-                                $('.remark').val(data.remark);
-                                $('.contract_manager').val(data.contractManager);
+                                $('#company_name').val(data.companyName);
+                                $('#contract_name').val(data.contractName);
+                                $('#contract_date').val(data.contractDate);
+                                $('#contractor').val(data.contractor);
+                                $('#contract_service').val(data.contractService);
+                                $('#contract_div').val(data.contractDiv);
+                                $('#contract_period').val(data.contractPeriod);
+                                $('#start_date').val(data.startDate);
+                                $('#end_date').val(data.endDate);
+                                $('#monetary_unit').val(data.monetaryUnit);
+                                $('#exchange_rate').val(data.exchangeRate);
+                                $('#amount').val(formatCurrency(data.amount));
+                                $('#discounted_amount').val(formatCurrency(data.discountedAmount));
+                                $('#actual_amount').val(formatCurrency(data.actualAmount));
+                                $('#remark').val(data.remark);
+                                $('#contract_manager').val(data.contractManager);
                                 
                                 switch(data.contractDiv)
                                 {
@@ -242,39 +243,39 @@
                                         expandedChildren($('#license_content'));
 
                                         data.licenses.forEach(function(license, index){
-                                            var newRow = $('.license tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#license tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.mode').val('U');
-                                            $(newRow).find('.license_no').val(license.licenseNo);
-                                            $(newRow).find('.license_type').val(license.licenseType);
-                                            $(newRow).find('.app_name').val(license.appName);
-                                            $(newRow).find('.license_start_date').val(license.startDate);
-                                            $(newRow).find('.license_end_date').val(license.endDate);
-                                            $(newRow).find('.license_count').val(license.licenseCount);
-                                            $(newRow).find('.unit_price').val(formatCurrency(license.unitPrice));
-                                            $(newRow).find('.license_amount').val(formatCurrency(license.amount));
-                                            $(newRow).find('.license_discounted_amount').val(formatCurrency(license.discountedAmount));
-                                            $(newRow).find('.license_actual_amount').val(formatCurrency(license.actualAmount));
+                                            $(newRow).find('#mode').val('U');
+                                            $(newRow).find('#license_no').val(license.licenseNo);
+                                            $(newRow).find('#license_type').val(license.licenseType);
+                                            $(newRow).find('#app_name').val(license.appName);
+                                            $(newRow).find('#license_start_date').val(license.startDate);
+                                            $(newRow).find('#license_end_date').val(license.endDate);
+                                            $(newRow).find('#license_count').val(license.licenseCount);
+                                            $(newRow).find('#unit_price').val(formatCurrency(license.unitPrice));
+                                            $(newRow).find('#license_amount').val(formatCurrency(license.amount));
+                                            $(newRow).find('#license_discounted_amount').val(formatCurrency(license.discountedAmount));
+                                            $(newRow).find('#license_actual_amount').val(formatCurrency(license.actualAmount));
 
-                                            $('.license tbody').append(newRow);
+                                            $('#license tbody').append(newRow);
                                         });
                                         break;
                                     case "D":
                                         expandedChildren($('#odm_content'));
                                         
                                         data.odmContracts.forEach(function(odmContract, index){
-                                            var newRow = $('.odm_contract tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#odm_contract tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.mode').val('U');
-                                            $(newRow).find('.odm_seq').val(odmContract.odmSeq);
-                                            $(newRow).find('.odm_cont_div').val(odmContract.odmContDiv);
-                                            $(newRow).find('.pay_currency').val(odmContract.payCurrency);
-                                            $(newRow).find('.pay_unit').val(odmContract.payUnit);
-                                            $(newRow).find('.pay_term_mo').val(odmContract.payTermMo);
-                                            $(newRow).find('.unit_price').val(odmContract.unitPrice);
-                                            $(newRow).find('.apply_date').val(odmContract.applyDate);
+                                            $(newRow).find('#mode').val('U');
+                                            $(newRow).find('#odm_seq').val(odmContract.odmSeq);
+                                            $(newRow).find('#odm_cont_div').val(odmContract.odmContDiv);
+                                            $(newRow).find('#pay_currency').val(odmContract.payCurrency);
+                                            $(newRow).find('#pay_unit').val(odmContract.payUnit);
+                                            $(newRow).find('#pay_term_mo').val(odmContract.payTermMo);
+                                            $(newRow).find('#unit_price').val(odmContract.unitPrice);
+                                            $(newRow).find('#apply_date').val(odmContract.applyDate);
 
-                                            $('.odm_contract tbody').append(newRow);
+                                            $('#odm_contract tbody').append(newRow);
                                         });
                                         break;
                                     case "A":
@@ -283,57 +284,59 @@
                                         expandedChildren($('#ships_subscribe_content'));
                                         
                                         data.shipsContracts.forEach(function(shipsContract, index){
-                                            var newRow = $('.ships_contract tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#ships_contract tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.mode').val('U');
-                                            $(newRow).find('.ship_seq').val(shipsContract.shipSeq);
-                                            $(newRow).find('.ship_name').val(shipsContract.shipName);
-                                            $(newRow).find('.imo_no').val(shipsContract.imoNo);
-                                            $(newRow).find('.equip_lent').val(shipsContract.equipLent);
-                                            $(newRow).find('.apply_start_date').val(shipsContract.applyStartDate);
-                                            $(newRow).find('.apply_finish_date').val(shipsContract.applyFinishDate);
-                                            $(newRow).find('.plan_seq').val(shipsContract.planSeq);
-                                            $(newRow).find('.plan_id').val(shipsContract.planId);
+                                            $(newRow).find('#mode').val('U');
+                                            $(newRow).find('#ship_seq').val(shipsContract.shipSeq);
+                                            $(newRow).find('#ship_name').val(shipsContract.shipName);
+                                            $(newRow).find('#imo_no').val(shipsContract.imoNo);
+                                            $(newRow).find('#equip_lent').val(shipsContract.equipLent);
+                                            $(newRow).find('#apply_start_date').val(shipsContract.applyStartDate);
+                                            $(newRow).find('#apply_finish_date').val(shipsContract.applyFinishDate);
+                                            $(newRow).find('#plan_seq').val(shipsContract.planSeq);
+                                            $(newRow).find('#plan_id').val(shipsContract.planId);
 
-                                            $('.ships_contract tbody').append(newRow);
+                                            $('#ships_contract tbody').append(newRow);
                                         });
                                         break;
                                     case "C":
                                         expandedChildren($('#company_subscribe_content'));
                                         
                                         data.companyContracts.forEach(function(companyContract, index){
-                                            var newRow = $('.company_contract tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#company_contract tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.mode').val('U');
-                                            $(newRow).find('.seq').val(companyContract.seq);
-                                            $(newRow).find('.company_subscribe_div').val(companyContract.subscribeDiv);
-                                            $(newRow).find('.company_pay_currency').val(companyContract.payCurrency);
-                                            $(newRow).find('.company_apply_start_date').val(companyContract.applyStartDate);
-                                            $(newRow).find('.company_apply_finish_date').val(companyContract.applyFinishDate);
-                                            $(newRow).find('.company_plan_seq').val(companyContract.planSeq);
-                                            $(newRow).find('.company_plan_id').val(companyContract.planId);
+                                            $(newRow).find('#mode').val('U');
+                                            $(newRow).find('#seq').val(companyContract.seq);
+                                            $(newRow).find('#company_subscribe_div').val(companyContract.subscribeDiv);
+                                            $(newRow).find('#company_pay_currency').val(companyContract.payCurrency);
+                                            $(newRow).find('#company_apply_start_date').val(companyContract.applyStartDate);
+                                            $(newRow).find('#company_apply_finish_date').val(companyContract.applyFinishDate);
+                                            $(newRow).find('#company_plan_seq').val(companyContract.planSeq);
+                                            $(newRow).find('#company_plan_id').val(companyContract.planId);
 
-                                            $('.company_contract tbody').append(newRow);
+                                            $('#company_contract tbody').append(newRow);
                                         });
                                         break;
                                 }
                                 $('.modal').show();
+                                mode = 'MODIFY';
                             }
                         },
                         error: function (xhr, status, error) {
                             alert("<%=t('message(request failed)')%>");
                         },
                     });
+
                 });
 
-                $('.delete').click(function() {
+                $('#delete').click(function() {
                     if (confirm("<%=t('message(delete data)')%>") == true)
                     {
                         var contractNos = [];
 
                         contractNos.push({
-                            companyNo: $('.company_no').val(),
-                            contractNo: $('.contract_no').val(),
+                            companyNo: $('#company_no').val(),
+                            contractNo: $('#contract_no').val(),
                         });
                         // 행 데이터 출력
                         $.ajax({
@@ -352,7 +355,7 @@
                                         return;
                                     case "SUCCESS":
                                         alert("<%=t('message(delete success)')%>");
-                                        window.location.href = "../../view/contract?companyNo=" + $('.company_no').val();
+                                        window.location.href = "../../view/contract?companyNo=" + $('#company_no').val();
                                         return;
                                 }
                             },
@@ -363,43 +366,43 @@
                     }
                 });
 
-                $('.back').click(function() {
-                    window.location.href = "../../view/contract?companyNo=" + $('.company_no').val();
+                $('#back').click(function() {
+                    window.location.href = "../../view/contract?companyNo=" + $('#company_no').val();
                 });
 
                 var clear = function() {
-                    $('.cell_company_name').text('');
-                    $('.cell_contract_no').text('');
-                    $('.cell_contract_name').text('');
-                    $('.cell_contract_date').text('');
-                    $('.cell_contractor').text('');
-                    $('.cell_contract_service').text('');
-                    $('.cell_contract_div').text('');
-                    $('.cell_contract_period').text('');
-                    $('.cell_contract_status').text('');
-                    $('.cell_start_date').text('');
-                    $('.cell_end_date').text('');
-                    $('.cell_monetary_unit').text('');
-                    $('.cell_exchange_rate').text('0');
-                    $('.cell_contract_manager').text('');
-                    $('.cell_remark').text('');
+                    $('#cell_company_name').text('');
+                    $('#cell_contract_no').text('');
+                    $('#cell_contract_name').text('');
+                    $('#cell_contract_date').text('');
+                    $('#cell_contractor').text('');
+                    $('#cell_contract_service').text('');
+                    $('#cell_contract_div').text('');
+                    $('#cell_contract_period').text('');
+                    $('#cell_contract_status').text('');
+                    $('#cell_start_date').text('');
+                    $('#cell_end_date').text('');
+                    $('#cell_monetary_unit').text('');
+                    $('#cell_exchange_rate').text('0');
+                    $('#cell_contract_manager').text('');
+                    $('#cell_remark').text('');
 
-                    const licenseRows = document.querySelectorAll(".view_license tbody tr:not(:first-child)");
+                    const licenseRows = document.querySelectorAll("#view_license tbody tr:not(:first-child)");
                     licenseRows.forEach(row => {
                         row.remove();
                     });
                     
-                    const odmContractRows = document.querySelectorAll(".view_odm_contract tbody tr:not(:first-child)");
+                    const odmContractRows = document.querySelectorAll("#view_odm_contract tbody tr:not(:first-child)");
                     odmContractRows.forEach(row => {
                         row.remove();
                     });
                     
-                    const shipsContractRows = document.querySelectorAll(".view_ships_contract tbody tr:not(:first-child)");
+                    const shipsContractRows = document.querySelectorAll("#view_ships_contract tbody tr:not(:first-child)");
                     shipsContractRows.forEach(row => {
                         row.remove();
                     });
                     
-                    const companyContractRows = document.querySelectorAll(".view_company_contract tbody tr:not(:first-child)");
+                    const companyContractRows = document.querySelectorAll("#view_company_contract tbody tr:not(:first-child)");
                     companyContractRows.forEach(row => {
                         row.remove();
                     });
@@ -407,88 +410,88 @@
 
                 // Modal Event And Function
                 var clearModal = function() {
-                    $('.company_name').val('');
-                    $('.contract_name').val('');
-                    $('.contract_date').val('');
-                    $('.contractor').val('');
-                    $('.contract_period').val('');
-                    $('.start_date').val('');
-                    $('.end_date').val('');
-                    $('.monetary_unit').val('');
-                    $('.exchange_rate').val('0');
-                    $('.amount').val('0');
-                    $('.discounted_amount').val('0');
-                    $('.actual_amount').val('0');
-                    $('.remark').val('');
+                    $('#company_name').val('');
+                    $('#contract_name').val('');
+                    $('#contract_date').val('');
+                    $('#contractor').val('');
+                    $('#contract_period').val('');
+                    $('#start_date').val('');
+                    $('#end_date').val('');
+                    $('#monetary_unit').val('');
+                    $('#exchange_rate').val('0');
+                    $('#amount').val('0');
+                    $('#discounted_amount').val('0');
+                    $('#actual_amount').val('0');
+                    $('#remark').val('');
 
-                    const licenseRows = document.querySelectorAll(".license tbody tr:not(:first-child)");
+                    const licenseRows = document.querySelectorAll("#license tbody tr:not(:first-child)");
                     licenseRows.forEach(row => {
                         row.remove();
                     });
                     
-                    const odmContractRows = document.querySelectorAll(".odm_contract tbody tr:not(:first-child)");
+                    const odmContractRows = document.querySelectorAll("#odm_contract tbody tr:not(:first-child)");
                     odmContractRows.forEach(row => {
                         row.remove();
                     });
                     
-                    const shipsContractRows = document.querySelectorAll(".ships_contract tbody tr:not(:first-child)");
+                    const shipsContractRows = document.querySelectorAll("#ships_contract tbody tr:not(:first-child)");
                     shipsContractRows.forEach(row => {
                         row.remove();
                     });
                     
-                    const companyContractRows = document.querySelectorAll(".company_contract tbody tr:not(:first-child)");
+                    const companyContractRows = document.querySelectorAll("#company_contract tbody tr:not(:first-child)");
                     companyContractRows.forEach(row => {
                         row.remove();
                     });
                 };
                 
                 var validationCheck = function() {
-                    if ($('.contract_name').val() === '') {
+                    if ($('#contract_name').val() === '') {
                         alert("<%=t('message(enter contract name)')%>");
                         return false;
                     }
 
-                    if ($('.contract_date').val() === '') {
+                    if ($('#contract_date').val() === '') {
                         alert("<%=t('message(enter contract date)')%>");
                         return false;
                     }
 
-                    if ($('.contractor').val() === '') {
+                    if ($('#contractor').val() === '') {
                         alert("<%=t('message(enter contractor)')%>");
                         return false;
                     }
 
-                    if ($('.contract_service').val() === '') {
+                    if ($('#contract_service').val() === '') {
                         alert("<%=t('message(enter contract service)')%>");
                         return false;
                     }
 
-                    if ($('.contract_div').val() === '') {
+                    if ($('#contract_div').val() === '') {
                         alert("<%=t('message(enter contract classification)')%>");
                         return false;
                     }
                     
-                    if ($('.contract_period').val() === '') {
+                    if ($('#contract_period').val() === '') {
                         alert("<%=t('message(select contract period)')%>");
                         return false;
                     }
                     
-                    if ($('.start_date').val() === '' || $('.end_date').val() === '') {
+                    if ($('#start_date').val() === '' || $('#end_date').val() === '') {
                         alert("<%=t('message(enter contract period)')%>");
                         return false;
                     }
                     
-                    if ($('.monetary_unit').val() === '') {
+                    if ($('#monetary_unit').val() === '') {
                         alert("<%=t('message(select monetray unit)')%>");
                         return false;
                     }
                     
-                    if ($('.exchange_rate').val() === '') {
+                    if ($('#exchange_rate').val() === '') {
                         alert("<%=t('message(enter exchange rate)')%>");
                         return false;
                     }
                     
-                    if ($('.contract_manager').val() === '') {
+                    if ($('#contract_manager').val() === '') {
                         alert("<%=t('message(enter person in charge of a contract)')%>");
                         return false;
                     }
@@ -496,39 +499,44 @@
                     return true;
                 }
 
+                $('#contract_service, #contract_div').on('mousedown', function(e) {
+                    if (mode === 'MODIFY') {
+                        e.preventDefault();
+                    }
+                });
 
                 /* 라이센스 관리 시작 */
-                $('.license_add').click(function() {
+                $('#license_add').click(function() {
                     if (!validationCheck()) {
                         return;
                     }
                     
-                    var newRow = $('.license tbody tr').first().clone().removeClass('hidden');
+                    var newRow = $('#license tbody tr').first().clone().removeClass('hidden');
 
-                    $(newRow).find('.license_start_date').val($('.start_date').val());
-                    $(newRow).find('.license_end_date').val($('.end_date').val());
+                    $(newRow).find('#license_start_date').val($('#start_date').val());
+                    $(newRow).find('#license_end_date').val($('#end_date').val());
 
-                    $('.license tbody').append(newRow);
+                    $('#license tbody').append(newRow);
                 });
 
-                $('.license_delete').click(function() {
-                    var selectedRow = $('.license tr.selected');
+                $('#license_delete').click(function() {
+                    var selectedRow = $('#license tr.selected');
                     if ($(selectedRow).length > 0) {
                         var index = $(selectedRow).index();
-                        var hidMode = $(selectedRow).find('.mode');
+                        var hidMode = $(selectedRow).find('#mode');
 
                         if (hidMode.val() == 'I') {
-                            $('.license tr.selected').remove();
+                            $('#license tr.selected').remove();
                         } else {
                             hidMode.val('D');
-                            $('.license tr.selected').addClass('hidden');
+                            $('#license tr.selected').addClass('hidden');
                         }
                     }
                 });
 
-                $('.contract_period').change(function() {
+                $('#contract_period').change(function() {
 
-                    var contractDate = new Date($('.contract_date').val());
+                    var contractDate = new Date($('#contract_date').val());
                     var contractPeriod = $(this).val();
                     var date = new Date();
                     switch (contractPeriod) {
@@ -552,23 +560,23 @@
                             break;
                     } 
                     
-                    $('.start_date').val($('.contract_date').val());
-                    $('.end_date').val(date);
+                    $('#start_date').val($('#contract_date').val());
+                    $('#end_date').val(date);
                 });
 
                 let preventChange = false;
-                $('.amount, .discounted_amount, .exchange_rate').focus(function() {
+                $('#amount, #discounted_amount, #exchange_rate').focus(function() {
                     preventChange = true;
                     $(this).val(parseCurrency($(this).val()));
                     $(this).select();
                     preventChange = false;
                 });
 
-                $('.amount, .discounted_amount, .exchange_rate').blur(function() {
+                $('#amount, #discounted_amount, #exchange_rate').blur(function() {
                     $(this).val(formatCurrency(parseCurrency($(this).val())));
                 });
 
-                $('.amount, .discounted_amount').change(function() {
+                $('#amount, #discounted_amount').change(function() {
                     if (preventChange) {
                         return;
                     }
@@ -578,21 +586,21 @@
                         $(this).val('0');
                     }
 
-                    var amount = parseCurrency($('.amount').val());
-                    var discounted_amount = parseCurrency($('.discounted_amount').val());
+                    var amount = parseCurrency($('#amount').val());
+                    var discounted_amount = parseCurrency($('#discounted_amount').val());
 
-                    $('.amount').val(formatCurrency(amount));
-                    $('.discounted_amount').val(formatCurrency(discounted_amount));
-                    $('.actual_amount').val(formatCurrency(amount - discounted_amount));
+                    $('#amount').val(formatCurrency(amount));
+                    $('#discounted_amount').val(formatCurrency(discounted_amount));
+                    $('#actual_amount').val(formatCurrency(amount - discounted_amount));
                     
                     preventChange = false;
                 })
 
-                $('.license tbody').on('click', 'tr', function() {
+                $('#license tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
-                $('.license').on('focus', '.unit_price, .license_discounted_amount', function() {
+                $('#license').on('focus', '#unit_price, #license_discounted_amount', function() {
                     preventChange = true;
 
                     $(this).val(parseCurrency($(this).val()));
@@ -601,11 +609,11 @@
                     preventChange = false;
                 });
 
-                $('.license').on('blur', '.unit_price, .license_discounted_amount', function() {
+                $('#license').on('blur', '#unit_price, #license_discounted_amount', function() {
                     $(this).val(formatCurrency(parseCurrency($(this).val())));
                 });
 
-                $('.license').on('change', '.license_count, .unit_price, .license_discounted_amount', function() {
+                $('#license').on('change', '#license_count, #unit_price, #license_discounted_amount', function() {
                     if (preventChange) {
                         return;
                     }
@@ -614,57 +622,57 @@
 
                     var row = $(this).closest('tr');
 
-                    var licenseCount = parseCurrency($(row).find('.license_count').val());
-                    var unitPrice = parseCurrency($(row).find('.unit_price').val());
-                    var discountedlicense_amount = parseCurrency($(row).find('.license_discounted_amount').val());
+                    var licenseCount = parseCurrency($(row).find('#license_count').val());
+                    var unitPrice = parseCurrency($(row).find('#unit_price').val());
+                    var discountedlicense_amount = parseCurrency($(row).find('#license_discounted_amount').val());
 
                     var license_amount = licenseCount * unitPrice;
                     var actuallicense_amount = license_amount - discountedlicense_amount;
 
-                    $(row).find('.unit_price').val(formatCurrency(unitPrice));
-                    $(row).find('.license_discounted_amount').val(formatCurrency(discountedlicense_amount));
-                    $(row).find('.license_amount').val(formatCurrency(license_amount));
-                    $(row).find('.license_actual_amount').val(formatCurrency(actuallicense_amount));
+                    $(row).find('#unit_price').val(formatCurrency(unitPrice));
+                    $(row).find('#license_discounted_amount').val(formatCurrency(discountedlicense_amount));
+                    $(row).find('#license_amount').val(formatCurrency(license_amount));
+                    $(row).find('#license_actual_amount').val(formatCurrency(actuallicense_amount));
                     
                     preventChange = false;
                 });
                 /* 라이센스 관리 끝 */
 
                 /* ODM 계약관리 시작 */
-                 $('.odm_contract_add').click(function() {
+                 $('#odm_contract_add').click(function() {
                     if (!validationCheck()) {
                         return;
                     }
                     
-                    var newRow = $('.odm_contract tbody tr').first().clone().removeClass('hidden');
+                    var newRow = $('#odm_contract tbody tr').first().clone().removeClass('hidden');
 
-                    $(newRow).find('.pay_currency').val($('.monetary_unit').val());
-                    $(newRow).find('.apply_date').val($('.start_date').val());
+                    $(newRow).find('#pay_currency').val($('#monetary_unit').val());
+                    $(newRow).find('#apply_date').val($('#start_date').val());
 
-                    $('.odm_contract tbody').append(newRow);
+                    $('#odm_contract tbody').append(newRow);
                 });
 
-                $('.odm_contract_delete').click(function() {
-                    var selectedRow = $('.odm_contract tr.selected');
+                $('#odm_contract_delete').click(function() {
+                    var selectedRow = $('#odm_contract tr.selected');
 
                     if ($(selectedRow).length > 0) {
                         var index = $(selectedRow).index();
-                        var hidMode = $(selectedRow).find('.mode');
+                        var hidMode = $(selectedRow).find('#mode');
 
                         if (hidMode.val() == 'I') {
-                            $('.odm_contract tr.selected').remove();
+                            $('#odm_contract tr.selected').remove();
                         } else {
                             hidMode.val('D');
-                            $('.odm_contract tr.selected').addClass('hidden');
+                            $('#odm_contract tr.selected').addClass('hidden');
                         }
                     }
                 });
                 
-                $('.odm_contract tbody').on('click', 'tr', function() {
+                $('#odm_contract tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
-                $('.odm_contract').on('focus', '.unit_price', function() {
+                $('#odm_contract').on('focus', '#unit_price', function() {
                     preventChange = true;
 
                     $(this).val(parseCurrency($(this).val()));
@@ -673,100 +681,100 @@
                     preventChange = false;
                 });
 
-                $('.odm_contract').on('blur', '.unit_price', function() {
+                $('#odm_contract').on('blur', '#unit_price', function() {
                     $(this).val(formatCurrency(parseCurrency($(this).val())));
                 });
                 /* ODM 계약관리 끝 */
 
                 /* 선박별 계약관리 시작 */
-                $('.ships_contract_add').click(function() {
+                $('#ships_contract_add').click(function() {
                     if (!validationCheck()) {
                         return;
                     }
                     
-                    var newRow = $('.ships_contract tbody tr').first().clone().removeClass('hidden');
+                    var newRow = $('#ships_contract tbody tr').first().clone().removeClass('hidden');
 
-                    $('.ships_contract tbody').append(newRow);
+                    $('#ships_contract tbody').append(newRow);
                 });
 
-                $('.ships_contract_delete').click(function() {
-                    var selectedRow = $('.ships_contract tr.selected');
+                $('#ships_contract_delete').click(function() {
+                    var selectedRow = $('#ships_contract tr.selected');
 
                     if ($(selectedRow).length > 0) {
                         var index = $(selectedRow).index();
-                        var hidMode = $(selectedRow).find('.mode');
+                        var hidMode = $(selectedRow).find('#mode');
 
                         if (hidMode.val() == 'I') {
-                            $('.ships_contract tr.selected').remove();
+                            $('#ships_contract tr.selected').remove();
                         } else {
                             hidMode.val('D');
-                            $('.ships_contract tr.selected').addClass('hidden');
+                            $('#ships_contract tr.selected').addClass('hidden');
                         }
                     }
                 });
                 
-                $('.ships_contract tbody').on('click', 'tr', function() {
+                $('#ships_contract tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
                 /* 선박별 계약관리 끝 */
 
                 /* 기업별 구독계약관리 시작 */
-                $('.company_contract_add').click(function() {
+                $('#company_contract_add').click(function() {
                     if (!validationCheck()) {
                         return;
                     }
                     
-                    var newRow = $('.company_contract tbody tr').first().clone().removeClass('hidden');
+                    var newRow = $('#company_contract tbody tr').first().clone().removeClass('hidden');
 
-                    $(newRow).find('.company_pay_currency').val($('.monetary_unit').val());
-                    $('.company_contract tbody').append(newRow);
+                    $(newRow).find('#company_pay_currency').val($('#monetary_unit').val());
+                    $('#company_contract tbody').append(newRow);
                 });
 
-                $('.company_contract_delete').click(function() {
-                    var selectedRow = $('.company_contract tr.selected');
+                $('#company_contract_delete').click(function() {
+                    var selectedRow = $('#company_contract tr.selected');
 
                     if ($(selectedRow).length > 0) {
                         var index = $(selectedRow).index();
-                        var hidMode = $(selectedRow).find('.mode');
+                        var hidMode = $(selectedRow).find('#mode');
 
                         if (hidMode.val() == 'I') {
-                            $('.company_contract tr.selected').remove();
+                            $('#company_contract tr.selected').remove();
                         } else {
                             hidMode.val('D');
-                            $('.company_contract tr.selected').addClass('hidden');
+                            $('#company_contract tr.selected').addClass('hidden');
                         }
                     }
                 });
                 
-                $('.company_contract tbody').on('click', 'tr', function() {
+                $('#company_contract tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
                 /* 기업별 구독계약관리 끝 */
 
-                $('.close').click(function() {
+                $('#close').click(function() {
                     $('.modal').hide();
                 });
 
-                $('.save').click(function() {
+                $('#save').click(function() {
                     if (confirm("<%=t('message(save data)')%>")) {
                         if (!validationCheck()) {
                             return;
                         }
 
-                        var companyNo = $('.company_no').val();
-                        var contractNo = $('.contract_no').val();
-                        var contractName = $('.contract_name').val();
-                        var contractDate = $('.contract_date').val();
-                        var contractor = $('.contractor').val();
-                        var contractService = $('.contract_service').val();
-                        var contractDiv = $('.contract_div').val();
-                        var contractPeriod = $('.contract_period').val();
-                        var startDate = $('.start_date').val();
-                        var endDate = $('.end_date').val();
-                        var monetaryUnit = $('.monetary_unit').val();
-                        var exchangeRate = $('.exchange_rate').val();
-                        var contractManager = $('.contract_manager').val();
-                        var remark = $('.remark').val();
+                        var companyNo = $('#company_no').val();
+                        var contractNo = $('#contract_no').val();
+                        var contractName = $('#contract_name').val();
+                        var contractDate = $('#contract_date').val();
+                        var contractor = $('#contractor').val();
+                        var contractService = $('#contract_service').val();
+                        var contractDiv = $('#contract_div').val();
+                        var contractPeriod = $('#contract_period').val();
+                        var startDate = $('#start_date').val();
+                        var endDate = $('#end_date').val();
+                        var monetaryUnit = $('#monetary_unit').val();
+                        var exchangeRate = $('#exchange_rate').val();
+                        var contractManager = $('#contract_manager').val();
+                        var remark = $('#remark').val();
 
                         var licenses = [];
                         var odmContracts = [];
@@ -776,96 +784,96 @@
                         switch (contractDiv)
                         {
                             case "L":
-                                if ($('.license tbody tr').length === 1) {
+                                if ($('#license tbody tr').length === 1) {
                                     alert("<%=t('message(enter license)')%>");
                                     return;
                                 }
 
-                                $('.license tbody tr').each(function(index, row) {
+                                $('#license tbody tr').each(function(index, row) {
                                     if (index === 0)
                                         return;
 
                                     licenses.push({
-                                        mode: $(row).find('.mode').val(),
-                                        licenseNo: $(row).find('.license_no').val(),
-                                        licenseType: $(row).find('.license_type').val(),
-                                        licenseDiv: $(row).find('.license_div').val(),
-                                        startDate: $(row).find('.license_start_date').val(),
-                                        endDate: $(row).find('.license_end_date').val(),
-                                        licenseCount: $(row).find('.license_count').val(),
-                                        unitPrice: parseCurrency($(row).find('.unit_price').val()),
-                                        amount: parseCurrency($(row).find('.license_amount').val()),
-                                        discountedAmount: parseCurrency($(row).find('.license_discounted_amount').val()),
-                                        actualAmount: parseCurrency($(row).find('.license_actual_amount').val()),
+                                        mode: $(row).find('#mode').val(),
+                                        licenseNo: $(row).find('#license_no').val(),
+                                        licenseType: $(row).find('#license_type').val(),
+                                        licenseDiv: $(row).find('#license_div').val(),
+                                        startDate: $(row).find('#license_start_date').val(),
+                                        endDate: $(row).find('#license_end_date').val(),
+                                        licenseCount: $(row).find('#license_count').val(),
+                                        unitPrice: parseCurrency($(row).find('#unit_price').val()),
+                                        amount: parseCurrency($(row).find('#license_amount').val()),
+                                        discountedAmount: parseCurrency($(row).find('#license_discounted_amount').val()),
+                                        actualAmount: parseCurrency($(row).find('#license_actual_amount').val()),
                                     });
                                 });
                                 break;
                             case "D":
-                                if ($('.odm_contract tbody tr').length === 1) {
+                                if ($('#odm_contract tbody tr').length === 1) {
                                     alert("<%=t('message(enter odm contract)')%>");
                                     return;
                                 }
 
-                                $('.odm_contract tbody tr').each(function(index, row) {
+                                $('#odm_contract tbody tr').each(function(index, row) {
                                     if (index === 0)
                                         return;
 
                                     odmContracts.push({
-                                        mode: $(row).find('.mode').val(),
-                                        odmSeq: $(row).find('.odm_seq').val(),
-                                        odmContDiv: $(row).find('.odm_cont_div').val(),
-                                        payCurrency: $(row).find('.pay_currency').val(),
-                                        payUnit: $(row).find('.pay_unit').val(),
-                                        payTermMo: $(row).find('.pay_term_mo').val(),
-                                        unitPrice: parseCurrency($(row).find('.unit_price').val()),
-                                        applyDate: $(row).find('.apply_date').val(),
+                                        mode: $(row).find('#mode').val(),
+                                        odmSeq: $(row).find('#odm_seq').val(),
+                                        odmContDiv: $(row).find('#odm_cont_div').val(),
+                                        payCurrency: $(row).find('#pay_currency').val(),
+                                        payUnit: $(row).find('#pay_unit').val(),
+                                        payTermMo: $(row).find('#pay_term_mo').val(),
+                                        unitPrice: parseCurrency($(row).find('#unit_price').val()),
+                                        applyDate: $(row).find('#apply_date').val(),
                                     });
                                 });
                                 break;
                             case "A":
                                 break;
                             case "S":
-                                if ($('.ships_contract tbody tr').length === 1) {
+                                if ($('#ships_contract tbody tr').length === 1) {
                                     alert("<%=t('message(enter vessel contract)')%>");
                                     return;
                                 }
 
-                                $('.ships_contract tbody tr').each(function(index, row) {
+                                $('#ships_contract tbody tr').each(function(index, row) {
                                     if (index === 0)
                                         return;
 
                                     shipsContracts.push({
-                                        mode: $(row).find('.mode').val(),
-                                        shipSeq: $(row).find('.ship_seq').val(),
-                                        shipName: $(row).find('.ship_name').val(),
-                                        imoNo: $(row).find('.imo_no').val(),
-                                        equipLent: $(row).find('.equip_lent').val(),
-                                        applyStartDate: $(row).find('.apply_start_date').val(),
-                                        applyFinishDate: $(row).find('.apply_finish_date').val(),
-                                        planSeq: $(row).find('.plan_seq').val(),
-                                        planId: $(row).find('.plan_id').val(),
+                                        mode: $(row).find('#mode').val(),
+                                        shipSeq: $(row).find('#ship_seq').val(),
+                                        shipName: $(row).find('#ship_name').val(),
+                                        imoNo: $(row).find('#imo_no').val(),
+                                        equipLent: $(row).find('#equip_lent').val(),
+                                        applyStartDate: $(row).find('#apply_start_date').val(),
+                                        applyFinishDate: $(row).find('#apply_finish_date').val(),
+                                        planSeq: $(row).find('#plan_seq').val(),
+                                        planId: $(row).find('#plan_id').val(),
                                     });
                                 });
                                 break;
                             case "C":
-                                if ($('.company_contract tbody tr').length === 1) {
+                                if ($('#company_contract tbody tr').length === 1) {
                                     alert("<%=t('message(enter company contract)')%>");
                                     return;
                                 }
 
-                                $('.company_contract tbody tr').each(function(index, row) {
+                                $('#company_contract tbody tr').each(function(index, row) {
                                     if (index === 0)
                                         return;
 
                                     companyContracts.push({
-                                        mode: $(row).find('.mode').val(),
-                                        seq: $(row).find('.seq').val(),
-                                        subscribeDiv: $(row).find('.company_subscribe_div').val(),
-                                        payCurrency: $(row).find('.company_pay_currency').val(),
-                                        applyStartDate: $(row).find('.company_apply_start_date').val(),
-                                        applyFinishDate: $(row).find('.company_apply_finish_date').val(),
-                                        planSeq: $(row).find('.company_plan_seq').val(),
-                                        planId: $(row).find('.company_plan_id').val(),
+                                        mode: $(row).find('#mode').val(),
+                                        seq: $(row).find('#seq').val(),
+                                        subscribeDiv: $(row).find('#company_subscribe_div').val(),
+                                        payCurrency: $(row).find('#company_pay_currency').val(),
+                                        applyStartDate: $(row).find('#company_apply_start_date').val(),
+                                        applyFinishDate: $(row).find('#company_apply_finish_date').val(),
+                                        planSeq: $(row).find('#company_plan_seq').val(),
+                                        planId: $(row).find('#company_plan_id').val(),
                                     });
                                 });
                                 break;
@@ -927,7 +935,7 @@
                     }
                 });
 
-                $('.cancel').click(function() {
+                $('#cancel').click(function() {
                     if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.modal').hide();
@@ -936,22 +944,22 @@
                     }
                 });
 
-                createVariablesSelection($('.contract_service'), contractServices, "<%=t('select')%>");
-                createVariablesSelection($('.contract_div'), contractDivs, "<%=t('select')%>");
+                createVariablesSelection($('#contract_service'), contractServices, "<%=t('select')%>");
+                createVariablesSelection($('#contract_div'), contractDivs, "<%=t('select')%>");
+                createVariablesSelection($('#monetary_unit'), monetaryUnits, "<%=t('select')%>");
+                createVariablesSelection($('#contract_period'), contractPeriods, "<%=t('select')%>");
 
-                createVariablesSelection($('.monetary_unit'), monetaryUnits, "<%=t('select')%>");
-                createVariablesSelection($('.contract_period'), contractPeriods, "<%=t('select')%>");
-                createVariablesSelection($('.license_type'), licenseTypes, "<%=t('select')%>");
-                createVariablesSelection($('.license_div'), licenseDivs, "<%=t('select')%>");
+                createVariablesSelection($('#license_type'), licenseTypes, "<%=t('select')%>");
+                createVariablesSelection($('#license_div'), licenseDivs, "<%=t('select')%>");
+
+                createVariablesSelection($('#odm_cont_div'), odmContractDivs, "<%=t('select')%>");
+                createVariablesSelection($('#pay_currency'), monetaryUnits, "<%=t('select')%>");
+                createVariablesSelection($('#pay_unit'), payUnits, "<%=t('select')%>");
+
+                createVariablesSelection($('#equip_lent'), useYn, "<%=t('select')%>");
                 
-                createVariablesSelection($('.odm_cont_div'), odmContractDivs, "<%=t('select')%>");
-                createVariablesSelection($('.pay_currency'), monetaryUnits, "<%=t('select')%>");
-                createVariablesSelection($('.pay_unit'), payUnits, "<%=t('select')%>");
-                
-                createVariablesSelection($('.equip_lent'), useYn, "<%=t('select')%>");
-                
-                createVariablesSelection($('.company_subscribe_div'), subscriptionDivs, "<%=t('select')%>");
-                createVariablesSelection($('.company_pay_currency'), monetaryUnits, "<%=t('select')%>");
+                createVariablesSelection($('#company_subscribe_div'), subscriptionDivs, "<%=t('select')%>");
+                createVariablesSelection($('#company_pay_currency'), monetaryUnits, "<%=t('select')%>");
 
                 search();
             });
@@ -959,66 +967,65 @@
     </head>
     <body>
         <form class="contract-detail-form">
-            
-            <div class="content">
-                <div  class="contents-container">
+            <div class="contents">
+                <div  class="contents-item">
                     <div class="title"><%=t('contract information')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="modify" value="<%=t('modify')%>"/></p>
-                            <p><input type="button" class="delete" value="<%=t('delete')%>"/></p>
-                            <input type="button" class="back" value="<%=t('back')%>"/>
+                            <span><input type="button" id="modify" value="<%=t('modify')%>"/></span>
+                            <span><input type="button" id="delete" value="<%=t('delete')%>"/></span>
+                            <span><input type="button" id="back" value="<%=t('back')%>"/></span>
                         </div>
                     </div>
                     <div>
-                        <table class="contract">
-                            <thead>
+                        <table class="detail-table">
+                            <thead class="detail-thead">
                                 <tr>
-                                    <th width="120px" class="right-align"><%=t('client company')%></th>
-                                    <td width="980px" class="cell_company_name" colspan="3"></td>
+                                    <th width="160px" class="right-align"><%=t('client company')%></th>
+                                    <td width="880px" id="cell_company_name" colspan="3"></td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align"><%=t('contract number')%></th>
-                                    <td width="380px" class="cell_contract_no"></td>
-                                    <th width="120px" class="right-align"><%=t('contract name')%></th>
-                                    <td width="380px" class="cell_contract_name"></td>
+                                    <th width="160px" class="right-align"><%=t('contract number')%></th>
+                                    <td width="360px" id="cell_contract_no"></td>
+                                    <th width="160px" class="right-align"><%=t('contract name')%></th>
+                                    <td width="360px" id="cell_contract_name"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('contract date')%></th>
-                                    <td class="cell_contract_date"></td>
+                                    <td id="cell_contract_date"></td>
                                     <th class="right-align"><%=t('person in charge')%></th>
-                                    <td class="cell_contractor"></td>
+                                    <td id="cell_contractor"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('contract service')%></th>
-                                    <td class="cell_contract_service"></td>
+                                    <td id="cell_contract_service"></td>
                                     <th class="right-align"><%=t('contract classification')%></th>
-                                    <td class="cell_contract_div"></td>
+                                    <td id="cell_contract_div"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('contract period')%></th>
                                     <td colspan="3">
                                         <div class="align-container">
-                                            <p class="cell_contract_period"></p>
-                                            <p class="cell_start_date"></p>
-                                            <p>~</p>
-                                            <p class="cell_end_date"></p>
+                                            <span id="cell_contract_period"></span>
+                                            <span id="cell_start_date"></span>
+                                            <span>~</span>
+                                            <span id="cell_end_date"></span>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('monetray unit')%></th>
-                                    <td class="cell_monetary_unit"></td>
+                                    <td id="cell_monetary_unit"></td>
                                     <th class="right-align"><%=t('exchange rate')%></th>
-                                    <td class="cell_exchange_rate"></td>
+                                    <td id="cell_exchange_rate"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('person in charge of a contract')%></th>
-                                    <td class="cell_contract_manager" colspan="3"></td>
+                                    <td id="cell_contract_manager" colspan="3"></td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('remark')%></th>
-                                    <td class="cell_remark" style="height:100px" colspan="3"></td>
+                                    <td id="cell_remark" style="height:100px" colspan="3"></td>
                                 </tr>
                             </thead>
                         </table>
@@ -1027,10 +1034,10 @@
                         <!-- License 시작 -->
                         <div id="view_license_content" class="hidden">
                             <div class="title"><%=t('license list')%></div>
-                            <table class="view_license">
-                                <thead>
+                            <table id="view_license" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
-                                        <th width="160px"><%=t('number')%></th>
+                                        <th width="200px"><%=t('number')%></th>
                                         <th width="140px"><%=t('type')%></th>
                                         <th width="140px"><%=t('division')%></th>
                                         <th width="220px"><%=t('period')%></th>
@@ -1041,22 +1048,23 @@
                                         <th width="100px"><%=t('actual amount')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
-                                        <td class="cell_license_no" style="text-align: center;"></td>
-                                        <td class="cell_license_type" style="text-align: center;"></td>
-                                        <td class="cell_license_div" style="text-align: center;"></td>
+                                        <td id="cell_license_no" style="text-align: center;"></td>
+                                        <td id="cell_license_type" style="text-align: center;"></td>
+                                        <td id="cell_license_div" style="text-align: center;"></td>
                                         <td>
                                             <div class="align-container-center">
-                                                <p class="cell_license_start_date"></p>~
-                                                <p class="cell_license_end_date"></p>
+                                                <span id="cell_license_start_date"></span>
+                                                <span>~</span>
+                                                <span id="cell_license_end_date"></span>
                                             </div>
                                         </td>
-                                        <td class="cell_license_count" style="text-align: right;"></td>
-                                        <td class="cell_unit_price" style="text-align: right;"></td>
-                                        <td class="cell_license_amount" style="text-align: right;"></td>
-                                        <td class="cell_license_discounted_amount" style="text-align: right;"></td>
-                                        <td class="cell_license_actual_amount" style="text-align: right;"></td>
+                                        <td id="cell_license_count" style="text-align: right;"></td>
+                                        <td id="cell_unit_price" style="text-align: right;"></td>
+                                        <td id="cell_license_amount" style="text-align: right;"></td>
+                                        <td id="cell_license_discounted_amount" style="text-align: right;"></td>
+                                        <td id="cell_license_actual_amount" style="text-align: right;"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1065,11 +1073,11 @@
                         <!-- ODM 계약 시작 -->
                         <div id="view_odm_content" class="hidden">
                             <div class="title"><%=t('odm contract')%></div>
-                            <table class="view_odm_contract">
-                                <thead>
+                            <table id="view_odm_contract" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
                                         <th width="60px"><%=t('sequential number')%></th>
-                                        <th width="160px"><%=t('contract classification')%></th>
+                                        <th width="200px"><%=t('contract classification')%></th>
                                         <th width="140px"><%=t('settlement currency')%></th>
                                         <th width="260px"><%=t('payment unit')%></th>
                                         <th width="160px"><%=t('payment cycle')%></th>
@@ -1077,15 +1085,15 @@
                                         <th width="160px"><%=t('date of application')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
-                                        <td class="cell_odm_seq" style="text-align: center;"></td>
-                                        <td class="cell_odm_cont_div" style="text-align: center;"></td>
-                                        <td class="cell_pay_currency" style="text-align: center;"></td>
-                                        <td class="cell_pay_unit" style="text-align: center;"></td>
-                                        <td class="cell_pay_term_mo" style="text-align: center;"></td>
-                                        <td class="cell_unit_price" style="text-align: right;"></td>
-                                        <td class="cell_apply_date" style="text-align: center;"></td>
+                                        <td id="cell_odm_seq" style="text-align: center;"></td>
+                                        <td id="cell_odm_cont_div" style="text-align: center;"></td>
+                                        <td id="cell_pay_currency" style="text-align: center;"></td>
+                                        <td id="cell_pay_unit" style="text-align: center;"></td>
+                                        <td id="cell_pay_term_mo" style="text-align: center;"></td>
+                                        <td id="cell_unit_price" style="text-align: right;"></td>
+                                        <td id="cell_apply_date" style="text-align: center;"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1094,8 +1102,8 @@
                         <!-- 선박별 구독계약 시작 -->
                         <div id="view_ships_subscribe_content" class="hidden">
                             <div class="title"><%=t('ship subscribe contract')%></div>
-                            <table class="view_ships_contract">
-                                <thead>
+                            <table id="view_ships_contract" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
                                         <th width="60px"><%=t('sequential number')%></th>
                                         <th width="200px"><%=t('ship name')%></th>
@@ -1105,20 +1113,20 @@
                                         <th width="180px"><%=t('payment system')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
-                                        <td class="cell_ship_seq" style="text-align: center;"></td>
-                                        <td class="cell_ship_name" style="text-align: center;"></td>
-                                        <td class="cell_imo_no" style="text-align: center;"></td>
-                                        <td class="cell_equip_lent" style="text-align: center;"></td>
+                                        <td id="cell_ship_seq" style="text-align: center;"></td>
+                                        <td id="cell_ship_name" style="text-align: center;"></td>
+                                        <td id="cell_imo_no" style="text-align: center;"></td>
+                                        <td id="cell_equip_lent" style="text-align: center;"></td>
                                         <td>
                                             <div class="align-container-center">
-                                                <p class="cell_ship_apply_start_date"></p>
-                                                <p>~</p>
-                                                <p class="cell_ship_apply_finish_date"></p>
+                                                <span id="cell_ship_apply_start_date"></span>
+                                                <span>~</span>
+                                                <span id="cell_ship_apply_finish_date"></span>
                                             </div>
                                         </td>
-                                        <td class="cell_ship_plan_name" style="text-align: center;"></td>
+                                        <td id="cell_ship_plan_name" style="text-align: center;"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1127,29 +1135,29 @@
                         <!-- 기업별 구독계약 시작 -->
                         <div id="view_company_subscribe_content" class="hidden">
                             <div class="title"><%=t('ship subscribe contract')%></div>
-                            <table class="view_company_contract">
-                                <thead>
+                            <table id="view_company_contract" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
                                         <th width="60px"><%=t('sequential number')%></th>
-                                        <th width="160px"><%=t('subscription classification')%></th>
+                                        <th width="200px"><%=t('subscription classification')%></th>
                                         <th width="140px"><%=t('settlement currency')%></th>
                                         <th width="300px"><%=t('period')%></th>
                                         <th width="180px"><%=t('payment system')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
-                                        <td class="cell_seq" style="text-align: center;"></td>
-                                        <td class="cell_company_subscribe_div" style="text-align: center;"></td>
-                                        <td class="cell_company_pay_currency" style="text-align: center;"></td>
+                                        <td id="cell_seq" style="text-align: center;"></td>
+                                        <td id="cell_company_subscribe_div" style="text-align: center;"></td>
+                                        <td id="cell_company_pay_currency" style="text-align: center;"></td>
                                         <td>
                                             <div class="align-container-center">
-                                                <p class="cell_company_apply_start_date"></p>
-                                                <p>~</p>
-                                                <p class="cell_company_apply_finish_date"></p>
+                                                <span id="cell_company_apply_start_date"></span>
+                                                <span>~</span>
+                                                <span id="cell_company_apply_finish_date"></span>
                                             </div>
                                         </td>
-                                        <td class="cell_company_plan_name" style="text-align: center;"></td>
+                                        <td id="cell_company_plan_name" style="text-align: center;"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1160,81 +1168,81 @@
             </div>
         </form>
         <div class="modal">
-            <div class="modal-content" style="width:1100px">
+            <div class="modal-contents" style="width:1280px">
                 <div class="contents-container">
-                    <span class="close">&times;</span>
-                    <div class="title"><%=t('contract management')%></div>
+                    <span id="close" class="modal-close">&times;</span>
+                    <div class="modal-title"><%=t('contract management')%></div>
                     <div>
-                        <table>
-                            <thead>
+                        <table class="modal-table">
+                            <thead class="modal-thead">
                                 <tr>
-                                    <th width="120px" class="right-align">*<%=t('client company')%></th>
+                                    <th width="160px" class="right-align">*<%=t('client company')%></th>
                                     <td width="980px" class="left-align" colspan="3">
-                                        <input type="hidden" class="company_no" value="<%=companyNo%>"/>
-                                        <input type="text" class="company_name" style="width: 240px;" readonly/>
+                                        <input type="hidden" id="company_no" value="<%=companyNo%>"/>
+                                        <input type="text" id="company_name" style="width: 240px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="120px" class="right-align">*<%=t('contract number')%></th>
-                                    <td width="380px" class="left-align">
-                                        <input type="text" class="contract_no" style="width: 240px;" readonly value="<%=contractNo%>"/>
+                                    <th width="160px" class="right-align">*<%=t('contract number')%></th>
+                                    <td width="460px" class="left-align">
+                                        <input type="text" id="contract_no" style="width: 240px;" readonly value="<%=contractNo%>"/>
                                     </td>
-                                    <th width="120px" class="right-align">*<%=t('contract name')%></th>
-                                    <td width="380px" class="left-align" colspan="3">
-                                        <input type="text" class="contract_name" style="width: 380px;"/>
+                                    <th width="160px" class="right-align">*<%=t('contract name')%></th>
+                                    <td width="460px" class="left-align" colspan="3">
+                                        <input type="text" id="contract_name" style="width: 380px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('contract date')%></th>
                                     <td class="left-align">
-                                        <input type="date" class="contract_date" style="width: 120px;"/>
+                                        <input type="date" id="contract_date" style="width: 120px;"/>
                                     </td>
                                     <th class="right-align">*<%=t('contractor')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="contractor" style="width: 160px;"/>
+                                        <input type="text" id="contractor" style="width: 160px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('contract service')%></th>
                                     <td class="left-align">
-                                        <select class="contract_service"></select>
+                                        <select id="contract_service"></select>
                                     </td>
                                     <th class="right-align">*<%=t('contract classification')%></th>
                                     <td class="left-align">
-                                        <select class="contract_div"></select>
+                                        <select id="contract_div"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('contract period')%></th>
                                     <td class="left-align" colspan="3">
                                         <div class="align-container">
-                                            <p><select class="contract_period"></select></p>
-                                            <p><input type="date" class="start_date" style="width: 120px;"/></p>
-                                            <p>~</p>
-                                            <p><input type="date" class="end_date" style="width: 120px;"/></p>
+                                            <span><select id="contract_period"></select></span>
+                                            <span><input type="date" id="start_date" style="width: 120px;"/></span>
+                                            <span>~</span>
+                                            <span><input type="date" id="end_date" style="width: 120px;"/></span>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('monetray unit')%></th>
                                     <td class="left-align">
-                                        <select class="monetary_unit"></select>
+                                        <select id="monetary_unit"></select>
                                     </td>
                                     <th class="right-align">*<%=t('exchange rate')%></th>
                                     <td class="left-align">
-                                        <input type="text" class="exchange_rate" style="width:100px; text-align: right;"/>
+                                        <input type="text" id="exchange_rate" style="width:100px; text-align: right;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('person in charge of a contract')%></th>
                                     <td class="left-align" colspan="3">
-                                        <select class="contract_manager"></select>
+                                        <select id="contract_manager"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('remark')%></th>
                                     <td class="left-align" colspan="3">
-                                        <textarea class="remark" style="width:940px; height:60px;"></textarea>
+                                        <textarea id="remark" style="width:940px; height:60px;"></textarea>
                                     </td>
                                 </tr>
                             </thead>
@@ -1243,51 +1251,51 @@
                     <div class="table-container" style="height:200px">
                         <!-- 라이센스 시작 -->
                         <div id="license_content" class="hidden">
-                            <div class="title"><%=t('license')%></div>
+                            <div class="modal-title"><%=t('license')%></div>
                             <div class="top-right-button">
                                 <div class="align-container">
-                                    <p><input type="button" class="license_add" value="<%=t('regist')%>"/></p>
-                                    <input type="button" class="license_delete" value="<%=t('delete')%>"/>
+                                    <span><input type="button" id="license_add" value="<%=t('regist')%>"/></span>
+                                    <span><input type="button" id="license_delete" value="<%=t('delete')%>"/></span>
                                 </div>
                             </div>
-                            <table class="license">
-                                <thead>
+                            <table id="license" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
-                                        <th width="100px"><%=t('number')%></th>
-                                        <th width="140px"><%=t('type')%></th>
-                                        <th width="140px"><%=t('division')%></th>
-                                        <th width="240px"><%=t('period')%></th>
-                                        <th width="60px"><%=t('quantity')%></th>
-                                        <th width="90px"><%=t('unit price')%></th>
-                                        <th width="110px"><%=t('amount')%></th>
-                                        <th width="110px"><%=t('discount amount')%></th>
-                                        <th width="110px"><%=t('actual amount')%></th>
+                                        <th><%=t('number')%></th>
+                                        <th><%=t('type')%></th>
+                                        <th><%=t('division')%></th>
+                                        <th><%=t('period')%></th>
+                                        <th><%=t('quantity')%></th>
+                                        <th><%=t('unit price')%></th>
+                                        <th><%=t('amount')%></th>
+                                        <th><%=t('discount amount')%></th>
+                                        <th><%=t('actual amount')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
                                         <td>
-                                            <input type="hidden" class="mode" value="I">
-                                            <input type="text" class="license_no" style="width:100px;" readonly>
+                                            <input type="hidden" id="mode" value="I">
+                                            <input type="text" id="license_no" style="width:150px;" readonly>
                                         </td>
                                         <td>
-                                            <select class="license_type" style="width:126px;"></select>
+                                            <select id="license_type" style="width:126px;"></select>
                                         </td>
                                         <td>
-                                            <select class="license_div" style="width:126px"></select>
+                                            <select id="license_div" style="width:126px"></select>
                                         </td>
                                         <td>
                                             <div class="align-container">
-                                                <p><input type="date" class="license_start_date" style="width:105px;"></p>
-                                                <p>~</p>
-                                                <input type="date" class="license_end_date" style="width:105px;">
+                                                <span><input type="date" id="license_start_date" style="width:120px;"></span>
+                                                <span>~</span>
+                                                <span><input type="date" id="license_end_date" style="width:120px;"></span>
                                             </div>
                                         </td>
-                                        <td><input type="text" class="license_count" style="width:50px; text-align:right" value="0"></td>
-                                        <td><input type="text" class="unit_price" style="width:80px; text-align:right" value="0"></td>
-                                        <td><input type="text" class="license_amount" style="width:100px; text-align:right" readonly value="0"></td>
-                                        <td><input type="text" class="license_discounted_amount" style="width:100px; text-align:right" value="0"></td>
-                                        <td><input type="text" class="license_actual_amount" style="width:100px; text-align:right" readonly value="0"></td>
+                                        <td><input type="text" id="license_count" style="width:40px; text-align:right" value="0"></td>
+                                        <td><input type="text" id="unit_price" style="width:80px; text-align:right" value="0"></td>
+                                        <td><input type="text" id="license_amount" style="width:100px; text-align:right" readonly value="0"></td>
+                                        <td><input type="text" id="license_discounted_amount" style="width:100px; text-align:right" value="0"></td>
+                                        <td><input type="text" id="license_actual_amount" style="width:100px; text-align:right" readonly value="0"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1298,40 +1306,40 @@
                             <div class="title"><%=t('odm contract')%></div>
                             <div class="top-right-button">
                                 <div class="align-container">
-                                    <p><input type="button" class="odm_contract_add" value="<%=t('regist')%>"/></p>
-                                    <input type="button" class="odm_contract_delete" value="<%=t('delete')%>"/>
+                                    <span><input type="button" id="odm_contract_add" value="<%=t('regist')%>"/></span>
+                                    <span><input type="button" id="odm_contract_delete" value="<%=t('delete')%>"/></span>
                                 </div>
                             </div>
-                            <table class="odm_contract">
-                                <thead>
+                            <table id="odm_contract" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
-                                        <th width="60px"><%=t('sequential number')%></th>
-                                        <th width="160px"><%=t('contract classification')%></th>
-                                        <th width="140px"><%=t('settlement currency')%></th>
-                                        <th width="260px"><%=t('payment unit')%></th>
-                                        <th width="160px"><%=t('payment cycle')%></th>
-                                        <th width="160px"><%=t('payment unity price')%></th>
-                                        <th width="160px"><%=t('date of application')%></th>
+                                        <th><%=t('sequential number')%></th>
+                                        <th><%=t('contract classification')%></th>
+                                        <th><%=t('settlement currency')%></th>
+                                        <th><%=t('payment unit')%></th>
+                                        <th><%=t('payment cycle')%></th>
+                                        <th><%=t('payment unity price')%></th>
+                                        <th><%=t('date of application')%></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="hidden">
                                         <td>
-                                            <input type="hidden" class="mode" value="I">
-                                            <input type="text" class="odm_seq" style="width:50px;" readonly>
+                                            <input type="hidden" id="mode" value="I">
+                                            <input type="text" id="odm_seq" style="width:50px;" readonly>
                                         </td>
                                         <td>
-                                            <select class="odm_cont_div" style="width:150px;"></select>
+                                            <select id="odm_cont_div" style="width:150px;"></select>
                                         </td>
                                         <td>
-                                            <select class="pay_currency" style="width:130px"></select>
+                                            <select id="pay_currency" style="width:130px"></select>
                                         </td>
                                         <td>
-                                            <select class="pay_unit" style="width:250px;"></select>
+                                            <select id="pay_unit" style="width:250px;"></select>
                                         </td>
-                                        <td><input type="text" class="pay_term_mo" style="width:150px; text-align:right" value="0"></td>
-                                        <td><input type="text" class="unit_price" style="width:150px; text-align:right" value="0"></td>
-                                        <td><input type="date" class="apply_date" style="width:150px;"></td>
+                                        <td><input type="text" id="pay_term_mo" style="width:150px; text-align:right" value="0"></td>
+                                        <td><input type="text" id="unit_price" style="width:150px; text-align:right" value="0"></td>
+                                        <td><input type="date" id="apply_date" style="width:150px;"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1342,42 +1350,42 @@
                             <div class="title"><%=t('ship subscribe contract')%></div>
                             <div class="top-right-button">
                                 <div class="align-container">
-                                    <p><input type="button" class="ships_contract_add" value="<%=t('regist')%>"/></p>
-                                    <input type="button" class="ships_contract_delete" value="<%=t('delete')%>"/>
+                                    <span><input type="button" id="ships_contract_add" value="<%=t('regist')%>"/></span>
+                                    <span><input type="button" id="ships_contract_delete" value="<%=t('delete')%>"/></span>
                                 </div>
                             </div>
-                            <table class="ships_contract">
-                                <thead>
+                            <table id="ships_contract" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
-                                        <th width="60px"><%=t('sequential number')%></th>
-                                        <th width="200px"><%=t('ship name')%></th>
-                                        <th width="160px"><%=t('imo number')%></th>
-                                        <th width="200px"><%=t('equipment rental')%></th>
-                                        <th width="300px"><%=t('period')%></th>
-                                        <th width="180px"><%=t('payment system')%></th>
+                                        <th><%=t('sequential number')%></th>
+                                        <th><%=t('ship name')%></th>
+                                        <th><%=t('imo number')%></th>
+                                        <th><%=t('equipment rental')%></th>
+                                        <th><%=t('period')%></th>
+                                        <th><%=t('payment system')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
                                         <td>
-                                            <input type="hidden" class="mode" value="I">
-                                            <input type="text" class="ship_seq" style="width:50px;" readonly>
+                                            <input type="hidden" id="mode" value="I">
+                                            <input type="text" id="ship_seq" style="width:50px;" readonly>
                                         </td>
-                                        <td><input type="text" class="ship_name" style="width:190px;"></td>
-                                        <td><input type="text" class="imo_no" style="width:150px;"></td>
+                                        <td><input type="text" id="ship_name" style="width:190px;"></td>
+                                        <td><input type="text" id="imo_no" style="width:150px;"></td>
                                         <td>
-                                            <select class="equip_lent" style="width:196px"></select>
+                                            <select id="equip_lent" style="width:196px"></select>
                                         </td>
                                         <td>
                                             <div class="align-container">
-                                                <p><input type="date" class="apply_start_date" style="width:125px;"></p>
-                                                <p>~</p>
-                                                <input type="date" class="apply_finish_date" style="width:125px;">
+                                                <span><input type="date" id="apply_start_date" style="width:125px;"></span>
+                                                <span>~</span>
+                                                <span><input type="date" id="apply_finish_date" style="width:125px;"></span>
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="hidden" class="plan_seq"/>
-                                            <select class="plan_id" style="width:170px"></select>
+                                            <input type="hidden" id="plan_seq"/>
+                                            <select id="plan_id" style="width:170px"></select>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1387,44 +1395,44 @@
                         <!-- 기업별 구독계약 시작 -->
                         <div id="company_subscribe_content" class="hidden">
                             <div class="title"><%=t('company subscribe contract')%></div>
-                            <div class="top-right-button">
+                            <div class="top-right-button" style="right:400px">
                                 <div class="align-container">
-                                    <p><input type="button" class="company_contract_add" value="<%=t('regist')%>"/></p>
-                                    <input type="button" class="company_contract_delete" value="<%=t('delete')%>"/>
+                                    <span><input type="button" id="company_contract_add" value="<%=t('regist')%>"/></span>
+                                    <span><input type="button" id="company_contract_delete" value="<%=t('delete')%>"/></span>
                                 </div>
                             </div>
-                            <table class="company_contract">
-                                <thead>
+                            <table id="company_contract" class="status-table" style="width:880px">
+                                <thead class="status-thead">
                                     <tr>
-                                        <th width="60px"><%=t('sequential number')%></th>
-                                        <th width="160px"><%=t('subscription classification')%></th>
-                                        <th width="140px"><%=t('settlement currency')%></th>
-                                        <th width="300px"><%=t('period')%></th>
-                                        <th width="180px"><%=t('payment system')%></th>
+                                        <th><%=t('sequential number')%></th>
+                                        <th><%=t('subscription classification')%></th>
+                                        <th><%=t('settlement currency')%></th>
+                                        <th><%=t('period')%></th>
+                                        <th><%=t('payment system')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
                                         <td>
-                                            <input type="hidden" class="mode" value="I">
-                                            <input type="text" class="seq" style="width:50px;" readonly>
+                                            <input type="hidden" id="mode" value="I">
+                                            <input type="text" id="seq" style="width:50px;" readonly>
                                         </td>
                                         <td>
-                                            <select class="company_subscribe_div" style="width:150px;"></select>
+                                            <select id="company_subscribe_div" style="width:150px;"></select>
                                         </td>
                                         <td>
-                                            <select class="company_pay_currency" style="width:130px"></select>
+                                            <select id="company_pay_currency" style="width:130px"></select>
                                         </td>
                                         <td>
                                             <div class="align-container">
-                                                <p><input type="date" class="company_apply_start_date" style="width:125px;"></p>
-                                                <p>~</p>
-                                                <input type="date" class="company_apply_finish_date" style="width:125px;">
+                                                <span><input type="date" id="company_apply_start_date" style="width:125px;"></span>
+                                                <span>~</span>
+                                                <span><input type="date" id="company_apply_finish_date" style="width:125px;"></span>
                                             </div>
                                         </td>
                                         <td>
-                                            <input type="hidden" class="company_plan_seq"/>
-                                            <select class="company_plan_id" style="width:170px"></select>
+                                            <input type="hidden" id="company_plan_seq"/>
+                                            <select id="company_plan_id" style="width:170px"></select>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -1434,8 +1442,8 @@
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="save" value="<%=t('save')%>"/></p>
-                            <input type="button" class="cancel" value="<%=t('cancel')%>"/>
+                            <span><input type="button" id="save" value="<%=t('save')%>"/></span>
+                            <span><input type="button" id="cancel" value="<%=t('cancel')%>"/></span>
                         </div>
                     </div>
                 </div>

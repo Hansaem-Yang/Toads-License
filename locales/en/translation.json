@@ -30,6 +30,7 @@
     "receipt": "Receipt",
     "details": "Details",
     "select": "Select",
+    "select small": "Select",
     
     "search conditions": "Search Conditions",
     "total slink usage": "Total S-Link Usage",

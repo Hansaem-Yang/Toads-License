@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/content-styles.css">
+        <link rel="stylesheet" href="/public/css/content-styles-figma.css">
         <!--
         <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
         <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
@@ -27,50 +27,50 @@
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
                                 var newRow = '<tr><td colspan="8" class="left-align"><%=t("message(no data)")%></td></tr>';
-                                $('.plan tbody').append(newRow);
+                                $('#plan tbody').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
-                                        var newRow = $('.plan tbody tr').first().clone().removeClass('hidden');
+                                        var newRow = $('#plan tbody tr').first().clone().removeClass('hidden');
                                         
-                                        $(newRow).find('.cell_plan_id').text(post.planId);
-                                        $(newRow).find('.cell_plan_kname').text(post.planKname);
-                                        $(newRow).find('.cell_plan_ename').text(post.planEname);
-                                        $(newRow).find('.cell_flat_div').text(flatDivs[post.flatDiv]);
-                                        $(newRow).find('.cell_odm_div').text(odmDivs[post.odmDiv]);
-                                        $(newRow).find('.cell_apply_date').text(post.applyDate);
-                                        $(newRow).find('.cell_finish_date').text(post.finishDate);
-                                        $(newRow).find('.cell_active_yn').text(activeYn[post.activeYn]);
-                                        $(newRow).find('.cell_remark').text(post.remark);
+                                        $(newRow).find('#cell_plan_id').text(post.planId);
+                                        $(newRow).find('#cell_plan_kname').text(post.planKname);
+                                        $(newRow).find('#cell_plan_ename').text(post.planEname);
+                                        $(newRow).find('#cell_flat_div').text(flatDivs[post.flatDiv]);
+                                        $(newRow).find('#cell_odm_div').text(odmDivs[post.odmDiv]);
+                                        $(newRow).find('#cell_apply_date').text(post.applyDate);
+                                        $(newRow).find('#cell_finish_date').text(post.finishDate);
+                                        $(newRow).find('#cell_active_yn').text(activeYn[post.activeYn]);
+                                        $(newRow).find('#cell_remark').text(post.remark);
 
-                                        $('.plan tbody').append(newRow);
+                                        $('#plan tbody').append(newRow);
                                     });
                                 }
                             }
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="8" class="left-align"><%=t("message(request failed)")%></td></tr>';
-                            $('.plan tbody').append(newRow);
+                            $('#plan tbody').append(newRow);
                         },
                     });
                 };
 
-                $('.add').click(function() {
+                $('#add').click(function() {
                     clearModal();
 
                     var today = new Date();
-                    $('.apply_date').val(getFormattedDate(today));
-                    $('.finish_date').val(getFormattedDate(today));
+                    $('#apply_date').val(getFormattedDate(today));
+                    $('#finish_date').val(getFormattedDate(today));
 
                     $('.modal').show();
                 });
 
-                $('.modify').click(function() {
+                $('#modify').click(function() {
                     clearModal();
 
-                    var selectedRow = $(".plan tr.selected");
+                    var selectedRow = $('#plan tr.selected');
                     if (selectedRow.length > 0) {
-                        var planId = selectedRow.find('.cell_plan_id').text();
+                        var planId = selectedRow.find('#cell_plan_id').text();
                         
                         // 행 데이터 출력
                         $.ajax({
@@ -86,32 +86,32 @@
                                 } else if (data === 'NO DATA') {
                                     alert("<%=t('message(no data)')%>");
                                 } else {
-                                    $('.plan_id').val(data.planId);
-                                    $('.plan_kname').val(data.planKname);
-                                    $('.plan_ename').val(data.planEname);
-                                    $('.flat_div').val(data.flatDiv);
-                                    $('.odm_div').val(data.odmDiv);
-                                    $('.apply_date').val(data.applyDate);
-                                    $('.finish_date').val(data.finishDate);
-                                    $('.active_yn').val(data.activeYn);
-                                    $('.remark').val(data.remark);
+                                    $('#plan_id').val(data.planId);
+                                    $('#plan_kname').val(data.planKname);
+                                    $('#plan_ename').val(data.planEname);
+                                    $('#flat_div').val(data.flatDiv);
+                                    $('#odm_div').val(data.odmDiv);
+                                    $('#apply_date').val(data.applyDate);
+                                    $('#finish_date').val(data.finishDate);
+                                    $('#active_yn').val(data.activeYn);
+                                    $('#remark').val(data.remark);
 
                                     data.planAmounts.forEach(function(planAmount, index){
-                                        var newRow = $('.plan_amount tbody tr').first().clone().removeClass('hidden');
+                                        var newRow = $('#plan_amount tbody tr').first().clone().removeClass('hidden');
 
-                                        $(newRow).find('.mode').val('U');
-                                        $(newRow).find('.plan_id').val(planAmount.planId);
-                                        $(newRow).find('.plan_seq').val(planAmount.planSeq);
-                                        $(newRow).find('.amount').val(formatCurrency(planAmount.amount));
-                                        $(newRow).find('.time').val(formatCurrency(planAmount.time));
-                                        $(newRow).find('.bill_base_1').val(planAmount.billBase1);
-                                        $(newRow).find('.surcharge').val(formatCurrency(planAmount.surcharge));
-                                        $(newRow).find('.bill_base_2').val(planAmount.billBase2);
-                                        $(newRow).find('.apply_date').val(planAmount.applyDate);
-                                        $(newRow).find('.finish_date').val(planAmount.finishDate);
-                                        $(newRow).find('.active_yn').val(planAmount.activeYn);
+                                        $(newRow).find('#mode').val('U');
+                                        $(newRow).find('#plan_id').val(planAmount.planId);
+                                        $(newRow).find('#plan_seq').val(planAmount.planSeq);
+                                        $(newRow).find('#amount').val(formatCurrency(planAmount.amount));
+                                        $(newRow).find('#time').val(formatCurrency(planAmount.time));
+                                        $(newRow).find('#bill_base_1').val(planAmount.billBase1);
+                                        $(newRow).find('#surcharge').val(formatCurrency(planAmount.surcharge));
+                                        $(newRow).find('#bill_base_2').val(planAmount.billBase2);
+                                        $(newRow).find('#apply_date').val(planAmount.applyDate);
+                                        $(newRow).find('#finish_date').val(planAmount.finishDate);
+                                        $(newRow).find('#active_yn').val(planAmount.activeYn);
 
-                                        $('.plan_amount tbody').append(newRow);
+                                        $('#plan_amount tbody').append(newRow);
                                     });
 
                                     $('.modal').show();
@@ -126,24 +126,24 @@
                     }
                 });
 
-                $('.detail').click(function() {
+                $('#detail').click(function() {
                     details();
                 });
 
-                $('.plan tbody').on('click', 'tr', function() {
+                $('#plan tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
-                $('.plan tbody').on('dblclick', 'tr', function() {
+                $('#plan tbody').on('dblclick', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
 
                     details();
                 });
 
                 var details = function() {
-                    var selectedRow = $(".plan tr.selected");
+                    var selectedRow = $('#plan tr.selected');
                     if (selectedRow.length > 0) {
-                        var planId = selectedRow.find('.cell_plan_id').text();
+                        var planId = selectedRow.find('#cell_plan_id').text();
                         
                         window.location.href = "../view/plan/detail?planId=" + planId;
                     } else {
@@ -152,7 +152,7 @@
                 }
 
                 var clearPlan = function() {
-                    const rows = document.querySelectorAll(".plan tbody tr:not(:first-child)");
+                    const rows = document.querySelectorAll("#plan tbody tr:not(:first-child)");
                     rows.forEach(row => {
                         row.remove();
                     });
@@ -160,53 +160,53 @@
 
                 // Modal Event And Function
                 var clearModal = function() {
-                    $('.plan_id').val('');
-                    $('.plan_kname').val('');
-                    $('.plan_ename').val('');
-                    $('.flat_div').val('');
-                    $('.odm_div').val('');
-                    $('.apply_date').val('');
-                    $('.finish_date').val('');
-                    $('.active_yn').val('');
-                    $('.remark').val('');
+                    $('#plan_id').val('');
+                    $('#plan_kname').val('');
+                    $('#plan_ename').val('');
+                    $('#flat_div').val('');
+                    $('#odm_div').val('');
+                    $('#apply_date').val('');
+                    $('#finish_date').val('');
+                    $('#active_yn').val('');
+                    $('#remark').val('');
 
-                    const planAmountRows = document.querySelectorAll(".plan_amount tbody tr:not(:first-child)");
+                    const planAmountRows = document.querySelectorAll("#plan_amount tbody tr:not(:first-child)");
                     planAmountRows.forEach(row => {
                         row.remove();
                     });
                 };
 
                 var validationCheck = function() {
-                    if ($('.plan_kname').val() === '') {
+                    if ($('#plan_kname').val() === '') {
                         alert("<%=t('message(enter name of plan (kor))')%>");
                         return false;
                     }
 
-                    if ($('.plan_ename').val() === '') {
+                    if ($('#plan_ename').val() === '') {
                         alert("<%=t('message(enter name of plan (eng))')%>");
                         return false;
                     }
 
-                    if ($('.flat_div').val() === '') {
+                    if ($('#flat_div').val() === '') {
                         alert("<%=t('message(select flat-rate class')%>");
                         return false;
                     }
 
-                    if ($('.odm_div').val() === '') {
+                    if ($('#odm_div').val() === '') {
                         alert("<%=t('message(select odm class')%>");
                         return false;
                     }
-                    if ($('.apply_date').val() === '') {
+                    if ($('#apply_date').val() === '') {
                         alert("<%=t('message(enter date of application')%>");
                         return false;
                     }
 
-                    if ($('.finish_date').val() === '') {
+                    if ($('#finish_date').val() === '') {
                         alert("<%=t('message(enter end date')%>");
                         return false;
                     }
                     
-                    if ($('.active_yn').val() === '') {
+                    if ($('#active_yn').val() === '') {
                         alert("<%=t('message(select enable or not')%>");
                         return false;
                     }
@@ -215,32 +215,32 @@
                 }
                 
                 var childValidationCheck = function(row) {
-                    if ($(row).find('.amount').val() === '') {
+                    if ($(row).find('#amount').val() === '') {
                         alert("<%=t('message(enter service price')%>");
                         return false;
                     }
 
-                    if ($(row).find('.time').val() === '') {
+                    if ($(row).find('#time').val() === '') {
                         alert("<%=t('message(enter service time')%>");
                         return false;
                     }
 
-                    if ($(row).find('.bill_base_1').val() === '') {
+                    if ($(row).find('#bill_base_1').val() === '') {
                         alert("<%=t('message(select billing unit')%>");
                         return false;
                     }
 
-                    if ($(row).find('.apply_date').val() === '') {
+                    if ($(row).find('#apply_date').val() === '') {
                         alert("<%=t('message(enter date of application')%>");
                         return false;
                     }
 
-                    if ($(row).find('.finish_date').val() === '') {
+                    if ($(row).find('#finish_date').val() === '') {
                         alert("<%=t('message(enter end date')%>");
                         return false;
                     }
                     
-                    if ($(row).find('.active_yn').val() === '') {
+                    if ($(row).find('#active_yn').val() === '') {
                         alert("<%=t('message(select enable or not')%>");
                         return false;
                     }
@@ -249,53 +249,53 @@
                 }
 
                 /* 요금제 가격 관리 시작 */
-                $('.plan_amount_add').click(function() {
+                $('#plan_amount_add').click(function() {
                     if (!validationCheck()) {
                         return;
                     }
                     
-                    var newRow = $('.plan_amount tbody tr').first().clone().removeClass('hidden');
+                    var newRow = $('#plan_amount tbody tr').first().clone().removeClass('hidden');
 
-                    $(newRow).find('.amount').val('0');
-                    $(newRow).find('.surcharge').val('0');
-                    $(newRow).find('.apply_date').val($('.apply_date').val());
-                    $(newRow).find('.finish_date').val($('.finish_date').val());
+                    $(newRow).find('#amount').val('0');
+                    $(newRow).find('#surcharge').val('0');
+                    $(newRow).find('#apply_date').val($('#apply_date').val());
+                    $(newRow).find('#finish_date').val($('#finish_date').val());
 
-                    $('.plan_amount tbody').append(newRow);
+                    $('#plan_amount tbody').append(newRow);
                 });
 
-                $('.plan_amount_delete').click(function() {
-                    var selectedRow = $('.plan_amount tr.selected');
+                $('#plan_amount_delete').click(function() {
+                    var selectedRow = $('#plan_amount tr.selected');
                     if ($(selectedRow).length > 0) {
                         var index = $(selectedRow).index();
-                        var hidMode = $(selectedRow).find('.mode');
+                        var hidMode = $(selectedRow).find('#mode');
 
                         if (hidMode.val() == 'I') {
-                            $('.plan_amount tr.selected').remove();
+                            $('#plan_amount tr.selected').remove();
                         } else {
                             hidMode.val('D');
-                            $('.plan_amount tr.selected').addClass('hidden');
+                            $('#plan_amount tr.selected').addClass('hidden');
                         }
                     }
                 });
 
                 let preventChange = false;
-                $('.amount, .surcharge').focus(function() {
+                $('#amount, #surcharge').focus(function() {
                     preventChange = true;
                     $(this).val(parseCurrency($(this).val()));
                     $(this).select();
                     preventChange = false;
                 });
 
-                $('.amount, .surcharge').blur(function() {
+                $('#amount, #surcharge').blur(function() {
                     $(this).val(formatCurrency(parseCurrency($(this).val())));
                 });
 
-                $('.plan_amount tbody').on('click', 'tr', function() {
+                $('#plan_amount tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
-                $('.plan_amount').on('focus', '.amount, .time, .surcharge', function() {
+                $('#plan_amount').on('focus', '.amount, #time, #surcharge', function() {
                     preventChange = true;
 
                     $(this).val(parseCurrency($(this).val()));
@@ -304,39 +304,39 @@
                     preventChange = false;
                 });
 
-                $('.plan_amount').on('blur', '.amount, .time, .surcharge', function() {
+                $('#plan_amount').on('blur', '.amount, #time, #surcharge', function() {
                     $(this).val(formatCurrency(parseCurrency($(this).val())));
                 });
                 /* 요금제 가격 관리 끝 */
 
-                $('.close').click(function() {
+                $('#close').click(function() {
                     $('.modal').hide();
                 });
 
-                $('.save').click(function() {
+                $('#save').click(function() {
                     if (confirm("<%=t('message(save data)')%>")) {
                         if (!validationCheck()) {
                             return;
                         }
                         
-                        var planId = $('.plan_id').val();
-                        var planKname = $('.plan_kname').val();
-                        var planEname = $('.plan_ename').val();
-                        var flatDiv = $('.flat_div').val();
-                        var odmDiv = $('.odm_div').val();
-                        var applyDate = $('.apply_date').val();
-                        var finishDate = $('.finish_date').val();
-                        var activeYn = $('.active_yn').val();
-                        var remark = $('.remark').val();
+                        var planId = $('#plan_id').val();
+                        var planKname = $('#plan_kname').val();
+                        var planEname = $('#plan_ename').val();
+                        var flatDiv = $('#flat_div').val();
+                        var odmDiv = $('#odm_div').val();
+                        var applyDate = $('#apply_date').val();
+                        var finishDate = $('#finish_date').val();
+                        var activeYn = $('#active_yn').val();
+                        var remark = $('#remark').val();
 
                         var planAmounts = [];
 
-                        if ($('.plan_amount tbody tr').length === 1) {
+                        if ($('#plan_amount tbody tr').length === 1) {
                             alert("<%=t('message(enter price of the pricing plan)')%>");
                             return;
                         }
 
-                        $('.plan_amount tbody tr').each(function(index, row) {
+                        $('#plan_amount tbody tr').each(function(index, row) {
                             if (index === 0)
                                 return;
 
@@ -345,17 +345,17 @@
                             }
 
                             planAmounts.push({
-                                mode: $(row).find('.mode').val(),
-                                planId: $(row).find('.plan_id').val(),
-                                planSeq: $(row).find('.plan_seq').val(),
-                                amount: parseCurrency($(row).find('.amount').val()),
-                                time: parseCurrency($(row).find('.time').val()),
-                                billBase1: $(row).find('.bill_base_1').val(),
-                                surcharge: parseCurrency($(row).find('.surcharge').val()),
-                                billBase2: $(row).find('.bill_base_2').val(),
-                                applyDate: $(row).find('.apply_date').val(),
-                                finishDate: $(row).find('.finish_date').val(),
-                                activeYn: $(row).find('.active_yn').val(),
+                                mode: $(row).find('#mode').val(),
+                                planId: $(row).find('#plan_id').val(),
+                                planSeq: $(row).find('#plan_seq').val(),
+                                amount: parseCurrency($(row).find('#amount').val()),
+                                time: parseCurrency($(row).find('#time').val()),
+                                billBase1: $(row).find('#bill_base_1').val(),
+                                surcharge: parseCurrency($(row).find('#surcharge').val()),
+                                billBase2: $(row).find('#bill_base_2').val(),
+                                applyDate: $(row).find('#apply_date').val(),
+                                finishDate: $(row).find('#finish_date').val(),
+                                activeYn: $(row).find('#active_yn').val(),
                             });
                         });
 
@@ -407,7 +407,7 @@
                     }
                 });
 
-                $('.cancel').click(function() {
+                $('#cancel').click(function() {
                     if (confirm("<%=t('message(input cancel)')%>") == true)
                     {
                         $('.modal').hide();
@@ -416,11 +416,11 @@
                     }
                 });
                 
-                createVariablesSelection($('.flat_div'), flatDivs, "<%=t('select')%>");
-                createVariablesSelection($('.odm_div'), odmDivs, "<%=t('select')%>");
-                createVariablesSelection($('.active_yn'), activeYn, "<%=t('select')%>");
-                createVariablesSelection($('.bill_base_1'), billBases, "<%=t('select')%>");
-                createVariablesSelection($('.bill_base_2'), billBases, "<%=t('select')%>");
+                createVariablesSelection($('#flat_div'), flatDivs, "<%=t('select')%>");
+                createVariablesSelection($('#odm_div'), odmDivs, "<%=t('select')%>");
+                createVariablesSelection($('#active_yn'), activeYn, "<%=t('select')%>");
+                createVariablesSelection($('#bill_base_1'), billBases, "<%=t('select')%>");
+                createVariablesSelection($('#bill_base_2'), billBases, "<%=t('select')%>");
 
                 search();
             });
@@ -428,19 +428,19 @@
     </head>
     <body>
         <form class="plan-status-form">
-            <div class="content">
-                <div class="contents-container">
+            <div class="contents">
+                <div class="contents-item">
                     <div class="title"><%=t('list of pricing plan')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <p><input type="button" class="add" value="<%=t('regist')%>"/></p>
-                            <p><input type="button" class="modify" value="<%=t('modify')%>"/></p>
-                            <input type="button" class="detail" value="<%=t('details')%>"/>
+                            <span><input type="button" id="add" value="<%=t('regist')%>"/></span>
+                            <span><input type="button" id="modify" value="<%=t('modify')%>"/></span>
+                            <span><input type="button" id="detail" value="<%=t('details')%>"/></span>
                         </div>
                     </div>
                     <div>
-                        <table class="plan">
-                            <thead>
+                        <table id="plan" class="status-table">
+                            <thead class="status-thead">
                                 <tr>
                                     <th width="80px"><%=t('number')%></th>
                                     <th width="240px"><%=t('name of plan (kor)')%></th>
@@ -452,16 +452,16 @@
                                     <th width="100px"><%=t('enable')%></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="status-tbody">
                                 <tr class="hidden">
-                                    <td class="cell_plan_id" style="text-align: center;"></td>
-                                    <td class="cell_plan_kname" style="text-align: left;"></td>
-                                    <td class="cell_plan_ename" style="text-align: left;"></td>
-                                    <td class="cell_flat_div" style="text-align: center;"></td>
-                                    <td class="cell_odm_div" style="text-align: center;"></td>
-                                    <td class="cell_apply_date" style="text-align: center;"></td>
-                                    <td class="cell_finish_date" style="text-align: center;"></td>
-                                    <td class="cell_active_yn" style="text-align: center;"></td>
+                                    <td id="cell_plan_id" style="text-align: center;"></td>
+                                    <td id="cell_plan_kname" style="text-align: left;"></td>
+                                    <td id="cell_plan_ename" style="text-align: left;"></td>
+                                    <td id="cell_flat_div" style="text-align: center;"></td>
+                                    <td id="cell_odm_div" style="text-align: center;"></td>
+                                    <td id="cell_apply_date" style="text-align: center;"></td>
+                                    <td id="cell_finish_date" style="text-align: center;"></td>
+                                    <td id="cell_active_yn" style="text-align: center;"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"><%=t('message(search data)')%></td>
@@ -473,59 +473,59 @@
             </div>
         </form>
         <div class="modal">
-            <div class="modal-content" style="width:1060px">
+            <div class="modal-contents" style="width:1080px">
                 <div class="contents-container">
-                    <span class="close">&times;</span>
-                    <div class="title"><%=t('pricing plan management')%></div>
+                    <span id="close" class="modal-close">&times;</span>
+                    <div class="modal-title"><%=t('pricing plan management')%></div>
                     <div>
-                        <table>
-                            <thead>
+                        <table class="modal-table">
+                            <thead class="modal-thead">
                                 <tr>
-                                    <th width="140px" class="right-align">*<%=t('pricing plan number')%></th>
+                                    <th width="160px" class="right-align">*<%=t('pricing plan number')%></th>
                                     <td width="920px" class="left-align" colspan="3">
-                                        <input type="text" class="plan_id" style="width: 120px;" readonly/>
+                                        <input type="text" id="plan_id" style="width: 120px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th width="140px" class="right-align">*<%=t('name of plan (kor)')%></th>
+                                    <th width="160px" class="right-align">*<%=t('name of plan (kor)')%></th>
                                     <td width="380px" class="left-align">
-                                        <input type="text" class="plan_kname" style="width: 350px;"/>
+                                        <input type="text" id="plan_kname" style="width: 350px;"/>
                                     </td>
-                                    <th width="140px" class="right-align">*<%=t('name of plan (eng)')%></th>
+                                    <th width="160px" class="right-align">*<%=t('name of plan (eng)')%></th>
                                     <td width="380px" class="left-align">
-                                        <input type="text" class="plan_ename" style="width: 350px;"/>
+                                        <input type="text" id="plan_ename" style="width: 350px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('flat-rate class')%></th>
                                     <td class="left-align">
-                                        <select class="flat_div"></select>
+                                        <select id="flat_div"></select>
                                     </td>
                                     <th class="right-align">*<%=t('odm class')%></th>
                                     <td class="left-align">
-                                        <select class="odm_div"></select>
+                                        <select id="odm_div"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('date of application')%></th>
                                     <td class="left-align">
-                                        <input type="date" class="apply_date" style="width: 120px;"/>
+                                        <input type="date" id="apply_date" style="width: 120px;"/>
                                     </td>
                                     <th class="right-align">*<%=t('end date')%></th>
                                     <td class="left-align">
-                                        <input type="date" class="finish_date" style="width: 120px;"/>
+                                        <input type="date" id="finish_date" style="width: 120px;"/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align">*<%=t('enable')%></th>
                                     <td class="left-align" colspan="3">
-                                        <select class="active_yn"></select>
+                                        <select id="active_yn"></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class="right-align"><%=t('remark')%></th>
                                     <td class="left-align" colspan="3">
-                                        <textarea class="remark" style="width:900px; height:60px;"></textarea>
+                                        <textarea id="remark" style="width:900px; height:60px;"></textarea>
                                     </td>
                                 </tr>
                             </thead>    
@@ -534,15 +534,15 @@
                     <div class="table-container" style="height:200px">
                         <!-- 요금제 가격 시작 -->
                         <div id="plan_amount_content">
-                            <div class="title"><%=t('price of pricing plan')%></div>
+                            <div class="modal-title"><%=t('price of pricing plan')%></div>
                             <div class="top-right-button">
                                 <div class="align-container">
-                                    <p><input type="button" class="plan_amount_add" value="<%=t('regist')%>"/></p>
-                                    <input type="button" class="plan_amount_delete" value="<%=t('delete')%>"/>
+                                    <span><input type="button" id="plan_amount_add" value="<%=t('regist')%>"/></span>
+                                    <span><input type="button" id="plan_amount_delete" value="<%=t('delete')%>"/></span>
                                 </div>
                             </div>
-                            <table class="plan_amount">
-                                <thead>
+                            <table id="plan_amount" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
                                         <th width="100px"><%=t('sequential number')%></th>
                                         <th width="100px"><%=t('service price')%></th>
@@ -555,35 +555,35 @@
                                         <th width="120px"><%=t('enable')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
                                         <td>
-                                            <input type="hidden" class="mode" value="I">
-                                            <input type="text" class="plan_seq" style="width:82px;" readonly>
+                                            <input type="hidden" id="mode" value="I">
+                                            <input type="text" id="plan_seq" style="width:82px;" readonly>
                                         </td>
                                         <td>
-                                            <input type="text" class="amount" style="width:82px; text-align:right" value="0">
+                                            <input type="text" id="amount" style="width:82px; text-align:right" value="0">
                                         </td>
                                         <td>
-                                            <input type="text" class="time" style="width:82px; text-align:right" value="0">
+                                            <input type="text" id="time" style="width:82px; text-align:right" value="0">
                                         </td>
                                         <td>
-                                            <select class="bill_base_1" style="width:166px"></select>
+                                            <select id="bill_base_1" style="width:166px"></select>
                                         </td>
                                         <td>
-                                            <input type="text" class="surcharge" style="width:82px; text-align:right" value="0">
+                                            <input type="text" id="surcharge" style="width:82px; text-align:right" value="0">
                                         </td>
                                         <td>
-                                            <select class="bill_base_2" style="width:166px"></select>
+                                            <select id="bill_base_2" style="width:166px"></select>
                                         </td>
                                         <td>
-                                            <input type="date" class="apply_date" style="width:104px;">
+                                            <input type="date" id="apply_date" style="width:104px;">
                                         </td>
                                         <td>
-                                            <input type="date" class="finish_date" style="width:104px;">
+                                            <input type="date" id="finish_date" style="width:104px;">
                                         </td>
                                         <td>
-                                            <select class="active_yn" style="width:106px"></select>
+                                            <select id="active_yn" style="width:106px"></select>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -593,8 +593,8 @@
                     </div></br>
                     <div class="bottom-button">
                         <div class="align-container">
-                            <p><input type="button" class="save" value="<%=t('save')%>"/></p>
-                            <input type="button" class="cancel" value="<%=t('cancel')%>"/>
+                            <span><input type="button" id="save" value="<%=t('save')%>"/></span>
+                            <span><input type="button" id="cancel" value="<%=t('cancel')%>"/></span>
                         </div>
                     </div>
                 </div>

@@ -29,6 +29,14 @@
                         },
                     });
                 }
+
+                window.toggleLanguage = function(isOn) {
+                    if (isOn) {
+                        $('.topmenu-object').css('height', '220px');
+                    } else {
+                        $('.topmenu-object').css('height', '84px');
+                    }
+                }
             });
         </script>
     </head>
@@ -38,7 +46,7 @@
                 <object class="sidebar-contents" data="./sidebar"></object>
             </div>
             <div class="topmenu">
-                <iframe class="topmenu-frame" src="./topmenu"></iframe>
+                <object class="topmenu-object" data="./topmenu"></object>
             </div>
             <div class="main-contents">
                 <iframe class="contents-frame" src="./dashboard"></iframe>
