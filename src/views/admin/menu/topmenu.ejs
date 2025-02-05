@@ -63,30 +63,6 @@
                     });
                 });
 
-                $('.logo').click(function(event) {
-                    event.preventDefault();
-
-                    $.ajax({
-                        url: "../session",
-                        method: "POST",
-                        success: function (data) {
-                            switch (data) {
-                                case "SESSION":
-                                    window.parent.location.href = "./main";
-                                    break;
-                                case "NO SESSION":
-                                    alert("<%=t('message(session expires)')%>");
-                                    window.parent.location.href = "./login";
-                                    break;
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            alert("<%=t('message(request failed)')%>");
-                            window.location.href = "./login";
-                        },
-                    });
-                });
-
                 const $customSelect = $('.custom-select');
                 const $selected = $customSelect.find('.selected');
                 const $dropdown = $customSelect.find('.dropdown');

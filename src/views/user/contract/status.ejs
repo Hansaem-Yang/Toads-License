@@ -2,12 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/content-styles.css">
-        <!--
-        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
-        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
-        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
-        -->
+        <link rel="stylesheet" href="/public/css/content-styles-figma.css">
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
         <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
@@ -16,7 +11,7 @@
                 var search = function() {
                     clearContract();
 
-                    var companyNo = $('.s_company_no').val();
+                    var companyNo = $('#s_company_no').val();
                     if (companyNo === '')
                     {
                         alert("<%=t('message(select client company)')%>");
@@ -36,60 +31,60 @@
                                 window.parent.location.href = "./login";
                             } else if (data === 'NO DATA') {
                                 var newRow = '<tr><td colspan="9" class="left-align"><%=t("message(no data)")%></td></tr>';
-                                $('.contract tbody').append(newRow);
+                                $('#contract tbody').append(newRow);
                             } else {
                                 if (Array.isArray(data)) {
                                     $.each(data, function(index, post) {
-                                        var newRow = $('.contract tbody tr').first().clone().removeClass('hidden');
+                                        var newRow = $('#contract tbody tr').first().clone().removeClass('hidden');
 
-                                        $(newRow).find('.cell_contract_no').text(post.contractNo);
-                                        $(newRow).find('.cell_contract_name').text(post.contractName);
-                                        $(newRow).find('.cell_contract_date').text(post.contractDate);
-                                        $(newRow).find('.cell_contractor').text(post.contractor);
-                                        $(newRow).find('.cell_start_date').text(post.startDate);
-                                        $(newRow).find('.cell_end_date').text(post.endDate);
-                                        $(newRow).find('.cell_contract_status').text(contractStatus[post.contractStatus]);
-                                        $(newRow).find('.cell_monetary_unit').text(post.monetaryUnit);
-                                        $(newRow).find('.cell_exchange_rate').text(post.exchangeRate);
-                                        $(newRow).find('.cell_actual_amount').text(formatCurrency(post.actualAmount));
+                                        $(newRow).find('#cell_contract_no').text(post.contractNo);
+                                        $(newRow).find('#cell_contract_name').text(post.contractName);
+                                        $(newRow).find('#cell_contract_date').text(post.contractDate);
+                                        $(newRow).find('#cell_contractor').text(post.contractor);
+                                        $(newRow).find('#cell_start_date').text(post.startDate);
+                                        $(newRow).find('#cell_end_date').text(post.endDate);
+                                        $(newRow).find('#cell_contract_status').text(contractStatus[post.contractStatus]);
+                                        $(newRow).find('#cell_monetary_unit').text(post.monetaryUnit);
+                                        $(newRow).find('#cell_exchange_rate').text(post.exchangeRate);
+                                        $(newRow).find('#cell_actual_amount').text(formatCurrency(post.actualAmount));
 
-                                        $('.contract tbody').append(newRow);
+                                        $('#contract tbody').append(newRow);
                                     });
                                 }
                             }
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="9" class="left-align"><%=t("message(request failed)")%></td></tr>';
-                            $('.contract tbody').append(newRow);
+                            $('#contract tbody').append(newRow);
                         },
                     });
                 };
 
-                $('.detail').click(function() {
+                $('#detail').click(function() {
                     details();
                 });
 
-                $('.contract tbody').on('click', 'tr', function() {
+                $('#contract tbody').on('click', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
                 });
 
-                $('.contract tbody').on('dblclick', 'tr', function() {
+                $('#contract tbody').on('dblclick', 'tr', function() {
                     $(this).addClass('selected').siblings().removeClass('selected');
 
                     details();
                 });
 
                 var details = function() {
-                    var companyNo = $('.s_company_no').val();
+                    var companyNo = $('#s_company_no').val();
                     if (companyNo === '')
                     {
                         alert("<%=t('message(select client company)')%>");
                         return;
                     }
 
-                    var selectedRow = $(".contract tr.selected");
+                    var selectedRow = $('#contract tr.selected');
                     if (selectedRow.length > 0) {
-                        var contractNo = selectedRow.find('.cell_contract_no').text();
+                        var contractNo = selectedRow.find('#cell_contract_no').text();
                         
                         window.location.href = "../view/contract/detail?companyNo=" + companyNo + "&contractNo=" + contractNo;
                     } else {
@@ -98,7 +93,7 @@
                 }
 
                 var clearContract = function() {
-                    const rows = document.querySelectorAll(".contract tbody tr:not(:first-child)");
+                    const rows = document.querySelectorAll("#contract tbody tr:not(:first-child)");
                     rows.forEach(row => {
                         row.remove();
                     });
@@ -110,50 +105,48 @@
     </head>
     <body>
         <form class="contract-status-form">
+            <input type="hidden" id="s_company_no" value="<%=session.user.companyNo%>"/>
             <div class="contents">
-                <input type="hidden" class="s_company_no" value="<%=session.user.companyNo%>"/>
-                <div class="contents-container">
+                <div class="contents-item">
                     <div class="title"><%=t('contract list')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <input type="button" class="detail" value="<%=t('details')%>"/>
+                            <input type="button" id="detail" value="<%=t('details')%>"/>
                         </div>
                     </div>
-                    <div>
-                        <table class="contract">
-                            <thead>
-                                <tr>
-                                    <th width="180px"><%=t('contract number')%></th>
-                                    <th width="260px"><%=t('contract name')%></th>
-                                    <th width="120px"><%=t('contract date')%></th>
-                                    <th width="140px"><%=t('person in charge')%></th>
-                                    <th width="200px"><%=t('contract period')%></th>
-                                    <th width="100px"><%=t('monetray unit')%></th>
-                                    <th width="100px"><%=t('exchange rate')%></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="hidden">
-                                    <td class="cell_contract_no" style="text-align: center;"></td>
-                                    <td class="cell_contract_name" style="text-align: left;"></td>
-                                    <td class="cell_contract_date" style="text-align: center;"></td>
-                                    <td class="cell_contractor" style="text-align: center;"></td>
-                                    <td>
-                                        <div class="align-container-center">
-                                            <p class="cell_start_date"></p>
-                                            <p class="">~</p>
-                                            <p class="cell_end_date"></p>
-                                        </div>
-                                    </td>
-                                    <td class="cell_monetary_unit" style="text-align: center;"></td>
-                                    <td class="cell_exchange_rate" style="text-align: right;"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="9"><%=t('message(search data)')%></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table id="contract" class="status-table">
+                        <thead class="status-thead">
+                            <tr>
+                                <th width="180px"><%=t('contract number')%></th>
+                                <th width="260px"><%=t('contract name')%></th>
+                                <th width="120px"><%=t('contract date')%></th>
+                                <th width="140px"><%=t('person in charge')%></th>
+                                <th width="200px"><%=t('contract period')%></th>
+                                <th width="100px"><%=t('monetray unit')%></th>
+                                <th width="100px"><%=t('exchange rate')%></th>
+                            </tr>
+                        </thead>
+                        <tbody class="status-tbody">
+                            <tr class="hidden">
+                                <td id="cell_contract_no" style="text-align: center;"></td>
+                                <td id="cell_contract_name" style="text-align: left;"></td>
+                                <td id="cell_contract_date" style="text-align: center;"></td>
+                                <td id="cell_contractor" style="text-align: center;"></td>
+                                <td>
+                                    <div class="align-container-center">
+                                        <span id="cell_start_date"></span>
+                                        <span>~</span>
+                                        <span id="cell_end_date"></span>
+                                    </div>
+                                </td>
+                                <td id="cell_monetary_unit" style="text-align: center;"></td>
+                                <td id="cell_exchange_rate" style="text-align: right;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="9"><%=t('message(search data)')%></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </form>

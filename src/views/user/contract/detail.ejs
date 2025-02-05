@@ -2,12 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/content-styles.css">
-        <!--
-        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
-        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
-        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
-        -->
+        <link rel="stylesheet" href="/public/css/content-styles-figma.css">
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="/public/js/common/common_utility.js"></script>
         <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
@@ -34,7 +29,7 @@
                                     });
                                 });
 
-                                createSelection($('.plan_id'), plans, "<%=t('select')%>");
+                                createSelection($('#plan_id'), plans, "<%=t('select')%>");
                             }
                         }
                     },
@@ -62,7 +57,7 @@
                                     });
                                 });
 
-                                createSelection($('.contract_manager'), employees, "<%=t('select')%>");
+                                createSelection($('#contract_manager'), employees, "<%=t('select')%>");
                             }
                         }
                     },
@@ -74,8 +69,8 @@
                 var search = function() {
                     clear();
 
-                    var companyNo = $('.company_no').val();
-                    var contractNo = $('.contract_no').val();
+                    var companyNo = $('#company_no').val();
+                    var contractNo = $('#contract_no').val();
 
                     // 행 데이터 출력
                     $.ajax({
@@ -93,22 +88,22 @@
                                 alert("<%=t('message(no data)')%>");
                             } else {
 
-                                $('.cell_company_name').text(data.companyName);
-                                $('.cell_contract_no').text(data.contractNo);
-                                $('.cell_contract_name').text(data.contractName);
-                                $('.cell_contract_date').text(data.contractDate);
-                                $('.cell_contractor').text(data.contractor);
-                                $('.cell_contract_service').text(contractServices[data.contractService]);
-                                $('.cell_contract_div').text(contractDivs[data.contractDiv]);
-                                $('.cell_contract_period').text(contractPeriods[data.contractPeriod]);
-                                $('.cell_start_date').text(data.startDate);
-                                $('.cell_end_date').text(data.endDate);
-                                $('.cell_monetary_unit').text(monetaryUnits[data.monetaryUnit]);
-                                $('.cell_exchange_rate').text(data.exchangeRate);
-                                $('.cell_remark').text(data.remark);
+                                $('#cell_company_name').text(data.companyName);
+                                $('#cell_contract_no').text(data.contractNo);
+                                $('#cell_contract_name').text(data.contractName);
+                                $('#cell_contract_date').text(data.contractDate);
+                                $('#cell_contractor').text(data.contractor);
+                                $('#cell_contract_service').text(contractServices[data.contractService]);
+                                $('#cell_contract_div').text(contractDivs[data.contractDiv]);
+                                $('#cell_contract_period').text(contractPeriods[data.contractPeriod]);
+                                $('#cell_start_date').text(data.startDate);
+                                $('#cell_end_date').text(data.endDate);
+                                $('#cell_monetary_unit').text(monetaryUnits[data.monetaryUnit]);
+                                $('#cell_exchange_rate').text(data.exchangeRate);
+                                $('#cell_remark').text(data.remark);
 
                                 const employee = employees.find(element => element.code === data.contractManager);
-                                $('.cell_contract_manager').text(employee?employee.name:'');
+                                $('#cell_contract_manager').text(employee?employee.name:'');
                                 
                                 switch(data.contractDiv)
                                 {
@@ -116,37 +111,37 @@
                                         viewExpandedChildren($('#view_license_content'));
 
                                         data.licenses.forEach(function(license, index){
-                                            var newRow = $('.view_license tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#view_license tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.cell_license_no').text(license.licenseNo);
-                                            $(newRow).find('.cell_license_type').text(licenseTypes[license.licenseType]);
-                                            $(newRow).find('.cell_license_div').text(licenseDivs[license.licenseDiv]);
-                                            $(newRow).find('.cell_license_start_date').text(license.startDate);
-                                            $(newRow).find('.cell_license_end_date').text(license.endDate);
-                                            $(newRow).find('.cell_license_count').text(license.licenseCount);
-                                            $(newRow).find('.cell_unit_price').text(formatCurrency(license.unitPrice));
-                                            $(newRow).find('.cell_license_amount').text(formatCurrency(license.amount));
-                                            $(newRow).find('.cell_license_discounted_amount').text(formatCurrency(license.discountedAmount));
-                                            $(newRow).find('.cell_license_actual_amount').text(formatCurrency(license.actualAmount));
+                                            $(newRow).find('#cell_license_no').text(license.licenseNo);
+                                            $(newRow).find('#cell_license_type').text(licenseTypes[license.licenseType]);
+                                            $(newRow).find('#cell_license_div').text(licenseDivs[license.licenseDiv]);
+                                            $(newRow).find('#cell_license_start_date').text(license.startDate);
+                                            $(newRow).find('#cell_license_end_date').text(license.endDate);
+                                            $(newRow).find('#cell_license_count').text(license.licenseCount);
+                                            $(newRow).find('#cell_unit_price').text(formatCurrency(license.unitPrice));
+                                            $(newRow).find('#cell_license_amount').text(formatCurrency(license.amount));
+                                            $(newRow).find('#cell_license_discounted_amount').text(formatCurrency(license.discountedAmount));
+                                            $(newRow).find('#cell_license_actual_amount').text(formatCurrency(license.actualAmount));
 
-                                            $('.view_license tbody').append(newRow);
+                                            $('#view_license tbody').append(newRow);
                                         });
                                         break;
                                     case "D":
                                         viewExpandedChildren($('#view_odm_content'));
                                         
                                         data.odmContracts.forEach(function(odmContract, index){
-                                            var newRow = $('.view_odm_contract tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#view_odm_contract tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.cell_odm_seq').text(odmContract.odmSeq);
-                                            $(newRow).find('.cell_odm_cont_div').text(odmContractDivs[odmContract.odmContDiv]);
-                                            $(newRow).find('.cell_pay_currency').text(monetaryUnits[odmContract.payCurrency]);
-                                            $(newRow).find('.cell_pay_unit').text(payUnits[odmContract.payUnit]);
-                                            $(newRow).find('.cell_pay_term_mo').text(odmContract.payTermMo);
-                                            $(newRow).find('.cell_unit_price').text(odmContract.unitPrice);
-                                            $(newRow).find('.cell_apply_date').text(odmContract.applyDate);
+                                            $(newRow).find('#cell_odm_seq').text(odmContract.odmSeq);
+                                            $(newRow).find('#cell_odm_cont_div').text(odmContractDivs[odmContract.odmContDiv]);
+                                            $(newRow).find('#cell_pay_currency').text(monetaryUnits[odmContract.payCurrency]);
+                                            $(newRow).find('#cell_pay_unit').text(payUnits[odmContract.payUnit]);
+                                            $(newRow).find('#cell_pay_term_mo').text(odmContract.payTermMo);
+                                            $(newRow).find('#cell_unit_price').text(odmContract.unitPrice);
+                                            $(newRow).find('#cell_apply_date').text(odmContract.applyDate);
 
-                                            $('.view_odm_contract tbody').append(newRow);
+                                            $('#view_odm_contract tbody').append(newRow);
                                         });
                                         break;
                                     case "A":
@@ -155,39 +150,39 @@
                                         viewExpandedChildren($('#view_ships_subscribe_content'));
                                         
                                         data.shipsContracts.forEach(function(shipsContract, index){
-                                            var newRow = $('.view_ships_contract tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#view_ships_contract tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.cell_ship_seq').text(shipsContract.shipSeq);
-                                            $(newRow).find('.cell_ship_name').text(shipsContract.shipName);
-                                            $(newRow).find('.cell_imo_no').text(shipsContract.imoNo);
-                                            $(newRow).find('.cell_equip_lent').text(useYn[shipsContract.equipLent]);
-                                            $(newRow).find('.cell_ship_apply_start_date').text(shipsContract.applyStartDate);
-                                            $(newRow).find('.cell_ship_apply_finish_date').text(shipsContract.applyFinishDate);
+                                            $(newRow).find('#cell_ship_seq').text(shipsContract.shipSeq);
+                                            $(newRow).find('#cell_ship_name').text(shipsContract.shipName);
+                                            $(newRow).find('#cell_imo_no').text(shipsContract.imoNo);
+                                            $(newRow).find('#cell_equip_lent').text(useYn[shipsContract.equipLent]);
+                                            $(newRow).find('#cell_ship_apply_start_date').text(shipsContract.applyStartDate);
+                                            $(newRow).find('#cell_ship_apply_finish_date').text(shipsContract.applyFinishDate);
 
                                             const item = plans.find(element => element.code === shipsContract.planId);
                                             
-                                            $(newRow).find('.cell_plan_name').text(item?item.name:'');
+                                            $(newRow).find('#cell_plan_name').text(item?item.name:'');
 
-                                            $('.view_ships_contract tbody').append(newRow);
+                                            $('#view_ships_contract tbody').append(newRow);
                                         });
                                         break;
                                     case "C":
                                         viewExpandedChildren($('#view_company_subscribe_content'));
                                         
                                         data.companyContracts.forEach(function(companyContract, index){
-                                            var newRow = $('.view_company_contract tbody tr').first().clone().removeClass('hidden');
+                                            var newRow = $('#view_company_contract tbody tr').first().clone().removeClass('hidden');
 
-                                            $(newRow).find('.cell_seq').text(companyContract.seq);
-                                            $(newRow).find('.cell_company_subscribe_div').text(subscriptionDivs[companyContract.subscribeDiv]);
-                                            $(newRow).find('.cell_company_pay_currency').text(monetaryUnits[companyContract.payCurrency]);
-                                            $(newRow).find('.cell_company_apply_start_date').text(companyContract.applyStartDate);
-                                            $(newRow).find('.cell_company_apply_finish_date').text(companyContract.applyFinishDate);
+                                            $(newRow).find('#cell_seq').text(companyContract.seq);
+                                            $(newRow).find('#cell_company_subscribe_div').text(subscriptionDivs[companyContract.subscribeDiv]);
+                                            $(newRow).find('#cell_company_pay_currency').text(monetaryUnits[companyContract.payCurrency]);
+                                            $(newRow).find('#cell_company_apply_start_date').text(companyContract.applyStartDate);
+                                            $(newRow).find('#cell_company_apply_finish_date').text(companyContract.applyFinishDate);
 
                                             const item = plans.find(element => element.code === companyContract.planId);
                                             
-                                            $(newRow).find('.cell_company_plan_name').text(item?item.name:'');
+                                            $(newRow).find('#cell_company_plan_name').text(item?item.name:'');
 
-                                            $('.view_company_contract tbody').append(newRow);
+                                            $('#view_company_contract tbody').append(newRow);
                                         });
                                         break;
                                 }
@@ -199,38 +194,38 @@
                     });
                 };
 
-                $('.back').click(function() {
-                    window.location.href = "../../view/contract?companyNo=" + $('.company_no').val();
+                $('#back').click(function() {
+                    window.location.href = "../../view/contract?companyNo=" + $('#company_no').val();
                 });
 
                 var clear = function() {
-                    $('.cell_company_name').text('');
-                    $('.cell_contract_no').text('');
-                    $('.cell_contract_name').text('');
-                    $('.cell_contract_date').text('');
-                    $('.cell_contractor').text('');
-                    $('.cell_contract_service').text('');
-                    $('.cell_contract_div').text('');
-                    $('.cell_contract_period').text('');
-                    $('.cell_contract_status').text('');
-                    $('.cell_start_date').text('');
-                    $('.cell_end_date').text('');
-                    $('.cell_monetary_unit').text('');
-                    $('.cell_exchange_rate').text('0');
-                    $('.cell_contract_manager').text('');
-                    $('.cell_remark').text('');
+                    $('#cell_company_name').text('');
+                    $('#cell_contract_no').text('');
+                    $('#cell_contract_name').text('');
+                    $('#cell_contract_date').text('');
+                    $('#cell_contractor').text('');
+                    $('#cell_contract_service').text('');
+                    $('#cell_contract_div').text('');
+                    $('#cell_contract_period').text('');
+                    $('#cell_contract_status').text('');
+                    $('#cell_start_date').text('');
+                    $('#cell_end_date').text('');
+                    $('#cell_monetary_unit').text('');
+                    $('#cell_exchange_rate').text('0');
+                    $('#cell_contract_manager').text('');
+                    $('#cell_remark').text('');
 
-                    const licenseRows = document.querySelectorAll(".view_license tbody tr:not(:first-child)");
+                    const licenseRows = document.querySelectorAll("#view_license tbody tr:not(:first-child)");
                     licenseRows.forEach(row => {
                         row.remove();
                     });
                     
-                    const odmContractRows = document.querySelectorAll(".view_odm_contract tbody tr:not(:first-child)");
+                    const odmContractRows = document.querySelectorAll("#view_odm_contract tbody tr:not(:first-child)");
                     odmContractRows.forEach(row => {
                         row.remove();
                     });
                     
-                    const shipsContractRows = document.querySelectorAll(".view_ships_contract tbody tr:not(:first-child)");
+                    const shipsContractRows = document.querySelectorAll("#view_ships_contract tbody tr:not(:first-child)");
                     shipsContractRows.forEach(row => {
                         row.remove();
                     });
@@ -242,76 +237,76 @@
     </head>
     <body>
         <form class="contract-detail-form">
-            <input type="hidden" class="company_no" value="<%=companyNo%>"/>
-            <input type="hidden" class="contract_no" value="<%=contractNo%>"/>
+            <input type="hidden" id="company_no" value="<%=companyNo%>"/>
+            <input type="hidden" id="contract_no" value="<%=contractNo%>"/>
             
             <div class="contents">
-                <div  class="contents-container">
+                <div  class="contents-item">
                     <div class="title"><%=t('contract information')%></div>
                     <div class="top-right-button">
                         <div class="align-container">
-                            <input type="button" class="back" value="<%=t('back')%>"/>
+                            <input type="button" id="back" value="<%=t('back')%>"/>
                         </div>
                     </div>
-                    <div>
-                        <table class="contract">
-                            <thead>
-                                <tr>
-                                    <th width="120px" class="right-align"><%=t('client company')%></th>
-                                    <td width="980px" class="cell_company_name" colspan="3"></td>
-                                </tr>
-                                <tr>
-                                    <th width="120px" class="right-align"><%=t('contract number')%></th>
-                                    <td width="380px" class="cell_contract_no"></td>
-                                    <th width="120px" class="right-align"><%=t('contract name')%></th>
-                                    <td width="380px" class="cell_contract_name"></td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('contract date')%></th>
-                                    <td class="cell_contract_date"></td>
-                                    <th class="right-align"><%=t('person in charge')%></th>
-                                    <td class="cell_contractor"></td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('contract service')%></th>
-                                    <td class="cell_contract_service"></td>
-                                    <th class="right-align"><%=t('contract classification')%></th>
-                                    <td class="cell_contract_div"></td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('contract period')%></th>
-                                    <td colspan="3">
-                                        <div class="align-container">
-                                            <p class="cell_contract_period"></p>
-                                            <p class="cell_start_date"></p>
-                                            <p>~</p>
-                                            <p class="cell_end_date"></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('monetray unit')%></th>
-                                    <td class="cell_monetary_unit"></td>
-                                    <th class="right-align"><%=t('exchange rate')%></th>
-                                    <td class="cell_exchange_rate"></td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('person in charge of a contract')%></th>
-                                    <td class="cell_contract_manager" colspan="3"></td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('remark')%></th>
-                                    <td class="cell_remark" style="height:100px" colspan="3"></td>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div></br>
+                    <table id="contract" class="detail-table">
+                        <thead class="detail-thead">
+                            <tr>
+                                <th width="160px" class="right-align"><%=t('client company')%></th>
+                                <td width="940px" id="cell_company_name" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <th width="160px" class="right-align"><%=t('contract number')%></th>
+                                <td width="380px" id="cell_contract_no"></td>
+                                <th width="160px" class="right-align"><%=t('contract name')%></th>
+                                <td width="380px" id="cell_contract_name"></td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('contract date')%></th>
+                                <td id="cell_contract_date"></td>
+                                <th class="right-align"><%=t('person in charge')%></th>
+                                <td id="cell_contractor"></td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('contract service')%></th>
+                                <td id="cell_contract_service"></td>
+                                <th class="right-align"><%=t('contract classification')%></th>
+                                <td id="cell_contract_div"></td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('contract period')%></th>
+                                <td colspan="3">
+                                    <div class="align-container">
+                                        <span id="cell_contract_period"></span>
+                                        <span id="cell_start_date"></span>
+                                        <span>~</span>
+                                        <span id="cell_end_date"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('monetray unit')%></th>
+                                <td id="cell_monetary_unit"></td>
+                                <th class="right-align"><%=t('exchange rate')%></th>
+                                <td id="cell_exchange_rate"></td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('person in charge of a contract')%></th>
+                                <td id="cell_contract_manager" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('remark')%></th>
+                                <td id="cell_remark" style="height:100px" colspan="3"></td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div  class="contents-item">
                     <div class="table-container">
                         <!-- License 시작 -->
                         <div id="view_license_content" class="hidden">
                             <div class="title"><%=t('license list')%></div>
-                            <table class="view_license">
-                                <thead>
+                            <table id="view_license" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
                                         <th width="160px"><%=t('number')%></th>
                                         <th width="140px"><%=t('type')%></th>
@@ -324,22 +319,23 @@
                                         <th width="100px"><%=t('actual amount')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
-                                        <td class="cell_license_no" style="text-align: center;"></td>
-                                        <td class="cell_license_type" style="text-align: center;"></td>
-                                        <td class="cell_license_div" style="text-align: center;"></td>
+                                        <td id="cell_license_no" style="text-align: center;"></td>
+                                        <td id="cell_license_type" style="text-align: center;"></td>
+                                        <td id="cell_license_div" style="text-align: center;"></td>
                                         <td>
                                             <div class="align-container-center">
-                                                <p class="cell_license_start_date"></p>~
-                                                <p class="cell_license_end_date"></p>
+                                                <span id="cell_license_start_date"></span>
+                                                <span>~</span>
+                                                <span id="cell_license_end_date"></span>
                                             </div>
                                         </td>
-                                        <td class="cell_license_count" style="text-align: right;"></td>
-                                        <td class="cell_unit_price" style="text-align: right;"></td>
-                                        <td class="cell_license_amount" style="text-align: right;"></td>
-                                        <td class="cell_license_discounted_amount" style="text-align: right;"></td>
-                                        <td class="cell_license_actual_amount" style="text-align: right;"></td>
+                                        <td id="cell_license_count" style="text-align: right;"></td>
+                                        <td id="cell_unit_price" style="text-align: right;"></td>
+                                        <td id="cell_license_amount" style="text-align: right;"></td>
+                                        <td id="cell_license_discounted_amount" style="text-align: right;"></td>
+                                        <td id="cell_license_actual_amount" style="text-align: right;"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -348,8 +344,8 @@
                         <!-- ODM 계약 시작 -->
                         <div id="view_odm_content" class="hidden">
                             <div class="title"><%=t('odm contract')%></div>
-                            <table class="view_odm_contract">
-                                <thead>
+                            <table id="view_odm_contract" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
                                         <th width="60px"><%=t('sequential number')%></th>
                                         <th width="160px"><%=t('contract classification')%></th>
@@ -360,15 +356,15 @@
                                         <th width="160px"><%=t('date of application')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
-                                        <td class="cell_odm_seq" style="text-align: center;"></td>
-                                        <td class="cell_odm_cont_div" style="text-align: center;"></td>
-                                        <td class="cell_pay_currency" style="text-align: center;"></td>
-                                        <td class="cell_pay_unit" style="text-align: center;"></td>
-                                        <td class="cell_pay_term_mo" style="text-align: center;"></td>
-                                        <td class="cell_unit_price" style="text-align: right;"></td>
-                                        <td class="cell_apply_date" style="text-align: center;"></td>
+                                        <td id="cell_odm_seq" style="text-align: center;"></td>
+                                        <td id="cell_odm_cont_div" style="text-align: center;"></td>
+                                        <td id="cell_pay_currency" style="text-align: center;"></td>
+                                        <td id="cell_pay_unit" style="text-align: center;"></td>
+                                        <td id="cell_pay_term_mo" style="text-align: center;"></td>
+                                        <td id="cell_unit_price" style="text-align: right;"></td>
+                                        <td id="cell_apply_date" style="text-align: center;"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -377,8 +373,8 @@
                         <!-- 선박별 구독계약 시작 -->
                         <div id="view_ships_subscribe_content" class="hidden">
                             <div class="title"><%=t('ship subscribe contract')%></div>
-                            <table class="view_ships_contract">
-                                <thead>
+                            <table id="view_ships_contract" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
                                         <th width="60px"><%=t('sequential number')%></th>
                                         <th width="200px"><%=t('ship name')%></th>
@@ -388,19 +384,20 @@
                                         <th width="180px"><%=t('payment system')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
-                                        <td class="cell_ship_seq" style="text-align: center;"></td>
-                                        <td class="cell_ship_name" style="text-align: center;"></td>
-                                        <td class="cell_imo_no" style="text-align: center;"></td>
-                                        <td class="cell_equip_lent" style="text-align: center;"></td>
+                                        <td id="cell_ship_seq" style="text-align: center;"></td>
+                                        <td id="cell_ship_name" style="text-align: center;"></td>
+                                        <td id="cell_imo_no" style="text-align: center;"></td>
+                                        <td id="cell_equip_lent" style="text-align: center;"></td>
                                         <td>
                                             <div class="align-container-center">
-                                                <p class="cell_ship_apply_start_date"></p>~
-                                                <p class="cell_ship_apply_finish_date"></p>
+                                                <span id="cell_ship_apply_start_date"></span>
+                                                <span>~</span>
+                                                <span id="cell_ship_apply_finish_date"></span>
                                             </div>
                                         </td>
-                                        <td class="cell_plan_name" style="text-align: center;"></td>
+                                        <td id="cell_plan_name" style="text-align: center;"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -409,8 +406,8 @@
                         <!-- 기업별 구독계약 시작 -->
                         <div id="view_company_subscribe_content" class="hidden">
                             <div class="title"><%=t('ship subscribe contract')%></div>
-                            <table class="view_company_contract">
-                                <thead>
+                            <table id="view_company_contract" class="status-table">
+                                <thead class="status-thead">
                                     <tr>
                                         <th width="60px"><%=t('sequential number')%></th>
                                         <th width="160px"><%=t('subscription classification')%></th>
@@ -419,19 +416,19 @@
                                         <th width="180px"><%=t('payment system')%></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="status-tbody">
                                     <tr class="hidden">
-                                        <td class="cell_seq" style="text-align: center;"></td>
-                                        <td class="cell_company_subscribe_div" style="text-align: center;"></td>
-                                        <td class="cell_company_pay_currency" style="text-align: center;"></td>
+                                        <td id="cell_seq" style="text-align: center;"></td>
+                                        <td id="cell_company_subscribe_div" style="text-align: center;"></td>
+                                        <td id="cell_company_pay_currency" style="text-align: center;"></td>
                                         <td>
                                             <div class="align-container-center">
-                                                <p class="cell_company_apply_start_date"></p>
-                                                <p>~</p>
-                                                <p class="cell_company_apply_finish_date"></p>
+                                                <span id="cell_company_apply_start_date"></span>
+                                                <span>~</span>
+                                                <span id="cell_company_apply_finish_date"></span>
                                             </div>
                                         </td>
-                                        <td class="cell_company_plan_name" style="text-align: center;"></td>
+                                        <td id="cell_company_plan_name" style="text-align: center;"></td>
                                     </tr>
                                 </tbody>
                             </table>

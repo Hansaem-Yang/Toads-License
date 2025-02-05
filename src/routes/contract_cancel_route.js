@@ -82,9 +82,9 @@ module.exports = function (app) {
     });
     app.post("/user/contract/cancel/detail", (req, res) => {
         let contractNo = req.body.contractNo;
-        let userNo = req.body.userNo;
+        let seq = req.body.seq;
 
-        manager.detail(contractNo, userNo).then((data) => {
+        manager.detail(contractNo, seq).then((data) => {
             if (data == null || data.length <= 0) {
                 res.send(constants.NO_DATA);
             } else {
@@ -98,8 +98,6 @@ module.exports = function (app) {
         let contents = req.body.contents;
         let status = req.body.status;
 
-        console.log("???");
-
         manager.insert(contractNo, reason, contents, status).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
@@ -108,7 +106,7 @@ module.exports = function (app) {
             }
         });
     });
-    app.post("/admin/contract/cancel/update", (req, res) => {
+    app.post("/user/contract/cancel/update", (req, res) => {
         let contractNo = req.body.contractNo;
         let seq = req.body.seq;
         let reason = req.body.reason;

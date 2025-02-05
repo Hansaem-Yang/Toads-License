@@ -492,6 +492,9 @@
                                         alert("<%=t('message(save failed)')%>");
                                         return;
                                     case "SUCCESS":
+                                        $('.pwd').val(newPwd);
+                                        $('.check_pwd').val(checkPwd);
+                                        
                                         alert("<%=t('message(save success)')%>");
                                         break;
                                 }

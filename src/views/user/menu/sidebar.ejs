@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/styles.css">
+        <link rel="stylesheet" href="/public/css/styles-figma.css">
         <!--
         <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
         <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
@@ -11,10 +11,47 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script>
             $(document).ready(function() {
+                $('#logo').click(function(event) {
+                    event.preventDefault();
+
+                    $.ajax({
+                        url: "../session",
+                        method: "POST",
+                        success: function (data) {
+                            switch (data) {
+                                case "SESSION":
+                                    window.parent.location.href = "./main";
+                                    break;
+                                case "NO SESSION":
+                                    alert("<%=t('message(session expires)')%>");
+                                    window.parent.location.href = "./login";
+                                    break;
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert("<%=t('message(request failed)')%>");
+                            window.location.href = "./login";
+                        },
+                    });
+                });
+
                 $('.side-menu div').each(function() {
                     if ($(this).attr('id') === $('#menu_id').val()) {
                         $(this).addClass('side-menu-selected');
                     }
+                });
+
+                $('.menu-item').on('mouseenter', function() {
+                    var src = `/public/images/icon/${$(this).attr('id')}_selected.png`;
+                    $(this).find('img').attr('src', src);
+                });
+
+                $('.menu-item').on('mouseleave', function() {
+                    if ($(this).hasClass('menu-selected'))
+                        return;
+
+                    var src = `/public/images/icon/${$(this).attr('id')}.png`;
+                    $(this).find('img').attr('src', src);
                 });
 
                 $('.menu-item').click(function() {
@@ -25,7 +62,7 @@
                     $('.submenu').not(submenu).slideUp();
                     submenu.slideToggle();
 
-                    if ($(this).attr('id') === 'contract_parent')
+                    if ($(this).attr('id') === 'contract_parent' || $(this).attr('id') === 'manager_parent')
                         return;
 
                     parent.onSelectMenu($(this).attr('id'));
@@ -41,21 +78,47 @@
         </script>
     </head>
     <body>
-        <form id="sidebar-form">
+        <form class="sidebar-contents" id="sidebar-form">
             <input type="hidden" id="menu_id" value="<%=session.menuId%>"/>
+            <div id="logo" class="logo"></div>
+            <div class="menu-title">Menu</div>
             <div class="menu">
-                <div id="dashboard" class="menu-item"><%=t('home')%></div>
-                <div id="company" class="menu-item"><%=t('company management')%></div>
-                <div id="contract_parent" class="menu-item"><%=t('contract management')%></div>
-                <div class="submenu">
-                    <div id="contract" class="submenu-item">- <%=t('contract status')%></div>
-                    <div id="contract_plan" class="submenu-item">- <%=t('rate plan management')%></div>
-                    <div id="contract_cancel" class="submenu-item">- <%=t('contract cancel')%></div>
+                <div id="dashboard" class="menu-item">
+                    <div class="menu-item-icon"><img src="/public/images/icon/dashboard.png"/></div>
+                    <div class="menu-item-text"><%=t('home')%></div>
                 </div>
-                <div id="contract_parent" class="menu-item"><%=t('user management')%></div>
+                <div id="company" class="menu-item">
+                    <div class="menu-item-icon"><img src="/public/images/icon/company.png"/></div>
+                    <div class="menu-item-text"><%=t('customer management')%></div>
+                </div>
+                <div id="contract_parent" class="menu-item">
+                    <div class="menu-item-icon"><img src="/public/images/icon/contract_parent.png"/></div>
+                    <div class="menu-item-text"><%=t('contract management')%></div>
+                </div>
                 <div class="submenu">
-                    <div id="contract_manager" class="submenu-item">- <%=t('administrator')%></div>
-                    <div id="contract_user" class="submenu-item">- <%=t('user')%></div>
+                    <div id="contract" class="submenu-item">
+                        <div class="menu-item-text"><%=t('contract management')%></div>
+                    </div>
+                    <!--
+                    <div id="contract_plan" class="submenu-item">
+                        <div class="menu-item-text"><%=t('rate plan management')%></div>
+                    </div>
+                    -->
+                    <div id="contract_cancel" class="submenu-item">
+                        <div class="menu-item-text"><%=t('contract cancel')%></div>
+                    </div>
+                </div>
+                <div id="manager_parent" class="menu-item">
+                    <div class="menu-item-icon"><img src="/public/images/icon/manager_parent.png"/></div>
+                    <div class="menu-item-text"><%=t('user management')%></div>
+                </div>
+                <div class="submenu">
+                    <div id="contract_manager" class="submenu-item">
+                        <div class="menu-item-text"><%=t('administrator')%></div>
+                    </div>
+                    <div id="contract_user" class="submenu-item">
+                        <div class="menu-item-text"><%=t('user')%></div>
+                    </div>
                 </div>
             </div>
         </form>

@@ -977,59 +977,59 @@
                             <span><input type="button" id="back" value="<%=t('back')%>"/></span>
                         </div>
                     </div>
-                    <div>
-                        <table class="detail-table">
-                            <thead class="detail-thead">
-                                <tr>
-                                    <th width="160px" class="right-align"><%=t('client company')%></th>
-                                    <td width="880px" id="cell_company_name" colspan="3"></td>
-                                </tr>
-                                <tr>
-                                    <th width="160px" class="right-align"><%=t('contract number')%></th>
-                                    <td width="360px" id="cell_contract_no"></td>
-                                    <th width="160px" class="right-align"><%=t('contract name')%></th>
-                                    <td width="360px" id="cell_contract_name"></td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('contract date')%></th>
-                                    <td id="cell_contract_date"></td>
-                                    <th class="right-align"><%=t('person in charge')%></th>
-                                    <td id="cell_contractor"></td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('contract service')%></th>
-                                    <td id="cell_contract_service"></td>
-                                    <th class="right-align"><%=t('contract classification')%></th>
-                                    <td id="cell_contract_div"></td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('contract period')%></th>
-                                    <td colspan="3">
-                                        <div class="align-container">
-                                            <span id="cell_contract_period"></span>
-                                            <span id="cell_start_date"></span>
-                                            <span>~</span>
-                                            <span id="cell_end_date"></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('monetray unit')%></th>
-                                    <td id="cell_monetary_unit"></td>
-                                    <th class="right-align"><%=t('exchange rate')%></th>
-                                    <td id="cell_exchange_rate"></td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('person in charge of a contract')%></th>
-                                    <td id="cell_contract_manager" colspan="3"></td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('remark')%></th>
-                                    <td id="cell_remark" style="height:100px" colspan="3"></td>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div></br>
+                    <table class="detail-table">
+                        <thead class="detail-thead">
+                            <tr>
+                                <th width="160px" class="right-align"><%=t('client company')%></th>
+                                <td width="880px" id="cell_company_name" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <th width="160px" class="right-align"><%=t('contract number')%></th>
+                                <td width="360px" id="cell_contract_no"></td>
+                                <th width="160px" class="right-align"><%=t('contract name')%></th>
+                                <td width="360px" id="cell_contract_name"></td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('contract date')%></th>
+                                <td id="cell_contract_date"></td>
+                                <th class="right-align"><%=t('person in charge')%></th>
+                                <td id="cell_contractor"></td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('contract service')%></th>
+                                <td id="cell_contract_service"></td>
+                                <th class="right-align"><%=t('contract classification')%></th>
+                                <td id="cell_contract_div"></td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('contract period')%></th>
+                                <td colspan="3">
+                                    <div class="align-container">
+                                        <span id="cell_contract_period"></span>
+                                        <span id="cell_start_date"></span>
+                                        <span>~</span>
+                                        <span id="cell_end_date"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('monetray unit')%></th>
+                                <td id="cell_monetary_unit"></td>
+                                <th class="right-align"><%=t('exchange rate')%></th>
+                                <td id="cell_exchange_rate"></td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('person in charge of a contract')%></th>
+                                <td id="cell_contract_manager" colspan="3"></td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('remark')%></th>
+                                <td id="cell_remark" style="height:100px" colspan="3"></td>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div  class="contents-item">
                     <div class="table-container">
                         <!-- License 시작 -->
                         <div id="view_license_content" class="hidden">
@@ -1172,82 +1172,80 @@
                 <div class="contents-container">
                     <span id="close" class="modal-close">&times;</span>
                     <div class="modal-title"><%=t('contract management')%></div>
-                    <div>
-                        <table class="modal-table">
-                            <thead class="modal-thead">
-                                <tr>
-                                    <th width="160px" class="right-align">*<%=t('client company')%></th>
-                                    <td width="980px" class="left-align" colspan="3">
-                                        <input type="hidden" id="company_no" value="<%=companyNo%>"/>
-                                        <input type="text" id="company_name" style="width: 240px;" readonly/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th width="160px" class="right-align">*<%=t('contract number')%></th>
-                                    <td width="460px" class="left-align">
-                                        <input type="text" id="contract_no" style="width: 240px;" readonly value="<%=contractNo%>"/>
-                                    </td>
-                                    <th width="160px" class="right-align">*<%=t('contract name')%></th>
-                                    <td width="460px" class="left-align" colspan="3">
-                                        <input type="text" id="contract_name" style="width: 380px;"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align">*<%=t('contract date')%></th>
-                                    <td class="left-align">
-                                        <input type="date" id="contract_date" style="width: 120px;"/>
-                                    </td>
-                                    <th class="right-align">*<%=t('contractor')%></th>
-                                    <td class="left-align">
-                                        <input type="text" id="contractor" style="width: 160px;"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align">*<%=t('contract service')%></th>
-                                    <td class="left-align">
-                                        <select id="contract_service"></select>
-                                    </td>
-                                    <th class="right-align">*<%=t('contract classification')%></th>
-                                    <td class="left-align">
-                                        <select id="contract_div"></select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align">*<%=t('contract period')%></th>
-                                    <td class="left-align" colspan="3">
-                                        <div class="align-container">
-                                            <span><select id="contract_period"></select></span>
-                                            <span><input type="date" id="start_date" style="width: 120px;"/></span>
-                                            <span>~</span>
-                                            <span><input type="date" id="end_date" style="width: 120px;"/></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align">*<%=t('monetray unit')%></th>
-                                    <td class="left-align">
-                                        <select id="monetary_unit"></select>
-                                    </td>
-                                    <th class="right-align">*<%=t('exchange rate')%></th>
-                                    <td class="left-align">
-                                        <input type="text" id="exchange_rate" style="width:100px; text-align: right;"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align">*<%=t('person in charge of a contract')%></th>
-                                    <td class="left-align" colspan="3">
-                                        <select id="contract_manager"></select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th class="right-align"><%=t('remark')%></th>
-                                    <td class="left-align" colspan="3">
-                                        <textarea id="remark" style="width:940px; height:60px;"></textarea>
-                                    </td>
-                                </tr>
-                            </thead>
-                        </table></br>
-                    </div>
+                    <table class="modal-table">
+                        <thead class="modal-thead">
+                            <tr>
+                                <th width="160px" class="right-align">*<%=t('client company')%></th>
+                                <td width="980px" class="left-align" colspan="3">
+                                    <input type="hidden" id="company_no" value="<%=companyNo%>"/>
+                                    <input type="text" id="company_name" style="width: 240px;" readonly/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th width="160px" class="right-align">*<%=t('contract number')%></th>
+                                <td width="460px" class="left-align">
+                                    <input type="text" id="contract_no" style="width: 240px;" readonly value="<%=contractNo%>"/>
+                                </td>
+                                <th width="160px" class="right-align">*<%=t('contract name')%></th>
+                                <td width="460px" class="left-align" colspan="3">
+                                    <input type="text" id="contract_name" style="width: 380px;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="right-align">*<%=t('contract date')%></th>
+                                <td class="left-align">
+                                    <input type="date" id="contract_date" style="width: 120px;"/>
+                                </td>
+                                <th class="right-align">*<%=t('contractor')%></th>
+                                <td class="left-align">
+                                    <input type="text" id="contractor" style="width: 160px;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="right-align">*<%=t('contract service')%></th>
+                                <td class="left-align">
+                                    <select id="contract_service"></select>
+                                </td>
+                                <th class="right-align">*<%=t('contract classification')%></th>
+                                <td class="left-align">
+                                    <select id="contract_div"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="right-align">*<%=t('contract period')%></th>
+                                <td class="left-align" colspan="3">
+                                    <div class="align-container">
+                                        <span><select id="contract_period"></select></span>
+                                        <span><input type="date" id="start_date" style="width: 120px;"/></span>
+                                        <span>~</span>
+                                        <span><input type="date" id="end_date" style="width: 120px;"/></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="right-align">*<%=t('monetray unit')%></th>
+                                <td class="left-align">
+                                    <select id="monetary_unit"></select>
+                                </td>
+                                <th class="right-align">*<%=t('exchange rate')%></th>
+                                <td class="left-align">
+                                    <input type="text" id="exchange_rate" style="width:100px; text-align: right;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="right-align">*<%=t('person in charge of a contract')%></th>
+                                <td class="left-align" colspan="3">
+                                    <select id="contract_manager"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="right-align"><%=t('remark')%></th>
+                                <td class="left-align" colspan="3">
+                                    <textarea id="remark" style="width:940px; height:60px;"></textarea>
+                                </td>
+                            </tr>
+                        </thead>
+                    </table></br>
                     <div class="table-container" style="height:200px">
                         <!-- 라이센스 시작 -->
                         <div id="license_content" class="hidden">

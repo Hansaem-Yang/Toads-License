@@ -151,7 +151,7 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (contractNo, userNo, userId, email, userName, applyStartDate, applyFinishDate, 
+    update: async function (contractNo, userNo, userId, email,  userPwd, userName, applyStartDate, applyFinishDate, 
         licenseNo, shipSeq, useYn, modifyUser) {
         try {
             let pool = await poolPromise;

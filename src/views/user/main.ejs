@@ -2,12 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="/public/css/styles.css">
-        <!--
-        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
-        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
-        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
-        -->
+        <link rel="stylesheet" href="/public/css/styles-figma.css">
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <title>Main</title>
         <script>
@@ -19,7 +14,7 @@
                         success: function (data) {
                             switch (data) {
                                 case "SESSION":
-                                    $('.content-frame').attr('src', menuId);
+                                    $('.contents-frame').attr('src', menuId);
                                     break;
                                 case "NO SESSION":
                                     alert("<%=t('message(session expires)')%>");
@@ -33,21 +28,27 @@
                         },
                     });
                 }
+                
+                window.toggleLanguage = function(isOn) {
+                    if (isOn) {
+                        $('.topmenu-object').css('height', '220px');
+                    } else {
+                        $('.topmenu-object').css('height', '84px');
+                    }
+                }
             });
         </script>
     </head>
     <body>
-        <header>
-            <div class="top-menu">
-                <object data="./topmenu"></object>
-            </div>
-        </header>
         <div class="container">
             <div class="sidebar">
-                <object data="./sidebar"></object>
+                <object class="sidebar-contents" data="./sidebar"></object>
             </div>
-            <div class="contents">
-                <iframe class="content-frame" src="./dashboard"></iframe>
+            <div class="topmenu">
+                <object class="topmenu-object" data="./topmenu"></object>
+            </div>
+            <div class="main-contents">
+                <iframe class="contents-frame" src="./dashboard"></iframe>
             </div>
         </div>
     </body>

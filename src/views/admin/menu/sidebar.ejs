@@ -6,6 +6,30 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script>
             $(document).ready(function() {
+                $('#logo').click(function(event) {
+                    event.preventDefault();
+
+                    $.ajax({
+                        url: "../session",
+                        method: "POST",
+                        success: function (data) {
+                            switch (data) {
+                                case "SESSION":
+                                    window.parent.location.href = "./main";
+                                    break;
+                                case "NO SESSION":
+                                    alert("<%=t('message(session expires)')%>");
+                                    window.parent.location.href = "./login";
+                                    break;
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert("<%=t('message(request failed)')%>");
+                            window.location.href = "./login";
+                        },
+                    });
+                });
+
                 $('.side-menu div').each(function() {
                     if ($(this).attr('id') === $('#menu_id').val()) {
                         $(this).addClass('side-menu-selected');
@@ -51,7 +75,7 @@
     <body>
         <form class="sidebar-contents" id="sidebar-form">
             <input type="hidden" id="menu_id" value="<%=session.menuId%>"/>
-            <div class="logo"></div>
+            <div id="logo" class="logo"></div>
             <div class="menu-title">Menu</div>
             <div class="menu">
                 <div id="dashboard" class="menu-item">
