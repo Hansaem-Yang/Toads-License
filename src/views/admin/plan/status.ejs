@@ -416,11 +416,15 @@
                     }
                 });
                 
+
                 createVariablesSelection($('#flat_div'), flatDivs, "<%=t('select')%>");
                 createVariablesSelection($('#odm_div'), odmDivs, "<%=t('select')%>");
                 createVariablesSelection($('#active_yn'), activeYn, "<%=t('select')%>");
                 createVariablesSelection($('#bill_base_1'), billBases, "<%=t('select')%>");
                 createVariablesSelection($('#bill_base_2'), billBases, "<%=t('select')%>");
+                
+                var row = $('#plan_amount tbody tr').first();
+                createVariablesSelection(row.find('#active_yn'), activeYn, "<%=t('select')%>");
 
                 search();
             });
@@ -473,7 +477,7 @@
             </div>
         </form>
         <div class="modal">
-            <div class="modal-contents" style="width:1080px">
+            <div class="modal-contents" style="width:1240px">
                 <div class="contents-container">
                     <span id="close" class="modal-close">&times;</span>
                     <div class="modal-title"><%=t('pricing plan management')%></div>
@@ -482,17 +486,17 @@
                             <thead class="modal-thead">
                                 <tr>
                                     <th width="160px" class="right-align">*<%=t('pricing plan number')%></th>
-                                    <td width="920px" class="left-align" colspan="3">
+                                    <td width="1080px" class="left-align" colspan="3">
                                         <input type="text" id="plan_id" style="width: 120px;" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th width="160px" class="right-align">*<%=t('name of plan (kor)')%></th>
-                                    <td width="380px" class="left-align">
+                                    <td width="470px" class="left-align">
                                         <input type="text" id="plan_kname" style="width: 350px;"/>
                                     </td>
                                     <th width="160px" class="right-align">*<%=t('name of plan (eng)')%></th>
-                                    <td width="380px" class="left-align">
+                                    <td width="470px" class="left-align">
                                         <input type="text" id="plan_ename" style="width: 350px;"/>
                                     </td>
                                 </tr>
@@ -525,7 +529,7 @@
                                 <tr>
                                     <th class="right-align"><%=t('remark')%></th>
                                     <td class="left-align" colspan="3">
-                                        <textarea id="remark" style="width:900px; height:60px;"></textarea>
+                                        <textarea id="remark" style="width:1020px; height:60px;"></textarea>
                                     </td>
                                 </tr>
                             </thead>    
@@ -550,8 +554,8 @@
                                         <th width="180px"><%=t('billing unit')%></th>
                                         <th width="100px"><%=t('excess charge')%></th>
                                         <th width="180px"><%=t('excess billing standard')%></th>
-                                        <th width="120px"><%=t('date of application')%></th>
-                                        <th width="120px"><%=t('end date')%></th>
+                                        <th width="140px"><%=t('date of application')%></th>
+                                        <th width="140px"><%=t('end date')%></th>
                                         <th width="120px"><%=t('enable')%></th>
                                     </tr>
                                 </thead>
@@ -577,10 +581,10 @@
                                             <select id="bill_base_2" style="width:166px"></select>
                                         </td>
                                         <td>
-                                            <input type="date" id="apply_date" style="width:104px;">
+                                            <input type="date" id="apply_date" style="width:120px;">
                                         </td>
                                         <td>
-                                            <input type="date" id="finish_date" style="width:104px;">
+                                            <input type="date" id="finish_date" style="width:120px;">
                                         </td>
                                         <td>
                                             <select id="active_yn" style="width:106px"></select>

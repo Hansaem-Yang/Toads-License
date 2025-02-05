@@ -104,9 +104,9 @@
                                     $(newRow).find('#bill_base_1').val(planAmount.billBase1);
                                     $(newRow).find('#surcharge').val(formatCurrency(planAmount.surcharge));
                                     $(newRow).find('#bill_base_2').val(planAmount.billBase2);
-                                    $(newRow).find('#price_apply_date').val(planAmount.applyDate);
-                                    $(newRow).find('#price_finish_date').val(planAmount.finishDate);
-                                    $(newRow).find('#price_active_yn').val(planAmount.activeYn);
+                                    $(newRow).find('#apply_date').val(planAmount.applyDate);
+                                    $(newRow).find('#finish_date').val(planAmount.finishDate);
+                                    $(newRow).find('#active_yn').val(planAmount.activeYn);
 
                                     $('#plan_amount tbody').append(newRow);
                                 });
@@ -258,7 +258,7 @@
                         return false;
                     }
                     
-                    if ($(row).find('#price_active_yn').val() === '') {
+                    if ($(row).find('#active_yn').val() === '') {
                         alert("<%=t('message(select enable or not')%>");
                         return false;
                     }
@@ -371,9 +371,9 @@
                                 billBase1: $(row).find('#bill_base_1').val(),
                                 surcharge: parseCurrency($(row).find('#surcharge').val()),
                                 billBase2: $(row).find('#bill_base_2').val(),
-                                applyDate: $(row).find('#price_apply_date').val(),
-                                finishDate: $(row).find('#price_finish_date').val(),
-                                activeYn: $(row).find('#price_active_yn').val(),
+                                applyDate: $(row).find('#apply_date').val(),
+                                finishDate: $(row).find('#finish_date').val(),
+                                activeYn: $(row).find('#active_yn').val(),
                             });
                         });
 
@@ -436,10 +436,12 @@
 
                 createVariablesSelection($('#flat_div'), flatDivs, "<%=t('select')%>");
                 createVariablesSelection($('#odm_div'), odmDivs, "<%=t('select')%>");
-                createVariablesSelection($('#active_yn'), activeYn, "<%=t('select samll')%>");
-                createVariablesSelection($('#price_active_yn'), activeYn, "<%=t('select samll')%>");
+                createVariablesSelection($('#active_yn'), activeYn, "<%=t('select')%>");
                 createVariablesSelection($('#bill_base_1'), billBases, "<%=t('select')%>");
                 createVariablesSelection($('#bill_base_2'), billBases, "<%=t('select')%>");
+                
+                var row = $('#plan_amount tbody tr').first();
+                createVariablesSelection(row.find('#active_yn'), activeYn, "<%=t('select')%>");
 
                 search();
             });
@@ -532,7 +534,7 @@
             </div>
         </form>
         <div class="modal">
-            <div class="modal-contents" style="width:1140px">
+            <div class="modal-contents" style="width:1240px">
                 <div class="contents-container">
                     <span id="close" class="modal-close">&times;</span>
                     <div class="modal-title"><%=t('pricing plan management')%></div>
@@ -541,17 +543,17 @@
                             <thead class="modal-thead">
                                 <tr>
                                     <th width="160px" class="right-align">*<%=t('pricing plan number')%></th>
-                                    <td width="980px" class="left-align" colspan="3">
+                                    <td width="1080px" class="left-align" colspan="3">
                                         <input type="text" id="plan_id" style="width: 120px;" value="<%=planId%>" readonly/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th width="160px" class="right-align">*<%=t('name of plan (kor)')%></th>
-                                    <td width="420px" class="left-align">
+                                    <td width="470px" class="left-align">
                                         <input type="text" id="plan_kname" style="width: 350px;"/>
                                     </td>
                                     <th width="160px" class="right-align">*<%=t('name of plan (eng)')%></th>
-                                    <td width="420px" class="left-align">
+                                    <td width="470px" class="left-align">
                                         <input type="text" id="plan_ename" style="width: 350px;"/>
                                     </td>
                                 </tr>
@@ -584,7 +586,7 @@
                                 <tr>
                                     <th class="right-align"><%=t('remark')%></th>
                                     <td class="left-align" colspan="3">
-                                        <textarea id="remark" style="width:1000px; height:60px;"></textarea>
+                                        <textarea id="remark" style="width:1020px; height:60px;"></textarea>
                                     </td>
                                 </tr>
                             </thead>    
@@ -636,13 +638,13 @@
                                             <select id="bill_base_2" style="width:166px"></select>
                                         </td>
                                         <td>
-                                            <input type="date" id="place_apply_date" style="width:120px;">
+                                            <input type="date" id="apply_date" style="width:120px;">
                                         </td>
                                         <td>
-                                            <input type="date" id="place_finish_date" style="width:120px;">
+                                            <input type="date" id="finish_date" style="width:120px;">
                                         </td>
                                         <td>
-                                            <select id="price_active_yn" style="width:100px"></select>
+                                            <select id="active_yn" style="width:100px"></select>
                                         </td>
                                     </tr>
                                 </tbody>
