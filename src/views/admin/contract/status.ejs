@@ -720,6 +720,9 @@
                     }
                     
                     var newRow = $('#ships_contract tbody tr').first().clone().removeClass('hidden');
+
+                    $(newRow).find('#ships_apply_start_date').val($('#start_date').val());
+                    $(newRow).find('#ships_apply_finish_date').val($('#end_date').val());
                     $('#ships_contract tbody').append(newRow);
                 });
 
@@ -753,6 +756,8 @@
                     var newRow = $('#company_contract tbody tr').first().clone().removeClass('hidden');
 
                     $(newRow).find('#company_pay_currency').val($('#monetary_unit').val());
+                    $(newRow).find('#company_apply_start_date').val($('#start_date').val());
+                    $(newRow).find('#company_apply_finish_date').val($('#end_date').val());
                     $('#company_contract tbody').append(newRow);
                 });
 

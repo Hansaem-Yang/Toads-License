@@ -125,9 +125,7 @@
                     #{companyNo}
                   , (select #{contractDiv} + '-' + #{contractService} + '-' + convert(varchar(8), convert(datetime, #{contractDate}), 112) + '-' + format(isnull(right(max(contract_no), 3), 0) + 1, '000') 
                        from contract
-                      where contract_div = #{contractDiv}
-                        and contract_service = #{contractService}
-                        and contract_date = #{contractDate})
+                      where contract_no like #{contractDiv} + '-' + #{contractService} + '-' + convert(varchar(8), convert(datetime, #{contractDate}), 112) + '%')
                   , #{contractName}
                   , #{contractDate}
                   , #{contractor}

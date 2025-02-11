@@ -10,6 +10,7 @@
     "user": "User",
     "consignment contract": "Consignment Contract",
     "rate plan management": "rate plan management",
+    "ship cctv": "Ship CCTV",
     "my info": "My information",
     "language": "Language",
     "ko": "Korean",
@@ -98,6 +99,7 @@
     "date of application": "Date of application",
     
     "ship subscribe contract": "Subscription contract by ship",
+    "ship seq": "Ship seq",
     "ship name": "Ship name",
     "imo number": "IMO Number",
     "equipment rental": "Equipment rental classification",
@@ -131,6 +133,32 @@
     "userno": "User No",
     "expiry date": "Expiry date",
     "ship": "Ship",
+
+    "list of pricing plan": "List of Rate Plans",
+    "name of plan": "Rate plan name",
+    "name of plan (kor)": "Rate plan name (KOR)",
+    "name of plan (eng)": "Rate plan name (ENG)",
+    "flat-rate class": "Flat-rate class",
+    "odm class": "ODM Class",
+    "end date": "End date",
+    "enable": "Activation status",
+    "exceeded time": "Overtime",
+    
+    "pricing plan management": "Rate Plan Management",
+    "pricing plan number": "Rate plan number",
+    "price of pricing plan": "Rate plan price",
+    "service price": "service price",
+    "service time": "service time",
+    "billing unit": "Billing criteria",
+    "excess charge": "Excessive charge",
+    "excess billing standard": "Excessive charge standard",
+    "list of pricing plan prices": "list of pricing plan prices",
+    
+    "list of ship cctv": "Ship CCTV List",
+    "ship cctv management": "Ship CCTV management",
+    "cctv no": "CCTV No",
+    "location": "Location",
+    "cctv url": "CCTV URL",
 
     "message(request failed)": "Server request failed.",
     "message(session expires)": "Your session has expired.",
@@ -193,5 +221,8 @@
     "message(enter application start date)": "Please enter application start date.",
     "message(enter application completion date)": "Please enter application completion date.",
     "message(select license)": "Please select a license.",
-    "message(select ship)": "Please select a ship."
+    "message(select ship)": "Please select a ship.",
+    
+    "message(enter location)": "Please enter the CCTV location.",
+    "message(enter cctv url)": "Please enter the CCTV URL."
 }

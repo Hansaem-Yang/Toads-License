@@ -212,4 +212,21 @@ module.exports = function (app) {
             res.render("user/plan/detail", {t: req.t});
         }
     });
+    
+    // CCTV 관리 페이지
+    app.get("/view/ship_cctv", (req, res) => {        
+        if (req.query.companyNo) {
+            res.locals.companyNo = req.query.companyNo;
+        }
+        else{
+            res.locals.companyNo = '';
+        }
+
+        if (req.session.user.companyDiv === 'T') {
+            res.render("admin/ship_cctv/status", {t: req.t});
+        }
+        else {
+            res.render("user/ship_cctv/status", {t: req.t});
+        }
+    });
 };

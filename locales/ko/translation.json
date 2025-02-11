@@ -10,6 +10,7 @@
     "user": "사용자",
     "consignment contract": "위탁 계약",
     "rate plan management": "요금제 관리",
+    "ship cctv": "선박 CCTV",
     "my info": "내정보",
     "language": "언어",
     "ko": "한국어",
@@ -98,6 +99,7 @@
     "date of application": "적용일자",
     
     "ship subscribe contract": "선박별 구독계약",
+    "ship seq": "선박 순번",
     "ship name": "선명",
     "imo number": "IMO번호",
     "equipment rental": "장비렌탈구분",
@@ -151,6 +153,12 @@
     "excess charge": "초과요금",
     "excess billing standard": "초과요금 과금기준",
     "list of pricing plan prices": "요금제 가격 목록",
+
+    "list of ship cctv": "선박 CCTV 목록",
+    "ship cctv management": "선박 CCTV 관리",
+    "cctv no": "CCTV 번호",
+    "location": "위치",
+    "cctv url": "CCTV URL",
 
     "message(request failed)": "서버 요청에 실패했습니다.",
     "message(session expires)": "세션이 만료되었습니다.",
@@ -225,5 +233,8 @@
     "message(select enable or not)": "활성화 여부를 선택하세요.",
     "message(enter service price)": "서비스가격을 입력하세요.",
     "message(enter service time)": "시간을 입력하세요.",
-    "message(select billing unit)": "과금기준을 선택하세요."
+    "message(select billing unit)": "과금기준을 선택하세요.",
+    
+    "message(enter location)": "CCTV 위치를 입력하세요.",
+    "message(enter cctv url)": "CCTV URL을 입력하세요."
 }

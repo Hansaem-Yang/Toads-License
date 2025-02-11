@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cctv">
+    <select id="status">
+        select a.contract_no
+             , a.ship_seq
+             , b.ship_name
+             , a.cctv_no
+             , a.location
+             , a.cctv_url
+          from ToadsSLink.dbo.cctv_list as a
+         inner join ToadsLicense.dbo.ships_contract as b
+            on a.contract_no = b.contract_no
+           and a.ship_seq = b.ship_seq
+         inner join ToadsLicense.dbo.contract as c
+            on b.contract_no = c.contract_no
+         where c.company_no = #{companyNo};
+    </select>
+    <select id="detail">
+        select a.contract_no
+             , a.ship_seq
+             , b.ship_name
+             , a.cctv_no
+             , a.location
+             , a.cctv_url
+          from ToadsSLink.dbo.cctv_list as a
+          left outer join ToadsLicense.dbo.ships_contract as b
+            on a.contract_no = b.contract_no
+           and a.ship_seq = b.ship_seq
+         where a.contract_no = #{contractNo}
+           and a.ship_seq = #{shipSeq}
+           and a.cctv_no = #{cctvNo};
+    </select>
+    <insert id="insert">
+        insert into ToadsSLink.dbo.cctv_list (
+                    contract_no
+                  , ship_seq
+                  , cctv_no
+                  , location
+                  , cctv_url
+        )
+        values (
+                    #{contractNo}
+                  , #{shipSeq}
+                  , (select isnull(max(cctv_no), 0) + 1
+                       from ToadsSLink.dbo.cctv_list
+                      where contract_no = #{contractNo}
+                        and ship_seq = #{shipSeq})
+                  , #{location}
+                  , #{cctvUrl}
+        );
+    </insert>
+    <update id="update">
+        update ToadsSLink.dbo.cctv_list
+           set location = #{location}
+             , cctv_url = #{cctvUrl}
+         where contract_no = #{contractNo}
+           and ship_seq = #{shipSeq}
+           and cctv_no = #{cctvNo};
+    </update>
+    <delete id="delete">
+        delete from ToadsSLink.dbo.cctv_list
+         where contract_no = #{contractNo}
+           and ship_seq = #{shipSeq}
+           and cctv_no = #{cctvNo};
+    </delete>
+</mapper>
