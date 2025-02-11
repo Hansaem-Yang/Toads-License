@@ -81,6 +81,8 @@
                                     });
                                 }
                             }
+                            
+                            scrollTable();
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="7" class="left-align"><%=t("message(request failed)")%></td></tr>';
@@ -330,7 +332,7 @@
                             <span><input type="button" id="detail" value="<%=t('details')%>"/></span>
                         </div>
                     </div>
-                    <table id="company_status" class="status-table">
+                    <table class="status-table">
                         <thead class="status-thead">
                             <tr>
                                 <th width="100px"><%=t('customer number')%></th>
@@ -342,21 +344,25 @@
                                 <th width="120px"><%=t('user count')%></th>
                             </tr>
                         </thead>
-                        <tbody class="status-tbody">
-                            <tr class="hidden">
-                                <td id="cell_company_no" style="text-align: center;"></td>
-                                <td id="cell_company_name" style="text-align: left;"></td>
-                                <td id="cell_owner_name" style="text-align: left;"></td>
-                                <td id="cell_company_div" style="text-align: center;"></td>
-                                <td id="cell_nation" style="text-align: center;"></td>
-                                <td id="cell_telephone" style="text-align: center;"></td>
-                                <td id="cell_total_users" style="text-align: right;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="7"><%=t('message(search data)')%></td>
-                            </tr>
-                        </tbody>
                     </table>
+                    <div class="scrollable-tbody" style="max-height: 500px;">
+                        <table id="company_status" class="status-table">
+                            <tbody class="status-tbody">
+                                <tr class="hidden">
+                                    <td width="100px" id="cell_company_no" style="text-align: center;"></td>
+                                    <td width="240px" id="cell_company_name" style="text-align: left;"></td>
+                                    <td width="220px" id="cell_owner_name" style="text-align: left;"></td>
+                                    <td width="120px" id="cell_company_div" style="text-align: center;"></td>
+                                    <td width="160px" id="cell_nation" style="text-align: center;"></td>
+                                    <td width="160px" id="cell_telephone" style="text-align: center;"></td>
+                                    <td width="120px" id="cell_total_users" style="text-align: right;"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7"><%=t('message(search data)')%></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </form>

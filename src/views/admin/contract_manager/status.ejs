@@ -83,6 +83,7 @@
                                     });
                                 }
                             }
+                            scrollTable();
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="9" class="left-align"><%=t("message(request failed)")%></td></tr>';
@@ -569,24 +570,26 @@
                             <span><input type="button" id="delete" value="<%=t('delete')%>"/></span>
                         </div>
                     </div>
-                    <div>
+                    <table class="status-table">
+                        <thead class="status-thead">
+                            <tr>
+                                <th width="100px"><%=t('sequential number')%></th>
+                                <th width="260px"><%=t('administrator name')%></th>
+                                <th width="260px"><%=t('email')%></th>
+                                <th width="120px"><%=t('permission')%></th>
+                                <th width="120px"><%=t('use status')%></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="scrollable-tbody" style="max-height: 500px;">
                         <table id="contract_manager" class="status-table">
-                            <thead class="status-thead">
-                                <tr>
-                                    <th width="100px"><%=t('sequential number')%></th>
-                                    <th width="260px"><%=t('administrator name')%></th>
-                                    <th width="260px"><%=t('email')%></th>
-                                    <th width="120px"><%=t('permission')%></th>
-                                    <th width="120px"><%=t('use status')%></th>
-                                </tr>
-                            </thead>
                             <tbody class="status-tbody">
                                 <tr class="hidden">
-                                    <td id="cell_seq" style="text-align: center;"></td>
-                                    <td id="cell_name" style="text-align: left;"></td>
-                                    <td id="cell_email" style="text-align: left;"></td>
-                                    <td id="cell_user_auth" style="text-align: center;"></td>
-                                    <td id="cell_use_yn" style="text-align: center;"></td>
+                                    <td width="100px" id="cell_seq" style="text-align: center;"></td>
+                                    <td width="260px" id="cell_name" style="text-align: left;"></td>
+                                    <td width="260px" id="cell_email" style="text-align: left;"></td>
+                                    <td width="120px" id="cell_user_auth" style="text-align: center;"></td>
+                                    <td width="120px" id="cell_use_yn" style="text-align: center;"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="5"><%=t('message(search data)')%></td>

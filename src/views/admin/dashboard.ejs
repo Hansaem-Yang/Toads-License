@@ -93,10 +93,10 @@
 
                                     $('#usage_status tbody').append(newRow);
                                 });
-                                
-                                MonthlyChart();
                             }
                         }
+                        scrollTable();
+                        MonthlyChart();
                     },
                     error: function (xhr, status, error) {
                         var newRow = '<tr><td colspan="6"><%=t("message(request failed)")%></td></tr>';
@@ -246,7 +246,7 @@
             <div class="contents">
                 <div class="contents-item">
                     <div class="title"><%=t('total slink usage')%></div>
-                    <table id="usage_status" class="status-table">
+                    <table class="status-table">
                         <thead class="status-thead">
                             <tr>
                                 <th width="240px"><%=t('client company')%></th>
@@ -258,18 +258,22 @@
                                 <th width="120px"><%=t('exceeded time')%></th>
                             </tr>
                         </thead>
-                        <tbody class="status-tbody">
-                            <tr class="hidden">
-                                <td id="cell_company_name" style="text-align: left;"></td>
-                                <td id="cell_plan_name" style="text-align: left;"></td>
-                                <td id="cell_time" style="text-align: right;"></td>
-                                <td id="cell_total_users" style="text-align: right;"></td>
-                                <td id="cell_total_usage" style="text-align: right;"></td>
-                                <td id="cell_monthly_usage" style="text-align: right;"></td>
-                                <td id="cell_exceeded_time" style="text-align: right;"></td>
-                            </tr>
-                        </tbody>
                     </table>
+                    <div class="scrollable-tbody">
+                        <table id="usage_status" class="status-table">
+                            <tbody class="status-tbody">
+                                <tr class="hidden">
+                                    <td width="240px" id="cell_company_name" style="text-align: left;"></td>
+                                    <td width="180px" id="cell_plan_name" style="text-align: left;"></td>
+                                    <td width="120px" id="cell_time" style="text-align: right;"></td>
+                                    <td width="120px" id="cell_total_users" style="text-align: right;"></td>
+                                    <td width="120px" id="cell_total_usage" style="text-align: right;"></td>
+                                    <td width="120px" id="cell_monthly_usage" style="text-align: right;"></td>
+                                    <td width="120px" id="cell_exceeded_time" style="text-align: right;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="contents-item">
                     <div id="charts" class="charts" style="text-align: center;">

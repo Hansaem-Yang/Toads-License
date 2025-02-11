@@ -175,11 +175,13 @@
                                         $(newRow).find('#cell_cctv_no').text(post.cctvNo);
                                         $(newRow).find('#cell_location').text(post.location);
                                         $(newRow).find('#cell_cctv_url').text(post.cctvUrl);
+                                        $(newRow).find('#cell_upload_cycle').text(post.uploadCycle);
 
                                         $('#ship_cctv tbody').append(newRow);
                                     });
                                 }
                             }
+                            scrollTable();
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="6" class="left-align"><%=t("message(request failed)")%></td></tr>';
@@ -231,6 +233,7 @@
                                         $('#cctv_no').val(data.cctvNo);
                                         $('#location').val(data.location);
                                         $('#cctv_url').val(data.cctvUrl);
+                                        $('#upload_cycle').val(data.uploadCycle);
                                         
                                         $('.modal').show();
                                     });
@@ -265,6 +268,7 @@
                     $('#cctv_no').val('');
                     $('#location').val('');
                     $('#cctv_url').val('');
+                    $('#upload_cycle').val('');
                 }
 
                 var clearContract = function() {
@@ -308,6 +312,11 @@
                         return false;
                     }
 
+                    if ($('#upload_cycle').val() === '') {
+                        alert("<%=t('message(enter upload cycle)')%>");
+                        return false;
+                    }
+
                     return true;
                 }
 
@@ -326,6 +335,7 @@
                         var cctvNo = $('#cctv_no').val();
                         var location = $('#location').val();
                         var cctvUrl = $('#cctv_url').val();
+                        var uploadCycle = $('#upload_cycle').val();
 
                         var url = "../admin/cctv/insert";
                         if (cctvNo === ''){
@@ -343,6 +353,7 @@
                                 cctvNo: cctvNo,
                                 location: location,
                                 cctvUrl: cctvUrl,
+                                uploadCycle: uploadCycle,
                             },
                             success: function (data) {
                                 switch (data) {
@@ -410,26 +421,30 @@
                             <span><input type="button" id="modify" value="<%=t('modify')%>"/></span>
                         </div>
                     </div>
-                    <div>
+                    <table class="status-table">
+                        <thead class="status-thead">
+                            <tr>
+                                <th width="160px"><%=t('contract number')%></th>
+                                <th width="80px"><%=t('ship seq')%></th>
+                                <th width="160px"><%=t('ship name')%></th>
+                                <th width="80px"><%=t('cctv no')%></th>
+                                <th width="160px"><%=t('location')%></th>
+                                <th width="500px"><%=t('cctv url')%></th>
+                                <th width="120px"><%=t('upload cycle')%></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="scrollable-tbody" style="max-height: 500px;">
                         <table id="ship_cctv" class="status-table">
-                            <thead class="status-thead">
-                                <tr>
-                                    <th width="160px"><%=t('contract number')%></th>
-                                    <th width="80px"><%=t('ship seq')%></th>
-                                    <th width="160px"><%=t('ship name')%></th>
-                                    <th width="80px"><%=t('cctv no')%></th>
-                                    <th width="160px"><%=t('location')%></th>
-                                    <th width="500px"><%=t('cctv url')%></th>
-                                </tr>
-                            </thead>
                             <tbody class="status-tbody">
                                 <tr class="hidden">
-                                    <td id="cell_contract_no" style="text-align: center;"></td>
-                                    <td id="cell_ship_seq" style="text-align: center;"></td>
-                                    <td id="cell_ship_name" style="text-align: left;"></td>
-                                    <td id="cell_cctv_no" style="text-align: center;"></td>
-                                    <td id="cell_location" style="text-align: left;"></td>
-                                    <td id="cell_cctv_url" style="text-align: left;"></td>
+                                    <td width="160px" id="cell_contract_no" style="text-align: center;"></td>
+                                    <td width="80px"  id="cell_ship_seq" style="text-align: center;"></td>
+                                    <td width="160px" id="cell_ship_name" style="text-align: left;"></td>
+                                    <td width="80px"  id="cell_cctv_no" style="text-align: center;"></td>
+                                    <td width="160px" id="cell_location" style="text-align: left;"></td>
+                                    <td width="500px" id="cell_cctv_url" style="text-align: left;"></td>
+                                    <td width="120px" id="cell_upload_cycle" style="text-align: left;"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="6"><%=t('message(search data)')%></td>
@@ -471,6 +486,12 @@
                                     <th class="right-align">*<%=t('cctv url')%></th>
                                     <td class="left-align">
                                         <input type="text" id="cctv_url" style="width: 600px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*<%=t('cctv url')%></th>
+                                    <td class="left-align">
+                                        <input type="text" id="upload_cycle" style="width: 60px;"/>
                                     </td>
                                 </tr>
                             </thead>    

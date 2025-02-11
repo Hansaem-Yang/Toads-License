@@ -159,6 +159,7 @@
     "cctv no": "CCTV No",
     "location": "Location",
     "cctv url": "CCTV URL",
+    "upload cycle": "Upload cycle",
 
     "message(request failed)": "Server request failed.",
     "message(session expires)": "Your session has expired.",
@@ -224,5 +225,6 @@
     "message(select ship)": "Please select a ship.",
     
     "message(enter location)": "Please enter the CCTV location.",
-    "message(enter cctv url)": "Please enter the CCTV URL."
+    "message(enter cctv url)": "Please enter the CCTV URL.",
+    "message(enter upload cycle)": "Enter the upload frequency (in minutes)."
 }

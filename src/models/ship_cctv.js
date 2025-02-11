@@ -9,6 +9,7 @@ class ShipCCTV extends Common {
         this.cctvNo = null;
         this.location = null;
         this.cctvUrl = null;
+        this.uploadCycle = null;
     }
 
     getContractNo() {
@@ -29,6 +30,9 @@ class ShipCCTV extends Common {
     getCctvUrl() {
         return cctvUrl;
     }
+    getUploadCycle() {
+        return uploadCycle;
+    }
 
     setContractNo(contractNo) {
         this.contractNo = contractNo;
@@ -47,6 +51,9 @@ class ShipCCTV extends Common {
     }
     setCctvUrl(cctvUrl) {
         this.cctvUrl = cctvUrl;
+    }
+    setUploadCycle(uploadCycle) {
+        this.uploadCycle = uploadCycle;
     }
 }
 

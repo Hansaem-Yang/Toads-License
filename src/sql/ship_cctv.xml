@@ -8,6 +8,7 @@
              , a.cctv_no
              , a.location
              , a.cctv_url
+             , a.upload_cycle
           from ToadsSLink.dbo.cctv_list as a
          inner join ToadsLicense.dbo.ships_contract as b
             on a.contract_no = b.contract_no
@@ -23,6 +24,7 @@
              , a.cctv_no
              , a.location
              , a.cctv_url
+             , a.upload_cycle
           from ToadsSLink.dbo.cctv_list as a
           left outer join ToadsLicense.dbo.ships_contract as b
             on a.contract_no = b.contract_no
@@ -38,6 +40,7 @@
                   , cctv_no
                   , location
                   , cctv_url
+                  , upload_cycle
         )
         values (
                     #{contractNo}
@@ -48,12 +51,14 @@
                         and ship_seq = #{shipSeq})
                   , #{location}
                   , #{cctvUrl}
+                  , #{uploadCycle}
         );
     </insert>
     <update id="update">
         update ToadsSLink.dbo.cctv_list
            set location = #{location}
              , cctv_url = #{cctvUrl}
+             , upload_cycle = #{uploadCycle}
          where contract_no = #{contractNo}
            and ship_seq = #{shipSeq}
            and cctv_no = #{cctvNo};

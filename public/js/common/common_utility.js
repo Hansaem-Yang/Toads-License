@@ -214,3 +214,10 @@ function getRGBA(index, count, a) {
 
     return rgba;
 }
+
+function scrollTable() {
+    let target = document.querySelector('.scrollable-tbody');
+    if (target.scrollHeight > target.clientHeight) {
+        $('.status-table').css('width', 'calc(100% - 17px)');
+    }
+}

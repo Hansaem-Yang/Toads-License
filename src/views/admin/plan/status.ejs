@@ -47,6 +47,7 @@
                                     });
                                 }
                             }
+                            scrollTable();
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="8" class="left-align"><%=t("message(request failed)")%></td></tr>';
@@ -442,30 +443,32 @@
                             <span><input type="button" id="detail" value="<%=t('details')%>"/></span>
                         </div>
                     </div>
-                    <div>
+                    <table class="status-table">
+                        <thead class="status-thead">
+                            <tr>
+                                <th width="80px"><%=t('number')%></th>
+                                <th width="240px"><%=t('name of plan (kor)')%></th>
+                                <th width="240px"><%=t('name of plan (eng)')%></th>
+                                <th width="100px"><%=t('flat-rate class')%></th>
+                                <th width="160px"><%=t('odm class')%></th>
+                                <th width="110px"><%=t('date of application')%></th>
+                                <th width="110px"><%=t('end date')%></th>
+                                <th width="100px"><%=t('enable')%></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="scrollable-tbody" style="max-height: 500px;">
                         <table id="plan" class="status-table">
-                            <thead class="status-thead">
-                                <tr>
-                                    <th width="80px"><%=t('number')%></th>
-                                    <th width="240px"><%=t('name of plan (kor)')%></th>
-                                    <th width="240px"><%=t('name of plan (eng)')%></th>
-                                    <th width="100px"><%=t('flat-rate class')%></th>
-                                    <th width="160px"><%=t('odm class')%></th>
-                                    <th width="110px"><%=t('date of application')%></th>
-                                    <th width="110px"><%=t('end date')%></th>
-                                    <th width="100px"><%=t('enable')%></th>
-                                </tr>
-                            </thead>
                             <tbody class="status-tbody">
                                 <tr class="hidden">
-                                    <td id="cell_plan_id" style="text-align: center;"></td>
-                                    <td id="cell_plan_kname" style="text-align: left;"></td>
-                                    <td id="cell_plan_ename" style="text-align: left;"></td>
-                                    <td id="cell_flat_div" style="text-align: center;"></td>
-                                    <td id="cell_odm_div" style="text-align: center;"></td>
-                                    <td id="cell_apply_date" style="text-align: center;"></td>
-                                    <td id="cell_finish_date" style="text-align: center;"></td>
-                                    <td id="cell_active_yn" style="text-align: center;"></td>
+                                    <td width="80px"  id="cell_plan_id" style="text-align: center;"></td>
+                                    <td width="240px" id="cell_plan_kname" style="text-align: left;"></td>
+                                    <td width="240px" id="cell_plan_ename" style="text-align: left;"></td>
+                                    <td width="100px" id="cell_flat_div" style="text-align: center;"></td>
+                                    <td width="160px" id="cell_odm_div" style="text-align: center;"></td>
+                                    <td width="110px" id="cell_apply_date" style="text-align: center;"></td>
+                                    <td width="110px" id="cell_finish_date" style="text-align: center;"></td>
+                                    <td width="100px" id="cell_active_yn" style="text-align: center;"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="8"><%=t('message(search data)')%></td>

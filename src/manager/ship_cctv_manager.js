@@ -27,6 +27,7 @@ module.exports = {
                 item.setCctvNo(record.cctv_no);
                 item.setLocation(record.location);
                 item.setCctvUrl(record.cctv_url);
+                item.setUploadCycle(record.upload_cycle);
 
                 list.push(item);
             });
@@ -62,6 +63,7 @@ module.exports = {
                 item.setCctvNo(record.cctv_no);
                 item.setLocation(record.location);
                 item.setCctvUrl(record.cctv_url);
+                item.setUploadCycle(record.upload_cycle);
             }
 
             return item;
@@ -70,7 +72,7 @@ module.exports = {
             return null;
         }
     },
-    insert: async function (contractNo, shipSeq, location, cctvUrl) {
+    insert: async function (contractNo, shipSeq, location, cctvUrl, uploadCycle) {
         try {
             let pool = await poolPromise;
             let transaction = new sql.Transaction(pool);
@@ -84,6 +86,7 @@ module.exports = {
                     shipSeq: shipSeq,
                     location: location,
                     cctvUrl: cctvUrl,
+                    uploadCycle: uploadCycle,
                 };
                 let format = { language: "sql", indent: " " };
                 let query = mybatisMapper.getStatement("cctv", "insert", param, format);
@@ -106,7 +109,7 @@ module.exports = {
             return -1;
         }
     },
-    update: async function (contractNo, shipSeq, cctvNo, location, cctvUrl) {
+    update: async function (contractNo, shipSeq, cctvNo, location, cctvUrl, uploadCycle) {
         try {
             let pool = await poolPromise;
             let transaction = new sql.Transaction(pool);
@@ -121,6 +124,7 @@ module.exports = {
                     cctvNo: cctvNo,
                     location: location,
                     cctvUrl: cctvUrl,
+                    uploadCycle: uploadCycle,
                 };
                 let format = { language: "sql", indent: " " };
                 let query = mybatisMapper.getStatement("cctv", "update", param, format);

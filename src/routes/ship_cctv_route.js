@@ -31,8 +31,9 @@ module.exports = function (app) {
         let shipSeq = req.body.shipSeq;
         let location = req.body.location;
         let cctvUrl = req.body.cctvUrl;
+        let uploadCycle = req.body.uploadCycle;
 
-        manager.insert(contractNo, shipSeq, location, cctvUrl).then((data) => {
+        manager.insert(contractNo, shipSeq, location, cctvUrl, uploadCycle).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {
@@ -46,8 +47,9 @@ module.exports = function (app) {
         let cctvNo = req.body.cctvNo;
         let location = req.body.location;
         let cctvUrl = req.body.cctvUrl;
+        let uploadCycle = req.body.uploadCycle;
 
-        manager.update(contractNo, shipSeq, cctvNo, location, cctvUrl).then((data) => {
+        manager.update(contractNo, shipSeq, cctvNo, location, cctvUrl, uploadCycle).then((data) => {
             if (data == null || data <= 0) {
                 res.send(constants.FAIL);
             } else {

@@ -62,11 +62,21 @@ html, body {
     overflow: hidden;
 }
 
+.scrollable-tbody {
+    display: block;
+    max-height: 200px; /* tbody의 최대 높이 */
+    overflow-y: auto; /* 세로 스크롤 추가 */
+}
+
+.scrollable-tbody table {
+    min-width: 100%; /* 표 크기가 작아지는 문제 해결 */
+}
+
 /* 조회 테이블 */
 .status-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 8px;
+    border-spacing: 0 4px;
     font: normal normal 300 16px/22px Pretendard;
 }
 
