@@ -101,6 +101,7 @@
                                     });
                                 }
                             }
+                            scrollTable();
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="9" class="left-align"><%=t("message(request failed)")%></td></tr>';
@@ -142,9 +143,12 @@
                     if ($('#contract_div').val() === 'L') {
                         $('#license').show();
                         $('#ships').hide();
-                    } else {
+                    } else if ($('#contract_div').val() === 'S') {
                         $('#license').hide();
                         $('#ships').show();
+                    } else {
+                        $('#license').hide();
+                        $('#ships').hide();
                     }
 
                     $('.modal').show();
@@ -204,9 +208,12 @@
                                     if ($('#contract_div').val() === 'L') {
                                         $('#license').show();
                                         $('#ships').hide();
-                                    } else {
+                                    } else if ($('#contract_div').val() === 'S') {
                                         $('#license').hide();
                                         $('#ships').show();
+                                    } else {
+                                        $('#license').hide();
+                                        $('#ships').hide();
                                     }
 
                                     $('.modal').show();
@@ -456,6 +463,7 @@
                         var userNo = $('#user_no').val();
                         var userId = $('#user_id').val();
                         var email = `${$('#user_id_copy').val()}@${$('#domain_addr').val()}`;
+                        var userPwd = $('#user_pwd').val();
                         var userName = $('#user_name').val();
                         var applyStartDate = $('#apply_start_date').val();
                         var applyFinishDate = $('#apply_finish_date').val();
@@ -478,6 +486,7 @@
                                 userNo: userNo,
                                 userId: userId,
                                 email: email,
+                                userPwd: userPwd,
                                 userName: userName,
                                 applyStartDate: applyStartDate,
                                 applyFinishDate: applyFinishDate,
@@ -625,6 +634,7 @@
                         </div>
                         <div class="align-container">
                             <input type="hidden" id="s_company_no" value="<%=session.user.companyNo%>"/>
+                            <input type="hidden" id="s_domain_addr" value="<%=session.user.domainAddr%>"/>
                             <select id="s_contract_no" style="width:320px;">
                                 <option value=""><%=t('select')%></option>
                             </select>
@@ -640,30 +650,32 @@
                             <span><input type="button" id="delete" value="<%=t('delete')%>"/></span>
                         </div>
                     </div>
-                    <div>
+                    <table class="status-table">
+                        <thead class="status-thead">
+                            <tr>
+                                <th width="100px"><%=t('sequential number')%></th>
+                                <th width="160px"><%=t('username')%></th>
+                                <th width="260px"><%=t('email')%></th>
+                                <th width="240px"><%=t('date of application')%></th>
+                                <th width="120px"><%=t('use status')%></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="scrollable-tbody" style="max-height: 500px;">
                         <table id="contract_user" class="status-table">
-                            <thead class="status-thead">
-                                <tr>
-                                    <th width="100px"><%=t('sequential number')%></th>
-                                    <th width="160px"><%=t('username')%></th>
-                                    <th width="260px"><%=t('email')%></th>
-                                    <th width="240px"><%=t('date of application')%></th>
-                                    <th width="120px"><%=t('use status')%></th>
-                                </tr>
-                            </thead>
                             <tbody class="status-tbody">
                                 <tr class="hidden">
-                                    <td id="cell_user_no" style="text-align: center;"></td>
-                                    <td id="cell_user_name" style="text-align: left;"></td>
-                                    <td id="cell_email" style="text-align: left;"></td>
-                                    <td>
+                                    <td width="100px" id="cell_user_no" style="text-align: center;"></td>
+                                    <td width="160px" id="cell_user_name" style="text-align: left;"></td>
+                                    <td width="260px" id="cell_email" style="text-align: left;"></td>
+                                    <td width="240px">
                                         <div class="align-container-center">
                                             <span id="cell_apply_start_date"></span>
                                             <span>~</span>
                                             <span id="cell_apply_finish_date"></span>
                                         </div>
                                     </td>
-                                    <td id="cell_use_yn" style="text-align: center;"></td>
+                                    <td width="120px" id="cell_use_yn" style="text-align: center;"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="5"><%=t('message(search data)')%></td>
@@ -742,13 +754,13 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="license">
+                                <tr id="license">
                                     <th class="right-align">*<%=t('license')%></th>
                                     <td class="left-align">
                                         <select id="license_no"></select>
                                     </td>
                                 </tr>
-                                <tr class="ships">
+                                <tr id="ships">
                                     <th class="right-align">*<%=t('ship')%></th>
                                     <td class="left-align">
                                         <select id="ship_seq"></select>

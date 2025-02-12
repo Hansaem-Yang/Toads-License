@@ -3,11 +3,6 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="/public/css/content-styles-figma.css">
-        <!--
-        <link rel="stylesheet" media="screen and (max-width: 600px)" href="/public/css/styles-small.css">
-        <link rel="stylesheet" media="screen and (min-width: 601px) and (max-width: 1024px)" href="/public/css/styles-medium.css">
-        <link rel="stylesheet" media="screen and (min-width: 1025px) and (max-width: 2560px)" href="/public/css/styles-large.css">
-        -->
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
@@ -56,6 +51,8 @@
                                 MonthlyChart(companyNo);
                             }
                         }
+
+                        scrollTable();
                     },
                     error: function (xhr, status, error) {
                         var newRow = '<tr><td colspan="6"><%=t("message(request failed)")%></td></tr>';
@@ -263,7 +260,7 @@
             <div class="contents">
                 <div class="contents-item">
                     <div class="title"><%=t('total slink usage')%></div>
-                    <table id="satellite-usage" class="status-table">
+                    <table class="status-table">
                         <thead class="status-thead">
                             <tr>
                                 <th width="180px"><%=t('name of plan')%></th>
@@ -275,18 +272,22 @@
                                 <th width="120px"><%=t('daily usage')%></th>
                             </tr>
                         </thead>
-                        <tbody class="status-tbody">
-                            <tr class="hidden">
-                                <td class="cell_plan_name" style="text-align: left;"></td>
-                                <td class="cell_time" style="text-align: right;"></td>
-                                <td class="cell_total_users" style="text-align: right;"></td>
-                                <td class="cell_total_usage" style="text-align: right;"></td>
-                                <td class="cell_annual_usage" style="text-align: right;"></td>
-                                <td class="cell_monthly_usage" style="text-align: right;"></td>
-                                <td class="cell_daliy_usage" style="text-align: right;"></td>
-                            </tr>
-                        </tbody>
                     </table>
+                    <div class="scrollable-tbody" style="max-height: 500px;">
+                        <table id="satellite-usage" class="status-table">
+                            <tbody class="status-tbody">
+                                <tr class="hidden">
+                                    <td width="180px" class="cell_plan_name" style="text-align: left;"></td>
+                                    <td width="120px" class="cell_time" style="text-align: right;"></td>
+                                    <td width="120px" class="cell_total_users" style="text-align: right;"></td>
+                                    <td width="120px" class="cell_total_usage" style="text-align: right;"></td>
+                                    <td width="120px" class="cell_annual_usage" style="text-align: right;"></td>
+                                    <td width="120px" class="cell_monthly_usage" style="text-align: right;"></td>
+                                    <td width="120px" class="cell_daliy_usage" style="text-align: right;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="contents-item">
                     <div id="charts" class="charts" style="text-align: center;">

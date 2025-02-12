@@ -96,6 +96,7 @@
                                     });
                                 }
                             }
+                            scrollTable();
                         },
                         error: function (xhr, status, error) {
                             var newRow = '<tr><td colspan="6" class="left-align"><%=t("message(request failed)")%></td></tr>';
@@ -380,7 +381,7 @@
                             <span><input type="button" id="delete" value="<%=t('delete')%>"/></span>
                         </div>
                     </div>
-                    <table id="contract_cancel" class="status-table">
+                    <table class="status-table">
                         <thead class="status-thead">
                             <tr>
                                 <th width="100px"><%=t('sequential number')%></th>
@@ -391,20 +392,24 @@
                                 <th width="120px"><%=t('status')%></th>
                             </tr>
                         </thead>
-                        <tbody class="status-tbody">
-                            <tr class="hidden">
-                                <td id="cell_seq" style="text-align: center;"></td>
-                                <td id="cell_reason" style="text-align: left;"></td>
-                                <td id="cell_request_date" style="text-align: center;"></td>
-                                <td id="cell_approval_date" style="text-align: center;"></td>
-                                <td id="cell_cancel_date" style="text-align: center;"></td>
-                                <td id="cell_status" style="text-align: center;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="6"><%=t('message(search data)')%></td>
-                            </tr>
-                        </tbody>
                     </table>
+                    <div class="scrollable-tbody" style="max-height: 500px;">
+                        <table id="contract_cancel" class="status-table">
+                            <tbody class="status-tbody">
+                                <tr class="hidden">
+                                    <td width="100px" id="cell_seq" style="text-align: center;"></td>
+                                    <td width="260px" id="cell_reason" style="text-align: left;"></td>
+                                    <td width="160px" id="cell_request_date" style="text-align: center;"></td>
+                                    <td width="160px" id="cell_approval_date" style="text-align: center;"></td>
+                                    <td width="160px" id="cell_cancel_date" style="text-align: center;"></td>
+                                    <td width="120px" id="cell_status" style="text-align: center;"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6"><%=t('message(search data)')%></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </form>

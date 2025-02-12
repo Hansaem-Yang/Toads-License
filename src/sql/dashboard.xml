@@ -84,51 +84,109 @@
     <select id="satellite_usage_by_user">
     <![CDATA[
         select a.company_no
-             , a.company_name
-             , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
-        	               from ToadsSLink.dbo.contract_connect_history
-        		            where company_id = a.company_no), 0) as total_usage
-             , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
-        	               from ToadsSLink.dbo.contract_connect_history
-        		            where company_id = a.company_no
-        		              and connect_date between dateadd(month, datediff(month, 0, getdate()) - 11, 0) and eomonth(getdate())), 0) as annual_usage
-             , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
-        	               from ToadsSLink.dbo.contract_connect_history
-        		            where company_id = a.company_no
-        		              and connect_date between dateadd(day, datediff(day, 0, getdate()), 0) and eomonth(getdate())), 0) as monthly_usage
-             , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
-        	               from ToadsSLink.dbo.contract_connect_history
-        		            where company_id = a.company_no
-        		              and connect_date between dateadd(day, datediff(day, 0, getdate()), 0) and getdate()), 0) as daliy_usage
-             , (select count(1)
-        	        from ToadsLicense.dbo.vw_ts_app_user
-        		     where company_no = a.company_no) as total_users
-		       , isnull(e.plan_kname, '') plan_kname
-		       , isnull(e.plan_ename, '') plan_ename
-		       , isnull(f.time, 0) time
-          from ToadsLicense.dbo.company as a
-		    left join ToadsLicense.dbo.contract as b
-		      on a.company_no = b.company_no
-		     and b.start_date <= getdate()
-		     and b.end_date >= getdate()
-		    left outer join ToadsLicense.dbo.company_contract as c
-		      on b.contract_no = c.contract_no
-		     and c.apply_start_date <= getdate()
-		     and c.apply_finish_date >= getdate()
-		    left outer join ToadsLicense.dbo.company_apply_plan as d
-		      on c.contract_no = d.contract_no
-		     and c.seq = d.seq
-		     and d.apply_start_date <= getdate()
-		     and d.apply_finish_date >= getdate()
-		    left outer join ToadsLicense.dbo.ts_plan as e
-		      on d.plan_id = e.plan_id
-		     and e.active_yn = 'Y'
-		    left outer join ToadsLicense.dbo.ts_plan_amount as f
-		      on e.plan_id = f.plan_id
-		     and f.apply_date <= getdate()
-		     and f.finish_date >= getdate()
-		     and f.active_yn = 'Y'
-         where a.company_no = #{companyNo}
+            , a.company_name
+            , isnull(b.plan_kname, '') plan_kname
+            , isnull(b.plan_ename, '') plan_ename
+            , isnull(c.time, 0) time
+            , sum(a.total_usage) as total_usage
+            , sum(a.annual_usage) as annual_usage
+            , sum(a.monthly_usage) as monthly_usage
+            , sum(a.daliy_usage) as daliy_usage
+          from (select a.company_no
+                    , a.company_name
+                    , c.contract_no
+                    , c.seq
+              , d.plan_id
+                    , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
+                                from ToadsSLink.dbo.contract_connect_history
+                                where company_id = a.company_no
+                                  and member_id = e.user_no), 0) as total_usage
+                    , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
+                                from ToadsSLink.dbo.contract_connect_history
+                                where company_id = a.company_no
+                                  and member_id = e.user_no
+                                  and connect_date between dateadd(month, datediff(month, 0, getdate()) - 11, 0) and eomonth(getdate())), 0) as annual_usage
+                    , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
+                                from ToadsSLink.dbo.contract_connect_history
+                                where company_id = a.company_no
+                                  and member_id = e.user_no
+                                  and connect_date between dateadd(day, datediff(day, 0, getdate()), 0) and eomonth(getdate())), 0) as monthly_usage
+                    , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
+                                from ToadsSLink.dbo.contract_connect_history
+                                where company_id = a.company_no
+                                  and member_id = e.user_no
+                                  and connect_date between dateadd(day, datediff(day, 0, getdate()), 0) and getdate()), 0) as daliy_usage
+                  from ToadsLicense.dbo.company as a
+                inner join ToadsLicense.dbo.contract as b
+                    on a.company_no = b.company_no
+                  and b.start_date <= getdate()
+                  and b.end_date >= getdate()
+                inner join ToadsLicense.dbo.company_contract as c
+                    on b.contract_no = c.contract_no
+                  and c.apply_start_date <= getdate()
+                  and c.apply_finish_date >= getdate()
+                  left outer join ToadsLicense.dbo.company_apply_plan as d
+                    on c.contract_no = d.contract_no
+                  and c.seq = d.seq
+                  and d.apply_start_date <= getdate()
+                  and d.apply_finish_date >= getdate()
+                  left outer join ToadsLicense.dbo.contract_user as e
+                    on b.contract_no = e.contract_no
+                where a.company_no = #{companyNo}
+                union all
+            select a.company_no
+                    , a.company_name
+                    , c.contract_no
+                    , c.ship_seq
+              , d.plan_id
+                    , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
+                                from ToadsSLink.dbo.contract_connect_history
+                                where company_id = a.company_no
+                                  and member_id = e.user_no), 0) as total_usage
+                    , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
+                                from ToadsSLink.dbo.contract_connect_history
+                                where company_id = a.company_no
+                                  and member_id = e.user_no
+                                  and connect_date between dateadd(month, datediff(month, 0, getdate()) - 11, 0) and eomonth(getdate())), 0) as annual_usage
+                    , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
+                                from ToadsSLink.dbo.contract_connect_history
+                                where company_id = a.company_no
+                                  and member_id = e.user_no
+                                  and connect_date between dateadd(day, datediff(day, 0, getdate()), 0) and eomonth(getdate())), 0) as monthly_usage
+                    , isnull((select sum(datediff(second, connect_date, disconnect_date)) 
+                                from ToadsSLink.dbo.contract_connect_history
+                                where company_id = a.company_no
+                                  and member_id = e.user_no
+                                  and connect_date between dateadd(day, datediff(day, 0, getdate()), 0) and getdate()), 0) as daliy_usage
+                  from ToadsLicense.dbo.company as a
+                inner join ToadsLicense.dbo.contract as b
+                    on a.company_no = b.company_no
+                  and b.start_date <= getdate()
+                  and b.end_date >= getdate()
+                inner join ToadsLicense.dbo.ships_contract as c
+                    on b.contract_no = c.contract_no
+                  and c.apply_start_date <= getdate()
+                  and c.apply_finish_date >= getdate()
+                  left outer join ToadsLicense.dbo.ships_apply_plan as d
+                    on c.contract_no = d.contract_no
+                  and c.ship_seq = d.ship_seq
+                  and d.apply_start_date <= getdate()
+                  and d.apply_finish_date >= getdate()
+                left outer join ToadsLicense.dbo.contract_user as e
+                    on b.contract_no = e.contract_no
+                where a.company_no = #{companyNo}) as a
+          left outer join ToadsLicense.dbo.ts_plan as b
+            on a.plan_id = b.plan_id
+          left outer join ToadsLicense.dbo.ts_plan_amount as c
+            on a.plan_id = c.plan_id
+          and c.apply_date <= getdate()
+          and c.finish_date >= getdate()
+          and c.active_yn = 'Y'
+        group by a.company_no
+                , a.company_name
+                , isnull(b.plan_kname, '')
+                , isnull(b.plan_ename, '')
+                , isnull(c.time, 0)
     ]]>
     </select>
     <select id="annual_satellite_usage_by_user">

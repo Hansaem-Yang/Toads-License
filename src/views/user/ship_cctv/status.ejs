@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/public/css/content-styles-figma.css">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="/public/js/common/common_utility.js"></script>
+        <script src="/public/js/common/<%= i18n.language %>/common_variables.js"></script>
+        <script>
+            $(document).ready(function() {
+                var contracts = [];
+                var ships = [];
+
+                var companyNo = $('#s_company_no').val();
+                $.ajax({
+                    url: "../admin/contract/codes",
+                    method: "POST",
+                    data: {
+                        companyNo: companyNo,
+                    },
+                    success: function (data) {
+                        if (data === 'NO SESSION') {
+                            alert("<%=t('message(session expires)')%>");
+                            window.parent.location.href = "./login";
+                        } else if (data === 'NO DATA') {
+                            alert("<%=t('message(no data)')%>");
+                        } else {
+                            contracts = [];
+                            if (Array.isArray(data)) {
+                                $.each(data, function(index, post) {
+                                    if (post.contractDiv === 'S') {
+                                        contracts.push({
+                                            code:post.contractNo, 
+                                            name:post.contractName, 
+                                            startDate:post.startDate,
+                                            endDate:post.endDate
+                                        });
+                                    }
+                                });
+
+                                createSelection($('#contract_no'), contracts, "<%=t('select')%>");
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert("<%=t('message(request failed)')%>");
+                    },
+                });
+
+                $('#contract_no').change(function() {
+                    clearShip();
+
+                    var contractNo = $('#contract_no').val();
+                    if (contractNo === '') {
+                        alert("<%=t('message(select contract number)')%>");
+                        return;
+                    }
+
+                    searchShipCodes(contractNo);
+                });
+
+                var searchShipCodes = function(contractNo, callback) {
+                    $.ajax({
+                        url: "../admin/contract/shipsCodes",
+                        method: "POST",
+                        data: {
+                            contractNo: contractNo,
+                        },
+                        success: function (data) {
+                            if (data === 'NO SESSION') {
+                                alert("<%=t('message(session expires)')%>");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                alert("<%=t('message(no data)')%>");
+                            } else {
+                                ships = [];
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        ships.push({
+                                            code:post.shipSeq, 
+                                            name:post.shipName
+                                        });
+                                    });
+
+                                    createSelection($('#ship_seq'), ships, "<%=t('select')%>");
+
+                                    if (callback)
+                                        callback();
+                                }
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert("<%=t('message(request failed)')%>");
+                        },
+                    });
+                }
+
+                var search = function() {
+                    clearShipCCTV();
+
+                    var companyNo = $('#s_company_no').val();
+                    if (companyNo === '') {
+                        alert("<%=t('message(select client company)')%>");
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "../admin/cctv/status",
+                        method: "POST",
+                        data: {
+                            companyNo: companyNo
+                        },
+                        success: function (data) {
+
+                            if (data === 'NO SESSION') {
+                                alert("<%=t('message(session expires)')%>");
+                                window.parent.location.href = "./login";
+                            } else if (data === 'NO DATA') {
+                                var newRow = '<tr><td colspan="6" class="left-align"><%=t("message(no data)")%></td></tr>';
+                                $('#ship_cctv tbody').append(newRow);
+                            } else {
+                                if (Array.isArray(data)) {
+                                    $.each(data, function(index, post) {
+                                        var newRow = $('#ship_cctv tbody tr').first().clone().removeClass('hidden');
+                                        
+                                        $(newRow).find('#cell_contract_no').text(post.contractNo);
+                                        $(newRow).find('#cell_ship_seq').text(post.shipSeq);
+                                        $(newRow).find('#cell_ship_name').text(post.shipName);
+                                        $(newRow).find('#cell_cctv_no').text(post.cctvNo);
+                                        $(newRow).find('#cell_location').text(post.location);
+                                        $(newRow).find('#cell_cctv_url').text(post.cctvUrl);
+                                        $(newRow).find('#cell_upload_cycle').text(post.uploadCycle);
+
+                                        $('#ship_cctv tbody').append(newRow);
+                                    });
+                                }
+                            }
+                            scrollTable();
+                        },
+                        error: function (xhr, status, error) {
+                            var newRow = '<tr><td colspan="6" class="left-align"><%=t("message(request failed)")%></td></tr>';
+                            $('#ship_cctv tbody').append(newRow);
+                        },
+                    });
+                }
+
+                $('#add').click(function() {
+                    clearModal();
+
+                    var companyNo = $('#s_company_no').val();
+                    if (companyNo === '') {
+                        alert("<%=t('message(select client company)')%>");
+                        return;
+                    }
+
+                    $('.modal').show();
+                });
+
+                $('#modify').click(function() {
+                    clearModal();
+
+                    var selectedRow = $('#ship_cctv tr.selected');
+                    if (selectedRow.length > 0) {
+                        var contractNo = selectedRow.find('#cell_contract_no').text();
+                        var shipSeq = selectedRow.find('#cell_ship_seq').text();
+                        var cctvNo = selectedRow.find('#cell_cctv_no').text();
+                        
+                        // 행 데이터 출력
+                        $.ajax({
+                            url: "../admin/cctv/detail",
+                            method: "POST",
+                            data: {
+                                contractNo: contractNo,
+                                shipSeq: shipSeq,
+                                cctvNo: cctvNo
+                            },
+                            success: function (data) {
+                                if (data === 'NO SESSION') {
+                                    alert("<%=t('message(session expires)')%>");
+                                    window.parent.location.href = "./login";
+                                } else if (data === 'NO DATA') {
+                                    alert("<%=t('message(no data)')%>");
+                                } else {
+                                    searchShipCodes(data.contractNo, () => {
+                                        $('#contract_no').val(data.contractNo);
+                                        $('#ship_seq').val(data.shipSeq);
+                                        $('#cctv_no').val(data.cctvNo);
+                                        $('#location').val(data.location);
+                                        $('#cctv_url').val(data.cctvUrl);
+                                        $('#upload_cycle').val(data.uploadCycle);
+                                        
+                                        $('.modal').show();
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                               alert("<%=t('message(request failed)')%>");
+                            },
+                        });
+                    } else {
+                        alert("<%=t('message(select row)')%>");
+                    }
+                });
+
+                $('#ship_cctv tbody').on('click', 'tr', function() {
+                    $(this).addClass('selected').siblings().removeClass('selected');
+                });
+
+                var clearShipCCTV = function() {
+                    const rows = document.querySelectorAll("#ship_cctv tbody tr:not(:first-child)");
+                    rows.forEach(row => {
+                        row.remove();
+                    });
+                }
+
+                // Modal Event And Function
+                var clearModal = function() {
+                    $('#company_no').val('');
+                    $('#contract_no').val('');
+                    $('#ship_seq').val('');
+                    $('#ship_name').val('');
+                    $('#cctv_no').val('');
+                    $('#location').val('');
+                    $('#cctv_url').val('');
+                    $('#upload_cycle').val('');
+                }
+
+                var clearContract = function() {
+                    $('#contract_no').empty();
+
+                    // Add default option
+                    $('#contract_no').append($('<option>', {
+                        value: '',
+                        text: "<%=t('select')%>"
+                    }));
+                }
+
+                var clearShip = function() {
+                    $('#ship_seq').empty();
+
+                    // Add default option
+                    $('#ship_seq').append($('<option>', {
+                        value: '',
+                        text: "<%=t('select')%>"
+                    }));
+                }
+
+                var validationCheck = function() {
+                    if ($('#contract_no').val() === '') {
+                        alert("<%=t('message(select contract number)')%>");
+                        return false;
+                    }
+
+                    if ($('#ship_seq').val() === '') {
+                        alert("<%=t('message(select ship)')%>");
+                        return false;
+                    }
+
+                    if ($('#location').val() === '') {
+                        alert("<%=t('message(enter location)')%>");
+                        return false;
+                    }
+
+                    if ($('#cctv_url').val() === '') {
+                        alert("<%=t('message(enter cctv url)')%>");
+                        return false;
+                    }
+
+                    if ($('#upload_cycle').val() === '') {
+                        alert("<%=t('message(enter upload cycle)')%>");
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                $('#close').click(function() {
+                    $('.modal').hide();
+                });
+
+                $('#save').click(function() {
+                    if (confirm("<%=t('message(save data)')%>")) {
+                        if (!validationCheck()) {
+                            return;
+                        }
+                        
+                        var contractNo = $('#contract_no').val();
+                        var shipSeq = $('#ship_seq').val();
+                        var cctvNo = $('#cctv_no').val();
+                        var location = $('#location').val();
+                        var cctvUrl = $('#cctv_url').val();
+                        var uploadCycle = $('#upload_cycle').val();
+
+                        var url = "../admin/cctv/insert";
+                        if (cctvNo === ''){
+                            url = "../admin/cctv/insert";
+                        } else {
+                            url = "../admin/cctv/update";
+                        }
+
+                        $.ajax({
+                            url: url,
+                            method: "POST",
+                            data: {
+                                contractNo: contractNo,
+                                shipSeq: shipSeq,
+                                cctvNo: cctvNo,
+                                location: location,
+                                cctvUrl: cctvUrl,
+                                uploadCycle: uploadCycle,
+                            },
+                            success: function (data) {
+                                switch (data) {
+                                    case "NO SESSION":
+                                        alert("<%=t('message(session expires)')%>");
+                                        window.parent.location.href = "./login";
+                                        return;
+                                    case "FAIL":
+                                        alert("<%=t('message(save failed)')%>");
+                                        return;
+                                    case "SUCCESS":
+                                        alert("<%=t('message(save success)')%>");
+                                        break;
+                                }
+
+                                $('.modal').hide();
+                                search();
+                                
+                                clearModal();
+                            },
+                            error: function (xhr, status, error) {
+                                alert("<%=t('message(request failed)')%>");
+                            },
+                        });
+                    }
+                });
+
+                $('#cancel').click(function() {
+                    if (confirm("<%=t('message(input cancel)')%>") == true) {
+                        $('.modal').hide();
+                        
+                        clearModal();
+                    }
+                });
+                
+                createSelection($('#contract_no'), contracts, "<%=t('select')%>");
+                createSelection($('#ship_seq'), ships, "<%=t('select')%>");
+                
+                search();
+            });
+        </script>
+    </head>
+    <body>
+        <form class="ship-cctv-status-form">
+            <input type="hidden" id="s_company_no" value="<%=session.user.companyNo%>"/>
+            <div class="contents">
+                <div class="contents-item">
+                    <div class="title"><%=t('list of ship cctv')%></div>
+                    <div class="top-right-button">
+                        <div class="align-container">
+                            <span><input type="button" id="add" value="<%=t('regist')%>"/></span>
+                            <span><input type="button" id="modify" value="<%=t('modify')%>"/></span>
+                        </div>
+                    </div>
+                    <table class="status-table">
+                        <thead class="status-thead">
+                            <tr>
+                                <th width="160px"><%=t('contract number')%></th>
+                                <th width="80px"><%=t('ship seq')%></th>
+                                <th width="160px"><%=t('ship name')%></th>
+                                <th width="80px"><%=t('cctv no')%></th>
+                                <th width="160px"><%=t('location')%></th>
+                                <th width="500px"><%=t('cctv url')%></th>
+                                <th width="120px"><%=t('upload cycle')%></th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="scrollable-tbody" style="max-height: 500px;">
+                        <table id="ship_cctv" class="status-table">
+                            <tbody class="status-tbody">
+                                <tr class="hidden">
+                                    <td width="160px" id="cell_contract_no" style="text-align: center;"></td>
+                                    <td width="80px"  id="cell_ship_seq" style="text-align: center;"></td>
+                                    <td width="160px" id="cell_ship_name" style="text-align: left;"></td>
+                                    <td width="80px"  id="cell_cctv_no" style="text-align: center;"></td>
+                                    <td width="160px" id="cell_location" style="text-align: left;"></td>
+                                    <td width="500px" id="cell_cctv_url" style="text-align: left;"></td>
+                                    <td width="120px" id="cell_upload_cycle" style="text-align: left;"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6"><%=t('message(search data)')%></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="modal">
+            <div class="modal-contents" style="width:820px">
+                <div class="contents-container">
+                    <span id="close" class="modal-close">&times;</span>
+                    <div class="modal-title"><%=t('ship cctv management')%></div>
+                    <div>
+                        <table class="modal-table">
+                            <thead class="modal-thead">
+                                <tr>
+                                    <th width="160px" class="right-align">*<%=t('contract number')%></th>
+                                    <td width="640px" class="left-align">
+                                        <select id="contract_no"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*<%=t('ship seq')%></th>
+                                    <td class="left-align">
+                                        <select id="ship_seq"></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*<%=t('location')%></th>
+                                    <td class="left-align">
+                                        <input type="hidden" id="cctv_no" style="width: 350px;"/>
+                                        <input type="text" id="location" style="width: 350px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*<%=t('cctv url')%></th>
+                                    <td class="left-align">
+                                        <input type="text" id="cctv_url" style="width: 600px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="right-align">*<%=t('upload cycle')%></th>
+                                    <td class="left-align">
+                                        <input type="text" id="upload_cycle" style="width: 60px;"/>
+                                    </td>
+                                </tr>
+                            </thead>    
+                        </table>
+                    </div></br>
+                    <div class="bottom-button">
+                        <div class="align-container">
+                            <span><input type="button" id="save" value="<%=t('save')%>"/></span>
+                            <span><input type="button" id="cancel" value="<%=t('cancel')%>"/></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
